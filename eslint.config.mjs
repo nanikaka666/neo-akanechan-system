@@ -36,6 +36,8 @@ export default defineConfig([
       ),
     ),
 
+    files: ["**/*.ts", "**/*.tsx"],
+
     languageOptions: {
       globals: {
         ...globals.browser,
