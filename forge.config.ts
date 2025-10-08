@@ -29,7 +29,7 @@ const config: ForgeConfig = {
             js: "./src/renderer.tsx",
             name: "main_window",
             preload: {
-              js: "./src/preload.ts",
+              js: "./src/preload/preload.ts",
             },
           },
         ],
