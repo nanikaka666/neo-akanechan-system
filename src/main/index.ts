@@ -34,6 +34,21 @@ const onWindowAllClosed = () => {
   }
 };
 
+/**
+ * Mac OS only.
+ *
+ * On OS X it's common to re-create a window in the app when the
+ * dock icon is clicked and there are no other windows open.
+ *
+ * @param _event
+ * @param _habVisibleWindows
+ */
+const onActivate = (_event: Electron.Event, _habVisibleWindows: boolean) => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
+};
+
 function main() {
   // Handle creating/removing shortcuts on Windows when installing/uninstalling.
   if (checkElectronSquirrelStartup()) {
@@ -47,13 +62,7 @@ function main() {
 
   app.on("window-all-closed", onWindowAllClosed);
 
-  app.on("activate", () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
+  app.on("activate", onActivate);
 }
 
 main();
