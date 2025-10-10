@@ -55,14 +55,12 @@ function main() {
     app.quit();
   }
 
-  // This method will be called when Electron has finished
-  // initialization and is ready to create browser windows.
-  // Some APIs can only be used after this event occurs.
-  app.on("ready", createWindow);
-
   app.on("window-all-closed", onWindowAllClosed);
 
-  app.on("activate", onActivate);
+  app.whenReady().then(() => {
+    createWindow();
+    app.on("activate", onActivate);
+  });
 }
 
 main();
