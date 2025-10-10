@@ -6,5 +6,5 @@ import { ChannelId, ChannelTitle } from "youtube-live-scraper";
  * key represents channel name of ipc process.
  */
 export interface IpcEvent {
-  confirmInputChannelId: (inputChannelId: ChannelId) => ChannelTitle;
+  confirmInputChannelId: (inputChannelId: ChannelId) => ChannelTitle | undefined;
 }
