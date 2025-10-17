@@ -74,7 +74,7 @@ function main() {
     }
   });
 
-  IpcMainWrapper.handle("getMainChannel", () => {
+  IpcMainWrapper.handle("getMainChannelId", () => {
     return Promise.resolve(undefined);
   });
 

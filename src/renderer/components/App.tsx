@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { MainWindow } from "./MainWindow";
-import { ChannelSummary } from "../../ipcEvent";
+import { ChannelId } from "youtube-live-scraper";
 
 export function App() {
-  const [mainChannel, setMainChannel] = useState<ChannelSummary>();
+  const [mainChannelId, setMainChannelId] = useState<ChannelId>();
 
   useEffect(() => {
-    window.ipcApi.requestMainChannel().then((ch) => {
-      setMainChannel((_) => ch);
+    window.ipcApi.requestMainChannelId().then((ch) => {
+      setMainChannelId((_) => ch);
     });
   }, []);
 
-  return mainChannel ? <div>{mainChannel.channelTitle.title}</div> : <MainWindow></MainWindow>;
+  return mainChannelId ? <div>{mainChannelId.id}</div> : <MainWindow></MainWindow>;
 }

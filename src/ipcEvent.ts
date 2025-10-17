@@ -21,5 +21,5 @@ export interface IpcEvent {
    */
   confirmInputChannelId: (inputChannelId: ChannelId) => ChannelSummary | undefined;
 
-  getMainChannel: () => ChannelSummary | undefined;
+  getMainChannelId: () => ChannelId | undefined;
 }

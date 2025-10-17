@@ -10,6 +10,6 @@ type Invoke<K extends keyof IpcEvent> = (
 export interface IpcApi {
   ipcApi: {
     requestConfirmingInputChannelId: Invoke<"confirmInputChannelId">;
-    requestMainChannel: Invoke<"getMainChannel">;
+    requestMainChannelId: Invoke<"getMainChannelId">;
   };
 }
