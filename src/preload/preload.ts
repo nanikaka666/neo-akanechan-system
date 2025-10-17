@@ -8,8 +8,9 @@ declare global {
 
 const ipcApi: IpcApi = {
   ipcApi: {
-    requestChannelTitleMatchTo: (inputChannelId) =>
+    requestConfirmingInputChannelId: (inputChannelId) =>
       IpcRendererWrapper.invoke("confirmInputChannelId", inputChannelId),
+    requestMainChannel: () => IpcRendererWrapper.invoke("getMainChannel"),
   },
 };
 
