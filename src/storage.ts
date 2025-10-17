@@ -13,7 +13,7 @@ const store = new Store<StorageData>();
  * Detail of storage is hidden to a caller.
  * So, storage implementations will be changed with no effect for a caller.
  */
-export const Storage = {
+const Storage = {
   get: <K extends keyof StorageData>(key: K): StorageData[K] => {
     return store.get(key);
   },
