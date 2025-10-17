@@ -1,5 +1,12 @@
 import { ChannelId, ChannelTitle } from "youtube-live-scraper";
 
+export interface ChannelSummary {
+  channelId: ChannelId;
+  channelTitle: ChannelTitle;
+  subscribersCount: number;
+  ownerIcon: string;
+}
+
 /**
  * Ipc process interfaces.
  *
@@ -12,5 +19,7 @@ export interface IpcEvent {
    *
    * if the channel was not found match to `inputChannelId`, `undefined` will be returned.
    */
-  confirmInputChannelId: (inputChannelId: ChannelId) => ChannelTitle | undefined;
+  confirmInputChannelId: (inputChannelId: ChannelId) => ChannelSummary | undefined;
+
+  getMainChannel: () => ChannelSummary | undefined;
 }
