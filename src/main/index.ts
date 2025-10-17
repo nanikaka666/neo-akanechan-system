@@ -63,11 +63,21 @@ function main() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
     try {
       const page = await PageFetcher.getChannelPage(inputChannelId);
-      return Scraper.getChannelTitleFromChannelPage(page);
+      return {
+        channelId: inputChannelId,
+        channelTitle: Scraper.getChannelTitleFromChannelPage(page),
+        subscribersCount: Scraper.getSubscriberCountFromChannelPage(page),
+        ownerIcon: Scraper.getOwnerIconUrlFromChannelPage(page),
+      };
     } catch {
       return undefined;
     }
   });
+
+  IpcMainWrapper.handle("getMainChannel", () => {
+    return Promise.resolve(undefined);
+  });
+
   app.whenReady().then(() => {
     createWindow();
     app.on("activate", onActivate);
