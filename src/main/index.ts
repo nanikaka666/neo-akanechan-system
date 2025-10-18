@@ -5,6 +5,7 @@ import { PageFetcher, Scraper } from "youtube-live-scraper";
 import { StorageService } from "./storage";
 import { createWindow } from "./mainWindow";
 import { setupApplicationMenu } from "./menu";
+import { platform } from "./environment";
 
 /**
  * Quit when all windows are closed, except on macOS. There, it's common
@@ -12,7 +13,7 @@ import { setupApplicationMenu } from "./menu";
  * explicitly with Cmd + Q.
  */
 const onWindowAllClosed = () => {
-  if (process.platform !== "darwin") {
+  if (platform() !== "mac") {
     app.quit();
   }
 };
