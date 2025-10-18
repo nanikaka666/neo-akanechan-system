@@ -1,4 +1,4 @@
-import { IpcRendererWrapper } from "../ipcRendererWrapper";
+import { IpcRendererWrapper } from "./ipcRendererWrapper";
 import { exposeToRenderer } from "./exposeToRenderer";
 import { IpcApi } from "./ipcApi";
 
