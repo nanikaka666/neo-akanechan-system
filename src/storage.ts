@@ -3,6 +3,7 @@ import { ChannelId } from "youtube-live-scraper";
 
 interface StorageData {
   mainChannelId: string;
+  registeredChannelIds: string[];
 }
 
 const store = new Store<StorageData>();
@@ -47,5 +48,26 @@ export const StorageService = {
         return undefined;
       }
     }
+  },
+
+  /**
+   * Add channel id to list and mark as main channel.
+   *
+   * Prerequisites: given channelId must be in Youtube ID style.
+   */
+  registerChannelIdAndMarkAsMain: (channelId: ChannelId) => {
+    if (channelId.isHandle) {
+      throw new Error(`Registering channelId must be Youtube ID style. ${channelId.id}`);
+    }
+    const list = Storage.get("registeredChannelIds") ?? [];
+
+    // check it is already registered.
+    if (list.filter((id) => id === channelId.id).length > 0) {
+      return false;
+    }
+    const newList = [...list, channelId.id];
+    Storage.set("registeredChannelIds", newList);
+    Storage.set("mainChannelId", channelId.id);
+    return true;
   },
 };
