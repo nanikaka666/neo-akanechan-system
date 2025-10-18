@@ -21,5 +21,8 @@ export interface IpcEvent {
    */
   confirmInputChannelId: (inputChannelId: ChannelId) => ChannelSummary | undefined;
 
+  /**
+   * Get the main channel id (in Youtube ID style).
+   */
   getMainChannelId: () => ChannelId | undefined;
 }
