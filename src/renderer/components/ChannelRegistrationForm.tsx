@@ -2,7 +2,7 @@ import { ChangeEvent, MouseEvent, useState } from "react";
 import { ChannelSummary } from "../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
 
-export function MainWindow() {
+export function ChannelRegistrationForm() {
   const [input, setInput] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>();
   const [channelData, setChannelData] = useState<ChannelSummary>();

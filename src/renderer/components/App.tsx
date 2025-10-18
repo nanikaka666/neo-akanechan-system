@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MainWindow } from "./MainWindow";
+import { ChannelRegistrationForm } from "./ChannelRegistrationForm";
 import { ChannelId } from "youtube-live-scraper";
 
 export function App() {
@@ -16,6 +16,6 @@ export function App() {
       <div>メインチャンネル: {mainChannelId.id}</div>
     </>
   ) : (
-    <MainWindow></MainWindow>
+    <ChannelRegistrationForm></ChannelRegistrationForm>
   );
 }
