@@ -11,5 +11,11 @@ export function App() {
     });
   }, []);
 
-  return mainChannelId ? <div>{mainChannelId.id}</div> : <MainWindow></MainWindow>;
+  return mainChannelId ? (
+    <>
+      <div>メインチャンネル: {mainChannelId.id}</div>
+    </>
+  ) : (
+    <MainWindow></MainWindow>
+  );
 }

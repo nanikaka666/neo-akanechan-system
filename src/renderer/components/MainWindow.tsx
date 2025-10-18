@@ -6,6 +6,7 @@ export function MainWindow() {
   const [input, setInput] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>();
   const [channelData, setChannelData] = useState<ChannelSummary>();
+  const [isComplete, setIsComplete] = useState(false);
 
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -35,7 +36,25 @@ export function MainWindow() {
     setInput((_) => "");
   }
 
-  return channelData === undefined ? (
+  async function onClickConfirmationYes(e: MouseEvent) {
+    e.preventDefault();
+    const res = await window.ipcApi.registerChannel(channelData!.channelId);
+    if (res) {
+      setIsComplete((_) => true);
+    } else {
+      setErrorMessage((_) => "そのチャンネルはすでに登録されています");
+      setChannelData((_) => undefined);
+    }
+  }
+
+  function onClickConfirmationNo(e: MouseEvent) {
+    e.preventDefault();
+    setChannelData((_) => undefined);
+  }
+
+  return isComplete ? (
+    <div>Registration complete!</div>
+  ) : channelData === undefined ? (
     <div>
       {errorMessage !== undefined && <div>{errorMessage}</div>}
       Input ChannelId: <input type="text" value={input} onChange={onChange}></input>
@@ -51,8 +70,8 @@ export function MainWindow() {
       <div>{channelData.channelTitle.title}</div>
       <div>{channelData.subscribersCount} 人</div>
       <div>このチャンネルをアプリに登録しますか？</div>
-      <button>OK</button>
-      <button>NO</button>
+      <button onClick={onClickConfirmationYes}>OK</button>
+      <button onClick={onClickConfirmationNo}>NO</button>
     </div>
   );
 }
