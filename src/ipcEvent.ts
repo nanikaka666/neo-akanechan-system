@@ -25,4 +25,11 @@ export interface IpcEvent {
    * Get the main channel id (in Youtube ID style).
    */
   getMainChannelId: () => ChannelId | undefined;
+
+  /**
+   * Register new channel, and mark as main channel.
+   *
+   * if given channelId was already registered, `false` will be returnd.
+   */
+  registerChannel: (channelId: ChannelId) => boolean;
 }

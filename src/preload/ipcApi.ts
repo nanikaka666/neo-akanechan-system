@@ -11,5 +11,6 @@ export interface IpcApi {
   ipcApi: {
     requestConfirmingInputChannelId: Invoke<"confirmInputChannelId">;
     requestMainChannelId: Invoke<"getMainChannelId">;
+    registerChannel: Invoke<"registerChannel">;
   };
 }
