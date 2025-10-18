@@ -11,6 +11,7 @@ const ipcApi: IpcApi = {
     requestConfirmingInputChannelId: (inputChannelId) =>
       IpcRendererWrapper.invoke("confirmInputChannelId", inputChannelId),
     requestMainChannelId: () => IpcRendererWrapper.invoke("getMainChannelId"),
+    registerChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
   },
 };
 
