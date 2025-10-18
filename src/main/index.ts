@@ -4,6 +4,7 @@ import { IpcMainWrapper } from "./ipcMainWrapper";
 import { PageFetcher, Scraper } from "youtube-live-scraper";
 import { StorageService } from "./storage";
 import { createWindow } from "./mainWindow";
+import { setupApplicationMenu } from "./menu";
 
 /**
  * Quit when all windows are closed, except on macOS. There, it's common
@@ -69,6 +70,7 @@ function main() {
   });
 
   app.whenReady().then(() => {
+    setupApplicationMenu();
     createWindow();
     app.on("activate", onActivate);
   });
