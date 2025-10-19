@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChannelRegistrationForm } from "./ChannelRegistrationForm";
+import { ChannelRegistration } from "./ChannelRegistration";
 import { ChannelId } from "youtube-live-scraper";
 
 export function App() {
@@ -14,9 +14,5 @@ export function App() {
     });
   }, []);
 
-  return mainChannelId ? (
-    <div>メインチャンネル: {mainChannelId.id}</div>
-  ) : (
-    <ChannelRegistrationForm></ChannelRegistrationForm>
-  );
+  return mainChannelId ? <div>メインチャンネル: {mainChannelId.id}</div> : <ChannelRegistration />;
 }

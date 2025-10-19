@@ -1,12 +1,17 @@
-import { ChangeEvent, MouseEvent, useState } from "react";
-import { ChannelSummary } from "../../ipcEvent";
+import { ChangeEvent, useState, MouseEvent } from "react";
 import { ChannelId } from "youtube-live-scraper";
+import type { Dispatch, SetStateAction } from "react";
+import { ChannelSummary } from "../../ipcEvent";
 
-export function ChannelRegistrationForm() {
+export function ChannelRegistrationForm({
+  setIsComplete,
+}: {
+  setIsComplete: Dispatch<SetStateAction<boolean>>;
+}) {
   const [input, setInput] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>();
   const [channelData, setChannelData] = useState<ChannelSummary>();
-  const [isComplete, setIsComplete] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -15,6 +20,7 @@ export function ChannelRegistrationForm() {
 
   async function onClick(e: MouseEvent) {
     e.preventDefault();
+    setIsSubmitting((_) => true);
 
     try {
       const channelId = new ChannelId(input);
@@ -33,6 +39,7 @@ export function ChannelRegistrationForm() {
       setErrorMessage((_) => `入力された ${input} の形式が正しくありません`);
     }
 
+    setIsSubmitting((_) => false);
     setInput((_) => "");
   }
 
@@ -52,13 +59,12 @@ export function ChannelRegistrationForm() {
     setChannelData((_) => undefined);
   }
 
-  return isComplete ? (
-    <div>Registration complete!</div>
-  ) : channelData === undefined ? (
+  return channelData === undefined ? (
     <div>
       {errorMessage !== undefined && <div>{errorMessage}</div>}
-      Input ChannelId: <input type="text" value={input} onChange={onChange}></input>
-      <button onClick={onClick} disabled={input === ""}>
+      Input ChannelId:{" "}
+      <input type="text" value={input} onChange={onChange} disabled={isSubmitting}></input>
+      <button onClick={onClick} disabled={input === "" || isSubmitting}>
         Submit
       </button>
     </div>
