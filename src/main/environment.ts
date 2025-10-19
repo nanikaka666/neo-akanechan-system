@@ -1,7 +1,7 @@
 import { app } from "electron";
 
 export function isDevMode() {
-  return app.isPackaged;
+  return !app.isPackaged;
 }
 
 export function platform() {
