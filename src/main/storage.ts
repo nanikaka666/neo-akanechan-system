@@ -18,11 +18,17 @@ const Storage = {
   get: <K extends keyof StorageData>(key: K): StorageData[K] => {
     return store.get(key);
   },
+  getAll: () => {
+    return store.store;
+  },
   set: <K extends keyof StorageData>(key: K, value: StorageData[K]) => {
     store.set(key, value);
   },
   delete: <K extends keyof StorageData>(key: K) => {
     store.delete(key);
+  },
+  deleteAll: () => {
+    store.clear();
   },
 };
 
@@ -69,5 +75,19 @@ export const StorageService = {
     Storage.set("registeredChannelIds", newList);
     Storage.set("mainChannelId", channelId.id);
     return true;
+  },
+
+  /**
+   * Get whole object stored in storage.
+   */
+  getAll: () => {
+    return Storage.getAll();
+  },
+
+  /**
+   * Clear all storage data.
+   */
+  clearAll: () => {
+    Storage.deleteAll();
   },
 };
