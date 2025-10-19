@@ -3,7 +3,7 @@ import { ChannelSummary } from "../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
 import { ChannelRegistrationComplete } from "./ChannelRegistrationComplete";
 
-export function ChannelRegistrationForm() {
+export function ChannelRegistration() {
   const [input, setInput] = useState("");
   const [errorMessage, setErrorMessage] = useState<string>();
   const [channelData, setChannelData] = useState<ChannelSummary>();
