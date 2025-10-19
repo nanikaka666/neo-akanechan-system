@@ -8,13 +8,14 @@ export function App() {
   useEffect(() => {
     window.ipcApi.requestMainChannelId().then((ch) => {
       setMainChannelId((_) => ch);
+      window.ipcApi.registerNewMainChannelListener((e, channelId) => {
+        setMainChannelId((_) => channelId);
+      });
     });
   }, []);
 
   return mainChannelId ? (
-    <>
-      <div>メインチャンネル: {mainChannelId.id}</div>
-    </>
+    <div>メインチャンネル: {mainChannelId.id}</div>
   ) : (
     <ChannelRegistrationForm></ChannelRegistrationForm>
   );
