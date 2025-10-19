@@ -1,6 +1,7 @@
 import { ChangeEvent, MouseEvent, useState } from "react";
 import { ChannelSummary } from "../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
+import { ChannelRegistrationComplete } from "./ChannelRegistrationComplete";
 
 export function ChannelRegistrationForm() {
   const [input, setInput] = useState("");
@@ -53,7 +54,7 @@ export function ChannelRegistrationForm() {
   }
 
   return isComplete ? (
-    <div>Registration complete!</div>
+    <ChannelRegistrationComplete />
   ) : channelData === undefined ? (
     <div>
       {errorMessage !== undefined && <div>{errorMessage}</div>}
