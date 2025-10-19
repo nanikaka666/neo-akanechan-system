@@ -1,4 +1,4 @@
-import { ipcRenderer } from "electron";
+import { ipcRenderer, IpcRendererEvent } from "electron";
 import { IpcEvent } from "../ipcEvent";
 
 /**
@@ -14,6 +14,12 @@ export const IpcRendererWrapper = {
   ): Promise<ReturnType<IpcEvent[K]>> => {
     return ipcRenderer.invoke(key, ...args);
   },
+  on: <K extends keyof IpcEvent>(
+    key: K,
+    callback: (e: IpcRendererEvent, ...args: Parameters<IpcEvent[K]>) => void,
+  ) => {
+    ipcRenderer.on(key, callback);
+  },
 };
 
 declare global {
@@ -23,6 +29,10 @@ declare global {
        * @deprecated use IpcRendererWrapper.invoke() instead.
        */
       invoke(channel: string, ...args: any[]): Promise<any>;
+      /**
+       * @deprecated use IpcRendererWrapper.on() instead.
+       */
+      on(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): this;
     }
   }
 }
