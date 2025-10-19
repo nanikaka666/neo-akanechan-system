@@ -6,6 +6,7 @@ import { StorageService } from "./storage";
 import { createWindow } from "./mainWindow";
 import { setupApplicationMenu } from "./menu";
 import { platform } from "./environment";
+import { WebContentsWrapper } from "./webContentsWrapper";
 
 /**
  * Quit when all windows are closed, except on macOS. There, it's common
@@ -66,7 +67,7 @@ function main() {
     if (!StorageService.registerChannelIdAndMarkAsMain(channelId)) {
       return Promise.resolve(false);
     }
-    // tell to renderer that core data changed.
+    WebContentsWrapper.send(e.sender, "tellNewMainChannelId", channelId);
     return Promise.resolve(true);
   });
 
