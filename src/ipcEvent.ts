@@ -32,4 +32,11 @@ export interface IpcEvent {
    * if given channelId was already registered, `false` will be returnd.
    */
   registerChannel: (channelId: ChannelId) => boolean;
+
+  /**
+   * Tell a event that changing the main channel.
+   *
+   * Main channel accepts `undefined`, if this app has no registrated channel id.
+   */
+  tellNewMainChannelId: (channelId?: ChannelId) => void;
 }
