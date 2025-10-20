@@ -71,6 +71,36 @@ function main() {
     return Promise.resolve(true);
   });
 
+  IpcMainWrapper.handle("getChannelTop", async (e, channelId) => {
+    try {
+      const channelPage = await PageFetcher.getChannelPage(channelId);
+      const channel = {
+        channelId: channelId,
+        channelTitle: Scraper.getChannelTitleFromChannelPage(channelPage),
+        subscribersCount: Scraper.getSubscriberCountFromChannelPage(channelPage),
+        ownerIcon: Scraper.getOwnerIconUrlFromChannelPage(channelPage),
+        channelBanner: Scraper.getChannelBanner(channelPage),
+      };
+
+      const maybeClosestLivePage = await PageFetcher.getLivePage(channelId);
+
+      const closestLive =
+        maybeClosestLivePage.type === "channel"
+          ? undefined
+          : {
+              title: Scraper.getVideoTitle(maybeClosestLivePage),
+              // thumbnail: Scraper.getVideoThumbnail(maybeClosestLivePage),
+              thumbnail: `https://i.ytimg.com/vi/${maybeClosestLivePage.videoId.id}/maxresdefault.jpg`, // temporary aid
+              // isOnAir: Scraper.isLiveNow(maybeClosestLivePage),
+              isOnAir: !maybeClosestLivePage.html.includes(`"scheduledStartTime"`), // temporary aid
+            };
+      return { channel, closestLive };
+    } catch (e: unknown) {
+      console.log(e);
+      return undefined;
+    }
+  });
+
   app.whenReady().then(() => {
     setupApplicationMenu();
     createWindow();
