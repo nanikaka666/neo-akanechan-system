@@ -18,5 +18,6 @@ export interface IpcApi {
     requestMainChannelId: Invoke<"getMainChannelId">;
     registerChannel: Invoke<"registerChannel">;
     registerNewMainChannelListener: Listen<"tellNewMainChannelId">;
+    requestChannelTop: Invoke<"getChannelTop">;
   };
 }
