@@ -20,6 +20,7 @@ export const WebContentsWrapper = {
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Electron {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     interface WebContents {
       /**
        * @deprecated use IpcRendererWrapper.invoke() instead.

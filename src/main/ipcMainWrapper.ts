@@ -22,6 +22,7 @@ export const IpcMainWrapper = {
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Electron {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     interface IpcMain extends NodeJS.EventEmitter {
       /**
        * @deprecated use IpcMainWrapper.handle() instead.
