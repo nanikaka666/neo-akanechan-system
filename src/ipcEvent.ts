@@ -23,9 +23,9 @@ export interface ChannelTop {
 }
 
 /**
- * Ipc process interfaces.
+ * Ipc channel interfaces.
  *
- * key represents channel name of ipc process.
+ * key represents channel name.
  */
 export interface IpcEvent {
   /**
