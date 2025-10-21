@@ -14,6 +14,7 @@ const ipcApi: IpcApi = {
     registerChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
     registerNewMainChannelListener: (callback) =>
       IpcRendererWrapper.on("tellNewMainChannelId", callback),
+    requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
   },
 };
 

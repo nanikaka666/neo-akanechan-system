@@ -1,10 +1,25 @@
-import { ChannelId, ChannelTitle } from "youtube-live-scraper";
+import { ChannelId, ChannelTitle, VideoTitle } from "youtube-live-scraper";
 
 export interface ChannelSummary {
   channelId: ChannelId;
   channelTitle: ChannelTitle;
   subscribersCount: number;
   ownerIcon: string;
+}
+
+export interface ChannelTop {
+  channel: {
+    channelId: ChannelId;
+    channelTitle: ChannelTitle;
+    subscribersCount: number;
+    ownerIcon: string;
+    channelBanner?: string;
+  };
+  closestLive?: {
+    title: VideoTitle;
+    thumbnail: string;
+    isOnAir: boolean;
+  };
 }
 
 /**
@@ -39,4 +54,9 @@ export interface IpcEvent {
    * Main channel accepts `undefined`, if this app has no registrated channel id.
    */
   tellNewMainChannelId: (channelId?: ChannelId) => void;
+
+  /**
+   * Get data for main channel top page.
+   */
+  getChannelTop: (channelId: ChannelId) => ChannelTop | undefined;
 }
