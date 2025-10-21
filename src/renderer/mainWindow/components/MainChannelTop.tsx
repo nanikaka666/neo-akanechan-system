@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChannelTop } from "../../ipcEvent";
+import { ChannelTop } from "../../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
 
 export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) {

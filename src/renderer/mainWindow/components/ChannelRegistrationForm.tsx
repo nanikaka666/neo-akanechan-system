@@ -1,7 +1,7 @@
 import { ChangeEvent, useState, MouseEvent } from "react";
 import { ChannelId } from "youtube-live-scraper";
 import type { Dispatch, SetStateAction } from "react";
-import { ChannelSummary } from "../../ipcEvent";
+import { ChannelSummary } from "../../../ipcEvent";
 
 export function ChannelRegistrationForm({
   setIsComplete,
