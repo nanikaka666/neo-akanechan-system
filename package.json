@@ -32,7 +32,6 @@
     "@eslint/compat": "^1.4.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.37.0",
-    "@eslint/migrate-config": "^1.5.2",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
@@ -47,7 +46,6 @@
     "mini-css-extract-plugin": "^2.9.4",
     "node-loader": "^2.1.0",
     "prettier": "^3.6.2",
-    "style-loader": "^3.3.4",
     "ts-loader": "^9.5.4",
     "typescript": "~5.8.3"
   },
