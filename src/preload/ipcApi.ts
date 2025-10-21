@@ -1,5 +1,10 @@
 import { IpcRendererEvent } from "electron";
 import { IpcEvent } from "../ipcEvent";
+import { IpcRendererWrapper } from "./ipcRendererWrapper";
+
+declare global {
+  interface Window extends IpcApi {}
+}
 
 type Invoke<K extends keyof IpcEvent> = (
   ...args: Parameters<IpcEvent[K]>
@@ -21,3 +26,15 @@ export interface IpcApi {
     requestChannelTop: Invoke<"getChannelTop">;
   };
 }
+
+export const IpcApi: IpcApi = {
+  ipcApi: {
+    requestConfirmingInputChannelId: (inputChannelId) =>
+      IpcRendererWrapper.invoke("confirmInputChannelId", inputChannelId),
+    requestMainChannelId: () => IpcRendererWrapper.invoke("getMainChannelId"),
+    registerChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
+    registerNewMainChannelListener: (callback) =>
+      IpcRendererWrapper.on("tellNewMainChannelId", callback),
+    requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
+  },
+};
