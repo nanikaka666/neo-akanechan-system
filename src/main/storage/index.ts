@@ -1,7 +1,7 @@
 import { ElectronStoreClient } from "./electronStoreClient";
 import { StorageService } from "./storageService";
 
-// Here define strategy which storage this app use.
+// Here define strategy which storage use.
 const storageService = new StorageService(ElectronStoreClient);
 
 /**
