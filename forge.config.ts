@@ -33,6 +33,14 @@ const config: ForgeConfig = {
               js: "./src/preload/index.ts",
             },
           },
+          {
+            html: "./src/renderer/overlay/index.html",
+            js: "./src/renderer/overlay/index.tsx",
+            name: "overlay",
+            preload: {
+              js: "./src/preload/index.ts",
+            },
+          },
         ],
       },
     }),
