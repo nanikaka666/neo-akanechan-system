@@ -1,7 +1,7 @@
 import { PageFetcher, Scraper } from "youtube-live-scraper";
 import { IpcMainWrapper } from "./ipcMainWrapper";
-import { StorageService } from "./storageService";
 import { WebContentsWrapper } from "./webContentsWrapper";
+import { getStorageService } from "./getStorageService";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
@@ -19,14 +19,14 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("getMainChannelId", () => {
-    return Promise.resolve(StorageService.getMainChannelId());
+    return Promise.resolve(getStorageService().getMainChannelId());
   });
 
   IpcMainWrapper.handle("registerChannel", (e, channelId) => {
     if (channelId.isHandle) {
       return Promise.resolve(false);
     }
-    if (!StorageService.registerChannelIdAndMarkAsMain(channelId)) {
+    if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
       return Promise.resolve(false);
     }
     WebContentsWrapper.send(e.sender, "tellNewMainChannelId", channelId);
