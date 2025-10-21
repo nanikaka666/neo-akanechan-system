@@ -1,5 +1,5 @@
 import { ChannelId } from "youtube-live-scraper";
-import { StorageDao } from "./storage";
+import { StorageDao } from "./types";
 
 /**
  * This class operates storage data controls.
