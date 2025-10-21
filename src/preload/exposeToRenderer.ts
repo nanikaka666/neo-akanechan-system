@@ -8,6 +8,7 @@ export function exposeToRenderer<T extends object, K extends keyof T>(obj: T, ke
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Electron {
     interface ContextBridge {
       /**
