@@ -1,4 +1,4 @@
-import { PageFetcher, Scraper } from "youtube-live-scraper";
+import { ChannelId, PageFetcher, Scraper } from "youtube-live-scraper";
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
@@ -7,8 +7,17 @@ export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
     try {
       const page = await PageFetcher.getChannelPage(inputChannelId);
+
+      // const channelIdYoutubeIdStyle = Scraper.hogehoge();
+
+      /** temporary aid */
+      const res = page.html.match(/"externalId":"(.+?)"/);
+      const channelIdYoutubeIdStyle = res !== null ? res[1] : undefined;
+
       return {
-        channelId: inputChannelId, //TODO: convert to Youtube ID style if needed.
+        channelId: channelIdYoutubeIdStyle
+          ? new ChannelId(channelIdYoutubeIdStyle)
+          : new ChannelId("@dame"), //TODO: convert to Youtube ID style if needed.
         channelTitle: Scraper.getChannelTitleFromChannelPage(page),
         subscribersCount: Scraper.getSubscriberCountFromChannelPage(page),
         ownerIcon: Scraper.getOwnerIconUrlFromChannelPage(page),
