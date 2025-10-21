@@ -23,7 +23,9 @@ export const IpcRendererWrapper = {
 };
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Electron {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     interface IpcRenderer extends NodeJS.EventEmitter {
       /**
        * @deprecated use IpcRendererWrapper.invoke() instead.

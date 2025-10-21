@@ -58,7 +58,6 @@ export default defineConfig([
           destructuredArrayIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/no-namespace": ["error", { allowDecralations: true }],
     },
   },
 ]);

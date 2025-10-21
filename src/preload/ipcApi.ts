@@ -3,6 +3,7 @@ import { IpcEvent } from "../ipcEvent";
 import { IpcRendererWrapper } from "./ipcRendererWrapper";
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface Window extends IpcApi {}
 }
 
