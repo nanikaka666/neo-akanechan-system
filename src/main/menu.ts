@@ -1,5 +1,5 @@
 import { BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
-import { StorageService } from "./storage";
+import { StorageService } from "./storageService";
 import { isDevMode, platform } from "./environment";
 
 function makeAppMenu(): MenuItemConstructorOptions[] {

@@ -1,6 +1,6 @@
 import { PageFetcher, Scraper } from "youtube-live-scraper";
 import { IpcMainWrapper } from "./ipcMainWrapper";
-import { StorageService } from "./storage";
+import { StorageService } from "./storageService";
 import { WebContentsWrapper } from "./webContentsWrapper";
 
 export function setupIpcMainHandlers() {
