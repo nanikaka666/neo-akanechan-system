@@ -59,4 +59,9 @@ export interface IpcEvent {
    * Get data for main channel top page.
    */
   getChannelTop: (channelId: ChannelId) => ChannelTop | undefined;
+
+  /**
+   * Confirm to user that overlay feature should starts.
+   */
+  userConfirmStartOverlay: (channelTop: ChannelTop) => boolean;
 }
