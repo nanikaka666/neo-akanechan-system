@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { ChannelTop } from "../../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
 
@@ -8,6 +8,13 @@ export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) 
   useEffect(() => {
     window.ipcApi.requestChannelTop(mainChannelId).then(setChannelTop).catch(console.log);
   }, []);
+
+  async function onClick(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+
+    const res = await window.ipcApi.requestConfirmToUserThatOverlayStarts(channelTop!);
+    console.log(res);
+  }
 
   return channelTop ? (
     <div>
@@ -39,7 +46,7 @@ export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) 
           />
           <div>{channelTop.closestLive.title.title}</div>
           <div>{channelTop.closestLive.isOnAir ? "On Air" : "Prepareing"}</div>
-          <button>Live Start</button>
+          <button onClick={onClick}>Live Start</button>
         </div>
       ) : (
         <div>予定されているライブはありません</div>
