@@ -4,6 +4,7 @@ import { ChannelId } from "youtube-live-scraper";
 
 export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) {
   const [channelTop, setChannelTop] = useState<ChannelTop>();
+  const [isConfirming, setIsConfirming] = useState(false);
 
   useEffect(() => {
     window.ipcApi.requestChannelTop(mainChannelId).then(setChannelTop).catch(console.log);
@@ -11,9 +12,11 @@ export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) 
 
   async function onClick(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+    setIsConfirming((_) => true);
 
     const res = await window.ipcApi.requestConfirmToUserThatOverlayStarts(channelTop!);
     console.log(res);
+    setIsConfirming((_) => false);
   }
 
   return channelTop ? (
@@ -46,7 +49,9 @@ export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) 
           />
           <div>{channelTop.closestLive.title.title}</div>
           <div>{channelTop.closestLive.isOnAir ? "On Air" : "Prepareing"}</div>
-          <button onClick={onClick}>Live Start</button>
+          <button onClick={onClick} disabled={isConfirming}>
+            Live Start
+          </button>
         </div>
       ) : (
         <div>予定されているライブはありません</div>
