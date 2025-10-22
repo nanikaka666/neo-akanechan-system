@@ -2,6 +2,7 @@ import { ChannelId, PageFetcher, Scraper } from "youtube-live-scraper";
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
+import { BrowserWindow, dialog } from "electron";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
@@ -70,5 +71,20 @@ export function setupIpcMainHandlers() {
       console.log(e);
       return undefined;
     }
+  });
+
+  IpcMainWrapper.handle("userConfirmStartOverlay", async (e, channelTop) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return Promise.resolve(false);
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `ライブ配信を開始しますか？`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+      detail: `${channelTop.closestLive!.title.title}`,
+    });
+    return Promise.resolve(res.response === 0);
   });
 }
