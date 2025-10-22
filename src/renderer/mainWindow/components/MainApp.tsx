@@ -3,7 +3,7 @@ import { ChannelRegistration } from "./ChannelRegistration";
 import { ChannelId } from "youtube-live-scraper";
 import { MainChannelTop } from "./MainChannelTop";
 
-export function App() {
+export function MainApp() {
   const [mainChannelId, setMainChannelId] = useState<ChannelId>();
 
   useEffect(() => {
