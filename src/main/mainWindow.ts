@@ -3,7 +3,7 @@ import { BrowserWindow } from "electron";
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-export const createWindow = (): void => {
+export const createMainWindow = (): void => {
   const mainWindow = new BrowserWindow({
     height: 600,
     width: 800,

@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import { checkElectronSquirrelStartup } from "./checkElectronSquirrelStartup";
-import { createWindow } from "./mainWindow";
+import { createMainWindow } from "./mainWindow";
 import { setupApplicationMenu } from "./menu";
 import { platform } from "./environment";
 import { setupIpcMainHandlers } from "./ipcMainHandlers";
@@ -27,7 +27,7 @@ const onWindowAllClosed = () => {
  */
 const onActivate = (_event: Electron.Event, _habVisibleWindows: boolean) => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    createMainWindow();
   }
 };
 
@@ -43,7 +43,7 @@ function main() {
 
   app.whenReady().then(() => {
     setupApplicationMenu();
-    createWindow();
+    createMainWindow();
     app.on("activate", onActivate);
   });
 }
