@@ -14,7 +14,7 @@ export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) 
     e.preventDefault();
     setIsConfirming((_) => true);
 
-    const res = await window.ipcApi.requestConfirmToUserThatOverlayStarts(channelTop!);
+    const res = await window.ipcApi.requestOpenOverlay(channelTop!);
     console.log(res);
     setIsConfirming((_) => false);
   }
