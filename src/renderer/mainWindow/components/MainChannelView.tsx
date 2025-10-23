@@ -8,7 +8,7 @@ export function MainChannelView({ channelTop }: { channelTop: ChannelTop }) {
     e.preventDefault();
     setIsConfirming((_) => true);
 
-    const res = await window.ipcApi.requestOpenOverlay(channelTop);
+    const res = await window.ipcApi.requestOpenOverlay(channelTop.closestLive!);
     console.log(res);
     setIsConfirming((_) => false);
   }
