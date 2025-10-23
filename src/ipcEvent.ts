@@ -5,21 +5,18 @@ export interface ChannelSummary {
   channelTitle: ChannelTitle;
   subscribersCount: number;
   ownerIcon: string;
+  channelBanner?: string;
+}
+
+export interface LiveSummary {
+  title: VideoTitle;
+  thumbnail: string;
+  isOnAir: boolean;
 }
 
 export interface ChannelTop {
-  channel: {
-    channelId: ChannelId;
-    channelTitle: ChannelTitle;
-    subscribersCount: number;
-    ownerIcon: string;
-    channelBanner?: string;
-  };
-  closestLive?: {
-    title: VideoTitle;
-    thumbnail: string;
-    isOnAir: boolean;
-  };
+  channel: ChannelSummary;
+  closestLive?: LiveSummary;
 }
 
 /**
