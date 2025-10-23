@@ -1,18 +1,7 @@
-import { useState, MouseEvent } from "react";
 import { ChannelTop } from "../../..//ipcEvent";
+import { ClosestLiveView } from "./ClosestLiveView";
 
 export function MainChannelView({ channelTop }: { channelTop: ChannelTop }) {
-  const [isConfirming, setIsConfirming] = useState(false);
-
-  async function onClick(e: MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    setIsConfirming((_) => true);
-
-    const res = await window.ipcApi.requestOpenOverlay(channelTop.closestLive!);
-    console.log(res);
-    setIsConfirming((_) => false);
-  }
-
   return (
     <div>
       <div>
@@ -34,19 +23,7 @@ export function MainChannelView({ channelTop }: { channelTop: ChannelTop }) {
         <div>Subsriber: {channelTop.channel.subscribersCount}</div>
       </div>
       {channelTop.closestLive ? (
-        <div>
-          <p>Next Live</p>
-          <img
-            src={channelTop.closestLive.thumbnail}
-            alt="next live thumbnail"
-            style={{ width: "360px" }}
-          />
-          <div>{channelTop.closestLive.title.title}</div>
-          <div>{channelTop.closestLive.isOnAir ? "On Air" : "Prepareing"}</div>
-          <button onClick={onClick} disabled={isConfirming}>
-            Live Start
-          </button>
-        </div>
+        <ClosestLiveView closestLive={channelTop.closestLive} />
       ) : (
         <div>予定されているライブはありません</div>
       )}
