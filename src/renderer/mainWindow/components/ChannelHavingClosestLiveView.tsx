@@ -13,7 +13,7 @@ export function ChannelHavingClosestLiveView({
     e.preventDefault();
     setIsConfirming((_) => true);
 
-    const res = await window.ipcApi.requestOpenOverlay(channelHavingClosestLive.closestLive);
+    const res = await window.ipcApi.requestOpenOverlay(channelHavingClosestLive);
     console.log(res);
     setIsConfirming((_) => false);
   }

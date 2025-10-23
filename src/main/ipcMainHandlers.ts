@@ -86,7 +86,7 @@ export function setupIpcMainHandlers() {
     }
   });
 
-  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, liveSummary) => {
+  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channelHavingClosestLive) => {
     if (BrowserWindow.getAllWindows().length === 2) {
       // already overlay window opened.
       return Promise.resolve(false);
@@ -100,7 +100,7 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${liveSummary.title.title}`,
+      detail: `${channelHavingClosestLive.closestLive.title.title}`,
     });
     if (res.response !== 0) {
       return Promise.resolve(false);
