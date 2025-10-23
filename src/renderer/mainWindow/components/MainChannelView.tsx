@@ -12,8 +12,6 @@ export function MainChannelView({ channelTop }: { channelTop: ChannelTop }) {
             style={{ width: "100%" }}
           />
         )}
-      </div>
-      <div>
         <img
           src={channelTop.channel.ownerIcon}
           alt="owner icon"
