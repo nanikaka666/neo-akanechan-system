@@ -1,6 +1,7 @@
 import { useState, MouseEvent } from "react";
 import { ChannelHavingClosestLive } from "../../../ipcEvent";
 import { ChannelSummaryView } from "./ChannelSummaryView";
+import { LiveControlPanel } from "./LiveControlPanel";
 
 export function ChannelHavingClosestLiveView({
   channelHavingClosestLive,
@@ -8,17 +9,20 @@ export function ChannelHavingClosestLiveView({
   channelHavingClosestLive: ChannelHavingClosestLive;
 }) {
   const [isConfirming, setIsConfirming] = useState(false);
+  const [isBeingOverlay, setIsBeingOverlay] = useState(false);
 
   async function onClick(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setIsConfirming((_) => true);
 
     const res = await window.ipcApi.requestOpenOverlay(channelHavingClosestLive);
-    console.log(res);
     setIsConfirming((_) => false);
+    setIsBeingOverlay((_) => res);
   }
 
-  return (
+  return isBeingOverlay ? (
+    <LiveControlPanel channelHavingClosestLive={channelHavingClosestLive} />
+  ) : (
     <div>
       <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} />
       <div>
