@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { ChannelTop } from "../../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
-import { MainChannelView } from "./MainChannelView";
+import { ChannelHasNoClosestLiveView } from "./ChannelHasNoClosestLiveView";
+import { ChannelHavingClosestLiveView } from "./ChannelHavingClosestLiveView";
 
 export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) {
   const [channelTop, setChannelTop] = useState<ChannelTop>();
@@ -10,5 +11,13 @@ export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) 
     window.ipcApi.requestChannelTop(mainChannelId).then(setChannelTop).catch(console.log);
   }, []);
 
-  return channelTop ? <MainChannelView channelTop={channelTop} /> : <div>Now Loading...</div>;
+  return channelTop ? (
+    channelTop.type === "has_no_closest_live" ? (
+      <ChannelHasNoClosestLiveView channel={channelTop} />
+    ) : (
+      <ChannelHavingClosestLiveView channel={channelTop} />
+    )
+  ) : (
+    <div>Now Loading...</div>
+  );
 }
