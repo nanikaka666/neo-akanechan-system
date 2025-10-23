@@ -74,7 +74,7 @@ export function setupIpcMainHandlers() {
     }
   });
 
-  IpcMainWrapper.handle("userConfirmStartOverlay", async (e, channelTop) => {
+  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channelTop) => {
     const window = BrowserWindow.fromWebContents(e.sender);
     if (window === null) {
       return Promise.resolve(false);

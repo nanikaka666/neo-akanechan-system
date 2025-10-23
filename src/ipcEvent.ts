@@ -63,5 +63,5 @@ export interface IpcEvent {
   /**
    * Confirm to user that overlay feature should starts.
    */
-  userConfirmStartOverlay: (channelTop: ChannelTop) => boolean;
+  startOverlayWithUserConfirmation: (channelTop: ChannelTop) => boolean;
 }
