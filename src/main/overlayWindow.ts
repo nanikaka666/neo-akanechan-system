@@ -4,7 +4,12 @@ declare const OVERLAY_WEBPACK_ENTRY: string;
 declare const OVERLAY_PRELOAD_WEBPACK_ENTRY: string;
 
 export const createOverlayWindow = (): void => {
+  const parent = BrowserWindow.getFocusedWindow();
+  if (parent === null) {
+    return;
+  }
   const overlayWindow = new BrowserWindow({
+    parent: parent,
     height: 600,
     width: 800,
     webPreferences: {

@@ -3,6 +3,7 @@ import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
+import { createOverlayWindow } from "./overlayWindow";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
@@ -85,6 +86,10 @@ export function setupIpcMainHandlers() {
       defaultId: 0,
       detail: `${channelTop.closestLive!.title.title}`,
     });
-    return Promise.resolve(res.response === 0);
+    if (res.response !== 0) {
+      return Promise.resolve(false);
+    }
+    createOverlayWindow();
+    return Promise.resolve(true);
   });
 }
