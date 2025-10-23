@@ -13,9 +13,9 @@ export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) 
 
   return channelTop ? (
     channelTop.type === "has_no_closest_live" ? (
-      <ChannelHasNoClosestLiveView channel={channelTop} />
+      <ChannelHasNoClosestLiveView channelHasNoClosestLive={channelTop} />
     ) : (
-      <ChannelHavingClosestLiveView channel={channelTop} />
+      <ChannelHavingClosestLiveView channelHavingClosestLive={channelTop} />
     )
   ) : (
     <div>Now Loading...</div>
