@@ -5,22 +5,27 @@ export interface ChannelSummary {
   channelTitle: ChannelTitle;
   subscribersCount: number;
   ownerIcon: string;
+  channelBanner?: string;
 }
 
-export interface ChannelTop {
-  channel: {
-    channelId: ChannelId;
-    channelTitle: ChannelTitle;
-    subscribersCount: number;
-    ownerIcon: string;
-    channelBanner?: string;
-  };
-  closestLive?: {
-    title: VideoTitle;
-    thumbnail: string;
-    isOnAir: boolean;
-  };
+export interface LiveSummary {
+  title: VideoTitle;
+  thumbnail: string;
+  isOnAir: boolean;
 }
+
+export interface ChannelHavingClosestLive {
+  type: "has_closest_live";
+  channel: ChannelSummary;
+  closestLive: LiveSummary;
+}
+
+export interface ChannelHasNoClosestLive {
+  type: "has_no_closest_live";
+  channel: ChannelSummary;
+}
+
+export type ChannelTop = ChannelHavingClosestLive | ChannelHasNoClosestLive;
 
 /**
  * Ipc channel interfaces.
@@ -59,4 +64,9 @@ export interface IpcEvent {
    * Get data for main channel top page.
    */
   getChannelTop: (channelId: ChannelId) => ChannelTop | undefined;
+
+  /**
+   * Confirm to user that overlay feature should starts.
+   */
+  startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
 }

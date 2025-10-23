@@ -2,6 +2,8 @@ import { ChannelId, PageFetcher, Scraper } from "youtube-live-scraper";
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
+import { BrowserWindow, dialog } from "electron";
+import { createOverlayWindow } from "./overlayWindow";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
@@ -65,10 +67,45 @@ export function setupIpcMainHandlers() {
               // isOnAir: Scraper.isLiveNow(maybeClosestLivePage),
               isOnAir: !maybeClosestLivePage.html.includes(`"scheduledStartTime"`), // temporary aid
             };
-      return { channel, closestLive };
+
+      if (closestLive === undefined) {
+        return {
+          type: "has_no_closest_live",
+          channel: channel,
+        };
+      } else {
+        return {
+          type: "has_closest_live",
+          channel: channel,
+          closestLive: closestLive,
+        };
+      }
     } catch (e: unknown) {
       console.log(e);
       return undefined;
     }
+  });
+
+  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channelHavingClosestLive) => {
+    if (BrowserWindow.getAllWindows().length === 2) {
+      // already overlay window opened.
+      return Promise.resolve(false);
+    }
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return Promise.resolve(false);
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `ライブ配信を開始しますか？`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+      detail: `${channelHavingClosestLive.closestLive.title.title}`,
+    });
+    if (res.response !== 0) {
+      return Promise.resolve(false);
+    }
+    createOverlayWindow();
+    return Promise.resolve(true);
   });
 }

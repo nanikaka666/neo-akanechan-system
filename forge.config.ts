@@ -26,9 +26,17 @@ const config: ForgeConfig = {
         config: rendererConfig,
         entryPoints: [
           {
-            html: "./src/renderer/index.html",
-            js: "./src/renderer/index.tsx",
+            html: "./src/renderer/mainWindow/index.html",
+            js: "./src/renderer/mainWindow/index.tsx",
             name: "main_window",
+            preload: {
+              js: "./src/preload/index.ts",
+            },
+          },
+          {
+            html: "./src/renderer/overlay/index.html",
+            js: "./src/renderer/overlay/index.tsx",
+            name: "overlay",
             preload: {
               js: "./src/preload/index.ts",
             },

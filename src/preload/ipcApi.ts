@@ -25,6 +25,7 @@ export interface IpcApi {
     registerChannel: Invoke<"registerChannel">;
     registerNewMainChannelListener: Listen<"tellNewMainChannelId">;
     requestChannelTop: Invoke<"getChannelTop">;
+    requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
   };
 }
 
@@ -37,5 +38,7 @@ export const IpcApi: IpcApi = {
     registerNewMainChannelListener: (callback) =>
       IpcRendererWrapper.on("tellNewMainChannelId", callback),
     requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
+    requestOpenOverlay: (channelTop) =>
+      IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
   },
 };
