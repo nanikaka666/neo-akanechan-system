@@ -22,7 +22,7 @@ export function MainChannelView({ channelTop }: { channelTop: ChannelTop }) {
         <div>{channelTop.channel.channelTitle.title}</div>
         <div>Subsriber: {channelTop.channel.subscribersCount}</div>
       </div>
-      {channelTop.closestLive ? (
+      {channelTop.type === "has_closest_live" ? (
         <ClosestLiveView closestLive={channelTop.closestLive} />
       ) : (
         <div>予定されているライブはありません</div>

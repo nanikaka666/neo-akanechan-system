@@ -67,7 +67,19 @@ export function setupIpcMainHandlers() {
               // isOnAir: Scraper.isLiveNow(maybeClosestLivePage),
               isOnAir: !maybeClosestLivePage.html.includes(`"scheduledStartTime"`), // temporary aid
             };
-      return { channel, closestLive };
+
+      if (closestLive === undefined) {
+        return {
+          type: "has_no_closest_live",
+          channel: channel,
+        };
+      } else {
+        return {
+          type: "has_closest_live",
+          channel: channel,
+          closestLive: closestLive,
+        };
+      }
     } catch (e: unknown) {
       console.log(e);
       return undefined;

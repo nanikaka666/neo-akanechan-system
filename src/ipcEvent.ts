@@ -14,10 +14,18 @@ export interface LiveSummary {
   isOnAir: boolean;
 }
 
-export interface ChannelTop {
+export interface ChannelHavingClosestLive {
+  type: "has_closest_live";
   channel: ChannelSummary;
-  closestLive?: LiveSummary;
+  closestLive: LiveSummary;
 }
+
+export interface ChannelHasNoClosestLive {
+  type: "has_no_closest_live";
+  channel: ChannelSummary;
+}
+
+export type ChannelTop = ChannelHavingClosestLive | ChannelHasNoClosestLive;
 
 /**
  * Ipc channel interfaces.
