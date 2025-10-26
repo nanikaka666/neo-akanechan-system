@@ -1,5 +1,6 @@
 import { ChannelId } from "youtube-live-scraper";
 import { StorageDao } from "./types";
+import { UserSettings } from "../userSettings";
 
 /**
  * This class operates storage data controls.
@@ -48,6 +49,45 @@ export class StorageService {
     this.#dao.set("registeredChannelIds", newList);
     this.#dao.set("mainChannelId", channelId.id);
     return true;
+  }
+
+  /**
+   * Get user settings attached to given channel id.
+   *
+   * if no settings, `undefined` will be returned.
+   * this function return *Partial* UserSettings because StorageData has possibility changing structure.
+   */
+  getUserSettings(channelId: ChannelId): Partial<UserSettings> | undefined {
+    if (channelId.isHandle) {
+      throw new Error(`ChannelId must be Youtube ID style. ${channelId.id}`);
+    }
+    const res = this.#dao.get("userSettings");
+    if (res === undefined) {
+      return undefined;
+    }
+    if (channelId.id in res) {
+      return res[channelId.id];
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
+   * Set user settings to given channel id.
+   *
+   * given new user settings must be complete shape UserSettings.
+   * old settings data will be completely rewrote.
+   */
+  registerUserSettings(channelId: ChannelId, settings: UserSettings) {
+    if (channelId.isHandle) {
+      throw new Error(`ChannelId must be Youtube ID style. ${channelId.id}`);
+    }
+    const current = this.#dao.get("userSettings");
+    if (current === undefined) {
+      this.#dao.set("userSettings", { [channelId.id]: settings });
+    } else {
+      this.#dao.set("userSettings", { ...current, ...{ [channelId.id]: settings } });
+    }
   }
 
   /**
