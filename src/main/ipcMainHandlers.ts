@@ -4,6 +4,7 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
+import { UserSettingsService } from "./userSettings";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
@@ -107,5 +108,9 @@ export function setupIpcMainHandlers() {
     }
     createOverlayWindow();
     return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("getUserSettings", (e, channelId) => {
+    return Promise.resolve(UserSettingsService.getUserSettings(channelId));
   });
 }

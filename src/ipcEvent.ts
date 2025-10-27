@@ -1,4 +1,5 @@
 import { ChannelId, ChannelTitle, VideoTitle } from "youtube-live-scraper";
+import { UserSettings } from "./main/userSettings";
 
 export interface ChannelSummary {
   channelId: ChannelId;
@@ -69,4 +70,11 @@ export interface IpcEvent {
    * Confirm to user that overlay feature should starts.
    */
   startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
+
+  /**
+   * Get UserSettings attached to given channel id.
+   *
+   * if no settings then filled with default value.
+   */
+  getUserSettings: (channelId: ChannelId) => UserSettings;
 }
