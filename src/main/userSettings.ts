@@ -45,7 +45,7 @@ export interface LiveChatSettings {
 
 const DefaultSettings: UserSettings = {
   ...({
-    useLiveChatDisplay: false,
+    useLiveChatDisplay: true,
     displayStyle: "typical",
     authorIconVisibility: true,
     authorNameVisibility: true,
