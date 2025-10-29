@@ -89,4 +89,9 @@ export interface IpcEvent {
    * Check existance of difference of user settings.
    */
   hasDifferenceAmongUserSettings: (settingsA: UserSettings, settingsB: UserSettings) => boolean;
+
+  /**
+   * Notify updated UserSettings to renderer.
+   */
+  tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
 }

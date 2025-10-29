@@ -117,7 +117,7 @@ export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("saveUserSettings", (e, channelId, userSettings) => {
     try {
       UserSettingsService.setUserSettings(channelId, userSettings);
-      // todo: send notification which changing user settings event to renderer
+      WebContentsWrapper.send(e.sender, "tellUpdatedUserSettings", channelId, userSettings);
       return Promise.resolve(true);
     } catch (e: unknown) {
       console.log(e);
