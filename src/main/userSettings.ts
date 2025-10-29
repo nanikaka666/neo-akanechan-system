@@ -88,4 +88,21 @@ export const UserSettingsService = {
     const current = UserSettingsService.getUserSettings(channelId);
     getStorageService().registerUserSettings(channelId, { ...current, ...newSettings });
   },
+
+  /**
+   * Compare user settings object.
+   */
+  isEqual: (settingsA: UserSettings, settingsB: UserSettings): boolean => {
+    // console.log("");
+    for (const key of Object.keys(DefaultSettings) as (keyof UserSettings)[]) {
+      //   console.log(`Compare key: ${key} A: ${settingsA[key]} B: ${settingsB[key]}`);
+      if (settingsA[key] !== settingsB[key]) {
+        // console.log("Different!!!");
+        return false;
+      }
+    }
+
+    // console.log("Same!!!");
+    return true;
+  },
 };

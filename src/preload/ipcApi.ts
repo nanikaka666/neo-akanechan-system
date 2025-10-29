@@ -28,6 +28,7 @@ export interface IpcApi {
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestUserSettings: Invoke<"getUserSettings">;
     registerUserSettings: Invoke<"saveUserSettings">;
+    requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
   };
 }
 
@@ -45,5 +46,7 @@ export const IpcApi: IpcApi = {
     requestUserSettings: (channelId) => IpcRendererWrapper.invoke("getUserSettings", channelId),
     registerUserSettings: (channelId, userSettings) =>
       IpcRendererWrapper.invoke("saveUserSettings", channelId, userSettings),
+    requestCheckHavingDifferenceAmongUserSettings: (settingsA, settingsB) =>
+      IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),
   },
 };

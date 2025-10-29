@@ -84,4 +84,9 @@ export interface IpcEvent {
    * if saving will be failed by some reasons, `false` will be returned.
    */
   saveUserSettings: (channelId: ChannelId, userSettings: UserSettings) => boolean;
+
+  /**
+   * Check existance of difference of user settings.
+   */
+  hasDifferenceAmongUserSettings: (settingsA: UserSettings, settingsB: UserSettings) => boolean;
 }

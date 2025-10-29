@@ -124,4 +124,8 @@ export function setupIpcMainHandlers() {
       return Promise.resolve(false);
     }
   });
+
+  IpcMainWrapper.handle("hasDifferenceAmongUserSettings", (e, settingsA, settingsB) => {
+    return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
+  });
 }
