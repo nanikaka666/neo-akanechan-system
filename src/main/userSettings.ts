@@ -8,6 +8,8 @@ import { getStorageService } from "./storage";
  */
 export type UserSettings = LiveChatSettings;
 
+export type LiveChatDisplayStyle = "typical";
+
 /**
  * Settings around Live Chat Display, part of UserSettings.
  */
@@ -20,7 +22,7 @@ export interface LiveChatSettings {
   /**
    * How to display live chats on overlay window.
    */
-  displayStyle: "typical";
+  displayStyle: LiveChatDisplayStyle;
 
   /**
    * Visibility: user icon.
