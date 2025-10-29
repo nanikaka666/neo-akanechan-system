@@ -50,7 +50,7 @@ export interface IpcEvent {
   /**
    * Register new channel, and mark as main channel.
    *
-   * if given channelId was already registered, `false` will be returnd.
+   * if given channelId was already registered, `false` will be returned.
    */
   registerChannel: (channelId: ChannelId) => boolean;
 
@@ -77,4 +77,11 @@ export interface IpcEvent {
    * if no settings then filled with default value.
    */
   getUserSettings: (channelId: ChannelId) => UserSettings;
+
+  /**
+   * Save userSettings to storage.
+   *
+   * if saving will be failed by some reasons, `false` will be returned.
+   */
+  saveUserSettings: (channelId: ChannelId, userSettings: UserSettings) => boolean;
 }

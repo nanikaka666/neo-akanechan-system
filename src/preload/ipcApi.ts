@@ -27,6 +27,7 @@ export interface IpcApi {
     requestChannelTop: Invoke<"getChannelTop">;
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestUserSettings: Invoke<"getUserSettings">;
+    registerUserSettings: Invoke<"saveUserSettings">;
   };
 }
 
@@ -42,5 +43,7 @@ export const IpcApi: IpcApi = {
     requestOpenOverlay: (channelTop) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
     requestUserSettings: (channelId) => IpcRendererWrapper.invoke("getUserSettings", channelId),
+    registerUserSettings: (channelId, userSettings) =>
+      IpcRendererWrapper.invoke("saveUserSettings", channelId, userSettings),
   },
 };

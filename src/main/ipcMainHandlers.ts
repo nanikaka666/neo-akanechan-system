@@ -113,4 +113,15 @@ export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("getUserSettings", (e, channelId) => {
     return Promise.resolve(UserSettingsService.getUserSettings(channelId));
   });
+
+  IpcMainWrapper.handle("saveUserSettings", (e, channelId, userSettings) => {
+    try {
+      UserSettingsService.setUserSettings(channelId, userSettings);
+      // todo: send notification which changing user settings event to renderer
+      return Promise.resolve(true);
+    } catch (e: unknown) {
+      console.log(e);
+      return Promise.resolve(false);
+    }
+  });
 }
