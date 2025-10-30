@@ -2,6 +2,7 @@ import { useState, MouseEvent, useEffect, useMemo } from "react";
 import { UserSettings } from "../../../main/userSettings";
 import { LiveChatSettingsForm } from "./LiveChatSettingsForm";
 import { ChannelSummary } from "../../../ipcEvent";
+import { GoalsSettingsForm } from "./GoalsSettingsForm";
 
 export function UserSettingsForm({
   channelSummary,
@@ -10,10 +11,11 @@ export function UserSettingsForm({
   channelSummary: ChannelSummary;
   userSettings: UserSettings;
 }) {
-  const originalUserSettings = useMemo(() => {
+  const originalUserSettings = useMemo<UserSettings>(() => {
     return { ...userSettings };
   }, [userSettings]);
-  const [currentUserSettings, setCurrentUserSettings] = useState(originalUserSettings);
+  const [currentUserSettings, setCurrentUserSettings] =
+    useState<UserSettings>(originalUserSettings);
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
 
   useEffect(() => {
@@ -36,6 +38,10 @@ export function UserSettingsForm({
       <div>User Settings Form</div>
       <LiveChatSettingsForm
         liveChatSettings={currentUserSettings}
+        setCurrentUserSettings={setCurrentUserSettings}
+      />
+      <GoalsSettingsForm
+        goalsSettings={currentUserSettings}
         setCurrentUserSettings={setCurrentUserSettings}
       />
       <button onClick={onClick} disabled={isSaveDisabled}>
