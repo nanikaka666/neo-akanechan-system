@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChannelRegistrationComplete } from "./ChannelRegistrationComplete";
 import { ChannelRegistrationForm } from "./ChannelRegistrationForm";
 
-export function ChannelRegistration() {
+export function ChannelRegistrationLoader() {
   const [isComplete, setIsComplete] = useState(false);
 
   return isComplete ? (
