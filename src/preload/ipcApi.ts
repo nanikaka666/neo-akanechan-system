@@ -26,6 +26,10 @@ export interface IpcApi {
     registerNewMainChannelListener: Listen<"tellNewMainChannelId">;
     requestChannelTop: Invoke<"getChannelTop">;
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
+    requestUserSettings: Invoke<"getUserSettings">;
+    registerUserSettings: Invoke<"saveUserSettings">;
+    requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
+    registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
   };
 }
 
@@ -40,5 +44,12 @@ export const IpcApi: IpcApi = {
     requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
     requestOpenOverlay: (channelTop) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
+    requestUserSettings: (channelId) => IpcRendererWrapper.invoke("getUserSettings", channelId),
+    registerUserSettings: (channelId, userSettings) =>
+      IpcRendererWrapper.invoke("saveUserSettings", channelId, userSettings),
+    requestCheckHavingDifferenceAmongUserSettings: (settingsA, settingsB) =>
+      IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),
+    registerUpdatedUserSettingsListener: (callback) =>
+      IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
   },
 };

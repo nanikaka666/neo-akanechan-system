@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChannelRegistration } from "./ChannelRegistration";
 import { ChannelId } from "youtube-live-scraper";
-import { MainChannelTop } from "./MainChannelTop";
+import { MainChannelTopLoader } from "./MainChannelTopLoader";
 
 export function MainApp() {
   const [mainChannelId, setMainChannelId] = useState<ChannelId>();
@@ -15,5 +15,9 @@ export function MainApp() {
     });
   }, []);
 
-  return mainChannelId ? <MainChannelTop mainChannelId={mainChannelId} /> : <ChannelRegistration />;
+  return mainChannelId ? (
+    <MainChannelTopLoader mainChannelId={mainChannelId} />
+  ) : (
+    <ChannelRegistration />
+  );
 }

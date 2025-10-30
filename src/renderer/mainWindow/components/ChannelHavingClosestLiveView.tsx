@@ -2,6 +2,7 @@ import { useState, MouseEvent } from "react";
 import { ChannelHavingClosestLive } from "../../../ipcEvent";
 import { ChannelSummaryView } from "./ChannelSummaryView";
 import { LiveControlPanel } from "./LiveControlPanel";
+import { UserSettingsFormLoader } from "./UserSettingsFormLoader";
 
 export function ChannelHavingClosestLiveView({
   channelHavingClosestLive,
@@ -23,21 +24,24 @@ export function ChannelHavingClosestLiveView({
   return isBeingOverlay ? (
     <LiveControlPanel channelHavingClosestLive={channelHavingClosestLive} />
   ) : (
-    <div>
-      <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} />
+    <>
       <div>
-        <p>Next Live</p>
-        <img
-          src={channelHavingClosestLive.closestLive.thumbnail}
-          alt="next live thumbnail"
-          style={{ width: "360px" }}
-        />
-        <div>{channelHavingClosestLive.closestLive.title.title}</div>
-        <div>{channelHavingClosestLive.closestLive.isOnAir ? "On Air" : "Prepareing"}</div>
-        <button onClick={onClick} disabled={isConfirming}>
-          Live Start
-        </button>
+        <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} />
+        <div>
+          <p>Next Live</p>
+          <img
+            src={channelHavingClosestLive.closestLive.thumbnail}
+            alt="next live thumbnail"
+            style={{ width: "360px" }}
+          />
+          <div>{channelHavingClosestLive.closestLive.title.title}</div>
+          <div>{channelHavingClosestLive.closestLive.isOnAir ? "On Air" : "Prepareing"}</div>
+          <button onClick={onClick} disabled={isConfirming}>
+            Live Start
+          </button>
+        </div>
       </div>
-    </div>
+      <UserSettingsFormLoader channelSummary={channelHavingClosestLive.channel} />
+    </>
   );
 }

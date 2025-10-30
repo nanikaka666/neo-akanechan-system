@@ -4,6 +4,7 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
+import { UserSettingsService } from "./userSettings";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
@@ -107,5 +108,24 @@ export function setupIpcMainHandlers() {
     }
     createOverlayWindow();
     return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("getUserSettings", (e, channelId) => {
+    return Promise.resolve(UserSettingsService.getUserSettings(channelId));
+  });
+
+  IpcMainWrapper.handle("saveUserSettings", (e, channelId, userSettings) => {
+    try {
+      UserSettingsService.setUserSettings(channelId, userSettings);
+      WebContentsWrapper.send(e.sender, "tellUpdatedUserSettings", channelId, userSettings);
+      return Promise.resolve(true);
+    } catch (e: unknown) {
+      console.log(e);
+      return Promise.resolve(false);
+    }
+  });
+
+  IpcMainWrapper.handle("hasDifferenceAmongUserSettings", (e, settingsA, settingsB) => {
+    return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
   });
 }

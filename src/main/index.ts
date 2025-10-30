@@ -4,6 +4,7 @@ import { createMainWindow } from "./mainWindow";
 import { setupApplicationMenu } from "./menu";
 import { platform } from "./environment";
 import { setupIpcMainHandlers } from "./ipcMainHandlers";
+import { setupReactDevtools } from "./reactDevtools";
 
 /**
  * Quit when all windows are closed, except on macOS. There, it's common
@@ -41,8 +42,9 @@ function main() {
 
   setupIpcMainHandlers();
 
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
     setupApplicationMenu();
+    await setupReactDevtools();
     createMainWindow();
     app.on("activate", onActivate);
   });

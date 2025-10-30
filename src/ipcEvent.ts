@@ -1,4 +1,5 @@
 import { ChannelId, ChannelTitle, VideoTitle } from "youtube-live-scraper";
+import { UserSettings } from "./main/userSettings";
 
 export interface ChannelSummary {
   channelId: ChannelId;
@@ -49,7 +50,7 @@ export interface IpcEvent {
   /**
    * Register new channel, and mark as main channel.
    *
-   * if given channelId was already registered, `false` will be returnd.
+   * if given channelId was already registered, `false` will be returned.
    */
   registerChannel: (channelId: ChannelId) => boolean;
 
@@ -69,4 +70,28 @@ export interface IpcEvent {
    * Confirm to user that overlay feature should starts.
    */
   startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
+
+  /**
+   * Get UserSettings attached to given channel id.
+   *
+   * if no settings then filled with default value.
+   */
+  getUserSettings: (channelId: ChannelId) => UserSettings;
+
+  /**
+   * Save userSettings to storage.
+   *
+   * if saving will be failed by some reasons, `false` will be returned.
+   */
+  saveUserSettings: (channelId: ChannelId, userSettings: UserSettings) => boolean;
+
+  /**
+   * Check existance of difference of user settings.
+   */
+  hasDifferenceAmongUserSettings: (settingsA: UserSettings, settingsB: UserSettings) => boolean;
+
+  /**
+   * Notify updated UserSettings to renderer.
+   */
+  tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
 }
