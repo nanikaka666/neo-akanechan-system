@@ -1,4 +1,4 @@
-import { GoalsSettings, UserSettings } from "../../../main/userSettings";
+import { GoalsSettings, UserSettings } from "../../../../main/userSettings";
 import { Dispatch, SetStateAction } from "react";
 
 export function GoalsSettingsForm({

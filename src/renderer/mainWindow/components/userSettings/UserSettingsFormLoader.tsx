@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ChannelSummary } from "../../../ipcEvent";
-import { UserSettings } from "../../../main/userSettings";
+import { ChannelSummary } from "../../../../ipcEvent";
+import { UserSettings } from "../../../../main/userSettings";
 import { UserSettingsForm } from "./UserSettingsForm";
 
 export function UserSettingsFormLoader({ channelSummary }: { channelSummary: ChannelSummary }) {
