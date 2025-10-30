@@ -1,4 +1,4 @@
-import { ChannelHavingClosestLive } from "../../../ipcEvent";
+import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 
 export function LiveControlPanel({
   channelHavingClosestLive,
