@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChannelRegistration } from "./ChannelRegistration";
+import { ChannelRegistration } from "./channelRegistration/ChannelRegistration";
 import { ChannelId } from "youtube-live-scraper";
 import { MainChannelTopLoader } from "./MainChannelTopLoader";
 
