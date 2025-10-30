@@ -4,7 +4,7 @@ import { ChannelId } from "youtube-live-scraper";
 import { ChannelHasNoClosestLiveView } from "./ChannelHasNoClosestLiveView";
 import { ChannelHavingClosestLiveView } from "./ChannelHavingClosestLiveView";
 
-export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) {
+export function MainChannelTopLoader({ mainChannelId }: { mainChannelId: ChannelId }) {
   const [channelTop, setChannelTop] = useState<ChannelTop>();
 
   useEffect(() => {
