@@ -6,25 +6,41 @@ import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
 
+/**
+ * temporary aid method.
+ */
+function extractChannelIdInYoutubeIdStyle(html: string) {
+  // todo: this convert must be done in Scraper.
+  const res = html.match(/"externalId":"(.+?)"/);
+  if (res === null) {
+    throw new Error("Youtube Id not found.");
+  }
+  return new ChannelId(res[1]);
+}
+
+async function getChannelSummary(channelId: ChannelId) {
+  const page = await PageFetcher.getChannelPage(channelId);
+
+  // const channelIdYoutubeIdStyle = Scraper.hogehoge();
+
+  /** temporary aid */
+  const channelIdInYoutubeId = channelId.isHandle
+    ? extractChannelIdInYoutubeIdStyle(page.html)
+    : channelId;
+
+  return {
+    channelId: channelIdInYoutubeId,
+    channelTitle: Scraper.getChannelTitleFromChannelPage(page),
+    subscribersCount: Scraper.getSubscriberCountFromChannelPage(page),
+    ownerIcon: Scraper.getOwnerIconUrlFromChannelPage(page),
+    channelBanner: Scraper.getChannelBanner(page),
+  };
+}
+
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
     try {
-      const page = await PageFetcher.getChannelPage(inputChannelId);
-
-      // const channelIdYoutubeIdStyle = Scraper.hogehoge();
-
-      /** temporary aid */
-      const res = page.html.match(/"externalId":"(.+?)"/);
-      const channelIdYoutubeIdStyle = res !== null ? res[1] : undefined;
-
-      return {
-        channelId: channelIdYoutubeIdStyle
-          ? new ChannelId(channelIdYoutubeIdStyle)
-          : new ChannelId("@dame"), //TODO: convert to Youtube ID style if needed.
-        channelTitle: Scraper.getChannelTitleFromChannelPage(page),
-        subscribersCount: Scraper.getSubscriberCountFromChannelPage(page),
-        ownerIcon: Scraper.getOwnerIconUrlFromChannelPage(page),
-      };
+      return await getChannelSummary(inputChannelId);
     } catch {
       return undefined;
     }
@@ -47,15 +63,7 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("getChannelTop", async (e, channelId) => {
     try {
-      const channelPage = await PageFetcher.getChannelPage(channelId);
-      const channel = {
-        channelId: channelId,
-        channelTitle: Scraper.getChannelTitleFromChannelPage(channelPage),
-        subscribersCount: Scraper.getSubscriberCountFromChannelPage(channelPage),
-        ownerIcon: Scraper.getOwnerIconUrlFromChannelPage(channelPage),
-        channelBanner: Scraper.getChannelBanner(channelPage),
-      };
-
+      const channel = await getChannelSummary(channelId);
       const maybeClosestLivePage = await PageFetcher.getLivePage(channelId);
 
       const closestLive =
