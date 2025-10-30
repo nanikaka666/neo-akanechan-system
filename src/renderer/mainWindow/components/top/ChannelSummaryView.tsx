@@ -1,4 +1,4 @@
-import { ChannelSummary } from "../../../ipcEvent";
+import { ChannelSummary } from "../../../../ipcEvent";
 
 export function ChannelSummaryView({ channelSummary }: { channelSummary: ChannelSummary }) {
   return (

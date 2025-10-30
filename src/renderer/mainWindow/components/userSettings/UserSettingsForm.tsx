@@ -1,7 +1,7 @@
 import { useState, MouseEvent, useEffect, useMemo } from "react";
-import { UserSettings } from "../../../main/userSettings";
+import { UserSettings } from "../../../../main/userSettings";
 import { LiveChatSettingsForm } from "./LiveChatSettingsForm";
-import { ChannelSummary } from "../../../ipcEvent";
+import { ChannelSummary } from "../../../../ipcEvent";
 import { GoalsSettingsForm } from "./GoalsSettingsForm";
 
 export function UserSettingsForm({

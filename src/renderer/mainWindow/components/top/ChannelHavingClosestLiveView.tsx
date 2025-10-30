@@ -1,8 +1,8 @@
 import { useState, MouseEvent } from "react";
-import { ChannelHavingClosestLive } from "../../../ipcEvent";
+import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 import { ChannelSummaryView } from "./ChannelSummaryView";
-import { LiveControlPanel } from "./LiveControlPanel";
-import { UserSettingsFormLoader } from "./UserSettingsFormLoader";
+import { LiveControlPanel } from "../liveControl/LiveControlPanel";
+import { UserSettingsFormLoader } from "../userSettings/UserSettingsFormLoader";
 
 export function ChannelHavingClosestLiveView({
   channelHavingClosestLive,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChannelTop } from "../../../ipcEvent";
+import { ChannelTop } from "../../../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
 import { ChannelHasNoClosestLiveView } from "./ChannelHasNoClosestLiveView";
 import { ChannelHavingClosestLiveView } from "./ChannelHavingClosestLiveView";

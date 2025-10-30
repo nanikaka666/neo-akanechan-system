@@ -1,5 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
-import { LiveChatDisplayStyle, LiveChatSettings, UserSettings } from "../../../main/userSettings";
+import {
+  LiveChatDisplayStyle,
+  LiveChatSettings,
+  UserSettings,
+} from "../../../../main/userSettings";
 
 const displayStyles: LiveChatDisplayStyle[] = ["typical"];
 
