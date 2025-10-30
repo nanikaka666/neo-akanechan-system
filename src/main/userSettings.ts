@@ -6,7 +6,7 @@ import { getStorageService } from "./storage";
  *
  * UserSettings is consisted with intersections of each type of settings.
  */
-export type UserSettings = LiveChatSettings;
+export type UserSettings = LiveChatSettings & GoalsSettings;
 
 export type LiveChatDisplayStyle = "typical";
 
@@ -45,6 +45,26 @@ export interface LiveChatSettings {
   decorateFirstChat: boolean;
 }
 
+/**
+ * Settings about owner's goals, part of UserSettings.
+ */
+export interface GoalsSettings {
+  /**
+   * Turn on indicator of subscribers count.
+   */
+  useSubscribersCountGoal: boolean;
+
+  /**
+   * Turn on indicator of like count.
+   */
+  useLikeCountGoal: boolean;
+
+  /**
+   * Turn on indicator of live view count.
+   */
+  useLiveViewCountGoal: boolean;
+}
+
 const DefaultSettings: UserSettings = {
   ...({
     useLiveChatDisplay: true,
@@ -54,6 +74,11 @@ const DefaultSettings: UserSettings = {
     membershipBadgeVisibility: true,
     decorateFirstChat: true,
   } satisfies LiveChatSettings),
+  ...({
+    useSubscribersCountGoal: true,
+    useLikeCountGoal: true,
+    useLiveViewCountGoal: true,
+  } satisfies GoalsSettings),
 };
 
 /**
