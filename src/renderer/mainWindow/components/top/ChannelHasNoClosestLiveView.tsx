@@ -1,6 +1,6 @@
-import { ChannelHasNoClosestLive } from "../../../ipcEvent";
+import { ChannelHasNoClosestLive } from "../../../../ipcEvent";
 import { ChannelSummaryView } from "./ChannelSummaryView";
-import { UserSettingsFormLoader } from "./userSettings/UserSettingsFormLoader";
+import { UserSettingsFormLoader } from "../userSettings/UserSettingsFormLoader";
 
 export function ChannelHasNoClosestLiveView({
   channelHasNoClosestLive,
