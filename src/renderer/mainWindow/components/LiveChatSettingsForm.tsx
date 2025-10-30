@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { LiveChatDisplayStyle, LiveChatSettings, UserSettings } from "../../../main/userSettings";
 
+const displayStyles: LiveChatDisplayStyle[] = ["typical"];
+
 export function LiveChatSettingsForm({
   liveChatSettings,
   setCurrentUserSettings,
@@ -28,17 +30,16 @@ export function LiveChatSettingsForm({
 
       <div>
         表示方法
-        {["typical"].map((style) => (
+        {displayStyles.map((style) => (
           <label key={style}>
             <input
               type="radio"
               name="displayStyle"
-              value={style}
               disabled={!liveChatSettings.useLiveChatDisplay}
               checked={style === liveChatSettings.displayStyle}
-              onChange={(e) => {
+              onChange={() => {
                 setCurrentUserSettings((prev) => {
-                  return { ...prev, ...{ displayStyle: e.target.value as LiveChatDisplayStyle } };
+                  return { ...prev, ...{ displayStyle: style } };
                 });
               }}
             />
