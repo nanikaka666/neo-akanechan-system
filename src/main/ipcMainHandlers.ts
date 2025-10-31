@@ -116,6 +116,7 @@ export function setupIpcMainHandlers() {
       return Promise.resolve(false);
     }
     createOverlayWindow();
+    WebContentsWrapper.send(e.sender, "tellOverlayStarted", channelHavingClosestLive);
     return Promise.resolve(true);
   });
 

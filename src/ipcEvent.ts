@@ -97,6 +97,11 @@ export interface IpcEvent {
   startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
 
   /**
+   * Tell that overlay is started to renderer.
+   */
+  tellOverlayStarted: (channelHavingClosestLive: ChannelHavingClosestLive) => void;
+
+  /**
    * Get UserSettings attached to given channel id.
    *
    * if no settings then filled with default value.
