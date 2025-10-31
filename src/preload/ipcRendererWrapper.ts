@@ -18,6 +18,7 @@ export const IpcRendererWrapper = {
     key: K,
     callback: (e: IpcRendererEvent, ...args: Parameters<IpcEvent[K]>) => void,
   ) => {
+    ipcRenderer.removeAllListeners(key);
     ipcRenderer.on(key, callback);
   },
 };

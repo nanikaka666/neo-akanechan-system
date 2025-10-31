@@ -63,6 +63,13 @@ export interface IpcEvent {
   switchMainChannel: (to: ChannelId) => boolean;
 
   /**
+   * Delete channel data from storage.
+   *
+   * it affects on registeredChannelIds, userSettings, mainChannelId.
+   */
+  deleteChannelWithUserConfirmation: (channel: ChannelSummary) => boolean;
+
+  /**
    * Tell a event that changing the main channel.
    *
    * Main channel accepts `undefined`, if this app has no registrated channel id.
@@ -73,6 +80,11 @@ export interface IpcEvent {
    * Get channels stored in storage.
    */
   getRegisterdChannels: () => ChannelSummary[];
+
+  /**
+   * Tell latest channel list to renderer.
+   */
+  tellUpdatedChannelIds: (channels: ChannelSummary[]) => void;
 
   /**
    * Get data for main channel top page.

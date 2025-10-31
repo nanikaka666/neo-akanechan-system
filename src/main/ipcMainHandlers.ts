@@ -149,4 +149,34 @@ export function setupIpcMainHandlers() {
     }
     return Promise.resolve(false);
   });
+
+  IpcMainWrapper.handle("deleteChannelWithUserConfirmation", async (e, channel) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `このチャンネルをリストから削除しますか？`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+      detail: `${channel.channelTitle.title}`,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
+
+    const oldMainChannelId = getStorageService().getMainChannelId();
+    getStorageService().deleteChannel(channel);
+    const latestMainChannelId = getStorageService().getMainChannelId();
+    if (oldMainChannelId?.id !== latestMainChannelId?.id) {
+      WebContentsWrapper.send(e.sender, "tellNewMainChannelId", latestMainChannelId);
+    } else {
+      const res =
+        (await Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary))) ??
+        [];
+      WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
+    }
+    return true;
+  });
 }

@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState, MouseEvent } from "react";
 import { ChannelSummary } from "../../../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
 import ReactModal from "react-modal";
@@ -9,8 +9,18 @@ export function ChannelList({ currentMainChannelId }: { currentMainChannelId: Ch
   const [channels, setChannels] = useState<ChannelSummary[]>();
   const [showModal, turnOn, turnOff] = useModal();
 
+  function deleteChannel(e: MouseEvent, channel: ChannelSummary) {
+    e.stopPropagation();
+    window.ipcApi.requestDeletingChannel(channel);
+  }
+
   useEffect(() => {
-    window.ipcApi.requestRegisteredChannels().then(setChannels);
+    window.ipcApi.requestRegisteredChannels().then((lists) => {
+      setChannels((_) => lists);
+      window.ipcApi.registerUpdatedChannelListListener((e, lists) => {
+        setChannels((_) => lists);
+      });
+    });
 
     // close modal when re-render this component.
     turnOff();
@@ -38,6 +48,7 @@ export function ChannelList({ currentMainChannelId }: { currentMainChannelId: Ch
           >
             <img src={channel.ownerIcon} style={{ width: "32px", height: "32px" }} />
             {channel.channelTitle.title}
+            <button onClick={(e) => deleteChannel(e, channel)}>削除</button>
           </div>
         );
       })}
