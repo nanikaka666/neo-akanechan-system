@@ -9,11 +9,11 @@ export function ChannelHasNoClosestLiveView({
 }) {
   return (
     <>
-      <div>
+      <div style={{ position: "absolute", left: "100px" }}>
         <ChannelSummaryView channelSummary={channelHasNoClosestLive.channel} />
         <div>予定されているライブはありません</div>
+        <UserSettingsFormLoader channelSummary={channelHasNoClosestLive.channel} />
       </div>
-      <UserSettingsFormLoader channelSummary={channelHasNoClosestLive.channel} />
     </>
   );
 }

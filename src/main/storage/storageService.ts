@@ -30,6 +30,12 @@ export class StorageService {
     }
   }
 
+  getRegisteredChannelIds() {
+    return this.#dao.get("registeredChannelIds").map((id) => {
+      return new ChannelId(id);
+    });
+  }
+
   /**
    * Add channel id to list and mark as main channel.
    *
@@ -47,6 +53,25 @@ export class StorageService {
     }
     const newList = [...list, channelId.id];
     this.#dao.set("registeredChannelIds", newList);
+    this.#dao.set("mainChannelId", channelId.id);
+    return true;
+  }
+
+  /**
+   * Switch main channel.
+   *
+   * main channel is must be listed in `registeredChannelIds`.
+   */
+  switchMainChannel(channelId: ChannelId) {
+    if (channelId.isHandle) {
+      throw new Error(`Registering channelId must be Youtube ID style. ${channelId.id}`);
+    }
+    const list = this.#dao.get("registeredChannelIds") ?? [];
+
+    // check: channelId is registered.
+    if (list.filter((id) => id === channelId.id).length === 0) {
+      return false;
+    }
     this.#dao.set("mainChannelId", channelId.id);
     return true;
   }
