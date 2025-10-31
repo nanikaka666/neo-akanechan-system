@@ -1,6 +1,7 @@
 import { ChannelId } from "youtube-live-scraper";
 import { StorageDao } from "./types";
 import { UserSettings } from "../userSettings";
+import { ChannelSummary } from "../../ipcEvent";
 
 /**
  * This class operates storage data controls.
@@ -74,6 +75,30 @@ export class StorageService {
     }
     this.#dao.set("mainChannelId", channelId.id);
     return true;
+  }
+
+  /**
+   * Delete channel data.
+   */
+  deleteChannel(channel: ChannelSummary) {
+    const nextChannelIds = (this.#dao.get("registeredChannelIds") ?? []).filter(
+      (id) => id !== channel.channelId.id,
+    );
+    this.#dao.set("registeredChannelIds", nextChannelIds);
+
+    if (this.#dao.get("mainChannelId") === channel.channelId.id) {
+      if (nextChannelIds.length === 0) {
+        this.#dao.delete("mainChannelId");
+      } else {
+        this.#dao.set("mainChannelId", nextChannelIds[0]);
+      }
+    }
+
+    const userSettings = this.#dao.get("userSettings");
+    if (userSettings !== undefined && channel.channelId.id in userSettings) {
+      const { [channel.channelId.id]: _, ...rest } = userSettings;
+      this.#dao.set("userSettings", rest);
+    }
   }
 
   /**
