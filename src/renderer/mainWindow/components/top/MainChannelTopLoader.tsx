@@ -10,7 +10,7 @@ export function MainChannelTopLoader({ mainChannelId }: { mainChannelId: Channel
 
   useEffect(() => {
     window.ipcApi.requestChannelTop(mainChannelId).then(setChannelTop).catch(console.log);
-  }, []);
+  }, [mainChannelId]);
 
   return channelTop ? (
     <>

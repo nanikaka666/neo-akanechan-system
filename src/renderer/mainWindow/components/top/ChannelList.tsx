@@ -1,13 +1,19 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { ChannelSummary } from "../../../../ipcEvent";
 import { ChannelId } from "youtube-live-scraper";
+import ReactModal from "react-modal";
+import { ChannelRegistrationLoader } from "../channelRegistration/ChannelRegistrationLoader";
 
 export function ChannelList({ currentMainChannelId }: { currentMainChannelId: ChannelId }) {
   const [channels, setChannels] = useState<ChannelSummary[]>();
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
 
   useEffect(() => {
     window.ipcApi.requestRegisteredChannels().then(setChannels);
-  }, []);
+
+    // close modal when re-render this component.
+    setShowRegistrationModal((_) => false);
+  }, [currentMainChannelId]);
 
   return channels ? (
     <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
@@ -26,6 +32,14 @@ export function ChannelList({ currentMainChannelId }: { currentMainChannelId: Ch
           </div>
         );
       })}
+      <div onClick={() => setShowRegistrationModal((_) => true)}>Add Channel</div>
+      <ReactModal
+        style={{ content: { inset: 0 } }}
+        isOpen={showRegistrationModal}
+        onRequestClose={() => setShowRegistrationModal((_) => false)}
+      >
+        <ChannelRegistrationLoader />
+      </ReactModal>
     </div>
   ) : (
     <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
