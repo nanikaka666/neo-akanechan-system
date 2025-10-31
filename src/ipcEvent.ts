@@ -94,4 +94,9 @@ export interface IpcEvent {
    * Notify updated UserSettings to renderer.
    */
   tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
+
+  /**
+   * Get channels stored in storage.
+   */
+  getRegisterdChannels: () => ChannelSummary[];
 }

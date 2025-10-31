@@ -30,6 +30,12 @@ export class StorageService {
     }
   }
 
+  getRegisteredChannelIds() {
+    return this.#dao.get("registeredChannelIds").map((id) => {
+      return new ChannelId(id);
+    });
+  }
+
   /**
    * Add channel id to list and mark as main channel.
    *

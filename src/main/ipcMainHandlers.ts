@@ -5,6 +5,7 @@ import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
+import { ChannelSummary } from "../ipcEvent";
 
 /**
  * temporary aid method.
@@ -34,7 +35,7 @@ async function getChannelSummary(channelId: ChannelId) {
     subscribersCount: Scraper.getSubscriberCountFromChannelPage(page),
     ownerIcon: Scraper.getOwnerIconUrlFromChannelPage(page),
     channelBanner: Scraper.getChannelBanner(page),
-  };
+  } satisfies ChannelSummary;
 }
 
 export function setupIpcMainHandlers() {
@@ -135,5 +136,9 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("hasDifferenceAmongUserSettings", (e, settingsA, settingsB) => {
     return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
+  });
+
+  IpcMainWrapper.handle("getRegisterdChannels", () => {
+    return Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary));
   });
 }
