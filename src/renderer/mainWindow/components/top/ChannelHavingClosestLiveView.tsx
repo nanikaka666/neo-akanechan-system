@@ -25,7 +25,7 @@ export function ChannelHavingClosestLiveView({
     <LiveControlPanel channelHavingClosestLive={channelHavingClosestLive} />
   ) : (
     <>
-      <div>
+      <div style={{ position: "absolute", left: "100px" }}>
         <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} />
         <div>
           <p>Next Live</p>
@@ -40,8 +40,8 @@ export function ChannelHavingClosestLiveView({
             Live Start
           </button>
         </div>
+        <UserSettingsFormLoader channelSummary={channelHavingClosestLive.channel} />
       </div>
-      <UserSettingsFormLoader channelSummary={channelHavingClosestLive.channel} />
     </>
   );
 }
