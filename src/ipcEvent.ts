@@ -55,11 +55,24 @@ export interface IpcEvent {
   registerChannel: (channelId: ChannelId) => boolean;
 
   /**
+   * Switch "MainChannel" to another one.
+   *
+   * The channel id must be stored in storage.
+   * when failed switching, `false` will be returned.
+   */
+  switchMainChannel: (to: ChannelId) => boolean;
+
+  /**
    * Tell a event that changing the main channel.
    *
    * Main channel accepts `undefined`, if this app has no registrated channel id.
    */
   tellNewMainChannelId: (channelId?: ChannelId) => void;
+
+  /**
+   * Get channels stored in storage.
+   */
+  getRegisterdChannels: () => ChannelSummary[];
 
   /**
    * Get data for main channel top page.
@@ -94,9 +107,4 @@ export interface IpcEvent {
    * Notify updated UserSettings to renderer.
    */
   tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
-
-  /**
-   * Get channels stored in storage.
-   */
-  getRegisterdChannels: () => ChannelSummary[];
 }

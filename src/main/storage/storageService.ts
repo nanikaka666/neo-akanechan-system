@@ -58,6 +58,25 @@ export class StorageService {
   }
 
   /**
+   * Switch main channel.
+   *
+   * main channel is must be listed in `registeredChannelIds`.
+   */
+  switchMainChannel(channelId: ChannelId) {
+    if (channelId.isHandle) {
+      throw new Error(`Registering channelId must be Youtube ID style. ${channelId.id}`);
+    }
+    const list = this.#dao.get("registeredChannelIds") ?? [];
+
+    // check: channelId is registered.
+    if (list.filter((id) => id === channelId.id).length === 0) {
+      return false;
+    }
+    this.#dao.set("mainChannelId", channelId.id);
+    return true;
+  }
+
+  /**
    * Get user settings attached to given channel id.
    *
    * if no settings, `undefined` will be returned.

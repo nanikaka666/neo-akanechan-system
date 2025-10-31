@@ -141,4 +141,12 @@ export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("getRegisterdChannels", () => {
     return Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary));
   });
+
+  IpcMainWrapper.handle("switchMainChannel", (e, to) => {
+    if (getStorageService().switchMainChannel(to)) {
+      WebContentsWrapper.send(e.sender, "tellNewMainChannelId", to);
+      return Promise.resolve(true);
+    }
+    return Promise.resolve(false);
+  });
 }

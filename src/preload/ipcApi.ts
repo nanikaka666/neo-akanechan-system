@@ -31,6 +31,7 @@ export interface IpcApi {
     requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
     registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
     requestRegisteredChannels: Invoke<"getRegisterdChannels">;
+    requestSwitchMainChannel: Invoke<"switchMainChannel">;
   };
 }
 
@@ -53,5 +54,6 @@ export const IpcApi: IpcApi = {
     registerUpdatedUserSettingsListener: (callback) =>
       IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
     requestRegisteredChannels: () => IpcRendererWrapper.invoke("getRegisterdChannels"),
+    requestSwitchMainChannel: (to) => IpcRendererWrapper.invoke("switchMainChannel", to),
   },
 };
