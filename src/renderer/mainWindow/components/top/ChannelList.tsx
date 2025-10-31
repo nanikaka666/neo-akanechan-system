@@ -26,7 +26,15 @@ export function ChannelList({ currentMainChannelId }: { currentMainChannelId: Ch
               }
             : undefined;
         return (
-          <div key={channel.channelId.id} style={styles}>
+          <div
+            key={channel.channelId.id}
+            style={styles}
+            onClick={() => {
+              if (currentMainChannelId.id !== channel.channelId.id) {
+                window.ipcApi.requestSwitchMainChannel(channel.channelId);
+              }
+            }}
+          >
             <img src={channel.ownerIcon} style={{ width: "32px", height: "32px" }} />
             {channel.channelTitle.title}
           </div>
@@ -34,7 +42,7 @@ export function ChannelList({ currentMainChannelId }: { currentMainChannelId: Ch
       })}
       <div onClick={() => setShowRegistrationModal((_) => true)}>Add Channel</div>
       <ReactModal
-        style={{ content: { inset: 0 } }}
+        style={{ content: { inset: "20px" } }}
         isOpen={showRegistrationModal}
         onRequestClose={() => setShowRegistrationModal((_) => false)}
       >

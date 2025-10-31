@@ -9,19 +9,23 @@ export function MainChannelTopLoader({ mainChannelId }: { mainChannelId: Channel
   const [channelTop, setChannelTop] = useState<ChannelTop>();
 
   useEffect(() => {
+    // to show loading screen, reset channelTop here.
+    setChannelTop((_) => undefined);
     window.ipcApi.requestChannelTop(mainChannelId).then(setChannelTop).catch(console.log);
   }, [mainChannelId]);
 
-  return channelTop ? (
+  return (
     <>
       <ChannelList currentMainChannelId={mainChannelId} />
-      {channelTop.type === "has_no_closest_live" ? (
-        <ChannelHasNoClosestLiveView channelHasNoClosestLive={channelTop} />
+      {channelTop ? (
+        channelTop.type === "has_no_closest_live" ? (
+          <ChannelHasNoClosestLiveView channelHasNoClosestLive={channelTop} />
+        ) : (
+          <ChannelHavingClosestLiveView channelHavingClosestLive={channelTop} />
+        )
       ) : (
-        <ChannelHavingClosestLiveView channelHavingClosestLive={channelTop} />
+        <div style={{ position: "absolute", left: "100px" }}>Now Loading...</div>
       )}
     </>
-  ) : (
-    <div>Now Loading...</div>
   );
 }
