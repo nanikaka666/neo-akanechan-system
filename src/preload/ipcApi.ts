@@ -33,6 +33,7 @@ export interface IpcApi {
     requestRegisteredChannels: Invoke<"getRegisterdChannels">;
     requestSwitchMainChannel: Invoke<"switchMainChannel">;
     requestDeletingChannel: Invoke<"deleteChannelWithUserConfirmation">;
+    registerUpdatedChannelListListener: Listen<"tellUpdatedChannelIds">;
   };
 }
 
@@ -58,5 +59,7 @@ export const IpcApi: IpcApi = {
     requestSwitchMainChannel: (to) => IpcRendererWrapper.invoke("switchMainChannel", to),
     requestDeletingChannel: (channel) =>
       IpcRendererWrapper.invoke("deleteChannelWithUserConfirmation", channel),
+    registerUpdatedChannelListListener: (callback) =>
+      IpcRendererWrapper.on("tellUpdatedChannelIds", callback),
   },
 };

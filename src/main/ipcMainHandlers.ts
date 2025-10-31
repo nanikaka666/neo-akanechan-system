@@ -172,7 +172,10 @@ export function setupIpcMainHandlers() {
     if (oldMainChannelId?.id !== latestMainChannelId?.id) {
       WebContentsWrapper.send(e.sender, "tellNewMainChannelId", latestMainChannelId);
     } else {
-      // todo: tell new channel list
+      const res =
+        (await Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary))) ??
+        [];
+      WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
     }
     return true;
   });
