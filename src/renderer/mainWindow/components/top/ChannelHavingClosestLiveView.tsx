@@ -3,6 +3,8 @@ import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 import { ChannelSummaryView } from "./ChannelSummaryView";
 import { LiveControlPanel } from "../liveControl/LiveControlPanel";
 import { UserSettingsFormLoader } from "../userSettings/UserSettingsFormLoader";
+import ReactModal from "react-modal";
+import { useModal } from "../hooks/useModal";
 
 export function ChannelHavingClosestLiveView({
   channelHavingClosestLive,
@@ -11,6 +13,7 @@ export function ChannelHavingClosestLiveView({
 }) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isBeingOverlay, setIsBeingOverlay] = useState(false);
+  const [showModal, turnOn, turnOff] = useModal();
 
   async function onClick(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -24,24 +27,25 @@ export function ChannelHavingClosestLiveView({
   return isBeingOverlay ? (
     <LiveControlPanel channelHavingClosestLive={channelHavingClosestLive} />
   ) : (
-    <>
-      <div style={{ position: "absolute", left: "100px" }}>
-        <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} />
-        <div>
-          <p>Next Live</p>
-          <img
-            src={channelHavingClosestLive.closestLive.thumbnail}
-            alt="next live thumbnail"
-            style={{ width: "360px" }}
-          />
-          <div>{channelHavingClosestLive.closestLive.title.title}</div>
-          <div>{channelHavingClosestLive.closestLive.isOnAir ? "On Air" : "Prepareing"}</div>
-          <button onClick={onClick} disabled={isConfirming}>
-            Live Start
-          </button>
-        </div>
-        <UserSettingsFormLoader channelSummary={channelHavingClosestLive.channel} />
+    <div style={{ position: "absolute", left: "100px" }}>
+      <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} />
+      <div>
+        <p>Next Live</p>
+        <img
+          src={channelHavingClosestLive.closestLive.thumbnail}
+          alt="next live thumbnail"
+          style={{ width: "360px" }}
+        />
+        <div>{channelHavingClosestLive.closestLive.title.title}</div>
+        <div>{channelHavingClosestLive.closestLive.isOnAir ? "On Air" : "Prepareing"}</div>
+        <button onClick={onClick} disabled={isConfirming}>
+          Live Start
+        </button>
       </div>
-    </>
+      <button onClick={turnOn}>ライブの設定</button>
+      <ReactModal isOpen={showModal} onRequestClose={turnOff}>
+        <UserSettingsFormLoader channelSummary={channelHavingClosestLive.channel} />
+      </ReactModal>
+    </div>
   );
 }
