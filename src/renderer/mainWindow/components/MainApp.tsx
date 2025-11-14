@@ -3,7 +3,7 @@ import { ChannelRegistrationLoader } from "./channelRegistration/ChannelRegistra
 import { ChannelId } from "youtube-live-scraper";
 import { MainChannelTopLoader } from "./top/MainChannelTopLoader";
 import { ChannelHavingClosestLive } from "../../../ipcEvent";
-import { LiveControlPanel } from "./liveControl/LiveControlPanel";
+import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
 import { UserSettings } from "../../../main/userSettings";
 
 interface ChannelAndSettings {
@@ -36,7 +36,7 @@ export function MainApp() {
 
   return mainChannelId ? (
     channelAndSettings ? (
-      <LiveControlPanel
+      <LiveControlPanelInStandBy
         channelHavingClosestLive={channelAndSettings.channel}
         userSettings={channelAndSettings.settings}
       />

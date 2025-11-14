@@ -3,7 +3,7 @@ import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 import { StandByAnnouncement } from "./StandByAnnouncement";
 import { UserSettings } from "../../../../main/userSettings";
 
-export function LiveControlPanel({
+export function LiveControlPanelInStandBy({
   channelHavingClosestLive,
   userSettings,
 }: {
