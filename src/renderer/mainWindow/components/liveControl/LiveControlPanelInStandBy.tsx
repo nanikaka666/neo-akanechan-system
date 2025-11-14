@@ -20,7 +20,10 @@ export function LiveControlPanelInStandBy({
       {isStandBy ? (
         <>
           <SideBarInStandBy liveLaunchProperties={liveLaunchProperties} />
-          <StandByAnnouncement prepareCompletion={prepareCompletion} />
+          <StandByAnnouncement
+            liveLaunchProperties={liveLaunchProperties}
+            prepareCompletion={prepareCompletion}
+          />
         </>
       ) : (
         <LiveControlPanel liveLaunchProperties={liveLaunchProperties} />

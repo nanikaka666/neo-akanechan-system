@@ -31,6 +31,7 @@ export type ChannelTop = ChannelHavingClosestLive | ChannelHasNoClosestLive;
 export interface LiveLaunchProperties {
   channel: ChannelHavingClosestLive;
   settings: UserSettings;
+  overlayWindowTitle: string;
 }
 
 /**

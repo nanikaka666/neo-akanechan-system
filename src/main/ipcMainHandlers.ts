@@ -115,10 +115,14 @@ export function setupIpcMainHandlers() {
     if (res.response !== 0) {
       return Promise.resolve(false);
     }
-    createOverlayWindow();
+    // shown on title bar of overlay window.
+    const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title.title}`;
+    createOverlayWindow(overlayWindowTitle);
+
     WebContentsWrapper.send(e.sender, "tellOverlayStarted", {
       channel: channelHavingClosestLive,
       settings: UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
+      overlayWindowTitle: overlayWindowTitle,
     } satisfies LiveLaunchProperties);
     return Promise.resolve(true);
   });
