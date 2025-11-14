@@ -5,7 +5,7 @@ import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
-import { ChannelSummary } from "../ipcEvent";
+import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
 
 /**
  * temporary aid method.
@@ -115,7 +115,15 @@ export function setupIpcMainHandlers() {
     if (res.response !== 0) {
       return Promise.resolve(false);
     }
-    createOverlayWindow();
+    // shown on title bar of overlay window.
+    const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title.title}`;
+    createOverlayWindow(overlayWindowTitle);
+
+    WebContentsWrapper.send(e.sender, "tellOverlayStarted", {
+      channel: channelHavingClosestLive,
+      settings: UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
+      overlayWindowTitle: overlayWindowTitle,
+    } satisfies LiveLaunchProperties);
     return Promise.resolve(true);
   });
 

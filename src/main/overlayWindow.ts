@@ -3,13 +3,13 @@ import { BrowserWindow } from "electron";
 declare const OVERLAY_WEBPACK_ENTRY: string;
 declare const OVERLAY_PRELOAD_WEBPACK_ENTRY: string;
 
-export const createOverlayWindow = (): void => {
+export const createOverlayWindow = (title: string): void => {
   const parent = BrowserWindow.getFocusedWindow();
   if (parent === null) {
     return;
   }
   const overlayWindow = new BrowserWindow({
-    parent: parent,
+    title: title,
     height: 600,
     width: 800,
     webPreferences: {

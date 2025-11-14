@@ -1,7 +1,6 @@
 import { useState, MouseEvent } from "react";
 import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 import { ChannelSummaryView } from "./ChannelSummaryView";
-import { LiveControlPanel } from "../liveControl/LiveControlPanel";
 import { UserSettingsFormLoader } from "../userSettings/UserSettingsFormLoader";
 import ReactModal from "react-modal";
 import { useModal } from "../hooks/useModal";
@@ -12,21 +11,17 @@ export function ChannelHavingClosestLiveView({
   channelHavingClosestLive: ChannelHavingClosestLive;
 }) {
   const [isConfirming, setIsConfirming] = useState(false);
-  const [isBeingOverlay, setIsBeingOverlay] = useState(false);
   const [showModal, turnOn, turnOff] = useModal();
 
   async function onClick(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setIsConfirming((_) => true);
 
-    const res = await window.ipcApi.requestOpenOverlay(channelHavingClosestLive);
+    await window.ipcApi.requestOpenOverlay(channelHavingClosestLive);
     setIsConfirming((_) => false);
-    setIsBeingOverlay((_) => res);
   }
 
-  return isBeingOverlay ? (
-    <LiveControlPanel channelHavingClosestLive={channelHavingClosestLive} />
-  ) : (
+  return (
     <div style={{ position: "absolute", left: "100px" }}>
       <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} />
       <div>
