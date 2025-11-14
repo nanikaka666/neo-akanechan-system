@@ -3,6 +3,7 @@ import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 import { StandByAnnouncement } from "./StandByAnnouncement";
 import { UserSettings } from "../../../../main/userSettings";
 import { LiveControlPanel } from "./LiveControlPanel";
+import { SideBarInStandBy } from "./SideBarInStandBy";
 
 export function LiveControlPanelInStandBy({
   channelHavingClosestLive,
@@ -20,7 +21,13 @@ export function LiveControlPanelInStandBy({
   return (
     <>
       {isStandBy ? (
-        <StandByAnnouncement prepareCompletion={prepareCompletion} />
+        <>
+          <SideBarInStandBy
+            channelHavingClosestLive={channelHavingClosestLive}
+            userSettings={userSettings}
+          />
+          <StandByAnnouncement prepareCompletion={prepareCompletion} />
+        </>
       ) : (
         <LiveControlPanel
           channelHavingClosestLive={channelHavingClosestLive}
