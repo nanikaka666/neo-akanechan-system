@@ -1,25 +1,25 @@
 import { CSSProperties, Dispatch, SetStateAction } from "react";
-import { ChannelHavingClosestLive } from "../../../../ipcEvent";
-import { UserSettings } from "../../../../main/userSettings";
+import { LiveLaunchProperties } from "../../../../ipcEvent";
 import { Mode } from "./LiveControlPanel";
 
 const selectedStyle: CSSProperties = { backgroundColor: "orange" };
 
 export function SideBar({
-  channelHavingClosestLive,
-  userSettings,
+  liveLaunchProperties,
   mode,
   setMode,
 }: {
-  channelHavingClosestLive: ChannelHavingClosestLive;
-  userSettings: UserSettings;
+  liveLaunchProperties: LiveLaunchProperties;
   mode: Mode;
   setMode: Dispatch<SetStateAction<Mode>>;
 }) {
   return (
     <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
       <div>
-        <img src={channelHavingClosestLive.closestLive.thumbnail} style={{ width: "100px" }}></img>
+        <img
+          src={liveLaunchProperties.channel.closestLive.thumbnail}
+          style={{ width: "100px" }}
+        ></img>
       </div>
       <div
         onClick={() => setMode((_) => "commentViewer")}

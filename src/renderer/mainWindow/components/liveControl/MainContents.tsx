@@ -1,17 +1,14 @@
 import { CSSProperties } from "react";
-import { ChannelHavingClosestLive } from "../../../../ipcEvent";
-import { UserSettings } from "../../../../main/userSettings";
+import { LiveLaunchProperties } from "../../../../ipcEvent";
 import { Mode } from "./LiveControlPanel";
 
 const displayNone: CSSProperties = { display: "none" };
 
 export function MainContents({
-  channelHavingClosestLive,
-  userSettings,
+  liveLaunchProperties,
   mode,
 }: {
-  channelHavingClosestLive: ChannelHavingClosestLive;
-  userSettings: UserSettings;
+  liveLaunchProperties: LiveLaunchProperties;
   mode: Mode;
 }) {
   return (

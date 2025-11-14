@@ -23,10 +23,7 @@ export function MainApp() {
 
   return mainChannelId ? (
     liveLaunchProperties ? (
-      <LiveControlPanelInStandBy
-        channelHavingClosestLive={liveLaunchProperties.channel}
-        userSettings={liveLaunchProperties.settings}
-      />
+      <LiveControlPanelInStandBy liveLaunchProperties={liveLaunchProperties} />
     ) : (
       <MainChannelTopLoader mainChannelId={mainChannelId} />
     )

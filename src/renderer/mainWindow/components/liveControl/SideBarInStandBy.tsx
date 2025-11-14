@@ -1,17 +1,17 @@
-import { ChannelHavingClosestLive } from "../../../../ipcEvent";
-import { UserSettings } from "../../../../main/userSettings";
+import { LiveLaunchProperties } from "../../../../ipcEvent";
 
 export function SideBarInStandBy({
-  channelHavingClosestLive,
-  userSettings,
+  liveLaunchProperties,
 }: {
-  channelHavingClosestLive: ChannelHavingClosestLive;
-  userSettings: UserSettings;
+  liveLaunchProperties: LiveLaunchProperties;
 }) {
   return (
     <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
       <div>
-        <img src={channelHavingClosestLive.closestLive.thumbnail} style={{ width: "100px" }}></img>
+        <img
+          src={liveLaunchProperties.channel.closestLive.thumbnail}
+          style={{ width: "100px" }}
+        ></img>
       </div>
       <div>Comment Viewer</div>
       <div>Chance Time</div>

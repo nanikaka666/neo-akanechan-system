@@ -1,16 +1,13 @@
 import { useState } from "react";
-import { ChannelHavingClosestLive } from "../../../../ipcEvent";
+import { LiveLaunchProperties } from "../../../../ipcEvent";
 import { StandByAnnouncement } from "./StandByAnnouncement";
-import { UserSettings } from "../../../../main/userSettings";
 import { LiveControlPanel } from "./LiveControlPanel";
 import { SideBarInStandBy } from "./SideBarInStandBy";
 
 export function LiveControlPanelInStandBy({
-  channelHavingClosestLive,
-  userSettings,
+  liveLaunchProperties,
 }: {
-  channelHavingClosestLive: ChannelHavingClosestLive;
-  userSettings: UserSettings;
+  liveLaunchProperties: LiveLaunchProperties;
 }) {
   const [isStandBy, setIsStandBy] = useState(true);
 
@@ -22,17 +19,11 @@ export function LiveControlPanelInStandBy({
     <>
       {isStandBy ? (
         <>
-          <SideBarInStandBy
-            channelHavingClosestLive={channelHavingClosestLive}
-            userSettings={userSettings}
-          />
+          <SideBarInStandBy liveLaunchProperties={liveLaunchProperties} />
           <StandByAnnouncement prepareCompletion={prepareCompletion} />
         </>
       ) : (
-        <LiveControlPanel
-          channelHavingClosestLive={channelHavingClosestLive}
-          userSettings={userSettings}
-        />
+        <LiveControlPanel liveLaunchProperties={liveLaunchProperties} />
       )}
     </>
   );

@@ -1,33 +1,21 @@
 import { useState } from "react";
-import { ChannelHavingClosestLive } from "../../../../ipcEvent";
-import { UserSettings } from "../../../../main/userSettings";
+import { LiveLaunchProperties } from "../../../../ipcEvent";
 import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
 
 export type Mode = "commentViewer" | "chanceTime" | "rankings" | "neighborhoods";
 
 export function LiveControlPanel({
-  channelHavingClosestLive,
-  userSettings,
+  liveLaunchProperties,
 }: {
-  channelHavingClosestLive: ChannelHavingClosestLive;
-  userSettings: UserSettings;
+  liveLaunchProperties: LiveLaunchProperties;
 }) {
   const [mode, setMode] = useState<Mode>("commentViewer");
 
   return (
     <>
-      <SideBar
-        channelHavingClosestLive={channelHavingClosestLive}
-        userSettings={userSettings}
-        mode={mode}
-        setMode={setMode}
-      />
-      <MainContents
-        channelHavingClosestLive={channelHavingClosestLive}
-        userSettings={userSettings}
-        mode={mode}
-      />
+      <SideBar liveLaunchProperties={liveLaunchProperties} mode={mode} setMode={setMode} />
+      <MainContents liveLaunchProperties={liveLaunchProperties} mode={mode} />
     </>
   );
 }
