@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 import { UserSettings } from "../../../../main/userSettings";
 import { SideBar } from "./SideBar";
+import { MainContents } from "./MainContents";
 
 export type Mode = "commentViewer" | "chanceTime" | "rankings" | "neighborhoods";
 
@@ -22,7 +23,11 @@ export function LiveControlPanel({
         mode={mode}
         setMode={setMode}
       />
-      <div>hoge</div>
+      <MainContents
+        channelHavingClosestLive={channelHavingClosestLive}
+        userSettings={userSettings}
+        mode={mode}
+      />
     </>
   );
 }
