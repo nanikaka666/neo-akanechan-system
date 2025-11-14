@@ -9,7 +9,6 @@ export const createOverlayWindow = (): void => {
     return;
   }
   const overlayWindow = new BrowserWindow({
-    parent: parent,
     height: 600,
     width: 800,
     webPreferences: {
