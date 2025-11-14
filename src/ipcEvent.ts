@@ -99,7 +99,10 @@ export interface IpcEvent {
   /**
    * Tell that overlay is started to renderer.
    */
-  tellOverlayStarted: (channelHavingClosestLive: ChannelHavingClosestLive) => void;
+  tellOverlayStarted: (
+    channelHavingClosestLive: ChannelHavingClosestLive,
+    userSettings: UserSettings,
+  ) => void;
 
   /**
    * Get UserSettings attached to given channel id.

@@ -116,7 +116,12 @@ export function setupIpcMainHandlers() {
       return Promise.resolve(false);
     }
     createOverlayWindow();
-    WebContentsWrapper.send(e.sender, "tellOverlayStarted", channelHavingClosestLive);
+    WebContentsWrapper.send(
+      e.sender,
+      "tellOverlayStarted",
+      channelHavingClosestLive,
+      UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
+    );
     return Promise.resolve(true);
   });
 

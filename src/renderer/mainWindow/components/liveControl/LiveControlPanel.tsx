@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 import { StandByAnnouncement } from "./StandByAnnouncement";
+import { UserSettings } from "../../../../main/userSettings";
 
 export function LiveControlPanel({
   channelHavingClosestLive,
+  userSettings,
 }: {
   channelHavingClosestLive: ChannelHavingClosestLive;
+  userSettings: UserSettings;
 }) {
   const [isStandBy, setIsStandBy] = useState(true);
 
