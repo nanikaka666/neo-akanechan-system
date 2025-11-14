@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChannelHavingClosestLive } from "../../../../ipcEvent";
 import { StandByAnnouncement } from "./StandByAnnouncement";
 import { UserSettings } from "../../../../main/userSettings";
+import { LiveControlPanel } from "./LiveControlPanel";
 
 export function LiveControlPanelInStandBy({
   channelHavingClosestLive,
@@ -18,13 +19,14 @@ export function LiveControlPanelInStandBy({
 
   return (
     <>
-      <div>
-        <div>Overlay Control Panels.</div>
-        <div>Comment Viewer</div>
-        <div>Chance Time</div>
-        <div>Point Rankings</div>
-      </div>
-      {isStandBy && <StandByAnnouncement prepareCompletion={prepareCompletion} />}
+      {isStandBy ? (
+        <StandByAnnouncement prepareCompletion={prepareCompletion} />
+      ) : (
+        <LiveControlPanel
+          channelHavingClosestLive={channelHavingClosestLive}
+          userSettings={userSettings}
+        />
+      )}
     </>
   );
 }
