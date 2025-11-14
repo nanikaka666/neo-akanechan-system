@@ -2,18 +2,12 @@ import { useEffect, useState } from "react";
 import { ChannelRegistrationLoader } from "./channelRegistration/ChannelRegistrationLoader";
 import { ChannelId } from "youtube-live-scraper";
 import { MainChannelTopLoader } from "./top/MainChannelTopLoader";
-import { ChannelHavingClosestLive } from "../../../ipcEvent";
+import { LiveLaunchProperties } from "../../../ipcEvent";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
-import { UserSettings } from "../../../main/userSettings";
-
-interface ChannelAndSettings {
-  channel: ChannelHavingClosestLive;
-  settings: UserSettings;
-}
 
 export function MainApp() {
   const [mainChannelId, setMainChannelId] = useState<ChannelId>();
-  const [channelAndSettings, setChannelAndSettings] = useState<ChannelAndSettings>();
+  const [liveLaunchProperties, setLiveLaunchProperties] = useState<LiveLaunchProperties>();
 
   useEffect(() => {
     window.ipcApi.requestMainChannelId().then((ch) => {
@@ -21,24 +15,17 @@ export function MainApp() {
       window.ipcApi.registerNewMainChannelListener((e, channelId) => {
         setMainChannelId((_) => channelId);
       });
-      window.ipcApi.registerIsStartedOverlayListener(
-        (e, channelHavingClosestLive, userSettings) => {
-          setChannelAndSettings((_) => {
-            return {
-              channel: channelHavingClosestLive,
-              settings: userSettings,
-            } satisfies ChannelAndSettings;
-          });
-        },
-      );
+      window.ipcApi.registerIsStartedOverlayListener((e, liveLaunchProperties) => {
+        setLiveLaunchProperties((_) => liveLaunchProperties);
+      });
     });
   }, []);
 
   return mainChannelId ? (
-    channelAndSettings ? (
+    liveLaunchProperties ? (
       <LiveControlPanelInStandBy
-        channelHavingClosestLive={channelAndSettings.channel}
-        userSettings={channelAndSettings.settings}
+        channelHavingClosestLive={liveLaunchProperties.channel}
+        userSettings={liveLaunchProperties.settings}
       />
     ) : (
       <MainChannelTopLoader mainChannelId={mainChannelId} />

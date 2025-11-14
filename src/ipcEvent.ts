@@ -28,6 +28,11 @@ export interface ChannelHasNoClosestLive {
 
 export type ChannelTop = ChannelHavingClosestLive | ChannelHasNoClosestLive;
 
+export interface LiveLaunchProperties {
+  channel: ChannelHavingClosestLive;
+  settings: UserSettings;
+}
+
 /**
  * Ipc channel interfaces.
  *
@@ -99,10 +104,7 @@ export interface IpcEvent {
   /**
    * Tell that overlay is started to renderer.
    */
-  tellOverlayStarted: (
-    channelHavingClosestLive: ChannelHavingClosestLive,
-    userSettings: UserSettings,
-  ) => void;
+  tellOverlayStarted: (liveLaunchProperties: LiveLaunchProperties) => void;
 
   /**
    * Get UserSettings attached to given channel id.
