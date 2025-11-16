@@ -108,6 +108,11 @@ export interface IpcEvent {
   tellOverlayStarted: (liveLaunchProperties: LiveLaunchProperties) => void;
 
   /**
+   * Start emitters depend on user settings.
+   */
+  launchEmitters: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+
+  /**
    * Get UserSettings attached to given channel id.
    *
    * if no settings then filled with default value.

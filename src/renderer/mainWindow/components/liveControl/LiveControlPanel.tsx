@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LiveLaunchProperties } from "../../../../ipcEvent";
 import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
@@ -11,6 +11,10 @@ export function LiveControlPanel({
   liveLaunchProperties: LiveLaunchProperties;
 }) {
   const [mode, setMode] = useState<Mode>("commentViewer");
+
+  useEffect(() => {
+    window.ipcApi.requestLaunchEmitters(liveLaunchProperties).then(console.log);
+  }, []);
 
   return (
     <>

@@ -6,6 +6,13 @@ import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
 import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
+import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
+import {
+  LikeCountRaisedEventEmitter,
+  LiveViewCountRaisedEventEmitter,
+  SubscriberCountRaisedEventEmitter,
+} from "simple-youtube-emitter";
+import { setupLiveChatEmitter } from "./emitter/liveChatManager";
 
 /**
  * temporary aid method.
@@ -185,6 +192,11 @@ export function setupIpcMainHandlers() {
         [];
       WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
     }
+    return true;
+  });
+
+  IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
+    await setupLiveChatEmitter(liveLaunchProperties);
     return true;
   });
 }
