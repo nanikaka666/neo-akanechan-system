@@ -22,13 +22,14 @@ export async function setupLiveChatEmitter(liveLaunchProperties: LiveLaunchPrope
   if (liveChatEmitter !== undefined) {
     liveChatEmitter.close();
     liveChatEmitter = undefined;
-    textChats = [];
-    superChats = [];
-    superStickers = [];
-    newMemberships = [];
-    membershipMilestones = [];
-    gifts = [];
   }
+  textChats = [];
+  superChats = [];
+  superStickers = [];
+  newMemberships = [];
+  membershipMilestones = [];
+  gifts = [];
+
   liveChatEmitter = new YoutubeLiveChatEmitter(
     liveLaunchProperties.channel.channel.channelId.id,
     1 * 1000,
