@@ -36,6 +36,7 @@ export interface IpcApi {
     registerUpdatedChannelListListener: Listen<"tellUpdatedChannelIds">;
     registerIsStartedOverlayListener: Listen<"tellOverlayStarted">;
     requestLaunchEmitters: Invoke<"launchEmitters">;
+    registerChatCountListener: Listen<"tellChatCount">;
   };
 }
 
@@ -67,5 +68,6 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellOverlayStarted", callback),
     requestLaunchEmitters: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
+    registerChatCountListener: (callback) => IpcRendererWrapper.on("tellChatCount", callback),
   },
 };

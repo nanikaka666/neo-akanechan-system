@@ -9,6 +9,8 @@ import {
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
 import { LiveLaunchProperties } from "../../ipcEvent";
 import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
+import { WebContents } from "electron";
+import { WebContentsWrapper } from "../webContentsWrapper";
 
 let liveChatEmitter: YoutubeLiveChatEmitter | undefined;
 let textChats: ChatItemText[];
@@ -17,24 +19,36 @@ let superStickers: ChatItemSuperSticker[];
 let newMemberships: NewMembership[];
 let membershipMilestones: MembershipMilestone[];
 let gifts: (SponsorshipsGift & { num: number })[];
+const authorChannelIds = new Set<string>();
 
-export async function setupLiveChatEmitter(liveLaunchProperties: LiveLaunchProperties) {
+let webContents: WebContents | undefined;
+
+export async function setupLiveChatEmitter(
+  w: WebContents,
+  liveLaunchProperties: LiveLaunchProperties,
+) {
   if (liveChatEmitter !== undefined) {
     liveChatEmitter.close();
     liveChatEmitter = undefined;
   }
+  webContents = w;
   textChats = [];
   superChats = [];
   superStickers = [];
   newMemberships = [];
   membershipMilestones = [];
   gifts = [];
+  authorChannelIds.clear();
 
   liveChatEmitter = new YoutubeLiveChatEmitter(
     liveLaunchProperties.channel.channel.channelId.id,
     1 * 1000,
   );
   liveChatEmitter.on("addChat", (item) => {
+    if (!authorChannelIds.has(item.author.channelId.id)) {
+      authorChannelIds.add(item.author.channelId.id);
+      // tell chat UU count increased.
+    }
     if (item.type === "text") {
       textChats = [...textChats, item];
       console.log(item.messages);
@@ -45,6 +59,9 @@ export async function setupLiveChatEmitter(liveLaunchProperties: LiveLaunchPrope
       superStickers = [...superStickers, item];
       console.log(item.superSticker);
     }
+    // tell chat count increased.
+    const chatNum = textChats.length + superChats.length + superStickers.length;
+    WebContentsWrapper.send(webContents!, "tellChatCount", chatNum);
   });
   liveChatEmitter.on("removeChat", (id) => {
     // very simple deleting algorythm.
@@ -54,6 +71,8 @@ export async function setupLiveChatEmitter(liveLaunchProperties: LiveLaunchPrope
   });
   liveChatEmitter.on("blockUser", (blockChannelId) => {
     textChats = textChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
+    superChats = superChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
+    superStickers = superStickers.filter((item) => item.author.channelId.id !== blockChannelId.id);
     console.log(`block user: ${blockChannelId.id}`);
   });
   liveChatEmitter.on("memberships", (item) => {

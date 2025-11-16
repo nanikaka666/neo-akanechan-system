@@ -135,4 +135,11 @@ export interface IpcEvent {
    * Notify updated UserSettings to renderer.
    */
   tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
+
+  /**
+   * Notify counts of chats to renderer.
+   *
+   * counts means number of text chat, superchat, superstickers; effect of removing chat and blocking user is reflected.
+   */
+  tellChatCount: (chatCount: number) => void;
 }
