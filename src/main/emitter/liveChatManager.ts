@@ -1,0 +1,85 @@
+import {
+  ChatItemSuperChat,
+  ChatItemSuperSticker,
+  ChatItemText,
+  MembershipMilestone,
+  NewMembership,
+  SponsorshipsGift,
+  TextMessage,
+} from "youtube-livechat-emitter/dist/src/types/liveChat";
+import { LiveLaunchProperties } from "../../ipcEvent";
+import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
+
+let liveChatEmitter: YoutubeLiveChatEmitter | undefined;
+let textChats: ChatItemText[];
+let superChats: ChatItemSuperChat[];
+let superStickers: ChatItemSuperSticker[];
+let newMemberships: NewMembership[];
+let membershipMilestones: MembershipMilestone[];
+let gifts: (SponsorshipsGift & { num: number })[];
+
+export async function setupLiveChatEmitter(liveLaunchProperties: LiveLaunchProperties) {
+  if (liveChatEmitter !== undefined) {
+    liveChatEmitter.close();
+    liveChatEmitter = undefined;
+    textChats = [];
+    superChats = [];
+    superStickers = [];
+    newMemberships = [];
+    membershipMilestones = [];
+    gifts = [];
+  }
+  liveChatEmitter = new YoutubeLiveChatEmitter(
+    liveLaunchProperties.channel.channel.channelId.id,
+    1 * 1000,
+  );
+  liveChatEmitter.on("addChat", (item) => {
+    if (item.type === "text") {
+      textChats = [...textChats, item];
+      console.log(item.messages);
+    } else if (item.type === "superChat") {
+      superChats = [...superChats, item];
+      console.log(item.superChat);
+    } else {
+      superStickers = [...superStickers, item];
+      console.log(item.superSticker);
+    }
+  });
+  liveChatEmitter.on("removeChat", (id) => {
+    // very simple deleting algorythm.
+    // if any problem of performance occurred then change the algorythm.
+    textChats = textChats.filter((item) => item.id.id !== id.id);
+    console.log(`remove item: ${id.id}`);
+  });
+  liveChatEmitter.on("blockUser", (blockChannelId) => {
+    textChats = textChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
+    console.log(`block user: ${blockChannelId.id}`);
+  });
+  liveChatEmitter.on("memberships", (item) => {
+    if (item.type === "new") {
+      newMemberships = [...newMemberships, item];
+      console.log("New Memberships.", item);
+    } else {
+      membershipMilestones = [...membershipMilestones, item];
+      console.log("Membership Milestone.", item);
+    }
+  });
+  liveChatEmitter.on("sponsorshipsGift", (item) => {
+    const convertedItem = {
+      ...item,
+      num: Number.parseInt((item.messages![1] as TextMessage).text),
+    };
+    gifts = [...gifts, convertedItem];
+    console.log("Gift purchased!", convertedItem);
+  });
+  liveChatEmitter.on("start", () => {
+    console.log("LiveChatEmitter started.");
+  });
+  liveChatEmitter.on("end", () => {
+    console.log("LiveChatEmitter finished.");
+  });
+  liveChatEmitter.on("error", (error) => {
+    console.log(error);
+  });
+  await liveChatEmitter.start();
+}
