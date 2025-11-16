@@ -6,13 +6,8 @@ import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
 import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
-import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
-import {
-  LikeCountRaisedEventEmitter,
-  LiveViewCountRaisedEventEmitter,
-  SubscriberCountRaisedEventEmitter,
-} from "simple-youtube-emitter";
 import { setupLiveChatEmitter } from "./emitter/liveChatManager";
+import { setupLikeCountEmitter } from "./emitter/likeCountManager";
 
 /**
  * temporary aid method.
@@ -196,7 +191,10 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
-    await setupLiveChatEmitter(liveLaunchProperties);
+    await Promise.all([
+      setupLiveChatEmitter(liveLaunchProperties),
+      setupLikeCountEmitter(liveLaunchProperties),
+    ]);
     return true;
   });
 }
