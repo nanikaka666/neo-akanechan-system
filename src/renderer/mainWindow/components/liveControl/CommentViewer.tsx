@@ -7,6 +7,18 @@ interface TimeRange {
   end: string;
 }
 
+function formatDate(date: Date) {
+  const hour = date.getHours() + "";
+  const minute = date.getMinutes() + "";
+  const second = date.getSeconds() + "";
+
+  return `${to2Digit(hour)}:${to2Digit(minute)}:${to2Digit(second)}`;
+}
+
+function to2Digit(value: string) {
+  return value.length === 1 ? "0" + value : value;
+}
+
 export function CommentViewer() {
   const [textChats, setTextChats] = useState<ChatItemText[]>([]);
   const [textChatNum, setTextChatNum] = useState(0);
@@ -29,8 +41,8 @@ export function CommentViewer() {
         const startDate = new Date(textChats[range.startIndex].timestamp / 1000); // microsecond to millisecond
         const endDate = new Date(textChats[range.endIndex].timestamp / 1000);
         return {
-          start: `${startDate.getHours()}:${startDate.getMinutes()}:${startDate.getSeconds()}`,
-          end: `${endDate.getHours()}:${endDate.getMinutes()}:${endDate.getSeconds()}`,
+          start: formatDate(startDate),
+          end: formatDate(endDate),
         };
       });
     }
