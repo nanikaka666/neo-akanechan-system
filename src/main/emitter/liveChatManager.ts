@@ -85,9 +85,14 @@ export async function setupLiveChatEmitter(
     }
   });
   liveChatEmitter.on("sponsorshipsGift", (item) => {
+    const message = (item.messages![0] as TextMessage).text;
+    const res = message.match(/^[^0-9]*([0-9]+)/);
+    if (res === null) {
+      throw new Error(`Gift num not found. ${message}`);
+    }
     const convertedItem = {
       ...item,
-      num: Number.parseInt((item.messages![1] as TextMessage).text),
+      num: Number.parseInt(res[1]),
     };
     gifts = [...gifts, convertedItem];
     console.log("Gift purchased!", convertedItem);
