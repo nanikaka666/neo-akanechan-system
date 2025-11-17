@@ -14,6 +14,8 @@ import { WebContentsWrapper } from "../webContentsWrapper";
 
 let liveChatEmitter: YoutubeLiveChatEmitter | undefined;
 let textChats: ChatItemText[];
+let chatNum: number;
+let textChatNum: number;
 let superChats: ChatItemSuperChat[];
 let superStickers: ChatItemSuperSticker[];
 let newMemberships: NewMembership[];
@@ -33,6 +35,8 @@ export async function setupLiveChatEmitter(
   }
   webContents = w;
   textChats = [];
+  textChatNum = 0;
+  chatNum = 0;
   superChats = [];
   superStickers = [];
   newMemberships = [];
@@ -50,9 +54,11 @@ export async function setupLiveChatEmitter(
       WebContentsWrapper.send(webContents!, "tellChatUniqueUserCount", authorChannelIds.size);
     }
     if (item.type === "text") {
-      textChats = [...textChats, item];
+      // increase chat count
+      textChatNum++;
+      textChats = [...textChats, item].slice(-1000); // take latest 1000 items.
       console.log(item.messages);
-      WebContentsWrapper.send(webContents!, "tellTextChats", textChats);
+      WebContentsWrapper.send(webContents!, "tellTextChats", textChats, textChatNum);
     } else if (item.type === "superChat") {
       superChats = [...superChats, item];
       console.log(item.superChat);
@@ -61,7 +67,7 @@ export async function setupLiveChatEmitter(
       console.log(item.superSticker);
     }
     // tell chat count increased.
-    const chatNum = textChats.length + superChats.length + superStickers.length;
+    chatNum++;
     WebContentsWrapper.send(webContents!, "tellChatCount", chatNum);
   });
   liveChatEmitter.on("removeChat", (id) => {

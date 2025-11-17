@@ -167,5 +167,5 @@ export interface IpcEvent {
   /**
    * Notify all text chats to renderer.
    */
-  tellTextChats: (textChats: ChatItemText[]) => void;
+  tellTextChats: (textChats: ChatItemText[], textChatNum: number) => void;
 }
