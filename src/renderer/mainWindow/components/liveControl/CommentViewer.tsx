@@ -90,19 +90,19 @@ export function CommentViewer() {
         }}
         itemContent={(index, textChat) => {
           return (
-            <div style={{}}>
-              <div>
-                <img src={textChat.author.thumbnails[0].url} />
+            <div style={textChat.isFirst ? { backgroundColor: "yellowgreen" } : {}}>
+              <img src={textChat.author.thumbnails[0].url} />
+              <span style={{ marginLeft: "5px", marginRight: "5px", fontWeight: "bold" }}>
                 {textChat.author.name}
+              </span>
 
-                {textChat.messages.map((messageItem, idx) => {
-                  return messageItem.type === "text" ? (
-                    messageItem.text
-                  ) : (
-                    <img style={{ width: "16px" }} src={messageItem.images[0].url} key={idx} />
-                  );
-                })}
-              </div>
+              {textChat.messages.map((messageItem, idx) => {
+                return messageItem.type === "text" ? (
+                  messageItem.text
+                ) : (
+                  <img style={{ width: "16px" }} src={messageItem.images[0].url} key={idx} />
+                );
+              })}
             </div>
           );
         }}
