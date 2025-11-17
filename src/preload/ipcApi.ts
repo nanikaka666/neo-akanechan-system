@@ -41,6 +41,7 @@ export interface IpcApi {
     registerLikeCountListener: Listen<"tellLikeCount">;
     registerLiveViewCountListener: Listen<"tellLiveViewCount">;
     registerSubscriberCountListener: Listen<"tellSubscriberCount">;
+    registerTextChatsListener: Listen<"tellTextChats">;
   };
 }
 
@@ -80,5 +81,6 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellLiveViewCount", callback),
     registerSubscriberCountListener: (callback) =>
       IpcRendererWrapper.on("tellSubscriberCount", callback),
+    registerTextChatsListener: (callback) => IpcRendererWrapper.on("tellTextChats", callback),
   },
 };

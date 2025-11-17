@@ -52,6 +52,7 @@ export async function setupLiveChatEmitter(
     if (item.type === "text") {
       textChats = [...textChats, item];
       console.log(item.messages);
+      WebContentsWrapper.send(webContents!, "tellTextChats", textChats);
     } else if (item.type === "superChat") {
       superChats = [...superChats, item];
       console.log(item.superChat);

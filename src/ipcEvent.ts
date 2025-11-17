@@ -1,5 +1,6 @@
 import { ChannelId, ChannelTitle, VideoTitle } from "youtube-live-scraper";
 import { UserSettings } from "./main/userSettings";
+import { ChatItemText } from "youtube-livechat-emitter/dist/src/types/liveChat";
 
 export interface ChannelSummary {
   channelId: ChannelId;
@@ -162,4 +163,9 @@ export interface IpcEvent {
    * Notify counts of subscribers to renderer.
    */
   tellSubscriberCount: (subscriberCount: number) => void;
+
+  /**
+   * Notify all text chats to renderer.
+   */
+  tellTextChats: (textChats: ChatItemText[]) => void;
 }
