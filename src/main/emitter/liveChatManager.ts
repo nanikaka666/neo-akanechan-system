@@ -47,7 +47,7 @@ export async function setupLiveChatEmitter(
   liveChatEmitter.on("addChat", (item) => {
     if (!authorChannelIds.has(item.author.channelId.id)) {
       authorChannelIds.add(item.author.channelId.id);
-      // tell chat UU count increased.
+      WebContentsWrapper.send(webContents!, "tellChatUniqueUserCount", authorChannelIds.size);
     }
     if (item.type === "text") {
       textChats = [...textChats, item];

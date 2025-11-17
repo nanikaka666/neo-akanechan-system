@@ -142,4 +142,9 @@ export interface IpcEvent {
    * counts means number of text chat, superchat, superstickers; effect of removing chat and blocking user is reflected.
    */
   tellChatCount: (chatCount: number) => void;
+
+  /**
+   * Notify counts of chat UU to renderer.
+   */
+  tellChatUniqueUserCount: (chatUU: number) => void;
 }

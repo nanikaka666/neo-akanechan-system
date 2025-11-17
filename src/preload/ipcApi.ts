@@ -37,6 +37,7 @@ export interface IpcApi {
     registerIsStartedOverlayListener: Listen<"tellOverlayStarted">;
     requestLaunchEmitters: Invoke<"launchEmitters">;
     registerChatCountListener: Listen<"tellChatCount">;
+    registerChatUUListener: Listen<"tellChatUniqueUserCount">;
   };
 }
 
@@ -69,5 +70,7 @@ export const IpcApi: IpcApi = {
     requestLaunchEmitters: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
     registerChatCountListener: (callback) => IpcRendererWrapper.on("tellChatCount", callback),
+    registerChatUUListener: (callback) =>
+      IpcRendererWrapper.on("tellChatUniqueUserCount", callback),
   },
 };
