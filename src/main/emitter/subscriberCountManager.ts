@@ -1,6 +1,7 @@
 import { WebContents } from "electron";
 import { LiveLaunchProperties } from "../../ipcEvent";
 import { SubscriberCountRaisedEventEmitter } from "simple-youtube-emitter";
+import { WebContentsWrapper } from "../webContentsWrapper";
 
 let subscriberCountEmitter: SubscriberCountRaisedEventEmitter | undefined;
 let webContents: WebContents | undefined;
@@ -30,6 +31,7 @@ export async function setupSubscriberCountEmitter(
   });
   subscriberCountEmitter.on("raised", (before, after) => {
     console.log(`Subscriber count: ${before.value} -> ${after.value}`);
+    WebContentsWrapper.send(webContents!, "tellSubscriberCount", after.value);
   });
 
   await subscriberCountEmitter.start();
