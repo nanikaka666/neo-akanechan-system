@@ -108,6 +108,11 @@ export interface IpcEvent {
   tellOverlayStarted: (liveLaunchProperties: LiveLaunchProperties) => void;
 
   /**
+   * Start emitters depend on user settings.
+   */
+  launchEmitters: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+
+  /**
    * Get UserSettings attached to given channel id.
    *
    * if no settings then filled with default value.
@@ -130,4 +135,31 @@ export interface IpcEvent {
    * Notify updated UserSettings to renderer.
    */
   tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
+
+  /**
+   * Notify counts of chats to renderer.
+   *
+   * counts means number of text chat, superchat, superstickers; effect of removing chat and blocking user is reflected.
+   */
+  tellChatCount: (chatCount: number) => void;
+
+  /**
+   * Notify counts of chat UU to renderer.
+   */
+  tellChatUniqueUserCount: (chatUU: number) => void;
+
+  /**
+   * Notify counts of like to renderer.
+   */
+  tellLikeCount: (likeCount: number) => void;
+
+  /**
+   * Notify counts of live view to renderer.
+   */
+  tellLiveViewCount: (liveViewCount: number) => void;
+
+  /**
+   * Notify counts of subscribers to renderer.
+   */
+  tellSubscriberCount: (subscriberCount: number) => void;
 }

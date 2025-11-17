@@ -6,6 +6,10 @@ import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
 import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
+import { setupLiveChatEmitter } from "./emitter/liveChatManager";
+import { setupLikeCountEmitter } from "./emitter/likeCountManager";
+import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
+import { setupSubscriberCountEmitter } from "./emitter/subscriberCountManager";
 
 /**
  * temporary aid method.
@@ -185,6 +189,16 @@ export function setupIpcMainHandlers() {
         [];
       WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
     }
+    return true;
+  });
+
+  IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
+    await Promise.all([
+      setupLiveChatEmitter(e.sender, liveLaunchProperties),
+      setupLikeCountEmitter(e.sender, liveLaunchProperties),
+      setupLiveViewCountEmitter(e.sender, liveLaunchProperties),
+      setupSubscriberCountEmitter(e.sender, liveLaunchProperties),
+    ]);
     return true;
   });
 }

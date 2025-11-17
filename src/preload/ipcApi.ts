@@ -35,6 +35,12 @@ export interface IpcApi {
     requestDeletingChannel: Invoke<"deleteChannelWithUserConfirmation">;
     registerUpdatedChannelListListener: Listen<"tellUpdatedChannelIds">;
     registerIsStartedOverlayListener: Listen<"tellOverlayStarted">;
+    requestLaunchEmitters: Invoke<"launchEmitters">;
+    registerChatCountListener: Listen<"tellChatCount">;
+    registerChatUUListener: Listen<"tellChatUniqueUserCount">;
+    registerLikeCountListener: Listen<"tellLikeCount">;
+    registerLiveViewCountListener: Listen<"tellLiveViewCount">;
+    registerSubscriberCountListener: Listen<"tellSubscriberCount">;
   };
 }
 
@@ -64,5 +70,15 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellUpdatedChannelIds", callback),
     registerIsStartedOverlayListener: (callback) =>
       IpcRendererWrapper.on("tellOverlayStarted", callback),
+    requestLaunchEmitters: (liveLaunchProperties) =>
+      IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
+    registerChatCountListener: (callback) => IpcRendererWrapper.on("tellChatCount", callback),
+    registerChatUUListener: (callback) =>
+      IpcRendererWrapper.on("tellChatUniqueUserCount", callback),
+    registerLikeCountListener: (callback) => IpcRendererWrapper.on("tellLikeCount", callback),
+    registerLiveViewCountListener: (callback) =>
+      IpcRendererWrapper.on("tellLiveViewCount", callback),
+    registerSubscriberCountListener: (callback) =>
+      IpcRendererWrapper.on("tellSubscriberCount", callback),
   },
 };
