@@ -193,7 +193,7 @@ export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
     await Promise.all([
       setupLiveChatEmitter(e.sender, liveLaunchProperties),
-      setupLikeCountEmitter(liveLaunchProperties),
+      setupLikeCountEmitter(e.sender, liveLaunchProperties),
     ]);
     return true;
   });

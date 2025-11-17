@@ -147,4 +147,9 @@ export interface IpcEvent {
    * Notify counts of chat UU to renderer.
    */
   tellChatUniqueUserCount: (chatUU: number) => void;
+
+  /**
+   * Notify counts of like to renderer.
+   */
+  tellLikeCount: (likeCount: number) => void;
 }

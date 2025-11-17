@@ -38,6 +38,7 @@ export interface IpcApi {
     requestLaunchEmitters: Invoke<"launchEmitters">;
     registerChatCountListener: Listen<"tellChatCount">;
     registerChatUUListener: Listen<"tellChatUniqueUserCount">;
+    registerLikeCountListener: Listen<"tellLikeCount">;
   };
 }
 
@@ -72,5 +73,6 @@ export const IpcApi: IpcApi = {
     registerChatCountListener: (callback) => IpcRendererWrapper.on("tellChatCount", callback),
     registerChatUUListener: (callback) =>
       IpcRendererWrapper.on("tellChatUniqueUserCount", callback),
+    registerLikeCountListener: (callback) => IpcRendererWrapper.on("tellLikeCount", callback),
   },
 };
