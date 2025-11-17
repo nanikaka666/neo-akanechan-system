@@ -8,6 +8,7 @@ import { UserSettingsService } from "./userSettings";
 import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
 import { setupLiveChatEmitter } from "./emitter/liveChatManager";
 import { setupLikeCountEmitter } from "./emitter/likeCountManager";
+import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
 
 /**
  * temporary aid method.
@@ -194,6 +195,7 @@ export function setupIpcMainHandlers() {
     await Promise.all([
       setupLiveChatEmitter(e.sender, liveLaunchProperties),
       setupLikeCountEmitter(e.sender, liveLaunchProperties),
+      setupLiveViewCountEmitter(e.sender, liveLaunchProperties),
     ]);
     return true;
   });

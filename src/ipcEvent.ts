@@ -152,4 +152,9 @@ export interface IpcEvent {
    * Notify counts of like to renderer.
    */
   tellLikeCount: (likeCount: number) => void;
+
+  /**
+   * Notify counts of live view to renderer.
+   */
+  tellLiveViewCount: (liveViewCount: number) => void;
 }

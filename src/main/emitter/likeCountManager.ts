@@ -12,6 +12,7 @@ export async function setupLikeCountEmitter(
 ) {
   if (likeCountEmitter !== undefined) {
     likeCountEmitter.close();
+    likeCountEmitter = undefined;
   }
   webContents = w;
   likeCountEmitter = LikeCountRaisedEventEmitter.initWithoutCredential(
