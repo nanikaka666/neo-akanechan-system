@@ -36,6 +36,26 @@ export interface LiveLaunchProperties {
 }
 
 /**
+ * Append some data to ChatItemText from youtube-livechat-emitter
+ */
+export type ExtendedChatItemText = ChatItemText & {
+  /**
+   * index which means position of whole text chat list.
+   */
+  indexOfWhole: number;
+
+  /**
+   * HH:mm:ss style time format
+   */
+  formatedTime: string;
+
+  /**
+   * `true` means this is first chat for author.
+   */
+  isFirst: boolean;
+};
+
+/**
  * Ipc channel interfaces.
  *
  * key represents channel name.
@@ -167,5 +187,5 @@ export interface IpcEvent {
   /**
    * Notify all text chats to renderer.
    */
-  tellTextChats: (textChats: ChatItemText[], textChatNum: number) => void;
+  tellTextChats: (textChats: ExtendedChatItemText[], textChatNum: number) => void;
 }

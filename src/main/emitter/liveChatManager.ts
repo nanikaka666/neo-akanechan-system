@@ -1,19 +1,18 @@
 import {
   ChatItemSuperChat,
   ChatItemSuperSticker,
-  ChatItemText,
   MembershipMilestone,
   NewMembership,
   SponsorshipsGift,
   TextMessage,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
-import { LiveLaunchProperties } from "../../ipcEvent";
+import { ExtendedChatItemText, LiveLaunchProperties } from "../../ipcEvent";
 import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 
 let liveChatEmitter: YoutubeLiveChatEmitter | undefined;
-let textChats: ChatItemText[];
+let textChats: ExtendedChatItemText[];
 let chatNum: number;
 let textChatNum: number;
 let superChats: ChatItemSuperChat[];
@@ -49,14 +48,24 @@ export async function setupLiveChatEmitter(
     1 * 1000,
   );
   liveChatEmitter.on("addChat", (item) => {
+    let isFirstChat = false;
     if (!authorChannelIds.has(item.author.channelId.id)) {
+      isFirstChat = true;
       authorChannelIds.add(item.author.channelId.id);
       WebContentsWrapper.send(webContents!, "tellChatUniqueUserCount", authorChannelIds.size);
     }
     if (item.type === "text") {
       // increase chat count
       textChatNum++;
-      textChats = [...textChats, item].slice(-1000); // take latest 1000 items.
+      const convertedItem = {
+        ...item,
+        ...{
+          indexOfWhole: textChatNum,
+          formatedTime: formatDate(new Date(item.timestamp / 1000)), // microsecond to millisecond
+          isFirst: isFirstChat,
+        },
+      } satisfies ExtendedChatItemText;
+      textChats = [...textChats, convertedItem].slice(-1000); // take latest 1000 items.
       console.log(item.messages);
       WebContentsWrapper.send(webContents!, "tellTextChats", textChats, textChatNum);
     } else if (item.type === "superChat") {
@@ -114,4 +123,16 @@ export async function setupLiveChatEmitter(
     console.log(error);
   });
   await liveChatEmitter.start();
+}
+
+function formatDate(date: Date) {
+  const hour = date.getHours() + "";
+  const minute = date.getMinutes() + "";
+  const second = date.getSeconds() + "";
+
+  return `${to2Digit(hour)}:${to2Digit(minute)}:${to2Digit(second)}`;
+}
+
+function to2Digit(value: string) {
+  return value.length === 1 ? "0" + value : value;
 }

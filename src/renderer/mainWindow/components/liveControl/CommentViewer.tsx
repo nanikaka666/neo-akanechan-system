@@ -1,30 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { ListRange, Virtuoso, VirtuosoHandle } from "react-virtuoso";
-import { ChatItemText } from "youtube-livechat-emitter/dist/src/types/liveChat";
+import { ExtendedChatItemText } from "../../../../ipcEvent";
 
-interface TimeRange {
-  start: string;
-  end: string;
-}
-
-function formatDate(date: Date) {
-  const hour = date.getHours() + "";
-  const minute = date.getMinutes() + "";
-  const second = date.getSeconds() + "";
-
-  return `${to2Digit(hour)}:${to2Digit(minute)}:${to2Digit(second)}`;
-}
-
-function to2Digit(value: string) {
-  return value.length === 1 ? "0" + value : value;
+interface RangeInfo {
+  time: {
+    start: string;
+    end: string;
+  };
+  indexOfWhole: {
+    start: number;
+    end: number;
+  };
 }
 
 export function CommentViewer() {
-  const [textChats, setTextChats] = useState<ChatItemText[]>([]);
+  const [textChats, setTextChats] = useState<ExtendedChatItemText[]>([]);
   const [textChatNum, setTextChatNum] = useState(0);
   const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
-  const [timeRange, setTimeRange] = useState<TimeRange>();
+  const [rangeInfo, setRangeInfo] = useState<RangeInfo>();
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
   useEffect(() => {
@@ -37,12 +31,16 @@ export function CommentViewer() {
 
   useEffect(() => {
     if (textChats.length !== 0) {
-      setTimeRange((_) => {
-        const startDate = new Date(textChats[range.startIndex].timestamp / 1000); // microsecond to millisecond
-        const endDate = new Date(textChats[range.endIndex].timestamp / 1000);
+      setRangeInfo((_) => {
         return {
-          start: formatDate(startDate),
-          end: formatDate(endDate),
+          time: {
+            start: textChats[range.startIndex].formatedTime,
+            end: textChats[range.endIndex].formatedTime,
+          },
+          indexOfWhole: {
+            start: textChats[range.startIndex].indexOfWhole,
+            end: textChats[range.endIndex].indexOfWhole,
+          },
         };
       });
     }
@@ -52,11 +50,11 @@ export function CommentViewer() {
     <div>
       <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
         <p>
-          {range.startIndex} - {range.endIndex} / {textChatNum}
+          Range: {range.startIndex} - {range.endIndex} / {textChats.length}
         </p>
-        {timeRange && (
+        {rangeInfo && (
           <p>
-            {timeRange.start} - {timeRange.end}
+            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${textChatNum}`}
           </p>
         )}
         {showGoToBottom && (
