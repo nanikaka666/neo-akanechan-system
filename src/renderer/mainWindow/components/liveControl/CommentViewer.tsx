@@ -1,5 +1,6 @@
-import { CSSProperties, useMemo, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
+import { ExtendedChatItemText } from "../../../../ipcEvent";
 
 export interface RangeInfo {
   time: {
@@ -25,14 +26,24 @@ const displayNone: CSSProperties = { display: "none" };
 
 export function CommentViewer() {
   const [viewerMode, setViewerMode] = useState<ViewerMode>("text");
+  const [textChats, setTextChats] = useState<ExtendedChatItemText[]>([]);
+  const [textChatNum, setTextChatNum] = useState(0);
 
   const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
     return [
-      { viewerMode: "text", label: "テキストチャット", disabled: false, itemNum: 123 },
+      { viewerMode: "text", label: "テキストチャット", disabled: false, itemNum: textChatNum },
       { viewerMode: "superchat", label: "SuperChat", disabled: false, itemNum: 123 },
       { viewerMode: "supersticker", label: "SuperSticker", disabled: true, itemNum: 0 },
       { viewerMode: "stocks", label: "ストック", disabled: false, itemNum: 123 },
     ];
+  }, [textChatNum]);
+
+  useEffect(() => {
+    window.ipcApi.registerTextChatsListener((e, newTextChats, newTextChatNum) => {
+      console.log("Set New TextChats: ", newTextChatNum);
+      setTextChats((_) => newTextChats);
+      setTextChatNum((_) => newTextChatNum);
+    });
   }, []);
 
   return (
@@ -50,7 +61,7 @@ export function CommentViewer() {
               return (
                 <option
                   key={optionItem.viewerMode}
-                  value={optionItem.viewerMode}
+                  value={optionItem.viewerMode satisfies ViewerMode}
                   disabled={optionItem.disabled}
                 >
                   {optionItem.label} ({optionItem.itemNum})
@@ -61,7 +72,7 @@ export function CommentViewer() {
         </label>
       </div>
       <div style={viewerMode !== "text" ? displayNone : {}}>
-        <TextChatViewer />
+        <TextChatViewer textChats={textChats} textChatNum={textChatNum} />
       </div>
       <div style={viewerMode !== "superchat" ? displayNone : {}}>Super Chat Viewer</div>
       <div style={viewerMode !== "supersticker" ? displayNone : {}}>Super Sticker Viewer</div>

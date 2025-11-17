@@ -3,21 +3,17 @@ import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { ExtendedChatItemText } from "../../../../ipcEvent";
 import { RangeInfo } from "./CommentViewer";
 
-export function TextChatViewer() {
-  const [textChats, setTextChats] = useState<ExtendedChatItemText[]>([]);
-  const [textChatNum, setTextChatNum] = useState(0);
+export function TextChatViewer({
+  textChats,
+  textChatNum,
+}: {
+  textChats: ExtendedChatItemText[];
+  textChatNum: number;
+}) {
   const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [rangeInfo, setRangeInfo] = useState<RangeInfo>();
   const [showGoToBottom, setShowGoToBottom] = useState(false);
-
-  useEffect(() => {
-    window.ipcApi.registerTextChatsListener((e, newTextChats, newTextChatNum) => {
-      console.log("Set New TextChats: ", newTextChatNum);
-      setTextChats((_) => newTextChats);
-      setTextChatNum((_) => newTextChatNum);
-    });
-  }, []);
 
   useEffect(() => {
     if (textChats.length !== 0) {
