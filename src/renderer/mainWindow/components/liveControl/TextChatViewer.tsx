@@ -70,7 +70,7 @@ export function TextChatViewer() {
           console.log(`Bottom status changed. ${atBottom}`);
           setShowGoToBottom((_) => !atBottom);
         }}
-        style={{ height: `calc(100vh)` }}
+        style={{ height: `calc(100vh - 50px)` }}
         followOutput={(isAtBottom) => {
           console.log(`FollowOutput isAtBottom: ${isAtBottom}`);
           return isAtBottom ? "smooth" : false;
