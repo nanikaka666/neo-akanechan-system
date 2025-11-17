@@ -157,4 +157,9 @@ export interface IpcEvent {
    * Notify counts of live view to renderer.
    */
   tellLiveViewCount: (liveViewCount: number) => void;
+
+  /**
+   * Notify counts of subscribers to renderer.
+   */
+  tellSubscriberCount: (subscriberCount: number) => void;
 }

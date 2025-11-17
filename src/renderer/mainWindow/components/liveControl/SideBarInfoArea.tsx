@@ -5,6 +5,7 @@ export function SideBarInfoArea() {
   const [chatUU, setChatUU] = useState(0);
   const [likeCount, setLikeCount] = useState(0);
   const [liveViewCount, setLiveViewCount] = useState(0);
+  const [subscriberCount, setSubscriberCount] = useState(0); // need initial value.
 
   useEffect(() => {
     window.ipcApi.registerChatCountListener((e, newChatCount) => {
@@ -19,6 +20,9 @@ export function SideBarInfoArea() {
     window.ipcApi.registerLiveViewCountListener((e, newLiveViewCount) => {
       setLiveViewCount((_) => newLiveViewCount);
     });
+    window.ipcApi.registerSubscriberCountListener((e, newSubscriberCount) => {
+      setSubscriberCount((_) => newSubscriberCount);
+    });
   }, []);
 
   return (
@@ -27,6 +31,7 @@ export function SideBarInfoArea() {
       <div>Live View Count (MAX): {liveViewCount}</div>
       <div>Chat Count: {chatCount}</div>
       <div>Chat UU Count: {chatUU}</div>
+      <div>Subscriber Count: {subscriberCount}</div>
     </div>
   );
 }
