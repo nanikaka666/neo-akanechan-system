@@ -4,6 +4,9 @@ import {
   ChatItemSuperChat,
   ChatItemSuperSticker,
   ChatItemText,
+  MembershipMilestone,
+  NewMembership,
+  SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
 
 export interface ChannelSummary {
@@ -70,6 +73,25 @@ export type ExtendedChatItemSuperSticker = ChatItemSuperSticker & {
 };
 
 export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
+
+export type ExtendedNewMembership = NewMembership & {
+  formatedTime: string;
+};
+
+export type ExtendedMembershipMilestone = MembershipMilestone & {
+  formatedTime: string;
+};
+
+export type ExtendedSponsorshipsGift = SponsorshipsGift & {
+  type: "gift";
+  num: number;
+  formatedTime: string;
+};
+
+export type ExtendedMembershipAndGiftItem =
+  | ExtendedNewMembership
+  | ExtendedMembershipMilestone
+  | ExtendedSponsorshipsGift;
 
 /**
  * Ipc channel interfaces.
@@ -209,4 +231,12 @@ export interface IpcEvent {
    * Notify all superchat and supersticker item to renderer.
    */
   tellSuperChats: (superChats: ExtendedSuperItem[], superChatsNum: number) => void;
+
+  /**
+   * Notify all memberships and gifts item to renderer.
+   */
+  tellMembershipsAndGifts: (
+    membershipsAndGifts: ExtendedMembershipAndGiftItem[],
+    membershipsAndGiftsNum: number,
+  ) => void;
 }

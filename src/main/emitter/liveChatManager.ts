@@ -1,13 +1,9 @@
-import {
-  MembershipMilestone,
-  NewMembership,
-  SponsorshipsGift,
-  TextMessage,
-} from "youtube-livechat-emitter/dist/src/types/liveChat";
+import { TextMessage } from "youtube-livechat-emitter/dist/src/types/liveChat";
 import {
   ExtendedChatItemSuperChat,
   ExtendedChatItemSuperSticker,
   ExtendedChatItemText,
+  ExtendedMembershipAndGiftItem,
   ExtendedSuperItem,
   LiveLaunchProperties,
 } from "../../ipcEvent";
@@ -24,9 +20,8 @@ let textChatNum: number;
 let superChats: ExtendedSuperItem[];
 let superChatsNum: number;
 
-let newMemberships: NewMembership[];
-let membershipMilestones: MembershipMilestone[];
-let gifts: (SponsorshipsGift & { num: number })[];
+let membershipsAndGifts: ExtendedMembershipAndGiftItem[];
+let membershipsAndGIftsNum: number;
 
 const authorChannelIds = new Set<string>();
 
@@ -49,9 +44,9 @@ export async function setupLiveChatEmitter(
   superChats = [];
   superChatsNum = 0;
 
-  newMemberships = [];
-  membershipMilestones = [];
-  gifts = [];
+  membershipsAndGifts = [];
+  membershipsAndGIftsNum = 0;
+
   authorChannelIds.clear();
 
   liveChatEmitter = new YoutubeLiveChatEmitter(
@@ -116,11 +111,23 @@ export async function setupLiveChatEmitter(
     // todo: tell changed chat lists to renderer
   });
   liveChatEmitter.on("memberships", (item) => {
+    membershipsAndGIftsNum++;
+    const convertedItem = {
+      ...item,
+      ...{ formatedTime: formatDate(new Date(item.timestamp / 1000)) },
+    } satisfies ExtendedMembershipAndGiftItem;
+    membershipsAndGifts = [...membershipsAndGifts, convertedItem];
+
+    WebContentsWrapper.send(
+      webContents!,
+      "tellMembershipsAndGifts",
+      membershipsAndGifts,
+      membershipsAndGIftsNum,
+    );
+
     if (item.type === "new") {
-      newMemberships = [...newMemberships, item];
       console.log("New Memberships.", item);
     } else {
-      membershipMilestones = [...membershipMilestones, item];
       console.log("Membership Milestone.", item);
     }
   });
@@ -132,9 +139,19 @@ export async function setupLiveChatEmitter(
     }
     const convertedItem = {
       ...item,
+      type: "gift",
       num: Number.parseInt(res[1]),
-    };
-    gifts = [...gifts, convertedItem];
+      formatedTime: "???", // todo: livechat emitter update
+    } satisfies ExtendedMembershipAndGiftItem;
+
+    membershipsAndGifts = [...membershipsAndGifts, convertedItem];
+
+    WebContentsWrapper.send(
+      webContents!,
+      "tellMembershipsAndGifts",
+      membershipsAndGifts,
+      membershipsAndGIftsNum,
+    );
     console.log("Gift purchased!", convertedItem);
   });
   liveChatEmitter.on("start", () => {

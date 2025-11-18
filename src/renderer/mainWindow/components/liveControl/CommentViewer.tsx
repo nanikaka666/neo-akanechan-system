@@ -1,7 +1,12 @@
 import { CSSProperties, useEffect, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
-import { ExtendedChatItemText, ExtendedSuperItem } from "../../../../ipcEvent";
+import {
+  ExtendedChatItemText,
+  ExtendedMembershipAndGiftItem,
+  ExtendedSuperItem,
+} from "../../../../ipcEvent";
 import { SuperChatsViewer } from "./SuperChatsViewer";
+import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 
 export interface RangeInfo {
   time: {
@@ -33,6 +38,11 @@ export function CommentViewer() {
   const [superChats, setSuperChats] = useState<ExtendedSuperItem[]>([]);
   const [superChatsNum, setSuperChatsNum] = useState(0);
 
+  const [membershipsAndGifts, setMembershipsAndGifts] = useState<ExtendedMembershipAndGiftItem[]>(
+    [],
+  );
+  const [membershipsAndGiftsNum, setMembershipsAndGiftsNum] = useState(0);
+
   const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
     return [
       { viewerMode: "text", label: "テキストチャット", disabled: false, itemNum: textChatNum },
@@ -52,11 +62,11 @@ export function CommentViewer() {
       {
         viewerMode: "membershipsAndGifts",
         label: "メンバーシップ & ギフト",
-        disabled: false,
-        itemNum: 123,
+        disabled: membershipsAndGiftsNum === 0,
+        itemNum: membershipsAndGiftsNum,
       },
     ];
-  }, [textChatNum, superChatsNum]);
+  }, [textChatNum, superChatsNum, membershipsAndGiftsNum]);
 
   useEffect(() => {
     window.ipcApi.registerTextChatsListener((e, newTextChats, newTextChatNum) => {
@@ -67,7 +77,12 @@ export function CommentViewer() {
       setSuperChats((_) => newSuperChats);
       setSuperChatsNum((_) => newSuperChatsNum);
     });
-    // todo: listen superchats list
+    window.ipcApi.registerMembershipsAndGiftsListener(
+      (e, newMembershipsAndGifts, newMembershipsAndGiftsNum) => {
+        setMembershipsAndGifts((_) => newMembershipsAndGifts);
+        setMembershipsAndGiftsNum((_) => newMembershipsAndGiftsNum);
+      },
+    );
   }, []);
 
   return (
@@ -103,7 +118,12 @@ export function CommentViewer() {
       </div>
       <div style={viewerMode !== "stocks" ? displayNone : {}}>Stocks</div>
       <div style={viewerMode !== "textByMemberships" ? displayNone : {}}>Chats by memberships</div>
-      <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>Memberships & Gifts</div>
+      <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>
+        <MembershipsAndGiftsViewer
+          membershipsAndGifts={membershipsAndGifts}
+          membershipsAndGiftsNum={membershipsAndGiftsNum}
+        />
+      </div>
     </div>
   );
 }
