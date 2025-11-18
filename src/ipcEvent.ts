@@ -1,6 +1,10 @@
 import { ChannelId, ChannelTitle, VideoTitle } from "youtube-live-scraper";
 import { UserSettings } from "./main/userSettings";
-import { ChatItemText } from "youtube-livechat-emitter/dist/src/types/liveChat";
+import {
+  ChatItemSuperChat,
+  ChatItemSuperSticker,
+  ChatItemText,
+} from "youtube-livechat-emitter/dist/src/types/liveChat";
 
 export interface ChannelSummary {
   channelId: ChannelId;
@@ -54,6 +58,18 @@ export type ExtendedChatItemText = ChatItemText & {
    */
   isFirst: boolean;
 };
+
+export type ExtendedChatItemSuperChat = ChatItemSuperChat & {
+  formatedTime: string;
+  isFirst: boolean;
+};
+
+export type ExtendedChatItemSuperSticker = ChatItemSuperSticker & {
+  formatedTime: string;
+  isFirst: boolean;
+};
+
+export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
 
 /**
  * Ipc channel interfaces.
@@ -185,7 +201,12 @@ export interface IpcEvent {
   tellSubscriberCount: (subscriberCount: number) => void;
 
   /**
-   * Notify all text chats to renderer.
+   * Notify latest 1000 text chats to renderer.
    */
   tellTextChats: (textChats: ExtendedChatItemText[], textChatNum: number) => void;
+
+  /**
+   * Notify all superchat and supersticker item to renderer.
+   */
+  tellSuperChats: (superChats: ExtendedSuperItem[], superChatsNum: number) => void;
 }

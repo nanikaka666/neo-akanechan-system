@@ -1,25 +1,33 @@
 import {
-  ChatItemSuperChat,
-  ChatItemSuperSticker,
   MembershipMilestone,
   NewMembership,
   SponsorshipsGift,
   TextMessage,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
-import { ExtendedChatItemText, LiveLaunchProperties } from "../../ipcEvent";
+import {
+  ExtendedChatItemSuperChat,
+  ExtendedChatItemSuperSticker,
+  ExtendedChatItemText,
+  ExtendedSuperItem,
+  LiveLaunchProperties,
+} from "../../ipcEvent";
 import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 
 let liveChatEmitter: YoutubeLiveChatEmitter | undefined;
-let textChats: ExtendedChatItemText[];
 let chatNum: number;
+
+let textChats: ExtendedChatItemText[];
 let textChatNum: number;
-let superChats: ChatItemSuperChat[];
-let superStickers: ChatItemSuperSticker[];
+
+let superChats: ExtendedSuperItem[];
+let superChatsNum: number;
+
 let newMemberships: NewMembership[];
 let membershipMilestones: MembershipMilestone[];
 let gifts: (SponsorshipsGift & { num: number })[];
+
 const authorChannelIds = new Set<string>();
 
 let webContents: WebContents | undefined;
@@ -33,11 +41,14 @@ export async function setupLiveChatEmitter(
     liveChatEmitter = undefined;
   }
   webContents = w;
+  chatNum = 0;
+
   textChats = [];
   textChatNum = 0;
-  chatNum = 0;
+
   superChats = [];
-  superStickers = [];
+  superChatsNum = 0;
+
   newMemberships = [];
   membershipMilestones = [];
   gifts = [];
@@ -69,11 +80,23 @@ export async function setupLiveChatEmitter(
       console.log(item.messages);
       WebContentsWrapper.send(webContents!, "tellTextChats", textChats, textChatNum);
     } else if (item.type === "superChat") {
-      superChats = [...superChats, item];
+      superChatsNum++;
+      const convertedItem = {
+        ...item,
+        ...{ formatedTime: formatDate(new Date(item.timestamp / 1000)), isFirst: isFirstChat },
+      } satisfies ExtendedChatItemSuperChat;
+      superChats = [...superChats, convertedItem];
       console.log(item.superChat);
+      WebContentsWrapper.send(webContents!, "tellSuperChats", superChats, superChatsNum);
     } else {
-      superStickers = [...superStickers, item];
+      superChatsNum++;
+      const convertedItem = {
+        ...item,
+        ...{ formatedTime: formatDate(new Date(item.timestamp / 1000)), isFirst: isFirstChat },
+      } satisfies ExtendedChatItemSuperSticker;
+      superChats = [...superChats, convertedItem];
       console.log(item.superSticker);
+      WebContentsWrapper.send(webContents!, "tellSuperChats", superChats, superChatsNum);
     }
     // tell chat count increased.
     chatNum++;
@@ -84,12 +107,13 @@ export async function setupLiveChatEmitter(
     // if any problem of performance occurred then change the algorythm.
     textChats = textChats.filter((item) => item.id.id !== id.id);
     console.log(`remove item: ${id.id}`);
+    // todo: tell changed chat lists to renderer
   });
   liveChatEmitter.on("blockUser", (blockChannelId) => {
     textChats = textChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
     superChats = superChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
-    superStickers = superStickers.filter((item) => item.author.channelId.id !== blockChannelId.id);
     console.log(`block user: ${blockChannelId.id}`);
+    // todo: tell changed chat lists to renderer
   });
   liveChatEmitter.on("memberships", (item) => {
     if (item.type === "new") {

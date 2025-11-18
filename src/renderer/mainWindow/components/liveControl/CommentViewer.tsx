@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
-import { ExtendedChatItemText } from "../../../../ipcEvent";
+import { ExtendedChatItemText, ExtendedSuperItem } from "../../../../ipcEvent";
+import { SuperChatsViewer } from "./SuperChatsViewer";
 
 export interface RangeInfo {
   time: {
@@ -13,13 +14,7 @@ export interface RangeInfo {
   };
 }
 
-type ViewerMode =
-  | "text"
-  | "superchat"
-  | "supersticker"
-  | "stocks"
-  | "textByMemberships"
-  | "membershipsAndGifts";
+type ViewerMode = "text" | "superchat" | "stocks" | "textByMemberships" | "membershipsAndGifts";
 
 interface ViewerModeSelectOption {
   viewerMode: ViewerMode;
@@ -35,11 +30,18 @@ export function CommentViewer() {
   const [textChats, setTextChats] = useState<ExtendedChatItemText[]>([]);
   const [textChatNum, setTextChatNum] = useState(0);
 
+  const [superChats, setSuperChats] = useState<ExtendedSuperItem[]>([]);
+  const [superChatsNum, setSuperChatsNum] = useState(0);
+
   const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
     return [
       { viewerMode: "text", label: "テキストチャット", disabled: false, itemNum: textChatNum },
-      { viewerMode: "superchat", label: "SuperChat", disabled: false, itemNum: 123 },
-      { viewerMode: "supersticker", label: "SuperSticker", disabled: true, itemNum: 0 },
+      {
+        viewerMode: "superchat",
+        label: "スパチャ & Sticker",
+        disabled: superChatsNum === 0,
+        itemNum: superChatsNum,
+      },
       { viewerMode: "stocks", label: "ストック", disabled: false, itemNum: 123 },
       {
         viewerMode: "textByMemberships",
@@ -54,14 +56,18 @@ export function CommentViewer() {
         itemNum: 123,
       },
     ];
-  }, [textChatNum]);
+  }, [textChatNum, superChatsNum]);
 
   useEffect(() => {
     window.ipcApi.registerTextChatsListener((e, newTextChats, newTextChatNum) => {
-      console.log("Set New TextChats: ", newTextChatNum);
       setTextChats((_) => newTextChats);
       setTextChatNum((_) => newTextChatNum);
     });
+    window.ipcApi.registerSuperChatsListener((e, newSuperChats, newSuperChatsNum) => {
+      setSuperChats((_) => newSuperChats);
+      setSuperChatsNum((_) => newSuperChatsNum);
+    });
+    // todo: listen superchats list
   }, []);
 
   return (
@@ -92,8 +98,9 @@ export function CommentViewer() {
       <div style={viewerMode !== "text" ? displayNone : {}}>
         <TextChatViewer textChats={textChats} textChatNum={textChatNum} />
       </div>
-      <div style={viewerMode !== "superchat" ? displayNone : {}}>Super Chat Viewer</div>
-      <div style={viewerMode !== "supersticker" ? displayNone : {}}>Super Sticker Viewer</div>
+      <div style={viewerMode !== "superchat" ? displayNone : {}}>
+        <SuperChatsViewer superChats={superChats} superChatsNum={superChatsNum} />
+      </div>
       <div style={viewerMode !== "stocks" ? displayNone : {}}>Stocks</div>
       <div style={viewerMode !== "textByMemberships" ? displayNone : {}}>Chats by memberships</div>
       <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>Memberships & Gifts</div>
