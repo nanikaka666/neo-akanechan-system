@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { ExtendedChatItemText } from "../../../../ipcEvent";
 import { RangeInfo } from "./CommentViewer";
+import { TextChatItem } from "./TextChatItem";
 
 export function TextChatViewer({
   textChats,
@@ -75,31 +76,7 @@ export function TextChatViewer({
           setRange((_) => newRange);
         }}
         itemContent={(index, textChat) => {
-          return (
-            <div style={textChat.isFirst ? { backgroundColor: "yellowgreen" } : {}}>
-              <img src={textChat.author.thumbnails[0].url} />
-              <span style={{ marginLeft: "5px", marginRight: "5px", fontWeight: "bold" }}>
-                {textChat.author.name}
-                {textChat.author.memberships && (
-                  <>
-                    <img
-                      src={textChat.author.memberships.thumbnails[0].url}
-                      style={{ width: "16px" }}
-                    ></img>
-                    <span>{textChat.author.memberships.label}</span>
-                  </>
-                )}
-              </span>
-
-              {textChat.messages.map((messageItem, idx) => {
-                return messageItem.type === "text" ? (
-                  messageItem.text
-                ) : (
-                  <img style={{ width: "16px" }} src={messageItem.images[0].url} key={idx} />
-                );
-              })}
-            </div>
-          );
+          return <TextChatItem item={textChat} />;
         }}
       />
     </div>
