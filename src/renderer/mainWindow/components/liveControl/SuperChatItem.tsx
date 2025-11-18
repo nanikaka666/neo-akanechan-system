@@ -1,5 +1,6 @@
 import { ExtendedChatItemSuperChat } from "../../../../ipcEvent";
 import { Author } from "./Author";
+import { Messages } from "./Messages";
 
 export function SuperChatItem({ item }: { item: ExtendedChatItemSuperChat }) {
   return (
@@ -8,14 +9,7 @@ export function SuperChatItem({ item }: { item: ExtendedChatItemSuperChat }) {
 
       <span style={{ fontWeight: "bold", fontSize: "24px" }}>{item.superChat.amount}</span>
 
-      {item.messages &&
-        item.messages.map((messageItem, idx) => {
-          return messageItem.type === "text" ? (
-            messageItem.text
-          ) : (
-            <img style={{ width: "16px" }} src={messageItem.images[0].url} key={idx} />
-          );
-        })}
+      {item.messages && <Messages messages={item.messages} />}
     </div>
   );
 }

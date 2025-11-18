@@ -1,5 +1,6 @@
 import { ExtendedChatItemSuperSticker } from "../../../../ipcEvent";
 import { Author } from "./Author";
+import { Messages } from "./Messages";
 
 export function SuperStickerItem({ item }: { item: ExtendedChatItemSuperSticker }) {
   return (
@@ -8,14 +9,7 @@ export function SuperStickerItem({ item }: { item: ExtendedChatItemSuperSticker 
 
       <span style={{ fontWeight: "bold", fontSize: "24px" }}>{item.superSticker.amount}</span>
 
-      {item.messages &&
-        item.messages.map((messageItem, idx) => {
-          return messageItem.type === "text" ? (
-            messageItem.text
-          ) : (
-            <img style={{ width: "16px" }} src={messageItem.images[0].url} key={idx} />
-          );
-        })}
+      {item.messages && <Messages messages={item.messages} />}
 
       <img src={item.superSticker.thumbnails[0].url} style={{ width: "64px" }} />
     </div>
