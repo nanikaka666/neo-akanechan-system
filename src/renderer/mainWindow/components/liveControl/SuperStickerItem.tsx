@@ -1,18 +1,10 @@
 import { ExtendedChatItemSuperSticker } from "../../../../ipcEvent";
+import { Author } from "./Author";
 
 export function SuperStickerItem({ item }: { item: ExtendedChatItemSuperSticker }) {
   return (
     <div style={{ backgroundColor: `#${item.superSticker.color.hex}` }}>
-      <img src={item.author.thumbnails[0].url} />
-      <span style={{ marginLeft: "5px", marginRight: "5px", fontWeight: "bold" }}>
-        {item.author.name}
-        {item.author.memberships && (
-          <>
-            <img src={item.author.memberships.thumbnails[0].url} style={{ width: "16px" }}></img>
-            <span>{item.author.memberships.label}</span>
-          </>
-        )}
-      </span>
+      <Author author={item.author} />
 
       <span style={{ fontWeight: "bold", fontSize: "24px" }}>{item.superSticker.amount}</span>
 
