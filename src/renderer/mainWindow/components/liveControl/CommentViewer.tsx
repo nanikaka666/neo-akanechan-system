@@ -13,7 +13,13 @@ export interface RangeInfo {
   };
 }
 
-type ViewerMode = "text" | "superchat" | "supersticker" | "stocks";
+type ViewerMode =
+  | "text"
+  | "superchat"
+  | "supersticker"
+  | "stocks"
+  | "textByMemberships"
+  | "membershipsAndGifts";
 
 interface ViewerModeSelectOption {
   viewerMode: ViewerMode;
@@ -35,6 +41,18 @@ export function CommentViewer() {
       { viewerMode: "superchat", label: "SuperChat", disabled: false, itemNum: 123 },
       { viewerMode: "supersticker", label: "SuperSticker", disabled: true, itemNum: 0 },
       { viewerMode: "stocks", label: "ストック", disabled: false, itemNum: 123 },
+      {
+        viewerMode: "textByMemberships",
+        label: "テキストチャット(メンバーシップのみ)",
+        disabled: false,
+        itemNum: 123,
+      },
+      {
+        viewerMode: "membershipsAndGifts",
+        label: "メンバーシップ & ギフト",
+        disabled: false,
+        itemNum: 123,
+      },
     ];
   }, [textChatNum]);
 
@@ -77,6 +95,8 @@ export function CommentViewer() {
       <div style={viewerMode !== "superchat" ? displayNone : {}}>Super Chat Viewer</div>
       <div style={viewerMode !== "supersticker" ? displayNone : {}}>Super Sticker Viewer</div>
       <div style={viewerMode !== "stocks" ? displayNone : {}}>Stocks</div>
+      <div style={viewerMode !== "textByMemberships" ? displayNone : {}}>Chats by memberships</div>
+      <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>Memberships & Gifts</div>
     </div>
   );
 }
