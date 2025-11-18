@@ -80,6 +80,15 @@ export function TextChatViewer({
               <img src={textChat.author.thumbnails[0].url} />
               <span style={{ marginLeft: "5px", marginRight: "5px", fontWeight: "bold" }}>
                 {textChat.author.name}
+                {textChat.author.memberships && (
+                  <>
+                    <img
+                      src={textChat.author.memberships.thumbnails[0].url}
+                      style={{ width: "16px" }}
+                    ></img>
+                    <span>{textChat.author.memberships.label}</span>
+                  </>
+                )}
               </span>
 
               {textChat.messages.map((messageItem, idx) => {
