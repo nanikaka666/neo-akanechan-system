@@ -11,6 +11,7 @@ import {
 import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
+import { getStockedLiveChatItemIds } from "../stock";
 
 /**
  * `isStocked` is unknown (always false more correctly) when live chat receiving.
@@ -33,34 +34,7 @@ let membershipsAndGIftsNum: number;
 
 const authorChannelIds = new Set<string>();
 
-let stocks: ExtendedChatItemText[];
-const stockedLiveChatItemIds = new Set<string>();
-
 let webContents: WebContents | undefined;
-
-export function getStocks() {
-  return stocks;
-}
-
-export function addStock(item: ExtendedChatItemText) {
-  if (stockedLiveChatItemIds.has(item.id.id)) {
-    throw new Error(`this item is already stocked. ${item.id.id}`);
-  }
-  stocks = [...stocks, { ...item, isStocked: true }];
-  stockedLiveChatItemIds.add(item.id.id);
-}
-
-export function removeStock(item: ExtendedChatItemText) {
-  if (!stockedLiveChatItemIds.has(item.id.id)) {
-    throw new Error(`this item is already unstocked. ${item.id.id}`);
-  }
-  stocks = stocks.filter((stock) => stock.id.id !== item.id.id);
-  stockedLiveChatItemIds.delete(item.id.id);
-}
-
-export function sendStocksToRenderer() {
-  WebContentsWrapper.send(webContents!, "tellStocks", stocks, stocks.length);
-}
 
 export async function setupLiveChatEmitter(
   w: WebContents,
@@ -70,9 +44,6 @@ export async function setupLiveChatEmitter(
     liveChatEmitter.close();
     liveChatEmitter = undefined;
   }
-
-  stocks = [];
-  stockedLiveChatItemIds.clear();
 
   webContents = w;
   chatNum = 0;
@@ -241,10 +212,11 @@ function to2Digit(value: string) {
  * set `isStocked` property.
  */
 function sendTextChatsToRenderer() {
+  const liveChatItemIds = getStockedLiveChatItemIds();
   const markedTextChats = textChats.map((item) => {
     return {
       ...item,
-      isStocked: stockedLiveChatItemIds.has(item.id.id),
+      isStocked: liveChatItemIds.has(item.id.id),
     } satisfies ExtendedChatItemText;
   });
 
