@@ -256,4 +256,14 @@ export interface IpcEvent {
    * Notify all stocks to renderer.
    */
   tellStocks: (stocks: ExtendedChatItemText[], stocksNum: number) => void;
+
+  /**
+   * Add chat item to stock list.
+   */
+  addStock: (stock: ExtendedChatItemText) => boolean;
+
+  /**
+   * Remove the stock from list.
+   */
+  removeStock: (stock: ExtendedChatItemText) => boolean;
 }
