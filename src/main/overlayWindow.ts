@@ -1,4 +1,5 @@
 import { BrowserWindow } from "electron";
+import { isDevMode } from "./environment";
 
 declare const OVERLAY_WEBPACK_ENTRY: string;
 declare const OVERLAY_PRELOAD_WEBPACK_ENTRY: string;
@@ -14,6 +15,7 @@ export const createOverlayWindow = (title: string): void => {
     width: 800,
     webPreferences: {
       preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
+      devTools: isDevMode(),
     },
   });
 

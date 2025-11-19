@@ -1,4 +1,5 @@
 import { BrowserWindow } from "electron";
+import { isDevMode } from "./environment";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -9,6 +10,7 @@ export const createMainWindow = (): void => {
     width: 800,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      devTools: isDevMode(),
     },
   });
 
