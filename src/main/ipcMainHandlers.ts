@@ -121,7 +121,9 @@ export function setupIpcMainHandlers() {
     }
     // shown on title bar of overlay window.
     const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title.title}`;
-    createOverlayWindow(overlayWindowTitle);
+
+    // memo: temporary turn off
+    // createOverlayWindow(overlayWindowTitle);
 
     WebContentsWrapper.send(e.sender, "tellOverlayStarted", {
       channel: channelHavingClosestLive,
