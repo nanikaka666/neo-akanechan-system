@@ -7,6 +7,7 @@ export function TextChatItem({ item }: { item: ExtendedChatItemText }) {
     <div style={item.isFirst ? { backgroundColor: "yellowgreen" } : {}}>
       <Author author={item.author} />
       <Messages messages={item.messages} />
+      {item.isStocked ? <div>This is stocked!</div> : <div>This is not stocked!</div>}
     </div>
   );
 }

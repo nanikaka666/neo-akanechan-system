@@ -12,10 +12,17 @@ import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 
+/**
+ * `isStocked` is unknown (always false more correctly) when live chat receiving.
+ *
+ * So `isStocked` will be calculated when every sending data to renderer.
+ */
+type NonMarkedExtendedChatItemText = Omit<ExtendedChatItemText, "isStocked">;
+
 let liveChatEmitter: YoutubeLiveChatEmitter | undefined;
 let chatNum: number;
 
-let textChats: ExtendedChatItemText[];
+let textChats: NonMarkedExtendedChatItemText[];
 let textChatNum: number;
 
 let superChats: ExtendedSuperItem[];
@@ -25,6 +32,9 @@ let membershipsAndGifts: ExtendedMembershipAndGiftItem[];
 let membershipsAndGIftsNum: number;
 
 const authorChannelIds = new Set<string>();
+
+let stocks: ExtendedChatItemText[];
+const stockedLiveChatItemIds = new Set<string>();
 
 let webContents: WebContents | undefined;
 
@@ -36,6 +46,10 @@ export async function setupLiveChatEmitter(
     liveChatEmitter.close();
     liveChatEmitter = undefined;
   }
+
+  stocks = [];
+  stockedLiveChatItemIds.clear();
+
   webContents = w;
   chatNum = 0;
 
@@ -71,10 +85,11 @@ export async function setupLiveChatEmitter(
           formatedTime: formatDate(new Date(item.timestamp / 1000)), // microsecond to millisecond
           isFirst: isFirstChat,
         },
-      } satisfies ExtendedChatItemText;
+      } satisfies NonMarkedExtendedChatItemText;
       textChats = [...textChats, convertedItem].slice(-1000); // take latest 1000 items.
       console.log(item.messages);
-      WebContentsWrapper.send(webContents!, "tellTextChats", textChats, textChatNum);
+
+      sendTextChatsToRenderer();
     } else if (item.type === "superChat") {
       superChatsNum++;
       const convertedItem = {
@@ -194,4 +209,19 @@ function formatDate(date: Date) {
 
 function to2Digit(value: string) {
   return value.length === 1 ? "0" + value : value;
+}
+/**
+ * Send chat data to renderer.
+ *
+ * set `isStocked` property.
+ */
+function sendTextChatsToRenderer() {
+  const markedTextChats = textChats.map((item) => {
+    return {
+      ...item,
+      isStocked: stockedLiveChatItemIds.has(item.id.id),
+    } satisfies ExtendedChatItemText;
+  });
+
+  WebContentsWrapper.send(webContents!, "tellTextChats", markedTextChats, textChatNum);
 }

@@ -61,6 +61,11 @@ export type ExtendedChatItemText = ChatItemText & {
    * `true` means this is first chat for author.
    */
   isFirst: boolean;
+
+  /**
+   * `true` means this is stocked by streamer.
+   */
+  isStocked: boolean;
 };
 
 export type ExtendedChatItemSuperChat = ChatItemSuperChat & {
