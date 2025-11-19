@@ -92,6 +92,7 @@ export type ExtendedSponsorshipsGift = SponsorshipsGift & {
   type: "gift";
   num: number;
   formatedTime: string;
+  id: string; // todo: id must be given livechat-emitter module
 };
 
 export type ExtendedGiftRedemption = GiftRedemption & {

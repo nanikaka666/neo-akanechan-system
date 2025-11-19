@@ -78,13 +78,13 @@ export function MembershipsAndGiftsViewer({
         }}
         itemContent={(index, item) => {
           return item.type === "new" ? (
-            <NewMembershipsItem item={item} />
+            <NewMembershipsItem item={item} key={item.id.id} />
           ) : item.type === "milestone" ? (
-            <MilestoneMembershipsItem item={item} />
+            <MilestoneMembershipsItem item={item} key={item.id.id} />
           ) : item.type === "gift" ? (
-            <GiftItem item={item} />
+            <GiftItem item={item} key={item.id} />
           ) : (
-            <RedemptionItem item={item} />
+            <RedemptionItem item={item} key={item.id.id} />
           );
         }}
       />

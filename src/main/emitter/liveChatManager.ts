@@ -179,6 +179,7 @@ export async function setupLiveChatEmitter(
       type: "gift",
       num: Number.parseInt(res[1]),
       formatedTime: "???", // todo: livechat emitter update
+      id: membershipsAndGIftsNum + "", // todo: given by emitter module
     } satisfies ExtendedMembershipAndGiftItem;
 
     membershipsAndGifts = [...membershipsAndGifts, convertedItem];

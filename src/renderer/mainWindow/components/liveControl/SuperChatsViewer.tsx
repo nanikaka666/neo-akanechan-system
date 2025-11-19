@@ -76,9 +76,9 @@ export function SuperChatsViewer({
         }}
         itemContent={(index, superChatsItem) => {
           return superChatsItem.type === "superChat" ? (
-            <SuperChatItem item={superChatsItem} />
+            <SuperChatItem item={superChatsItem} key={superChatsItem.id.id} />
           ) : (
-            <SuperStickerItem item={superChatsItem} />
+            <SuperStickerItem item={superChatsItem} key={superChatsItem.id.id} />
           );
         }}
       />
