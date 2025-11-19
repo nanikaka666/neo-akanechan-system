@@ -58,6 +58,10 @@ export function removeStock(item: ExtendedChatItemText) {
   stockedLiveChatItemIds.delete(item.id.id);
 }
 
+export function sendStocksToRenderer() {
+  WebContentsWrapper.send(webContents!, "tellStocks", stocks, stocks.length);
+}
+
 export async function setupLiveChatEmitter(
   w: WebContents,
   liveLaunchProperties: LiveLaunchProperties,
