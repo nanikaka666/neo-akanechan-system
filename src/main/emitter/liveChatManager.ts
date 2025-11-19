@@ -142,13 +142,13 @@ export async function setupLiveChatEmitter(
     // if any problem of performance occurred then change the algorythm.
     textChats = textChats.filter((item) => item.id.id !== id.id);
     console.log(`remove item: ${id.id}`);
-    // todo: tell changed chat lists to renderer
+    sendTextChatsToRenderer();
   });
   liveChatEmitter.on("blockUser", (blockChannelId) => {
     textChats = textChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
     superChats = superChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
     console.log(`block user: ${blockChannelId.id}`);
-    // todo: tell changed chat lists to renderer
+    sendTextChatsToRenderer();
   });
   liveChatEmitter.on("memberships", (item) => {
     membershipsAndGIftsNum++;
