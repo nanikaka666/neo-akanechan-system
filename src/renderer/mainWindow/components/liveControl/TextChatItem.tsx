@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExtendedChatItemText } from "../../../../ipcEvent";
 import { Author } from "./Author";
 import { Messages } from "./Messages";
 
 export function TextChatItem({ item }: { item: ExtendedChatItemText }) {
   const [isSending, setIsSending] = useState(false);
+
+  useEffect(() => {
+    setIsSending((_) => false);
+  }, [item.isStocked]);
 
   return (
     <div style={item.isFirst ? { backgroundColor: "yellowgreen" } : {}}>
@@ -14,10 +18,9 @@ export function TextChatItem({ item }: { item: ExtendedChatItemText }) {
         <button
           onClick={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             setIsSending((_) => true);
-            window.ipcApi.requestRemoveStock(item).then((_) => {
-              setIsSending((_) => false);
-            });
+            window.ipcApi.requestRemoveStock(item);
           }}
           disabled={isSending}
         >
@@ -27,10 +30,9 @@ export function TextChatItem({ item }: { item: ExtendedChatItemText }) {
         <button
           onClick={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             setIsSending((_) => true);
-            window.ipcApi.requestAddStock(item).then((_) => {
-              setIsSending((_) => false);
-            });
+            window.ipcApi.requestAddStock(item);
           }}
           disabled={isSending}
         >

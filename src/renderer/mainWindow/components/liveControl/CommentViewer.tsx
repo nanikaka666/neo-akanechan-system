@@ -87,6 +87,7 @@ export function CommentViewer() {
       },
     );
     window.ipcApi.registerStocksListener((e, newStocks, newStocksNum) => {
+      console.log(newStocks);
       setStocks((_) => newStocks);
       setStocksNum((_) => newStocksNum);
     });

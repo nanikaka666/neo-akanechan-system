@@ -17,7 +17,11 @@ export function TextChatViewer({
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
   useEffect(() => {
-    if (textChats.length !== 0) {
+    if (
+      textChats.length !== 0 &&
+      range.startIndex < textChats.length &&
+      range.endIndex < textChats.length
+    ) {
       setRangeInfo((_) => {
         return {
           time: {
@@ -64,19 +68,19 @@ export function TextChatViewer({
         data={textChats}
         atBottomThreshold={200}
         atBottomStateChange={(atBottom) => {
-          console.log(`Bottom status changed. ${atBottom}`);
+          // console.log(`Bottom status changed. ${atBottom}`);
           setShowGoToBottom((_) => !atBottom);
         }}
         style={{ height: `calc(100vh - 50px)` }}
         followOutput={(isAtBottom) => {
-          console.log(`FollowOutput isAtBottom: ${isAtBottom}`);
+          // console.log(`FollowOutput isAtBottom: ${isAtBottom}`);
           return isAtBottom ? "smooth" : false;
         }}
         rangeChanged={(newRange) => {
           setRange((_) => newRange);
         }}
         itemContent={(index, textChat) => {
-          return <TextChatItem item={textChat} />;
+          return <TextChatItem item={textChat} key={textChat.id.id} />;
         }}
       />
     </div>

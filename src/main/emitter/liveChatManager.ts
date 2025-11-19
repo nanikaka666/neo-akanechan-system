@@ -38,6 +38,26 @@ const stockedLiveChatItemIds = new Set<string>();
 
 let webContents: WebContents | undefined;
 
+export function getStocks() {
+  return stocks;
+}
+
+export function addStock(item: ExtendedChatItemText) {
+  if (stockedLiveChatItemIds.has(item.id.id)) {
+    throw new Error(`this item is already stocked. ${item.id.id}`);
+  }
+  stocks = [...stocks, { ...item, isStocked: true }];
+  stockedLiveChatItemIds.add(item.id.id);
+}
+
+export function removeStock(item: ExtendedChatItemText) {
+  if (!stockedLiveChatItemIds.has(item.id.id)) {
+    throw new Error(`this item is already unstocked. ${item.id.id}`);
+  }
+  stocks = stocks.filter((stock) => stock.id.id !== item.id.id);
+  stockedLiveChatItemIds.delete(item.id.id);
+}
+
 export async function setupLiveChatEmitter(
   w: WebContents,
   liveLaunchProperties: LiveLaunchProperties,
