@@ -11,7 +11,12 @@ import {
 import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
-import { getStockedLiveChatItemIds } from "../stock";
+import {
+  getStockedLiveChatItemIds,
+  removeStockByLiveChatItemIdIfNeeded,
+  removeStocksByChannelIdIfNeeded,
+  sendStocksToRenderer,
+} from "../stock";
 
 /**
  * `isStocked` is unknown (always false more correctly) when live chat receiving.
@@ -114,12 +119,22 @@ export async function setupLiveChatEmitter(
     textChats = textChats.filter((item) => item.id.id !== id.id);
     console.log(`remove item: ${id.id}`);
     sendTextChatsToRenderer();
+
+    // if some item removed by stocks, send updated stock to renderer
+    if (removeStockByLiveChatItemIdIfNeeded(id)) {
+      sendStocksToRenderer(webContents!);
+    }
   });
   liveChatEmitter.on("blockUser", (blockChannelId) => {
     textChats = textChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
     superChats = superChats.filter((item) => item.author.channelId.id !== blockChannelId.id);
     console.log(`block user: ${blockChannelId.id}`);
     sendTextChatsToRenderer();
+
+    // if some item removed by stocks, send updated stock to renderer
+    if (removeStocksByChannelIdIfNeeded(blockChannelId)) {
+      sendStocksToRenderer(webContents!);
+    }
   });
   liveChatEmitter.on("memberships", (item) => {
     membershipsAndGIftsNum++;
