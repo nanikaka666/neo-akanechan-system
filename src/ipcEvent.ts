@@ -4,6 +4,7 @@ import {
   ChatItemSuperChat,
   ChatItemSuperSticker,
   ChatItemText,
+  GiftRedemption,
   MembershipMilestone,
   NewMembership,
   SponsorshipsGift,
@@ -88,10 +89,16 @@ export type ExtendedSponsorshipsGift = SponsorshipsGift & {
   formatedTime: string;
 };
 
+export type ExtendedGiftRedemption = GiftRedemption & {
+  type: "redemption";
+  formatedTime: string;
+};
+
 export type ExtendedMembershipAndGiftItem =
   | ExtendedNewMembership
   | ExtendedMembershipMilestone
-  | ExtendedSponsorshipsGift;
+  | ExtendedSponsorshipsGift
+  | ExtendedGiftRedemption;
 
 /**
  * Ipc channel interfaces.

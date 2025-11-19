@@ -3,6 +3,7 @@ import {
   ExtendedChatItemSuperChat,
   ExtendedChatItemSuperSticker,
   ExtendedChatItemText,
+  ExtendedGiftRedemption,
   ExtendedMembershipAndGiftItem,
   ExtendedSuperItem,
   LiveLaunchProperties,
@@ -154,6 +155,22 @@ export async function setupLiveChatEmitter(
       membershipsAndGIftsNum,
     );
     console.log("Gift purchased!", convertedItem);
+  });
+  liveChatEmitter.on("redemptionGift", (item) => {
+    membershipsAndGIftsNum++;
+    const convertedItem = {
+      ...item,
+      type: "redemption",
+      formatedTime: formatDate(new Date(item.timestamp / 1000)),
+    } satisfies ExtendedGiftRedemption;
+    membershipsAndGifts = [...membershipsAndGifts, convertedItem];
+    WebContentsWrapper.send(
+      webContents!,
+      "tellMembershipsAndGifts",
+      membershipsAndGifts,
+      membershipsAndGIftsNum,
+    );
+    console.log("Gift redemption!", convertedItem);
   });
   liveChatEmitter.on("start", () => {
     console.log("LiveChatEmitter started.");

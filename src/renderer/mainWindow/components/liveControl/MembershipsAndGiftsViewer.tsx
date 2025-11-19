@@ -5,6 +5,7 @@ import { RangeInfo } from "./CommentViewer";
 import { NewMembershipsItem } from "./NewMembershipsItem";
 import { MilestoneMembershipsItem } from "./MilestoneMembershipsItem";
 import { GiftItem } from "./GiftItem";
+import { RedemptionItem } from "./RedemptionItem";
 
 export function MembershipsAndGiftsViewer({
   membershipsAndGifts,
@@ -80,8 +81,10 @@ export function MembershipsAndGiftsViewer({
             <NewMembershipsItem item={item} />
           ) : item.type === "milestone" ? (
             <MilestoneMembershipsItem item={item} />
-          ) : (
+          ) : item.type === "gift" ? (
             <GiftItem item={item} />
+          ) : (
+            <RedemptionItem item={item} />
           );
         }}
       />
