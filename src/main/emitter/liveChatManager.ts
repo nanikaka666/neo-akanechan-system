@@ -132,6 +132,7 @@ export async function setupLiveChatEmitter(
     }
   });
   liveChatEmitter.on("sponsorshipsGift", (item) => {
+    membershipsAndGIftsNum++;
     const message = (item.messages![0] as TextMessage).text;
     const res = message.match(/^[^0-9]*([0-9]+)/);
     if (res === null) {
