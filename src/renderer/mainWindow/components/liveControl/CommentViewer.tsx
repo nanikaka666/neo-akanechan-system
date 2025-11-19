@@ -69,7 +69,7 @@ export function CommentViewer() {
         itemNum: membershipsAndGiftsNum,
       },
     ];
-  }, [textChatNum, superChatsNum, membershipsAndGiftsNum]);
+  }, [textChatNum, superChatsNum, membershipsAndGiftsNum, stocksNum]);
 
   useEffect(() => {
     window.ipcApi.registerTextChatsListener((e, newTextChats, newTextChatNum) => {
