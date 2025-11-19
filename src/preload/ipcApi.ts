@@ -44,6 +44,7 @@ export interface IpcApi {
     registerTextChatsListener: Listen<"tellTextChats">;
     registerSuperChatsListener: Listen<"tellSuperChats">;
     registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
+    registerStocksListener: Listen<"tellStocks">;
   };
 }
 
@@ -87,5 +88,6 @@ export const IpcApi: IpcApi = {
     registerSuperChatsListener: (callback) => IpcRendererWrapper.on("tellSuperChats", callback),
     registerMembershipsAndGiftsListener: (callback) =>
       IpcRendererWrapper.on("tellMembershipsAndGifts", callback),
+    registerStocksListener: (callback) => IpcRendererWrapper.on("tellStocks", callback),
   },
 };

@@ -43,6 +43,9 @@ export function CommentViewer() {
   );
   const [membershipsAndGiftsNum, setMembershipsAndGiftsNum] = useState(0);
 
+  const [stocks, setStocks] = useState<ExtendedChatItemText[]>([]);
+  const [stocksNum, setStocksNum] = useState(0);
+
   const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
     return [
       { viewerMode: "text", label: "テキストチャット", disabled: false, itemNum: textChatNum },
@@ -52,7 +55,7 @@ export function CommentViewer() {
         disabled: superChatsNum === 0,
         itemNum: superChatsNum,
       },
-      { viewerMode: "stocks", label: "ストック", disabled: false, itemNum: 123 },
+      { viewerMode: "stocks", label: "ストック", disabled: stocksNum === 0, itemNum: stocksNum },
       {
         viewerMode: "textByMemberships",
         label: "テキストチャット(メンバーシップのみ)",
@@ -83,6 +86,10 @@ export function CommentViewer() {
         setMembershipsAndGiftsNum((_) => newMembershipsAndGiftsNum);
       },
     );
+    window.ipcApi.registerStocksListener((e, newStocks, newStocksNum) => {
+      setStocks((_) => newStocks);
+      setStocksNum((_) => newStocksNum);
+    });
   }, []);
 
   return (
@@ -116,7 +123,9 @@ export function CommentViewer() {
       <div style={viewerMode !== "superchat" ? displayNone : {}}>
         <SuperChatsViewer superChats={superChats} superChatsNum={superChatsNum} />
       </div>
-      <div style={viewerMode !== "stocks" ? displayNone : {}}>Stocks</div>
+      <div style={viewerMode !== "stocks" ? displayNone : {}}>
+        <TextChatViewer textChats={stocks} textChatNum={stocksNum} />
+      </div>
       <div style={viewerMode !== "textByMemberships" ? displayNone : {}}>Chats by memberships</div>
       <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>
         <MembershipsAndGiftsViewer

@@ -251,4 +251,9 @@ export interface IpcEvent {
     membershipsAndGifts: ExtendedMembershipAndGiftItem[],
     membershipsAndGiftsNum: number,
   ) => void;
+
+  /**
+   * Notify all stocks to renderer.
+   */
+  tellStocks: (stocks: ExtendedChatItemText[], stocksNum: number) => void;
 }
