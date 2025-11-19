@@ -211,7 +211,7 @@ function to2Digit(value: string) {
  *
  * set `isStocked` property.
  */
-function sendTextChatsToRenderer() {
+export function sendTextChatsToRenderer() {
   const liveChatItemIds = getStockedLiveChatItemIds();
   const markedTextChats = textChats.map((item) => {
     return {

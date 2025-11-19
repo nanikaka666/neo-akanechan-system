@@ -6,7 +6,7 @@ import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
 import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
-import { setupLiveChatEmitter } from "./emitter/liveChatManager";
+import { sendTextChatsToRenderer, setupLiveChatEmitter } from "./emitter/liveChatManager";
 import { setupLikeCountEmitter } from "./emitter/likeCountManager";
 import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
 import { setupSubscriberCountEmitter } from "./emitter/subscriberCountManager";
@@ -213,6 +213,7 @@ export function setupIpcMainHandlers() {
     }
     addStock(item);
     sendStocksToRenderer(e.sender);
+    sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
     return Promise.resolve(true);
   });
 
@@ -222,6 +223,7 @@ export function setupIpcMainHandlers() {
     }
     removeStock(item);
     sendStocksToRenderer(e.sender);
+    sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
     return Promise.resolve(true);
   });
 }
