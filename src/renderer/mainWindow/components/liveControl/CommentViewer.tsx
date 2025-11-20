@@ -5,7 +5,7 @@ import {
   ExtendedMembershipAndGiftItem,
   ExtendedSuperItem,
 } from "../../../../ipcEvent";
-import { SuperChatsViewer } from "./SuperChatsViewer";
+import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 
 export interface RangeInfo {
@@ -19,7 +19,7 @@ export interface RangeInfo {
   };
 }
 
-type ViewerMode = "text" | "superchat" | "stocks" | "membershipsAndGifts";
+type ViewerMode = "text" | "superchatAndStickers" | "stocks" | "membershipsAndGifts";
 
 interface ViewerModeSelectOption {
   viewerMode: ViewerMode;
@@ -35,8 +35,8 @@ export function CommentViewer() {
   const [textChats, setTextChats] = useState<ExtendedChatItemText[]>([]);
   const [textChatNum, setTextChatNum] = useState(0);
 
-  const [superChats, setSuperChats] = useState<ExtendedSuperItem[]>([]);
-  const [superChatsNum, setSuperChatsNum] = useState(0);
+  const [superChatAndStickers, setSuperChatAndStickers] = useState<ExtendedSuperItem[]>([]);
+  const [superChatAndStickersNum, setSuperChatAndStickersNum] = useState(0);
 
   const [membershipsAndGifts, setMembershipsAndGifts] = useState<ExtendedMembershipAndGiftItem[]>(
     [],
@@ -50,10 +50,10 @@ export function CommentViewer() {
     return [
       { viewerMode: "text", label: "テキストチャット", disabled: false, itemNum: textChatNum },
       {
-        viewerMode: "superchat",
+        viewerMode: "superchatAndStickers",
         label: "スパチャ & Sticker",
-        disabled: superChatsNum === 0,
-        itemNum: superChatsNum,
+        disabled: superChatAndStickersNum === 0,
+        itemNum: superChatAndStickersNum,
       },
       { viewerMode: "stocks", label: "ストック", disabled: stocksNum === 0, itemNum: stocksNum },
       {
@@ -63,7 +63,7 @@ export function CommentViewer() {
         itemNum: membershipsAndGiftsNum,
       },
     ];
-  }, [textChatNum, superChatsNum, membershipsAndGiftsNum, stocksNum]);
+  }, [textChatNum, superChatAndStickersNum, membershipsAndGiftsNum, stocksNum]);
 
   useEffect(() => {
     window.ipcApi.registerTextChatsListener((e, newTextChats, newTextChatNum) => {
@@ -71,8 +71,8 @@ export function CommentViewer() {
       setTextChatNum((_) => newTextChatNum);
     });
     window.ipcApi.registerSuperChatsListener((e, newSuperChats, newSuperChatsNum) => {
-      setSuperChats((_) => newSuperChats);
-      setSuperChatsNum((_) => newSuperChatsNum);
+      setSuperChatAndStickers((_) => newSuperChats);
+      setSuperChatAndStickersNum((_) => newSuperChatsNum);
     });
     window.ipcApi.registerMembershipsAndGiftsListener(
       (e, newMembershipsAndGifts, newMembershipsAndGiftsNum) => {
@@ -115,8 +115,11 @@ export function CommentViewer() {
       <div style={viewerMode !== "text" ? displayNone : {}}>
         <TextChatViewer textChats={textChats} textChatNum={textChatNum} />
       </div>
-      <div style={viewerMode !== "superchat" ? displayNone : {}}>
-        <SuperChatsViewer superChats={superChats} superChatsNum={superChatsNum} />
+      <div style={viewerMode !== "superchatAndStickers" ? displayNone : {}}>
+        <SuperChatAndStickersViewer
+          superChatAndStickers={superChatAndStickers}
+          superChatAndStickersNum={superChatAndStickersNum}
+        />
       </div>
       <div style={viewerMode !== "stocks" ? displayNone : {}}>
         <TextChatViewer textChats={stocks} textChatNum={stocksNum} />

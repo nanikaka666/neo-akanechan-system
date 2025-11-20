@@ -5,12 +5,12 @@ import { RangeInfo } from "./CommentViewer";
 import { SuperChatItem } from "./SuperChatItem";
 import { SuperStickerItem } from "./SuperStickerItem";
 
-export function SuperChatsViewer({
-  superChats,
-  superChatsNum,
+export function SuperChatAndStickersViewer({
+  superChatAndStickers,
+  superChatAndStickersNum,
 }: {
-  superChats: ExtendedSuperItem[];
-  superChatsNum: number;
+  superChatAndStickers: ExtendedSuperItem[];
+  superChatAndStickersNum: number;
 }) {
   const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
@@ -18,12 +18,12 @@ export function SuperChatsViewer({
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
   useEffect(() => {
-    if (superChats.length !== 0) {
+    if (superChatAndStickers.length !== 0) {
       setRangeInfo((_) => {
         return {
           time: {
-            start: superChats[range.startIndex].formatedTime,
-            end: superChats[range.endIndex].formatedTime,
+            start: superChatAndStickers[range.startIndex].formatedTime,
+            end: superChatAndStickers[range.endIndex].formatedTime,
           },
           indexOfWhole: {
             start: range.startIndex + 1,
@@ -32,17 +32,17 @@ export function SuperChatsViewer({
         };
       });
     }
-  }, [superChats, range]);
+  }, [superChatAndStickers, range]);
 
   return (
     <div>
       <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
         <p>
-          Range: {range.startIndex} - {range.endIndex} / {superChats.length}
+          Range: {range.startIndex} - {range.endIndex} / {superChatAndStickers.length}
         </p>
         {rangeInfo && (
           <p>
-            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${superChatsNum}`}
+            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${superChatAndStickersNum}`}
           </p>
         )}
         {showGoToBottom && (
@@ -50,7 +50,7 @@ export function SuperChatsViewer({
             onClick={(e) => {
               e.preventDefault();
               ref.current?.scrollIntoView({
-                index: superChats.length - 1,
+                index: superChatAndStickers.length - 1,
                 align: "end",
                 behavior: "auto",
               });
@@ -62,7 +62,7 @@ export function SuperChatsViewer({
       </div>
       <Virtuoso
         ref={ref}
-        data={superChats}
+        data={superChatAndStickers}
         atBottomThreshold={200}
         atBottomStateChange={(atBottom) => {
           setShowGoToBottom((_) => !atBottom);
@@ -74,11 +74,11 @@ export function SuperChatsViewer({
         rangeChanged={(newRange) => {
           setRange((_) => newRange);
         }}
-        itemContent={(index, superChatsItem) => {
-          return superChatsItem.type === "superChat" ? (
-            <SuperChatItem item={superChatsItem} key={superChatsItem.id.id} />
+        itemContent={(index, item) => {
+          return item.type === "superChat" ? (
+            <SuperChatItem item={item} key={item.id.id} />
           ) : (
-            <SuperStickerItem item={superChatsItem} key={superChatsItem.id.id} />
+            <SuperStickerItem item={item} key={item.id.id} />
           );
         }}
       />
