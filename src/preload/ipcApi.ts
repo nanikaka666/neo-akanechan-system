@@ -21,7 +21,6 @@ type Listen<K extends keyof IpcEvent> = (
 export interface IpcApi {
   ipcApi: {
     requestConfirmingInputChannelId: Invoke<"confirmInputChannelId">;
-    requestMainChannelId: Invoke<"getMainChannelId">;
     registerChannel: Invoke<"registerChannel">;
     registerNewMainChannelListener: Listen<"tellNewMainChannelId">;
     requestChannelTop: Invoke<"getChannelTop">;
@@ -43,6 +42,7 @@ export interface IpcApi {
     requestAddStock: Invoke<"addStock">;
     requestRemoveStock: Invoke<"removeStock">;
     registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
+    requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
   };
 }
 
@@ -50,7 +50,6 @@ export const IpcApi: IpcApi = {
   ipcApi: {
     requestConfirmingInputChannelId: (inputChannelId) =>
       IpcRendererWrapper.invoke("confirmInputChannelId", inputChannelId),
-    requestMainChannelId: () => IpcRendererWrapper.invoke("getMainChannelId"),
     registerChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
     registerNewMainChannelListener: (callback) =>
       IpcRendererWrapper.on("tellNewMainChannelId", callback),
@@ -83,5 +82,6 @@ export const IpcApi: IpcApi = {
     requestRemoveStock: (stock) => IpcRendererWrapper.invoke("removeStock", stock),
     registerLiveStatisticsListener: (callback) =>
       IpcRendererWrapper.on("tellLiveStatistics", callback),
+    requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
   },
 };

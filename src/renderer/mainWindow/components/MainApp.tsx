@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import { ChannelRegistrationLoader } from "./channelRegistration/ChannelRegistrationLoader";
 import { ChannelId } from "youtube-live-scraper";
 import { MainChannelTopLoader } from "./top/MainChannelTopLoader";
-import { LiveLaunchProperties } from "../../../ipcEvent";
+import { LiveLaunchProperties, MainAppPage } from "../../../ipcEvent";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
 
 export function MainApp() {
   const [mainChannelId, setMainChannelId] = useState<ChannelId>();
   const [liveLaunchProperties, setLiveLaunchProperties] = useState<LiveLaunchProperties>();
+  const [mainAppPage, setMainAppPage] = useState<MainAppPage>();
 
   useEffect(() => {
-    window.ipcApi.requestMainChannelId().then((ch) => {
-      setMainChannelId((_) => ch);
+    window.ipcApi.requestInitialMainAppPage().then((page) => {
+      // setMainChannelId((_) => ch);
+      setMainAppPage((_) => page);
       window.ipcApi.registerNewMainChannelListener((e, channelId) => {
         setMainChannelId((_) => channelId);
       });
@@ -21,13 +23,15 @@ export function MainApp() {
     });
   }, []);
 
-  return mainChannelId ? (
+  return mainAppPage ? (
     liveLaunchProperties ? (
       <LiveControlPanelInStandBy liveLaunchProperties={liveLaunchProperties} />
+    ) : mainAppPage.type === "liveSelection" ? (
+      <MainChannelTopLoader mainChannelId={mainAppPage.mainChannelId} />
     ) : (
-      <MainChannelTopLoader mainChannelId={mainChannelId} />
+      <ChannelRegistrationLoader />
     )
   ) : (
-    <ChannelRegistrationLoader />
+    <div>Now Loading...</div>
   );
 }

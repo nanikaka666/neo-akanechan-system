@@ -5,7 +5,12 @@ import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
-import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
+import {
+  BeginningBlankPage,
+  ChannelSummary,
+  LiveLaunchProperties,
+  LiveSelectionPage,
+} from "../ipcEvent";
 import { sendTextChatsToRenderer, setupLiveChatEmitter } from "./emitter/liveChatManager";
 import { setupLikeCountEmitter } from "./emitter/likeCountManager";
 import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
@@ -51,10 +56,6 @@ export function setupIpcMainHandlers() {
     } catch {
       return undefined;
     }
-  });
-
-  IpcMainWrapper.handle("getMainChannelId", () => {
-    return Promise.resolve(getStorageService().getMainChannelId());
   });
 
   IpcMainWrapper.handle("registerChannel", (e, channelId) => {
@@ -223,5 +224,17 @@ export function setupIpcMainHandlers() {
     }
     sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
     return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("getInitialMainAppPage", () => {
+    const maybeMainChannelId = getStorageService().getMainChannelId();
+    if (maybeMainChannelId) {
+      return Promise.resolve({
+        type: "liveSelection",
+        mainChannelId: maybeMainChannelId,
+      } satisfies LiveSelectionPage);
+    } else {
+      return Promise.resolve({ type: "beginningBlank" } satisfies BeginningBlankPage);
+    }
   });
 }

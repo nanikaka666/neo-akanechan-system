@@ -182,11 +182,6 @@ export interface IpcEvent {
   confirmInputChannelId: (inputChannelId: ChannelId) => ChannelSummary | undefined;
 
   /**
-   * Get the main channel id (in Youtube ID style).
-   */
-  getMainChannelId: () => ChannelId | undefined;
-
-  /**
    * Register new channel, and mark as main channel.
    *
    * if given channelId was already registered, `false` will be returned.
@@ -306,4 +301,9 @@ export interface IpcEvent {
    * Notify LiveStatistics to renderer.
    */
   tellLiveStatistics: (statistics: LiveStatistics) => void;
+
+  /**
+   * Return MainAppPage for initial status.
+   */
+  getInitialMainAppPage: () => BeginningBlankPage | LiveSelectionPage;
 }
