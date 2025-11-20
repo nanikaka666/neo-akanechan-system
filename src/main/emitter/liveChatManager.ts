@@ -16,7 +16,6 @@ import {
   getStockedLiveChatItemIds,
   removeStockByLiveChatItemIdIfNeeded,
   removeStocksByChannelIdIfNeeded,
-  sendStocksToRenderer,
 } from "../stock";
 import { updateLiveStatistics } from "../liveStatistics";
 
@@ -119,7 +118,7 @@ export async function setupLiveChatEmitter(
           isFirst: isFirstChat,
         },
       } satisfies NonMarkedExtendedChatItemText;
-      textChats = [...textChats, convertedItem].slice(-100); // take latest 1000 items.
+      textChats = [...textChats, convertedItem].slice(-1000); // take latest 1000 items.
       console.log(item.messages);
 
       sendTextChatsToRenderer();
@@ -159,10 +158,8 @@ export async function setupLiveChatEmitter(
     updateLiveStatistics(counts);
     sendTextChatsToRenderer();
 
-    // if some item removed by stocks, send updated stock to renderer
-    if (removeStockByLiveChatItemIdIfNeeded(id)) {
-      sendStocksToRenderer(webContents!);
-    }
+    // if removed chat is stocked one, remove it.
+    removeStockByLiveChatItemIdIfNeeded(id);
   });
   liveChatEmitter.on("blockUser", (blockChannelId) => {
     // hold a count which how many text chat will be removed.
@@ -184,10 +181,9 @@ export async function setupLiveChatEmitter(
     counts.chatUUCount = authorChannelIds.size;
 
     updateLiveStatistics(counts);
-    // if some item removed by stocks, send updated stock to renderer
-    if (removeStocksByChannelIdIfNeeded(blockChannelId)) {
-      sendStocksToRenderer(webContents!);
-    }
+
+    // remove all chat which posted by block user from stock list.
+    removeStocksByChannelIdIfNeeded(blockChannelId);
   });
   liveChatEmitter.on("memberships", (item) => {
     const convertedItem = {

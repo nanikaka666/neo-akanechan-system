@@ -1,5 +1,5 @@
 import { WebContents } from "electron";
-import { ExtendedChatItemText, LiveStatistics } from "../ipcEvent";
+import { ExtendedChatItemText } from "../ipcEvent";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { LiveChatItemId } from "youtube-livechat-emitter/dist/src/core/LiveChatItemId";
 import { ChannelId } from "youtube-live-scraper";
@@ -11,7 +11,7 @@ import { updateLiveStatistics } from "./liveStatistics";
  * Owner can reference stocked item whenever even if it flew out from chat list.
  */
 let stocks: ExtendedChatItemText[] = [];
-let counts: Pick<LiveStatistics, "stocksCount">;
+let webContents: WebContents;
 
 const stockedLiveChatItemIds = new Set<string>();
 
@@ -19,12 +19,10 @@ export function getStockedLiveChatItemIds() {
   return stockedLiveChatItemIds;
 }
 
-export function setupStocks() {
+export function setupStocks(w: WebContents) {
   stocks = [];
   stockedLiveChatItemIds.clear();
-  counts = {
-    stocksCount: 0,
-  };
+  webContents = w;
 }
 
 export function addStock(item: ExtendedChatItemText) {
@@ -33,7 +31,7 @@ export function addStock(item: ExtendedChatItemText) {
   }
   stocks = [...stocks, { ...item, isStocked: true }];
   stockedLiveChatItemIds.add(item.id.id);
-  counts.stocksCount = stockedLiveChatItemIds.size;
+  sendStocksToRenderer();
 }
 
 export function removeStock(item: ExtendedChatItemText) {
@@ -42,31 +40,27 @@ export function removeStock(item: ExtendedChatItemText) {
   }
   stocks = stocks.filter((stock) => stock.id.id !== item.id.id);
   stockedLiveChatItemIds.delete(item.id.id);
-  counts.stocksCount = stockedLiveChatItemIds.size;
+  sendStocksToRenderer();
 }
 
 export function removeStockByLiveChatItemIdIfNeeded(liveChatItemId: LiveChatItemId) {
   const target = stocks.filter((item) => item.id.id === liveChatItemId.id);
   if (target.length === 0) {
-    return false;
+    return;
   }
   removeStock(target[0]);
-  counts.stocksCount = stockedLiveChatItemIds.size;
-  return true;
 }
 
 export function removeStocksByChannelIdIfNeeded(channelId: ChannelId) {
   const targets = stocks.filter((item) => item.author.channelId.id === channelId.id);
   if (targets.length === 0) {
-    return false;
+    return;
   }
 
   targets.forEach(removeStock);
-  counts.stocksCount = stockedLiveChatItemIds.size;
-  return true;
 }
 
-export function sendStocksToRenderer(webContents: WebContents) {
-  updateLiveStatistics(counts);
+function sendStocksToRenderer() {
+  updateLiveStatistics({ stocksCount: stockedLiveChatItemIds.size });
   WebContentsWrapper.send(webContents, "tellStocks", stocks, stocks.length);
 }

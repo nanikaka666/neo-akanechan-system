@@ -10,7 +10,7 @@ import { sendTextChatsToRenderer, setupLiveChatEmitter } from "./emitter/liveCha
 import { setupLikeCountEmitter } from "./emitter/likeCountManager";
 import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
 import { setupSubscriberCountEmitter } from "./emitter/subscriberCountManager";
-import { addStock, sendStocksToRenderer, removeStock, setupStocks } from "./stock";
+import { addStock, removeStock, setupStocks } from "./stock";
 import { setupLiveStatistics } from "./liveStatistics";
 
 /**
@@ -197,7 +197,7 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
-    setupStocks();
+    setupStocks(e.sender);
     setupLiveStatistics(e.sender);
 
     await Promise.all([
@@ -214,7 +214,6 @@ export function setupIpcMainHandlers() {
       return Promise.resolve(false);
     }
     addStock(item);
-    sendStocksToRenderer(e.sender);
     sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
     return Promise.resolve(true);
   });
@@ -224,7 +223,6 @@ export function setupIpcMainHandlers() {
       return Promise.resolve(false);
     }
     removeStock(item);
-    sendStocksToRenderer(e.sender);
     sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
     return Promise.resolve(true);
   });
