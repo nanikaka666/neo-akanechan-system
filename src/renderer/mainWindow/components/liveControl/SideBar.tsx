@@ -2,6 +2,7 @@ import { CSSProperties, Dispatch, SetStateAction } from "react";
 import { LiveLaunchProperties } from "../../../../ipcEvent";
 import { Mode } from "./LiveControlPanel";
 import { SideBarInfoArea } from "./SideBarInfoArea";
+import { ExitLiveButton } from "./ExitLiveButton";
 
 const selectedStyle: CSSProperties = { backgroundColor: "orange" };
 
@@ -47,6 +48,7 @@ export function SideBar({
         Neighborhoods
       </div>
       <SideBarInfoArea />
+      <ExitLiveButton />
     </div>
   );
 }
