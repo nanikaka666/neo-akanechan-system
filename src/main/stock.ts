@@ -4,7 +4,13 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { LiveChatItemId } from "youtube-livechat-emitter/dist/src/core/LiveChatItemId";
 import { ChannelId } from "youtube-live-scraper";
 
+/**
+ * Stocks is set of marked text chat item.
+ *
+ * Owner can reference stocked item whenever even if it flew out from chat list.
+ */
 let stocks: ExtendedChatItemText[] = [];
+
 const stockedLiveChatItemIds = new Set<string>();
 
 export function getStockedLiveChatItemIds() {
