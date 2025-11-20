@@ -7,6 +7,7 @@ import {
 } from "../../../../ipcEvent";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
+import { ViewerModeSelector } from "./ViewerModeSelector";
 
 export interface RangeInfo {
   time: {
@@ -19,9 +20,9 @@ export interface RangeInfo {
   };
 }
 
-type ViewerMode = "text" | "superchatAndStickers" | "stocks" | "membershipsAndGifts";
+export type ViewerMode = "text" | "superchatAndStickers" | "stocks" | "membershipsAndGifts";
 
-interface ViewerModeSelectOption {
+export interface ViewerModeSelectOption {
   viewerMode: ViewerMode;
   label: string;
   disabled: boolean;
@@ -89,7 +90,7 @@ export function CommentViewer() {
 
   return (
     <div>
-      <div style={{ height: "50px" }}>
+      {/* <div style={{ height: "50px" }}>
         <label>
           <select
             value={viewerMode}
@@ -111,7 +112,12 @@ export function CommentViewer() {
             })}
           </select>
         </label>
-      </div>
+      </div> */}
+      <ViewerModeSelector
+        currentViewerMode={viewerMode}
+        options={selectOptions}
+        setViewerMode={setViewerMode}
+      />
       <div style={viewerMode !== "text" ? displayNone : {}}>
         <TextChatViewer textChats={textChats} textChatNum={textChatNum} />
       </div>
