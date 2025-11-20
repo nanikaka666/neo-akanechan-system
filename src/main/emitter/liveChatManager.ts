@@ -131,6 +131,8 @@ export async function setupLiveChatEmitter(
     console.log(`block user: ${blockChannelId.id}`);
     sendTextChatsToRenderer();
 
+    authorChannelIds.delete(blockChannelId.id);
+
     // if some item removed by stocks, send updated stock to renderer
     if (removeStocksByChannelIdIfNeeded(blockChannelId)) {
       sendStocksToRenderer(webContents!);
