@@ -1,20 +1,20 @@
 import { LikeCountRaisedEventEmitter } from "simple-youtube-emitter";
-import { LiveLaunchProperties } from "../../ipcEvent";
-import { WebContents } from "electron";
-import { WebContentsWrapper } from "../webContentsWrapper";
+import { LiveLaunchProperties, LiveStatistics } from "../../ipcEvent";
+import { updateLiveStatistics } from "../liveStatistics";
 
 let likeCountEmitter: LikeCountRaisedEventEmitter | undefined;
-let webContents: WebContents | undefined;
 
-export async function setupLikeCountEmitter(
-  w: WebContents,
-  liveLaunchProperties: LiveLaunchProperties,
-) {
+let counts: Pick<LiveStatistics, "currentLikeCount" | "maxLikeCount">;
+
+export async function setupLikeCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
   if (likeCountEmitter !== undefined) {
     likeCountEmitter.close();
     likeCountEmitter = undefined;
   }
-  webContents = w;
+  counts = {
+    currentLikeCount: 0, // todo: update this value correctly
+    maxLikeCount: 0,
+  };
   likeCountEmitter = LikeCountRaisedEventEmitter.initWithoutCredential(
     liveLaunchProperties.channel.channel.channelId.id,
     10 * 1000,
@@ -32,7 +32,10 @@ export async function setupLikeCountEmitter(
     // tell raised value to LCP and overlay.
     // depends on settings, tell reaching goals.
     console.log(`Like Count: ${before.value} -> ${after.value}`);
-    WebContentsWrapper.send(webContents!, "tellLikeCount", after.value);
+    counts.currentLikeCount = after.value;
+    counts.maxLikeCount = after.value;
+
+    updateLiveStatistics(counts);
   });
   await likeCountEmitter.start();
 }

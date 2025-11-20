@@ -1,24 +1,24 @@
-import { WebContents } from "electron";
-import { LiveLaunchProperties } from "../../ipcEvent";
+import { LiveLaunchProperties, LiveStatistics } from "../../ipcEvent";
 import { SubscriberCountRaisedEventEmitter } from "simple-youtube-emitter";
-import { WebContentsWrapper } from "../webContentsWrapper";
+import { updateLiveStatistics } from "../liveStatistics";
 
 let subscriberCountEmitter: SubscriberCountRaisedEventEmitter | undefined;
-let webContents: WebContents | undefined;
 
-export async function setupSubscriberCountEmitter(
-  w: WebContents,
-  liveLaunchProperties: LiveLaunchProperties,
-) {
+let counts: Pick<LiveStatistics, "currentSubscriberCount" | "maxSubscriberCount">;
+
+export async function setupSubscriberCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
   if (subscriberCountEmitter !== undefined) {
     subscriberCountEmitter.close();
     subscriberCountEmitter = undefined;
   }
+  counts = {
+    currentSubscriberCount: 0, // todo: update this value correctly
+    maxSubscriberCount: 0,
+  };
   subscriberCountEmitter = SubscriberCountRaisedEventEmitter.initWithoutCredential(
     liveLaunchProperties.channel.channel.channelId.id,
     30 * 1000,
   );
-  webContents = w;
 
   subscriberCountEmitter.on("start", () => {
     console.log("SubscriberCountEmitter started.");
@@ -31,7 +31,10 @@ export async function setupSubscriberCountEmitter(
   });
   subscriberCountEmitter.on("raised", (before, after) => {
     console.log(`Subscriber count: ${before.value} -> ${after.value}`);
-    WebContentsWrapper.send(webContents!, "tellSubscriberCount", after.value);
+    counts.maxSubscriberCount = after.value;
+    counts.currentSubscriberCount = after.value;
+
+    updateLiveStatistics(counts);
   });
 
   await subscriberCountEmitter.start();

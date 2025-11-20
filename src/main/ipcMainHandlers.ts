@@ -6,10 +6,12 @@ import { BrowserWindow, dialog } from "electron";
 import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
 import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
-import { setupLiveChatEmitter } from "./emitter/liveChatManager";
+import { sendTextChatsToRenderer, setupLiveChatEmitter } from "./emitter/liveChatManager";
 import { setupLikeCountEmitter } from "./emitter/likeCountManager";
 import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
 import { setupSubscriberCountEmitter } from "./emitter/subscriberCountManager";
+import { addStock, removeStock, setupStocks } from "./stock";
+import { setupLiveStatistics } from "./liveStatistics";
 
 /**
  * temporary aid method.
@@ -121,7 +123,9 @@ export function setupIpcMainHandlers() {
     }
     // shown on title bar of overlay window.
     const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title.title}`;
-    createOverlayWindow(overlayWindowTitle);
+
+    // memo: temporary turn off
+    // createOverlayWindow(overlayWindowTitle);
 
     WebContentsWrapper.send(e.sender, "tellOverlayStarted", {
       channel: channelHavingClosestLive,
@@ -193,12 +197,31 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
+    setupStocks(e.sender);
+    setupLiveStatistics(e.sender);
+
     await Promise.all([
       setupLiveChatEmitter(e.sender, liveLaunchProperties),
-      setupLikeCountEmitter(e.sender, liveLaunchProperties),
-      setupLiveViewCountEmitter(e.sender, liveLaunchProperties),
-      setupSubscriberCountEmitter(e.sender, liveLaunchProperties),
+      setupLikeCountEmitter(liveLaunchProperties),
+      setupLiveViewCountEmitter(liveLaunchProperties),
+      setupSubscriberCountEmitter(liveLaunchProperties),
     ]);
     return true;
+  });
+
+  IpcMainWrapper.handle("addStock", (e, item) => {
+    if (!addStock(item)) {
+      return Promise.resolve(false);
+    }
+    sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
+    return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("removeStock", (e, item) => {
+    if (!removeStock(item)) {
+      return Promise.resolve(false);
+    }
+    sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
+    return Promise.resolve(true);
   });
 }

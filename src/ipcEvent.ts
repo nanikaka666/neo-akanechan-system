@@ -1,5 +1,14 @@
 import { ChannelId, ChannelTitle, VideoTitle } from "youtube-live-scraper";
 import { UserSettings } from "./main/userSettings";
+import {
+  ChatItemSuperChat,
+  ChatItemSuperSticker,
+  ChatItemText,
+  GiftRedemption,
+  MembershipMilestone,
+  NewMembership,
+  SponsorshipsGift,
+} from "youtube-livechat-emitter/dist/src/types/liveChat";
 
 export interface ChannelSummary {
   channelId: ChannelId;
@@ -33,6 +42,90 @@ export interface LiveLaunchProperties {
   settings: UserSettings;
   overlayWindowTitle: string;
 }
+
+/**
+ * Summary data about the live shown on SideBar.
+ */
+export interface LiveStatistics {
+  currentLikeCount: number;
+  maxLikeCount: number;
+  currentLiveViewCount: number;
+  maxLiveViewCount: number;
+  textChatCount: number;
+  superChatCount: number;
+  superStickerCount: number;
+  chatUUCount: number;
+  currentSubscriberCount: number;
+  maxSubscriberCount: number;
+  newMembershipsCount: number;
+  membershipMilestoneCount: number;
+  giftCount: number;
+  redemptionGiftCount: number;
+  stocksCount: number;
+}
+
+/**
+ * Append some data to ChatItemText from youtube-livechat-emitter
+ */
+export type ExtendedChatItemText = ChatItemText & {
+  /**
+   * index which means position of whole text chat list.
+   */
+  indexOfWhole: number;
+
+  /**
+   * HH:mm:ss style time format
+   */
+  formatedTime: string;
+
+  /**
+   * `true` means this is first chat for author.
+   */
+  isFirst: boolean;
+
+  /**
+   * `true` means this is stocked by streamer.
+   */
+  isStocked: boolean;
+};
+
+export type ExtendedChatItemSuperChat = ChatItemSuperChat & {
+  formatedTime: string;
+  isFirst: boolean;
+};
+
+export type ExtendedChatItemSuperSticker = ChatItemSuperSticker & {
+  formatedTime: string;
+  isFirst: boolean;
+};
+
+export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
+
+export type ExtendedNewMembership = NewMembership & {
+  formatedTime: string;
+};
+
+export type ExtendedMembershipMilestone = MembershipMilestone & {
+  formatedTime: string;
+};
+
+export type ExtendedSponsorshipsGift = SponsorshipsGift & {
+  type: "gift";
+  num: number;
+  formatedTime: string;
+  id: string; // todo: id must be given livechat-emitter module
+};
+
+export type ExtendedGiftRedemption = GiftRedemption & {
+  type: "redemption";
+  formatedTime: string;
+};
+
+export type ExtendedMembershipAndGiftItem =
+  | ExtendedNewMembership
+  | ExtendedMembershipMilestone
+  | ExtendedSponsorshipsGift
+  | ExtendedGiftRedemption;
 
 /**
  * Ipc channel interfaces.
@@ -137,29 +230,40 @@ export interface IpcEvent {
   tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
 
   /**
-   * Notify counts of chats to renderer.
-   *
-   * counts means number of text chat, superchat, superstickers; effect of removing chat and blocking user is reflected.
+   * Notify latest 1000 text chats to renderer.
    */
-  tellChatCount: (chatCount: number) => void;
+  tellTextChats: (textChats: ExtendedChatItemText[], textChatNum: number) => void;
 
   /**
-   * Notify counts of chat UU to renderer.
+   * Notify all superchat and supersticker item to renderer.
    */
-  tellChatUniqueUserCount: (chatUU: number) => void;
+  tellSuperChats: (superChats: ExtendedSuperItem[], superChatsNum: number) => void;
 
   /**
-   * Notify counts of like to renderer.
+   * Notify all memberships and gifts item to renderer.
    */
-  tellLikeCount: (likeCount: number) => void;
+  tellMembershipsAndGifts: (
+    membershipsAndGifts: ExtendedMembershipAndGiftItem[],
+    membershipsAndGiftsNum: number,
+  ) => void;
 
   /**
-   * Notify counts of live view to renderer.
+   * Notify all stocks to renderer.
    */
-  tellLiveViewCount: (liveViewCount: number) => void;
+  tellStocks: (stocks: ExtendedChatItemText[], stocksNum: number) => void;
 
   /**
-   * Notify counts of subscribers to renderer.
+   * Add chat item to stock list.
    */
-  tellSubscriberCount: (subscriberCount: number) => void;
+  addStock: (stock: ExtendedChatItemText) => boolean;
+
+  /**
+   * Remove the stock from list.
+   */
+  removeStock: (stock: ExtendedChatItemText) => boolean;
+
+  /**
+   * Notify LiveStatistics to renderer.
+   */
+  tellLiveStatistics: (statistics: LiveStatistics) => void;
 }

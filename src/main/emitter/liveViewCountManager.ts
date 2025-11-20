@@ -1,15 +1,12 @@
-import { WebContents } from "electron";
-import { LiveLaunchProperties } from "../../ipcEvent";
+import { LiveLaunchProperties, LiveStatistics } from "../../ipcEvent";
 import { LiveViewCountRaisedEventEmitter } from "simple-youtube-emitter";
-import { WebContentsWrapper } from "../webContentsWrapper";
+import { updateLiveStatistics } from "../liveStatistics";
 
 let liveViewCountEmitter: LiveViewCountRaisedEventEmitter | undefined;
-let webContents: WebContents | undefined;
 
-export async function setupLiveViewCountEmitter(
-  w: WebContents,
-  liveLaunchProperties: LiveLaunchProperties,
-) {
+let counts: Pick<LiveStatistics, "currentLiveViewCount" | "maxLiveViewCount">;
+
+export async function setupLiveViewCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
   if (liveViewCountEmitter !== undefined) {
     liveViewCountEmitter.close();
     liveViewCountEmitter = undefined;
@@ -18,7 +15,10 @@ export async function setupLiveViewCountEmitter(
     liveLaunchProperties.channel.channel.channelId.id,
     10 * 1000,
   );
-  webContents = w;
+  counts = {
+    currentLiveViewCount: 0, // todo: upadte this value correctly
+    maxLiveViewCount: 0,
+  };
 
   liveViewCountEmitter.on("start", () => {
     console.log("LiveViewCountEmitter started.");
@@ -31,7 +31,11 @@ export async function setupLiveViewCountEmitter(
   });
   liveViewCountEmitter.on("raised", (before, after) => {
     console.log(`LiveViewCount: ${before.value} -> ${after.value}`);
-    WebContentsWrapper.send(webContents!, "tellLiveViewCount", after.value);
+
+    counts.maxLiveViewCount = after.value;
+    counts.currentLiveViewCount = after.value;
+
+    updateLiveStatistics(counts);
   });
 
   await liveViewCountEmitter.start();
