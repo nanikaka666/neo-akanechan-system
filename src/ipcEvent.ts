@@ -10,6 +10,46 @@ import {
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
 
+/**
+ * Represents page which first status of this app.
+ *
+ * User does not any channel yet.
+ */
+export interface BeginningBlankPage {
+  type: "beginningBlank";
+}
+
+/**
+ * Represents page which user selects a live from registered channels.
+ */
+export interface LiveSelectionPage {
+  type: "liveSelection";
+  mainChannelId: ChannelId;
+}
+
+/**
+ * Represents page which user selected a live and does preparing.
+ *
+ * in this status, the emitters are not started.
+ */
+export interface LiveStandByPage {
+  type: "liveStandBy";
+  liveLaunchProperties: LiveLaunchProperties;
+}
+
+/**
+ * Reperesents page which user start streaming.
+ */
+export interface InLivePage {
+  type: "inLive";
+  liveLaunchProperties: LiveLaunchProperties;
+}
+
+/**
+ * Represents MainApp status where user is in.
+ */
+export type MainAppPage = BeginningBlankPage | LiveSelectionPage | LiveStandByPage | InLivePage;
+
 export interface ChannelSummary {
   channelId: ChannelId;
   channelTitle: ChannelTitle;
