@@ -210,19 +210,17 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("addStock", (e, item) => {
-    if (item.isStocked) {
+    if (!addStock(item)) {
       return Promise.resolve(false);
     }
-    addStock(item);
     sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
     return Promise.resolve(true);
   });
 
   IpcMainWrapper.handle("removeStock", (e, item) => {
-    if (!item.isStocked) {
+    if (!removeStock(item)) {
       return Promise.resolve(false);
     }
-    removeStock(item);
     sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
     return Promise.resolve(true);
   });
