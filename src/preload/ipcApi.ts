@@ -22,7 +22,6 @@ export interface IpcApi {
   ipcApi: {
     requestConfirmingInputChannelId: Invoke<"confirmInputChannelId">;
     registerChannel: Invoke<"registerChannel">;
-    registerNewMainChannelListener: Listen<"tellNewMainChannelId">;
     requestChannelTop: Invoke<"getChannelTop">;
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestUserSettings: Invoke<"getUserSettings">;
@@ -43,6 +42,7 @@ export interface IpcApi {
     requestRemoveStock: Invoke<"removeStock">;
     registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
     requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
+    registerMainAppPage: Listen<"tellMainAppPage">;
   };
 }
 
@@ -51,8 +51,6 @@ export const IpcApi: IpcApi = {
     requestConfirmingInputChannelId: (inputChannelId) =>
       IpcRendererWrapper.invoke("confirmInputChannelId", inputChannelId),
     registerChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
-    registerNewMainChannelListener: (callback) =>
-      IpcRendererWrapper.on("tellNewMainChannelId", callback),
     requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
     requestOpenOverlay: (channelTop) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
@@ -83,5 +81,6 @@ export const IpcApi: IpcApi = {
     registerLiveStatisticsListener: (callback) =>
       IpcRendererWrapper.on("tellLiveStatistics", callback),
     requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
+    registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
   },
 };

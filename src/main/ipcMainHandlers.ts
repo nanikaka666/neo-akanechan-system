@@ -65,7 +65,10 @@ export function setupIpcMainHandlers() {
     if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
       return Promise.resolve(false);
     }
-    WebContentsWrapper.send(e.sender, "tellNewMainChannelId", channelId);
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveSelection",
+      mainChannelId: channelId,
+    } satisfies LiveSelectionPage);
     return Promise.resolve(true);
   });
 
@@ -161,7 +164,10 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("switchMainChannel", (e, to) => {
     if (getStorageService().switchMainChannel(to)) {
-      WebContentsWrapper.send(e.sender, "tellNewMainChannelId", to);
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+        type: "liveSelection",
+        mainChannelId: to,
+      } satisfies LiveSelectionPage);
       return Promise.resolve(true);
     }
     return Promise.resolve(false);
@@ -187,7 +193,16 @@ export function setupIpcMainHandlers() {
     getStorageService().deleteChannel(channel);
     const latestMainChannelId = getStorageService().getMainChannelId();
     if (oldMainChannelId?.id !== latestMainChannelId?.id) {
-      WebContentsWrapper.send(e.sender, "tellNewMainChannelId", latestMainChannelId);
+      WebContentsWrapper.send(
+        e.sender,
+        "tellMainAppPage",
+        latestMainChannelId
+          ? ({
+              type: "liveSelection",
+              mainChannelId: latestMainChannelId,
+            } satisfies LiveSelectionPage)
+          : ({ type: "beginningBlank" } satisfies BeginningBlankPage),
+      );
     } else {
       const res =
         (await Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary))) ??

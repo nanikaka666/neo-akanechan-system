@@ -204,13 +204,6 @@ export interface IpcEvent {
   deleteChannelWithUserConfirmation: (channel: ChannelSummary) => boolean;
 
   /**
-   * Tell a event that changing the main channel.
-   *
-   * Main channel accepts `undefined`, if this app has no registrated channel id.
-   */
-  tellNewMainChannelId: (channelId?: ChannelId) => void;
-
-  /**
    * Get channels stored in storage.
    */
   getRegisterdChannels: () => ChannelSummary[];
@@ -306,4 +299,9 @@ export interface IpcEvent {
    * Return MainAppPage for initial status.
    */
   getInitialMainAppPage: () => BeginningBlankPage | LiveSelectionPage;
+
+  /**
+   * Notify latest MainAppPage to renderer.
+   */
+  tellMainAppPage: (page: MainAppPage) => void;
 }
