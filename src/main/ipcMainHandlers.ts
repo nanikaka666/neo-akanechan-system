@@ -131,11 +131,14 @@ export function setupIpcMainHandlers() {
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
 
-    WebContentsWrapper.send(e.sender, "tellOverlayStarted", {
-      channel: channelHavingClosestLive,
-      settings: UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
-      overlayWindowTitle: overlayWindowTitle,
-    } satisfies LiveLaunchProperties);
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveStandBy",
+      liveLaunchProperties: {
+        channel: channelHavingClosestLive,
+        settings: UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
+        overlayWindowTitle: overlayWindowTitle,
+      },
+    });
     return Promise.resolve(true);
   });
 

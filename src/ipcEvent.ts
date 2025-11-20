@@ -224,11 +224,6 @@ export interface IpcEvent {
   startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
 
   /**
-   * Tell that overlay is started to renderer.
-   */
-  tellOverlayStarted: (liveLaunchProperties: LiveLaunchProperties) => void;
-
-  /**
    * Start emitters depend on user settings.
    */
   launchEmitters: (liveLaunchProperties: LiveLaunchProperties) => boolean;
