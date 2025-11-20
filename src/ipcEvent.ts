@@ -44,6 +44,27 @@ export interface LiveLaunchProperties {
 }
 
 /**
+ * Summary data about the live shown on SideBar.
+ */
+export interface LiveStatistics {
+  currentLikeCount: number;
+  maxLikeCount: number;
+  currentLiveViewCount: number;
+  maxLiveViewCount: number;
+  textChatCount: number;
+  superChatCount: number;
+  superStickerCount: number;
+  chatUUCount: number;
+  currentSubscriberCount: number;
+  maxSubscriberCount: number;
+  newMembershipsCount: number;
+  membershipMilestoneCount: number;
+  giftCount: number;
+  redemptionGiftCount: number;
+  stocksCount: number;
+}
+
+/**
  * Append some data to ChatItemText from youtube-livechat-emitter
  */
 export type ExtendedChatItemText = ChatItemText & {
@@ -209,33 +230,6 @@ export interface IpcEvent {
   tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
 
   /**
-   * Notify counts of chats to renderer.
-   *
-   * counts means number of text chat, superchat, superstickers; effect of removing chat and blocking user is reflected.
-   */
-  tellChatCount: (chatCount: number) => void;
-
-  /**
-   * Notify counts of chat UU to renderer.
-   */
-  tellChatUniqueUserCount: (chatUU: number) => void;
-
-  /**
-   * Notify counts of like to renderer.
-   */
-  tellLikeCount: (likeCount: number) => void;
-
-  /**
-   * Notify counts of live view to renderer.
-   */
-  tellLiveViewCount: (liveViewCount: number) => void;
-
-  /**
-   * Notify counts of subscribers to renderer.
-   */
-  tellSubscriberCount: (subscriberCount: number) => void;
-
-  /**
    * Notify latest 1000 text chats to renderer.
    */
   tellTextChats: (textChats: ExtendedChatItemText[], textChatNum: number) => void;
@@ -267,4 +261,9 @@ export interface IpcEvent {
    * Remove the stock from list.
    */
   removeStock: (stock: ExtendedChatItemText) => boolean;
+
+  /**
+   * Notify LiveStatistics to renderer.
+   */
+  tellLiveStatistics: (statistics: LiveStatistics) => void;
 }

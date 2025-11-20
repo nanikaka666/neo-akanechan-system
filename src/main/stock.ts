@@ -1,8 +1,9 @@
 import { WebContents } from "electron";
-import { ExtendedChatItemText } from "../ipcEvent";
+import { ExtendedChatItemText, LiveStatistics } from "../ipcEvent";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { LiveChatItemId } from "youtube-livechat-emitter/dist/src/core/LiveChatItemId";
 import { ChannelId } from "youtube-live-scraper";
+import { updateLiveStatistics } from "./liveStatistics";
 
 /**
  * Stocks is set of marked text chat item.
@@ -10,6 +11,7 @@ import { ChannelId } from "youtube-live-scraper";
  * Owner can reference stocked item whenever even if it flew out from chat list.
  */
 let stocks: ExtendedChatItemText[] = [];
+let counts: Pick<LiveStatistics, "stocksCount">;
 
 const stockedLiveChatItemIds = new Set<string>();
 
@@ -20,6 +22,9 @@ export function getStockedLiveChatItemIds() {
 export function setupStocks() {
   stocks = [];
   stockedLiveChatItemIds.clear();
+  counts = {
+    stocksCount: 0,
+  };
 }
 
 export function addStock(item: ExtendedChatItemText) {
@@ -28,6 +33,7 @@ export function addStock(item: ExtendedChatItemText) {
   }
   stocks = [...stocks, { ...item, isStocked: true }];
   stockedLiveChatItemIds.add(item.id.id);
+  counts.stocksCount = stockedLiveChatItemIds.size;
 }
 
 export function removeStock(item: ExtendedChatItemText) {
@@ -36,6 +42,7 @@ export function removeStock(item: ExtendedChatItemText) {
   }
   stocks = stocks.filter((stock) => stock.id.id !== item.id.id);
   stockedLiveChatItemIds.delete(item.id.id);
+  counts.stocksCount = stockedLiveChatItemIds.size;
 }
 
 export function removeStockByLiveChatItemIdIfNeeded(liveChatItemId: LiveChatItemId) {
@@ -44,6 +51,7 @@ export function removeStockByLiveChatItemIdIfNeeded(liveChatItemId: LiveChatItem
     return false;
   }
   removeStock(target[0]);
+  counts.stocksCount = stockedLiveChatItemIds.size;
   return true;
 }
 
@@ -54,9 +62,11 @@ export function removeStocksByChannelIdIfNeeded(channelId: ChannelId) {
   }
 
   targets.forEach(removeStock);
+  counts.stocksCount = stockedLiveChatItemIds.size;
   return true;
 }
 
 export function sendStocksToRenderer(webContents: WebContents) {
+  updateLiveStatistics(counts);
   WebContentsWrapper.send(webContents, "tellStocks", stocks, stocks.length);
 }

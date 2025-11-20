@@ -11,6 +11,7 @@ import { setupLikeCountEmitter } from "./emitter/likeCountManager";
 import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
 import { setupSubscriberCountEmitter } from "./emitter/subscriberCountManager";
 import { addStock, sendStocksToRenderer, removeStock, setupStocks } from "./stock";
+import { setupLiveStatistics } from "./liveStatistics";
 
 /**
  * temporary aid method.
@@ -197,12 +198,13 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
     setupStocks();
+    setupLiveStatistics(e.sender);
 
     await Promise.all([
       setupLiveChatEmitter(e.sender, liveLaunchProperties),
-      setupLikeCountEmitter(e.sender, liveLaunchProperties),
-      setupLiveViewCountEmitter(e.sender, liveLaunchProperties),
-      setupSubscriberCountEmitter(e.sender, liveLaunchProperties),
+      setupLikeCountEmitter(liveLaunchProperties),
+      setupLiveViewCountEmitter(liveLaunchProperties),
+      setupSubscriberCountEmitter(liveLaunchProperties),
     ]);
     return true;
   });

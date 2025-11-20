@@ -36,17 +36,13 @@ export interface IpcApi {
     registerUpdatedChannelListListener: Listen<"tellUpdatedChannelIds">;
     registerIsStartedOverlayListener: Listen<"tellOverlayStarted">;
     requestLaunchEmitters: Invoke<"launchEmitters">;
-    registerChatCountListener: Listen<"tellChatCount">;
-    registerChatUUListener: Listen<"tellChatUniqueUserCount">;
-    registerLikeCountListener: Listen<"tellLikeCount">;
-    registerLiveViewCountListener: Listen<"tellLiveViewCount">;
-    registerSubscriberCountListener: Listen<"tellSubscriberCount">;
     registerTextChatsListener: Listen<"tellTextChats">;
     registerSuperChatsListener: Listen<"tellSuperChats">;
     registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
     registerStocksListener: Listen<"tellStocks">;
     requestAddStock: Invoke<"addStock">;
     requestRemoveStock: Invoke<"removeStock">;
+    registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
   };
 }
 
@@ -78,14 +74,6 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellOverlayStarted", callback),
     requestLaunchEmitters: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
-    registerChatCountListener: (callback) => IpcRendererWrapper.on("tellChatCount", callback),
-    registerChatUUListener: (callback) =>
-      IpcRendererWrapper.on("tellChatUniqueUserCount", callback),
-    registerLikeCountListener: (callback) => IpcRendererWrapper.on("tellLikeCount", callback),
-    registerLiveViewCountListener: (callback) =>
-      IpcRendererWrapper.on("tellLiveViewCount", callback),
-    registerSubscriberCountListener: (callback) =>
-      IpcRendererWrapper.on("tellSubscriberCount", callback),
     registerTextChatsListener: (callback) => IpcRendererWrapper.on("tellTextChats", callback),
     registerSuperChatsListener: (callback) => IpcRendererWrapper.on("tellSuperChats", callback),
     registerMembershipsAndGiftsListener: (callback) =>
@@ -93,5 +81,7 @@ export const IpcApi: IpcApi = {
     registerStocksListener: (callback) => IpcRendererWrapper.on("tellStocks", callback),
     requestAddStock: (stock) => IpcRendererWrapper.invoke("addStock", stock),
     requestRemoveStock: (stock) => IpcRendererWrapper.invoke("removeStock", stock),
+    registerLiveStatisticsListener: (callback) =>
+      IpcRendererWrapper.on("tellLiveStatistics", callback),
   },
 };
