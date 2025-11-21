@@ -258,4 +258,27 @@ export function setupIpcMainHandlers() {
 
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("quitLive", async (e, liveLaunchProperties) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `本当に終了しますか？`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+      detail: `${liveLaunchProperties.channel.closestLive.title.title}`,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
+    // todo: stop emitters
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveSelection",
+      mainChannelId: liveLaunchProperties.channel.channel.channelId,
+    } satisfies LiveSelectionPage);
+    return true;
+  });
 }
