@@ -299,4 +299,9 @@ export interface IpcEvent {
    * Notify latest MainAppPage to renderer.
    */
   tellMainAppPage: (page: MainAppPage) => void;
+
+  /**
+   * transit MainAppPage status to "inLive".
+   */
+  startLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
 }

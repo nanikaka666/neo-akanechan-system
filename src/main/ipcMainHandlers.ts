@@ -3,14 +3,8 @@ import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
-import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
-import {
-  BeginningBlankPage,
-  ChannelSummary,
-  LiveLaunchProperties,
-  LiveSelectionPage,
-} from "../ipcEvent";
+import { BeginningBlankPage, ChannelSummary, InLivePage, LiveSelectionPage } from "../ipcEvent";
 import { sendTextChatsToRenderer, setupLiveChatEmitter } from "./emitter/liveChatManager";
 import { setupLikeCountEmitter } from "./emitter/likeCountManager";
 import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
@@ -254,5 +248,14 @@ export function setupIpcMainHandlers() {
     } else {
       return Promise.resolve({ type: "beginningBlank" } satisfies BeginningBlankPage);
     }
+  });
+
+  IpcMainWrapper.handle("startLive", (e, liveLaunchProperties) => {
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "inLive",
+      liveLaunchProperties: liveLaunchProperties,
+    } satisfies InLivePage);
+
+    return Promise.resolve(true);
   });
 }

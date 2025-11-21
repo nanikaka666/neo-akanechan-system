@@ -3,6 +3,7 @@ import { ChannelRegistrationLoader } from "./channelRegistration/ChannelRegistra
 import { MainChannelTopLoader } from "./top/MainChannelTopLoader";
 import { MainAppPage } from "../../../ipcEvent";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
+import { LiveControlPanel } from "./liveControl/LiveControlPanel";
 
 export function MainApp() {
   const [mainAppPage, setMainAppPage] = useState<MainAppPage>();
@@ -17,7 +18,9 @@ export function MainApp() {
   }, []);
 
   return mainAppPage ? (
-    mainAppPage.type === "liveStandBy" ? (
+    mainAppPage.type === "inLive" ? (
+      <LiveControlPanel liveLaunchProperties={mainAppPage.liveLaunchProperties} />
+    ) : mainAppPage.type === "liveStandBy" ? (
       <LiveControlPanelInStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveSelection" ? (
       <MainChannelTopLoader mainChannelId={mainAppPage.mainChannelId} />

@@ -42,6 +42,7 @@ export interface IpcApi {
     registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
     requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
     registerMainAppPage: Listen<"tellMainAppPage">;
+    requestStartLive: Invoke<"startLive">;
   };
 }
 
@@ -79,5 +80,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellLiveStatistics", callback),
     requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
     registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
+    requestStartLive: (liveLaunchProperties) =>
+      IpcRendererWrapper.invoke("startLive", liveLaunchProperties),
   },
 };
