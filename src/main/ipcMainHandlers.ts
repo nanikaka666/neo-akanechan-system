@@ -5,12 +5,22 @@ import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { BeginningBlankPage, ChannelSummary, InLivePage, LiveSelectionPage } from "../ipcEvent";
-import { sendTextChatsToRenderer, setupLiveChatEmitter } from "./emitter/liveChatManager";
-import { setupLikeCountEmitter } from "./emitter/likeCountManager";
-import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
-import { setupSubscriberCountEmitter } from "./emitter/subscriberCountManager";
-import { addStock, removeStock, setupStocks } from "./stock";
-import { setupLiveStatistics } from "./liveStatistics";
+import {
+  cleanUpLiveChatEmitter,
+  sendTextChatsToRenderer,
+  setupLiveChatEmitter,
+} from "./emitter/liveChatManager";
+import { cleanUpLikeCountEmitter, setupLikeCountEmitter } from "./emitter/likeCountManager";
+import {
+  cleanUpLiveViewCountEmitter,
+  setupLiveViewCountEmitter,
+} from "./emitter/liveViewCountManager";
+import {
+  cleanUpSubscriberCountEmitter,
+  setupSubscriberCountEmitter,
+} from "./emitter/subscriberCountManager";
+import { addStock, cleanUpStocks, removeStock, setupStocks } from "./stock";
+import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 
 /**
  * temporary aid method.
@@ -274,7 +284,16 @@ export function setupIpcMainHandlers() {
     if (res.response !== 0) {
       return false;
     }
-    // todo: stop emitters
+
+    // clean up emitters
+    cleanUpLiveChatEmitter();
+    cleanUpLikeCountEmitter();
+    cleanUpLiveViewCountEmitter();
+    cleanUpSubscriberCountEmitter();
+
+    cleanUpStocks();
+    cleanUpLiveStatistics();
+
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveSelection",
       mainChannelId: liveLaunchProperties.channel.channel.channelId,

@@ -6,11 +6,20 @@ let likeCountEmitter: LikeCountRaisedEventEmitter | undefined;
 
 let counts: Pick<LiveStatistics, "currentLikeCount" | "maxLikeCount">;
 
-export async function setupLikeCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
+export function cleanUpLikeCountEmitter() {
   if (likeCountEmitter !== undefined) {
     likeCountEmitter.close();
     likeCountEmitter = undefined;
   }
+  counts = {
+    currentLikeCount: 0,
+    maxLikeCount: 0,
+  };
+}
+
+export async function setupLikeCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
+  cleanUpLikeCountEmitter();
+
   counts = {
     currentLikeCount: 0, // todo: update this value correctly
     maxLikeCount: 0,

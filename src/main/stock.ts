@@ -11,12 +11,18 @@ import { updateLiveStatistics } from "./liveStatistics";
  * Owner can reference stocked item whenever even if it flew out from chat list.
  */
 let stocks: ExtendedChatItemText[] = [];
-let webContents: WebContents;
+let webContents: WebContents | undefined;
 
 const stockedLiveChatItemIds = new Set<string>();
 
 export function getStockedLiveChatItemIds() {
   return stockedLiveChatItemIds;
+}
+
+export function cleanUpStocks() {
+  stocks = [];
+  stockedLiveChatItemIds.clear();
+  webContents = undefined;
 }
 
 export function setupStocks(w: WebContents) {
@@ -87,6 +93,9 @@ export function removeStocksByChannelIdIfNeeded(channelId: ChannelId) {
 }
 
 function sendStocksToRenderer() {
+  if (!webContents) {
+    throw new Error(`webContents is undefined, call setupStocks()`);
+  }
   updateLiveStatistics({ stocksCount: stockedLiveChatItemIds.size });
   WebContentsWrapper.send(webContents, "tellStocks", stocks, stocks.length);
 }

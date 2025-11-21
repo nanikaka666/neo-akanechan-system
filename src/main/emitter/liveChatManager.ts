@@ -59,16 +59,13 @@ const authorChannelIds = new Set<string>();
 
 let webContents: WebContents | undefined;
 
-export async function setupLiveChatEmitter(
-  w: WebContents,
-  liveLaunchProperties: LiveLaunchProperties,
-) {
+export function cleanUpLiveChatEmitter() {
   if (liveChatEmitter !== undefined) {
     liveChatEmitter.close();
     liveChatEmitter = undefined;
   }
 
-  webContents = w;
+  webContents = undefined;
 
   textChats = [];
   textIndexOfWhole = 0;
@@ -89,7 +86,15 @@ export async function setupLiveChatEmitter(
   };
 
   authorChannelIds.clear();
+}
 
+export async function setupLiveChatEmitter(
+  w: WebContents,
+  liveLaunchProperties: LiveLaunchProperties,
+) {
+  cleanUpLiveChatEmitter();
+
+  webContents = w;
   liveChatEmitter = new YoutubeLiveChatEmitter(
     liveLaunchProperties.channel.channel.channelId.id,
     1 * 1000,
