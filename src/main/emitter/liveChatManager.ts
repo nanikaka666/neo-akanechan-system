@@ -27,7 +27,6 @@ import { updateLiveStatistics } from "../liveStatistics";
 type NonMarkedExtendedChatItemText = Omit<ExtendedChatItemText, "isStocked">;
 
 let liveChatEmitter: YoutubeLiveChatEmitter | undefined;
-// let chatNum: number;
 
 let counts: Pick<
   LiveStatistics,
