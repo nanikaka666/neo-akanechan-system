@@ -90,29 +90,6 @@ export function CommentViewer() {
 
   return (
     <div>
-      {/* <div style={{ height: "50px" }}>
-        <label>
-          <select
-            value={viewerMode}
-            onChange={(e) => {
-              setViewerMode((_) => e.target.value as ViewerMode);
-            }}
-            style={{ border: "none" }}
-          >
-            {selectOptions.map((optionItem) => {
-              return (
-                <option
-                  key={optionItem.viewerMode}
-                  value={optionItem.viewerMode satisfies ViewerMode}
-                  disabled={optionItem.disabled}
-                >
-                  {optionItem.label} ({optionItem.itemNum})
-                </option>
-              );
-            })}
-          </select>
-        </label>
-      </div> */}
       <ViewerModeSelector
         currentViewerMode={viewerMode}
         options={selectOptions}
