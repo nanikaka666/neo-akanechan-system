@@ -3,15 +3,24 @@ import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
-import { createOverlayWindow } from "./overlayWindow";
 import { UserSettingsService } from "./userSettings";
-import { ChannelSummary, LiveLaunchProperties } from "../ipcEvent";
-import { sendTextChatsToRenderer, setupLiveChatEmitter } from "./emitter/liveChatManager";
-import { setupLikeCountEmitter } from "./emitter/likeCountManager";
-import { setupLiveViewCountEmitter } from "./emitter/liveViewCountManager";
-import { setupSubscriberCountEmitter } from "./emitter/subscriberCountManager";
-import { addStock, removeStock, setupStocks } from "./stock";
-import { setupLiveStatistics } from "./liveStatistics";
+import { BeginningBlankPage, ChannelSummary, InLivePage, LiveSelectionPage } from "../ipcEvent";
+import {
+  cleanUpLiveChatEmitter,
+  sendTextChatsToRenderer,
+  setupLiveChatEmitter,
+} from "./emitter/liveChatManager";
+import { cleanUpLikeCountEmitter, setupLikeCountEmitter } from "./emitter/likeCountManager";
+import {
+  cleanUpLiveViewCountEmitter,
+  setupLiveViewCountEmitter,
+} from "./emitter/liveViewCountManager";
+import {
+  cleanUpSubscriberCountEmitter,
+  setupSubscriberCountEmitter,
+} from "./emitter/subscriberCountManager";
+import { addStock, cleanUpStocks, removeStock, setupStocks } from "./stock";
+import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 
 /**
  * temporary aid method.
@@ -53,10 +62,6 @@ export function setupIpcMainHandlers() {
     }
   });
 
-  IpcMainWrapper.handle("getMainChannelId", () => {
-    return Promise.resolve(getStorageService().getMainChannelId());
-  });
-
   IpcMainWrapper.handle("registerChannel", (e, channelId) => {
     if (channelId.isHandle) {
       return Promise.resolve(false);
@@ -64,7 +69,10 @@ export function setupIpcMainHandlers() {
     if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
       return Promise.resolve(false);
     }
-    WebContentsWrapper.send(e.sender, "tellNewMainChannelId", channelId);
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveSelection",
+      mainChannelId: channelId,
+    } satisfies LiveSelectionPage);
     return Promise.resolve(true);
   });
 
@@ -127,11 +135,14 @@ export function setupIpcMainHandlers() {
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
 
-    WebContentsWrapper.send(e.sender, "tellOverlayStarted", {
-      channel: channelHavingClosestLive,
-      settings: UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
-      overlayWindowTitle: overlayWindowTitle,
-    } satisfies LiveLaunchProperties);
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveStandBy",
+      liveLaunchProperties: {
+        channel: channelHavingClosestLive,
+        settings: UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
+        overlayWindowTitle: overlayWindowTitle,
+      },
+    });
     return Promise.resolve(true);
   });
 
@@ -160,7 +171,10 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("switchMainChannel", (e, to) => {
     if (getStorageService().switchMainChannel(to)) {
-      WebContentsWrapper.send(e.sender, "tellNewMainChannelId", to);
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+        type: "liveSelection",
+        mainChannelId: to,
+      } satisfies LiveSelectionPage);
       return Promise.resolve(true);
     }
     return Promise.resolve(false);
@@ -186,7 +200,16 @@ export function setupIpcMainHandlers() {
     getStorageService().deleteChannel(channel);
     const latestMainChannelId = getStorageService().getMainChannelId();
     if (oldMainChannelId?.id !== latestMainChannelId?.id) {
-      WebContentsWrapper.send(e.sender, "tellNewMainChannelId", latestMainChannelId);
+      WebContentsWrapper.send(
+        e.sender,
+        "tellMainAppPage",
+        latestMainChannelId
+          ? ({
+              type: "liveSelection",
+              mainChannelId: latestMainChannelId,
+            } satisfies LiveSelectionPage)
+          : ({ type: "beginningBlank" } satisfies BeginningBlankPage),
+      );
     } else {
       const res =
         (await Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary))) ??
@@ -223,5 +246,58 @@ export function setupIpcMainHandlers() {
     }
     sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
     return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("getInitialMainAppPage", () => {
+    const maybeMainChannelId = getStorageService().getMainChannelId();
+    if (maybeMainChannelId) {
+      return Promise.resolve({
+        type: "liveSelection",
+        mainChannelId: maybeMainChannelId,
+      } satisfies LiveSelectionPage);
+    } else {
+      return Promise.resolve({ type: "beginningBlank" } satisfies BeginningBlankPage);
+    }
+  });
+
+  IpcMainWrapper.handle("startLive", (e, liveLaunchProperties) => {
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "inLive",
+      liveLaunchProperties: liveLaunchProperties,
+    } satisfies InLivePage);
+
+    return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("quitLive", async (e, liveLaunchProperties) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `本当に終了しますか？`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+      detail: `${liveLaunchProperties.channel.closestLive.title.title}`,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
+
+    // clean up emitters
+    cleanUpLiveChatEmitter();
+    cleanUpLikeCountEmitter();
+    cleanUpLiveViewCountEmitter();
+    cleanUpSubscriberCountEmitter();
+
+    cleanUpStocks();
+    cleanUpLiveStatistics();
+
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveSelection",
+      mainChannelId: liveLaunchProperties.channel.channel.channelId,
+    } satisfies LiveSelectionPage);
+    return true;
   });
 }

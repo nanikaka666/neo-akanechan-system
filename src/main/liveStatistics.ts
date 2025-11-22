@@ -2,8 +2,13 @@ import { WebContents } from "electron";
 import { LiveStatistics } from "../ipcEvent";
 import { WebContentsWrapper } from "./webContentsWrapper";
 
-let liveStatistics: LiveStatistics;
+let liveStatistics: LiveStatistics | undefined;
 let webContents: WebContents | undefined;
+
+export function cleanUpLiveStatistics() {
+  liveStatistics = undefined;
+  webContents = undefined;
+}
 
 export function setupLiveStatistics(w: WebContents) {
   liveStatistics = {
@@ -27,6 +32,9 @@ export function setupLiveStatistics(w: WebContents) {
 }
 
 export function updateLiveStatistics(newData: Partial<LiveStatistics>) {
+  if (!liveStatistics || !webContents) {
+    throw new Error(`please call setupLiveStatistics()`);
+  }
   liveStatistics = { ...liveStatistics, ...newData };
-  WebContentsWrapper.send(webContents!, "tellLiveStatistics", liveStatistics);
+  WebContentsWrapper.send(webContents, "tellLiveStatistics", liveStatistics);
 }

@@ -21,9 +21,7 @@ type Listen<K extends keyof IpcEvent> = (
 export interface IpcApi {
   ipcApi: {
     requestConfirmingInputChannelId: Invoke<"confirmInputChannelId">;
-    requestMainChannelId: Invoke<"getMainChannelId">;
     registerChannel: Invoke<"registerChannel">;
-    registerNewMainChannelListener: Listen<"tellNewMainChannelId">;
     requestChannelTop: Invoke<"getChannelTop">;
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestUserSettings: Invoke<"getUserSettings">;
@@ -34,7 +32,6 @@ export interface IpcApi {
     requestSwitchMainChannel: Invoke<"switchMainChannel">;
     requestDeletingChannel: Invoke<"deleteChannelWithUserConfirmation">;
     registerUpdatedChannelListListener: Listen<"tellUpdatedChannelIds">;
-    registerIsStartedOverlayListener: Listen<"tellOverlayStarted">;
     requestLaunchEmitters: Invoke<"launchEmitters">;
     registerTextChatsListener: Listen<"tellTextChats">;
     registerSuperChatsListener: Listen<"tellSuperChats">;
@@ -43,6 +40,10 @@ export interface IpcApi {
     requestAddStock: Invoke<"addStock">;
     requestRemoveStock: Invoke<"removeStock">;
     registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
+    requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
+    registerMainAppPage: Listen<"tellMainAppPage">;
+    requestStartLive: Invoke<"startLive">;
+    requestQuitLive: Invoke<"quitLive">;
   };
 }
 
@@ -50,10 +51,7 @@ export const IpcApi: IpcApi = {
   ipcApi: {
     requestConfirmingInputChannelId: (inputChannelId) =>
       IpcRendererWrapper.invoke("confirmInputChannelId", inputChannelId),
-    requestMainChannelId: () => IpcRendererWrapper.invoke("getMainChannelId"),
     registerChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
-    registerNewMainChannelListener: (callback) =>
-      IpcRendererWrapper.on("tellNewMainChannelId", callback),
     requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
     requestOpenOverlay: (channelTop) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
@@ -70,8 +68,6 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.invoke("deleteChannelWithUserConfirmation", channel),
     registerUpdatedChannelListListener: (callback) =>
       IpcRendererWrapper.on("tellUpdatedChannelIds", callback),
-    registerIsStartedOverlayListener: (callback) =>
-      IpcRendererWrapper.on("tellOverlayStarted", callback),
     requestLaunchEmitters: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
     registerTextChatsListener: (callback) => IpcRendererWrapper.on("tellTextChats", callback),
@@ -83,5 +79,11 @@ export const IpcApi: IpcApi = {
     requestRemoveStock: (stock) => IpcRendererWrapper.invoke("removeStock", stock),
     registerLiveStatisticsListener: (callback) =>
       IpcRendererWrapper.on("tellLiveStatistics", callback),
+    requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
+    registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
+    requestStartLive: (liveLaunchProperties) =>
+      IpcRendererWrapper.invoke("startLive", liveLaunchProperties),
+    requestQuitLive: (liveLaunchProperties) =>
+      IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
   },
 };

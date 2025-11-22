@@ -1,4 +1,5 @@
 import { LiveLaunchProperties } from "../../../../ipcEvent";
+import { QuitLiveButton } from "./QuitLiveButton";
 
 export function SideBarInStandBy({
   liveLaunchProperties,
@@ -17,6 +18,7 @@ export function SideBarInStandBy({
       <div>Chance Time</div>
       <div>Participant Point Rankings</div>
       <div>Neighborhoods</div>
+      <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
     </div>
   );
 }

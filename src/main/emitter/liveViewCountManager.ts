@@ -6,19 +6,28 @@ let liveViewCountEmitter: LiveViewCountRaisedEventEmitter | undefined;
 
 let counts: Pick<LiveStatistics, "currentLiveViewCount" | "maxLiveViewCount">;
 
-export async function setupLiveViewCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
+export function cleanUpLiveViewCountEmitter() {
   if (liveViewCountEmitter !== undefined) {
     liveViewCountEmitter.close();
     liveViewCountEmitter = undefined;
   }
-  liveViewCountEmitter = LiveViewCountRaisedEventEmitter.initWithoutCredential(
-    liveLaunchProperties.channel.channel.channelId.id,
-    10 * 1000,
-  );
+  counts = {
+    currentLiveViewCount: 0,
+    maxLiveViewCount: 0,
+  };
+}
+
+export async function setupLiveViewCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
+  cleanUpLiveViewCountEmitter();
   counts = {
     currentLiveViewCount: 0, // todo: upadte this value correctly
     maxLiveViewCount: 0,
   };
+
+  liveViewCountEmitter = LiveViewCountRaisedEventEmitter.initWithoutCredential(
+    liveLaunchProperties.channel.channel.channelId.id,
+    10 * 1000,
+  );
 
   liveViewCountEmitter.on("start", () => {
     console.log("LiveViewCountEmitter started.");

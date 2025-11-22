@@ -10,6 +10,46 @@ import {
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
 
+/**
+ * Represents page which first status of this app.
+ *
+ * User does not any channel yet.
+ */
+export interface BeginningBlankPage {
+  type: "beginningBlank";
+}
+
+/**
+ * Represents page which user selects a live from registered channels.
+ */
+export interface LiveSelectionPage {
+  type: "liveSelection";
+  mainChannelId: ChannelId;
+}
+
+/**
+ * Represents page which user selected a live and does preparing.
+ *
+ * in this status, the emitters are not started.
+ */
+export interface LiveStandByPage {
+  type: "liveStandBy";
+  liveLaunchProperties: LiveLaunchProperties;
+}
+
+/**
+ * Reperesents page which user start streaming.
+ */
+export interface InLivePage {
+  type: "inLive";
+  liveLaunchProperties: LiveLaunchProperties;
+}
+
+/**
+ * Represents MainApp status where user is in.
+ */
+export type MainAppPage = BeginningBlankPage | LiveSelectionPage | LiveStandByPage | InLivePage;
+
 export interface ChannelSummary {
   channelId: ChannelId;
   channelTitle: ChannelTitle;
@@ -142,11 +182,6 @@ export interface IpcEvent {
   confirmInputChannelId: (inputChannelId: ChannelId) => ChannelSummary | undefined;
 
   /**
-   * Get the main channel id (in Youtube ID style).
-   */
-  getMainChannelId: () => ChannelId | undefined;
-
-  /**
    * Register new channel, and mark as main channel.
    *
    * if given channelId was already registered, `false` will be returned.
@@ -169,13 +204,6 @@ export interface IpcEvent {
   deleteChannelWithUserConfirmation: (channel: ChannelSummary) => boolean;
 
   /**
-   * Tell a event that changing the main channel.
-   *
-   * Main channel accepts `undefined`, if this app has no registrated channel id.
-   */
-  tellNewMainChannelId: (channelId?: ChannelId) => void;
-
-  /**
    * Get channels stored in storage.
    */
   getRegisterdChannels: () => ChannelSummary[];
@@ -194,11 +222,6 @@ export interface IpcEvent {
    * Confirm to user that overlay feature should starts.
    */
   startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
-
-  /**
-   * Tell that overlay is started to renderer.
-   */
-  tellOverlayStarted: (liveLaunchProperties: LiveLaunchProperties) => void;
 
   /**
    * Start emitters depend on user settings.
@@ -266,4 +289,24 @@ export interface IpcEvent {
    * Notify LiveStatistics to renderer.
    */
   tellLiveStatistics: (statistics: LiveStatistics) => void;
+
+  /**
+   * Return MainAppPage for initial status.
+   */
+  getInitialMainAppPage: () => BeginningBlankPage | LiveSelectionPage;
+
+  /**
+   * Notify latest MainAppPage to renderer.
+   */
+  tellMainAppPage: (page: MainAppPage) => void;
+
+  /**
+   * transit MainAppPage status to "inLive".
+   */
+  startLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+
+  /**
+   * transit MainAppPage status to "liveSelection"
+   */
+  quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
 }

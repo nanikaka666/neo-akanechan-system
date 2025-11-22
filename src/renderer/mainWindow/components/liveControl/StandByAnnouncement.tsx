@@ -1,12 +1,13 @@
+import { useState } from "react";
 import { LiveLaunchProperties } from "../../../../ipcEvent";
 
 export function StandByAnnouncement({
   liveLaunchProperties,
-  prepareCompletion,
 }: {
   liveLaunchProperties: LiveLaunchProperties;
-  prepareCompletion: () => void;
 }) {
+  const [disabled, setDisabled] = useState(false);
+
   return (
     <div style={{ position: "absolute", top: 0, left: "100px" }}>
       <div>配信スタンバイ中</div>
@@ -14,7 +15,16 @@ export function StandByAnnouncement({
         「{liveLaunchProperties.overlayWindowTitle}」のウィンドウをOBS上でキャプチャしてください
       </div>
       <div>準備ができたら「OK」を押してください</div>
-      <button onClick={prepareCompletion}>OK</button>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          setDisabled((_) => true);
+          window.ipcApi.requestStartLive(liveLaunchProperties);
+        }}
+        disabled={disabled}
+      >
+        OK
+      </button>
     </div>
   );
 }

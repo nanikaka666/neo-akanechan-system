@@ -6,11 +6,19 @@ let subscriberCountEmitter: SubscriberCountRaisedEventEmitter | undefined;
 
 let counts: Pick<LiveStatistics, "currentSubscriberCount" | "maxSubscriberCount">;
 
-export async function setupSubscriberCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
+export function cleanUpSubscriberCountEmitter() {
   if (subscriberCountEmitter !== undefined) {
     subscriberCountEmitter.close();
     subscriberCountEmitter = undefined;
   }
+  counts = {
+    currentSubscriberCount: 0,
+    maxSubscriberCount: 0,
+  };
+}
+
+export async function setupSubscriberCountEmitter(liveLaunchProperties: LiveLaunchProperties) {
+  cleanUpSubscriberCountEmitter();
   counts = {
     currentSubscriberCount: 0, // todo: update this value correctly
     maxSubscriberCount: 0,
