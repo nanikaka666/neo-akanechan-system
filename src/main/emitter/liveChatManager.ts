@@ -24,8 +24,6 @@ import { FocusManager } from "../focus";
 import { LiveChatItemId } from "youtube-livechat-emitter/dist/src/core/LiveChatItemId";
 import { ChannelId } from "youtube-live-scraper/dist/src";
 
-let liveChatManager: LiveChatManager | undefined;
-
 class LiveChatManager {
   #textChats: NonMarkedExtendedChatItemText[];
 
@@ -189,23 +187,7 @@ class LiveChatManager {
       ...{ formatedTime: this.#formatDate(item) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
-
-    WebContentsWrapper.send(
-      this.#webContents,
-      "tellMembershipsAndGifts",
-      this.#membershipsAndGifts,
-      this.#membershipsAndGifts.length,
-    );
-
-    // update counts by calculation.
-    this.#counts.newMembershipsCount = this.#membershipsAndGifts.filter(
-      (value) => value.type === "new",
-    ).length;
-    this.#counts.membershipMilestoneCount = this.#membershipsAndGifts.filter(
-      (value) => value.type === "milestone",
-    ).length;
-
-    updateLiveStatistics(this.#counts);
+    this.refreshMembershipsRenderer();
 
     if (item.type === "new") {
       console.log("New Memberships.", item);
@@ -229,17 +211,7 @@ class LiveChatManager {
     } satisfies ExtendedMembershipAndGiftItem;
 
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
-    this.#counts.giftCount = this.#membershipsAndGifts.filter(
-      (value) => value.type === "gift",
-    ).length;
-    updateLiveStatistics(this.#counts);
-
-    WebContentsWrapper.send(
-      this.#webContents,
-      "tellMembershipsAndGifts",
-      this.#membershipsAndGifts,
-      this.#membershipsAndGifts.length,
-    );
+    this.refreshMembershipsRenderer();
     console.log("Gift purchased!", convertedItem);
   }
 
@@ -250,18 +222,7 @@ class LiveChatManager {
       formatedTime: this.#formatDate(item),
     } satisfies ExtendedGiftRedemption;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
-
-    this.#counts.redemptionGiftCount = this.#membershipsAndGifts.filter(
-      (value) => value.type === "redemption",
-    ).length;
-    updateLiveStatistics(this.#counts);
-
-    WebContentsWrapper.send(
-      this.#webContents,
-      "tellMembershipsAndGifts",
-      this.#membershipsAndGifts,
-      this.#membershipsAndGifts.length,
-    );
+    this.refreshMembershipsRenderer();
     console.log("Gift redemption!", convertedItem);
   }
 
@@ -353,6 +314,31 @@ class LiveChatManager {
     updateLiveStatistics(latestStatistics);
   }
 
+  refreshMembershipsRenderer() {
+    WebContentsWrapper.send(
+      this.#webContents,
+      "tellMembershipsAndGifts",
+      this.#membershipsAndGifts,
+      this.#membershipsAndGifts.length,
+    );
+
+    // statistics
+    const latestStatistics: Pick<
+      LiveStatistics,
+      "newMembershipsCount" | "membershipMilestoneCount" | "giftCount" | "redemptionGiftCount"
+    > = {
+      newMembershipsCount: this.#membershipsAndGifts.filter((item) => item.type === "new").length,
+      membershipMilestoneCount: this.#membershipsAndGifts.filter(
+        (item) => item.type === "milestone",
+      ).length,
+      giftCount: this.#membershipsAndGifts.filter((item) => item.type === "gift").length,
+      redemptionGiftCount: this.#membershipsAndGifts.filter((item) => item.type === "redemption")
+        .length,
+    };
+
+    updateLiveStatistics(latestStatistics);
+  }
+
   async setup() {
     this.#emitter.on("addChat", (item) => this.#onAddChatListener(item));
     this.#emitter.on("removeChat", (id) => this.#onRemoveChatListener(id));
@@ -404,6 +390,8 @@ class LiveChatManager {
     return { ...item, isFocused: this.#focusManager.isFocused(item.id) };
   }
 }
+
+let liveChatManager: LiveChatManager | undefined;
 
 export function cleanUpLiveChatEmitter() {
   if (!liveChatManager) {
