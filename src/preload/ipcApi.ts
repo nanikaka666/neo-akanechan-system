@@ -45,6 +45,7 @@ export interface IpcApi {
     requestStartLive: Invoke<"startLive">;
     requestQuitLive: Invoke<"quitLive">;
     registerFocusListener: Listen<"tellFocus">;
+    requestUpdateFocus: Invoke<"updateFocus">;
   };
 }
 
@@ -87,5 +88,6 @@ export const IpcApi: IpcApi = {
     requestQuitLive: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
     registerFocusListener: (callback) => IpcRendererWrapper.on("tellFocus", callback),
+    requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
   },
 };
