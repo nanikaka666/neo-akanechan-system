@@ -105,6 +105,15 @@ export interface LiveStatistics {
 }
 
 /**
+ * `isStocked` is unknown (always false more correctly) when live chat receiving.
+ *
+ * So `isStocked` will be calculated when every sending data to renderer.
+ */
+export type NonMarkedExtendedChatItemText = Omit<ExtendedChatItemText, "isStocked" | "isFocused">;
+export type NonMarkedExtendedChatItemSuperChat = Omit<ExtendedChatItemSuperChat, "isFocused">;
+export type NonMarkedExtendedChatItemSuperSticker = Omit<ExtendedChatItemSuperSticker, "isFocused">;
+
+/**
  * Append some data to ChatItemText from youtube-livechat-emitter
  */
 export type ExtendedChatItemText = ChatItemText & {
@@ -127,16 +136,23 @@ export type ExtendedChatItemText = ChatItemText & {
    * `true` means this is stocked by streamer.
    */
   isStocked: boolean;
+
+  /**
+   * `true` means this is focused by streamer.
+   */
+  isFocused: boolean;
 };
 
 export type ExtendedChatItemSuperChat = ChatItemSuperChat & {
   formatedTime: string;
   isFirst: boolean;
+  isFocused: boolean;
 };
 
 export type ExtendedChatItemSuperSticker = ChatItemSuperSticker & {
   formatedTime: string;
   isFirst: boolean;
+  isFocused: boolean;
 };
 
 export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
@@ -326,4 +342,11 @@ export interface IpcEvent {
    * `undefined` means nothing focused item.
    */
   tellFocus: (focus?: FocusedOnChatItem) => void;
+
+  /**
+   * Update focus item.
+   *
+   * `undefined` means focused item will be unfocused.
+   */
+  updateFocus: (focus?: FocusedOnChatItem) => boolean;
 }
