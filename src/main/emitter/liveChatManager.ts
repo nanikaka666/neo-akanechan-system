@@ -365,7 +365,7 @@ class LiveChatManager {
       textChatCount: this.#textChatCount,
       superChatCount: this.#superChats.filter((chat) => chat.type === "superChat").length,
       superStickerCount: this.#superChats.filter((chat) => chat.type === "superSticker").length,
-      stocksCount: this.#stockManager.getStocks.length,
+      stocksCount: this.#stockManager.getStocks().length,
     };
 
     updateLiveStatistics(latestStatistics);
