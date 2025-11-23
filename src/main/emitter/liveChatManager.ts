@@ -19,10 +19,10 @@ import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";
-import { updateLiveStatistics } from "../liveStatistics";
 import { FocusManager } from "../focus";
 import { LiveChatItemId } from "youtube-livechat-emitter/dist/src/core/LiveChatItemId";
 import { ChannelId } from "youtube-live-scraper/dist/src";
+import { getLiveStatisticsManager } from "../liveStatistics";
 
 class LiveChatManager {
   #textChats: NonMarkedExtendedChatItemText[];
@@ -290,7 +290,7 @@ class LiveChatManager {
       stocksCount: this.#stockManager.getStocks().length,
     };
 
-    updateLiveStatistics(latestStatistics);
+    getLiveStatisticsManager().updateLiveStatistics(latestStatistics);
   }
 
   #refreshMembershipsOnRenderer() {
@@ -315,7 +315,7 @@ class LiveChatManager {
         .length,
     };
 
-    updateLiveStatistics(latestStatistics);
+    getLiveStatisticsManager().updateLiveStatistics(latestStatistics);
   }
 
   async setup() {

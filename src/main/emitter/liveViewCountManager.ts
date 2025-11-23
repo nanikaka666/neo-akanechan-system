@@ -1,6 +1,6 @@
 import { LiveLaunchProperties, LiveStatistics } from "../../ipcEvent";
 import { LiveViewCountRaisedEventEmitter } from "simple-youtube-emitter";
-import { updateLiveStatistics } from "../liveStatistics";
+import { getLiveStatisticsManager } from "../liveStatistics";
 
 let liveViewCountEmitter: LiveViewCountRaisedEventEmitter | undefined;
 
@@ -44,7 +44,7 @@ export async function setupLiveViewCountEmitter(liveLaunchProperties: LiveLaunch
     counts.maxLiveViewCount = after.value;
     counts.currentLiveViewCount = after.value;
 
-    updateLiveStatistics(counts);
+    getLiveStatisticsManager().updateLiveStatistics(counts);
   });
 
   await liveViewCountEmitter.start();

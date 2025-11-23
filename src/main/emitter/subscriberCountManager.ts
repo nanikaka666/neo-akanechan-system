@@ -1,6 +1,6 @@
 import { LiveLaunchProperties, LiveStatistics } from "../../ipcEvent";
 import { SubscriberCountRaisedEventEmitter } from "simple-youtube-emitter";
-import { updateLiveStatistics } from "../liveStatistics";
+import { getLiveStatisticsManager } from "../liveStatistics";
 
 let subscriberCountEmitter: SubscriberCountRaisedEventEmitter | undefined;
 
@@ -42,7 +42,7 @@ export async function setupSubscriberCountEmitter(liveLaunchProperties: LiveLaun
     counts.maxSubscriberCount = after.value;
     counts.currentSubscriberCount = after.value;
 
-    updateLiveStatistics(counts);
+    getLiveStatisticsManager().updateLiveStatistics(counts);
   });
 
   await subscriberCountEmitter.start();
