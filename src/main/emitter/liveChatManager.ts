@@ -128,7 +128,6 @@ class LiveChatManager {
       this.#superChats = [...this.#superChats, convertedItem];
 
       console.log(item.superChat);
-      // this.sendSuperChatAndSuperStickersToRenderer();
     } else {
       const convertedItem = {
         ...item,
