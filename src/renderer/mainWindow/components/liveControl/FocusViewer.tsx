@@ -1,20 +1,10 @@
 import { FocusedOnChatItem } from "../../../../ipcEvent";
-import { TextChatItem } from "./TextChatItem";
-import { SuperChatItem } from "./SuperChatItem";
-import { SuperStickerItem } from "./SuperStickerItem";
+import { FocusItem } from "./FocusItem";
 
 export function FocusViewer({ focus }: { focus?: FocusedOnChatItem }) {
-  return focus ? (
+  return (
     <div style={{ height: `calc(100vh - 50px)` }}>
-      {focus.type === "text" ? (
-        <TextChatItem item={focus} />
-      ) : focus.type === "superChat" ? (
-        <SuperChatItem item={focus} />
-      ) : (
-        <SuperStickerItem item={focus} />
-      )}
+      {focus ? <FocusItem item={focus} /> : <div>フォーカス中のアイテムはありません</div>}
     </div>
-  ) : (
-    <div style={{ height: `calc(100vh - 50px)` }}>フォーカス中のアイテムはありません</div>
   );
 }
