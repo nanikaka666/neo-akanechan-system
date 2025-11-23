@@ -7,10 +7,8 @@ import { SuperStickerItem } from "./SuperStickerItem";
 
 export function SuperChatAndStickersViewer({
   superChatAndStickers,
-  superChatAndStickersNum,
 }: {
   superChatAndStickers: ExtendedSuperItem[];
-  superChatAndStickersNum: number;
 }) {
   const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
@@ -42,7 +40,7 @@ export function SuperChatAndStickersViewer({
         </p>
         {rangeInfo && (
           <p>
-            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${superChatAndStickersNum}`}
+            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${superChatAndStickers.length}`}
           </p>
         )}
         {showGoToBottom && (

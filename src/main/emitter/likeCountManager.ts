@@ -1,6 +1,6 @@
 import { LikeCountRaisedEventEmitter } from "simple-youtube-emitter";
 import { LiveLaunchProperties, LiveStatistics } from "../../ipcEvent";
-import { updateLiveStatistics } from "../liveStatistics";
+import { getLiveStatisticsManager } from "../liveStatistics";
 
 let likeCountEmitter: LikeCountRaisedEventEmitter | undefined;
 
@@ -44,7 +44,7 @@ export async function setupLikeCountEmitter(liveLaunchProperties: LiveLaunchProp
     counts.currentLikeCount = after.value;
     counts.maxLikeCount = after.value;
 
-    updateLiveStatistics(counts);
+    getLiveStatisticsManager().updateLiveStatistics(counts);
   });
   await likeCountEmitter.start();
 }

@@ -9,10 +9,8 @@ import { RedemptionItem } from "./RedemptionItem";
 
 export function MembershipsAndGiftsViewer({
   membershipsAndGifts,
-  membershipsAndGiftsNum,
 }: {
   membershipsAndGifts: ExtendedMembershipAndGiftItem[];
-  membershipsAndGiftsNum: number;
 }) {
   const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
@@ -44,7 +42,7 @@ export function MembershipsAndGiftsViewer({
         </p>
         {rangeInfo && (
           <p>
-            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${membershipsAndGiftsNum}`}
+            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${membershipsAndGifts.length}`}
           </p>
         )}
         {showGoToBottom && (

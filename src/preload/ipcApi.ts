@@ -33,10 +33,7 @@ export interface IpcApi {
     requestDeletingChannel: Invoke<"deleteChannelWithUserConfirmation">;
     registerUpdatedChannelListListener: Listen<"tellUpdatedChannelIds">;
     requestLaunchEmitters: Invoke<"launchEmitters">;
-    registerTextChatsListener: Listen<"tellTextChats">;
-    registerSuperChatsListener: Listen<"tellSuperChats">;
     registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
-    registerStocksListener: Listen<"tellStocks">;
     requestAddStock: Invoke<"addStock">;
     requestRemoveStock: Invoke<"removeStock">;
     registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
@@ -44,6 +41,8 @@ export interface IpcApi {
     registerMainAppPage: Listen<"tellMainAppPage">;
     requestStartLive: Invoke<"startLive">;
     requestQuitLive: Invoke<"quitLive">;
+    requestUpdateFocus: Invoke<"updateFocus">;
+    registerChatsListener: Listen<"tellChats">;
   };
 }
 
@@ -70,11 +69,8 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellUpdatedChannelIds", callback),
     requestLaunchEmitters: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
-    registerTextChatsListener: (callback) => IpcRendererWrapper.on("tellTextChats", callback),
-    registerSuperChatsListener: (callback) => IpcRendererWrapper.on("tellSuperChats", callback),
     registerMembershipsAndGiftsListener: (callback) =>
       IpcRendererWrapper.on("tellMembershipsAndGifts", callback),
-    registerStocksListener: (callback) => IpcRendererWrapper.on("tellStocks", callback),
     requestAddStock: (stock) => IpcRendererWrapper.invoke("addStock", stock),
     requestRemoveStock: (stock) => IpcRendererWrapper.invoke("removeStock", stock),
     registerLiveStatisticsListener: (callback) =>
@@ -85,5 +81,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.invoke("startLive", liveLaunchProperties),
     requestQuitLive: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
+    requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
+    registerChatsListener: (callback) => IpcRendererWrapper.on("tellChats", callback),
   },
 };

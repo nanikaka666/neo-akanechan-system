@@ -105,6 +105,15 @@ export interface LiveStatistics {
 }
 
 /**
+ * `isStocked` is unknown (always false more correctly) when live chat receiving.
+ *
+ * So `isStocked` will be calculated when every sending data to renderer.
+ */
+export type NonMarkedExtendedChatItemText = Omit<ExtendedChatItemText, "isStocked" | "isFocused">;
+export type NonMarkedExtendedChatItemSuperChat = Omit<ExtendedChatItemSuperChat, "isFocused">;
+export type NonMarkedExtendedChatItemSuperSticker = Omit<ExtendedChatItemSuperSticker, "isFocused">;
+
+/**
  * Append some data to ChatItemText from youtube-livechat-emitter
  */
 export type ExtendedChatItemText = ChatItemText & {
@@ -127,16 +136,23 @@ export type ExtendedChatItemText = ChatItemText & {
    * `true` means this is stocked by streamer.
    */
   isStocked: boolean;
+
+  /**
+   * `true` means this is focused by streamer.
+   */
+  isFocused: boolean;
 };
 
 export type ExtendedChatItemSuperChat = ChatItemSuperChat & {
   formatedTime: string;
   isFirst: boolean;
+  isFocused: boolean;
 };
 
 export type ExtendedChatItemSuperSticker = ChatItemSuperSticker & {
   formatedTime: string;
   isFirst: boolean;
+  isFocused: boolean;
 };
 
 export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
@@ -166,6 +182,29 @@ export type ExtendedMembershipAndGiftItem =
   | ExtendedMembershipMilestone
   | ExtendedSponsorshipsGift
   | ExtendedGiftRedemption;
+
+/**
+ * A chat item on which owner focuses.
+ *
+ * Owner can have only one focused item at time.
+ */
+export type FocusedOnChatItem =
+  | ExtendedChatItemText
+  | ExtendedChatItemSuperChat
+  | ExtendedChatItemSuperSticker;
+
+/**
+ * Unit of chat data for transfer to renderer.
+ */
+export interface Chats {
+  textChats: {
+    items: ExtendedChatItemText[];
+    num: number;
+  };
+  superChatAndStickers: ExtendedSuperItem[];
+  stocks: ExtendedChatItemText[];
+  focus?: FocusedOnChatItem;
+}
 
 /**
  * Ipc channel interfaces.
@@ -253,27 +292,9 @@ export interface IpcEvent {
   tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
 
   /**
-   * Notify latest 1000 text chats to renderer.
-   */
-  tellTextChats: (textChats: ExtendedChatItemText[], textChatNum: number) => void;
-
-  /**
-   * Notify all superchat and supersticker item to renderer.
-   */
-  tellSuperChats: (superChats: ExtendedSuperItem[], superChatsNum: number) => void;
-
-  /**
    * Notify all memberships and gifts item to renderer.
    */
-  tellMembershipsAndGifts: (
-    membershipsAndGifts: ExtendedMembershipAndGiftItem[],
-    membershipsAndGiftsNum: number,
-  ) => void;
-
-  /**
-   * Notify all stocks to renderer.
-   */
-  tellStocks: (stocks: ExtendedChatItemText[], stocksNum: number) => void;
+  tellMembershipsAndGifts: (membershipsAndGifts: ExtendedMembershipAndGiftItem[]) => void;
 
   /**
    * Add chat item to stock list.
@@ -309,4 +330,16 @@ export interface IpcEvent {
    * transit MainAppPage status to "liveSelection"
    */
   quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+
+  /**
+   * Update focus item.
+   *
+   * `undefined` means focused item will be unfocused.
+   */
+  updateFocus: (focus?: FocusedOnChatItem) => boolean;
+
+  /**
+   * Notify latest chat data.
+   */
+  tellChats: (chats: Chats) => void;
 }
