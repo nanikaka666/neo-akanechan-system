@@ -284,7 +284,6 @@ class LiveChatManager {
       this.#webContents,
       "tellMembershipsAndGifts",
       this.#membershipsAndGifts,
-      this.#membershipsAndGifts.length,
     );
 
     // statistics

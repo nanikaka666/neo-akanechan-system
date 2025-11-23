@@ -48,7 +48,6 @@ export function CommentViewer() {
   const [membershipsAndGifts, setMembershipsAndGifts] = useState<ExtendedMembershipAndGiftItem[]>(
     [],
   );
-  const [membershipsAndGiftsNum, setMembershipsAndGiftsNum] = useState(0);
 
   const [stocks, setStocks] = useState<ExtendedChatItemText[]>([]);
 
@@ -72,20 +71,17 @@ export function CommentViewer() {
       {
         viewerMode: "membershipsAndGifts",
         label: "メンバーシップ & ギフト",
-        disabled: membershipsAndGiftsNum === 0,
-        itemNum: membershipsAndGiftsNum,
+        disabled: membershipsAndGifts.length === 0,
+        itemNum: membershipsAndGifts.length,
       },
       { viewerMode: "focus", label: "フォーカス中", disabled: !focus, itemNum: focus ? 1 : 0 },
     ];
-  }, [textChatNum, superChatAndStickers, membershipsAndGiftsNum, stocks, focus]);
+  }, [textChatNum, superChatAndStickers, membershipsAndGifts, stocks, focus]);
 
   useEffect(() => {
-    window.ipcApi.registerMembershipsAndGiftsListener(
-      (e, newMembershipsAndGifts, newMembershipsAndGiftsNum) => {
-        setMembershipsAndGifts((_) => newMembershipsAndGifts);
-        setMembershipsAndGiftsNum((_) => newMembershipsAndGiftsNum);
-      },
-    );
+    window.ipcApi.registerMembershipsAndGiftsListener((e, newMembershipsAndGifts) => {
+      setMembershipsAndGifts((_) => newMembershipsAndGifts);
+    });
     window.ipcApi.registerChatsListener((e, chats) => {
       setTextChats((_) => chats.textChats.items);
       setTextChatNum((_) => chats.textChats.num);
@@ -112,10 +108,7 @@ export function CommentViewer() {
         <TextChatViewer textChats={stocks} textChatNum={stocks.length} />
       </div>
       <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>
-        <MembershipsAndGiftsViewer
-          membershipsAndGifts={membershipsAndGifts}
-          membershipsAndGiftsNum={membershipsAndGiftsNum}
-        />
+        <MembershipsAndGiftsViewer membershipsAndGifts={membershipsAndGifts} />
       </div>
       <div style={viewerMode !== "focus" ? displayNone : {}}>
         <FocusViewer focus={focus} />

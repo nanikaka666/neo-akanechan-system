@@ -294,10 +294,7 @@ export interface IpcEvent {
   /**
    * Notify all memberships and gifts item to renderer.
    */
-  tellMembershipsAndGifts: (
-    membershipsAndGifts: ExtendedMembershipAndGiftItem[],
-    membershipsAndGiftsNum: number,
-  ) => void;
+  tellMembershipsAndGifts: (membershipsAndGifts: ExtendedMembershipAndGiftItem[]) => void;
 
   /**
    * Add chat item to stock list.
