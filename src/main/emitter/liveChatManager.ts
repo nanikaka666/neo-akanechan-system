@@ -111,7 +111,7 @@ class LiveChatManager {
         ...item,
         ...{
           indexOfWhole: this.#textIndexOfWhole,
-          formatedTime: this.#formatDate(new Date(item.timestamp / 1000)), // microsecond to millisecond
+          formatedTime: this.#formatDate(item),
           isFirst: isFirstChat,
         },
       } satisfies NonMarkedExtendedChatItemText;
@@ -121,7 +121,7 @@ class LiveChatManager {
       const convertedItem = {
         ...item,
         ...{
-          formatedTime: this.#formatDate(new Date(item.timestamp / 1000)),
+          formatedTime: this.#formatDate(item),
           isFirst: isFirstChat,
         },
       } satisfies NonMarkedExtendedChatItemSuperChat;
@@ -133,7 +133,7 @@ class LiveChatManager {
       const convertedItem = {
         ...item,
         ...{
-          formatedTime: this.#formatDate(new Date(item.timestamp / 1000)),
+          formatedTime: this.#formatDate(item),
           isFirst: isFirstChat,
         },
       } satisfies NonMarkedExtendedChatItemSuperSticker;
@@ -189,7 +189,7 @@ class LiveChatManager {
   #onMembershipsListener(item: MembershipItem) {
     const convertedItem = {
       ...item,
-      ...{ formatedTime: this.#formatDate(new Date(item.timestamp / 1000)) },
+      ...{ formatedTime: this.#formatDate(item) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
 
@@ -250,7 +250,7 @@ class LiveChatManager {
     const convertedItem = {
       ...item,
       type: "redemption",
-      formatedTime: this.#formatDate(new Date(item.timestamp / 1000)),
+      formatedTime: this.#formatDate(item),
     } satisfies ExtendedGiftRedemption;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
 
@@ -394,7 +394,10 @@ class LiveChatManager {
     this.#emitter.close();
   }
 
-  #formatDate(date: Date) {
+  // todo: accept SponsorshipGift
+  #formatDate(item: LiveChatItem | MembershipItem | GiftRedemption) {
+    const date = new Date(item.timestamp / 1000); // microsecond to millisecond
+
     const hour = date.getHours() + "";
     const minute = date.getMinutes() + "";
     const second = date.getSeconds() + "";
