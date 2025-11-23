@@ -6,10 +6,8 @@ import {
   TextMessage,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
 import {
-  ExtendedChatItemText,
   ExtendedGiftRedemption,
   ExtendedMembershipAndGiftItem,
-  ExtendedSuperItem,
   FocusedOnChatItem,
   LiveLaunchProperties,
   LiveStatistics,
@@ -295,13 +293,9 @@ class LiveChatManager {
    */
   refreshChatsRenderer() {
     // text chats
-    const markedTextChats = this.#textChats.map((item) => {
-      return {
-        ...item,
-        isStocked: this.#stockManager.isStocked(item.id),
-        isFocused: this.#focusManager.isFocused(item.id),
-      } satisfies ExtendedChatItemText;
-    });
+    const markedTextChats = this.#textChats
+      .map((item) => this.#markIsStocked(item))
+      .map((item) => this.#markIsFocused(item));
 
     WebContentsWrapper.send(
       this.#webContents,
@@ -311,12 +305,7 @@ class LiveChatManager {
     );
 
     // super chat and stickers
-    const markedSuperChatAndStickers = this.#superChats.map((item) => {
-      return {
-        ...item,
-        isFocused: this.#focusManager.isFocused(item.id),
-      } satisfies ExtendedSuperItem;
-    });
+    const markedSuperChatAndStickers = this.#superChats.map((item) => this.#markIsFocused(item));
 
     WebContentsWrapper.send(
       this.#webContents,
@@ -326,13 +315,10 @@ class LiveChatManager {
     );
 
     // stocks
-    const markedStocks = this.#stockManager.getStocks().map((item) => {
-      return {
-        ...item,
-        isStocked: this.#stockManager.isStocked(item.id),
-        isFocused: this.#focusManager.isFocused(item.id),
-      } satisfies ExtendedChatItemText;
-    });
+    const markedStocks = this.#stockManager
+      .getStocks()
+      .map((item) => this.#markIsStocked(item))
+      .map((item) => this.#markIsFocused(item));
 
     WebContentsWrapper.send(this.#webContents, "tellStocks", markedStocks, markedStocks.length);
 
@@ -340,16 +326,13 @@ class LiveChatManager {
     const currentFocus = this.#focusManager.getFocus();
     if (currentFocus) {
       if (currentFocus.type === "text") {
-        WebContentsWrapper.send(this.#webContents, "tellFocus", {
-          ...currentFocus,
-          isStocked: this.#stockManager.isStocked(currentFocus.id),
-          isFocused: this.#focusManager.isFocused(currentFocus.id),
-        });
+        WebContentsWrapper.send(
+          this.#webContents,
+          "tellFocus",
+          this.#markIsFocused(this.#markIsStocked(currentFocus)),
+        );
       } else {
-        WebContentsWrapper.send(this.#webContents, "tellFocus", {
-          ...currentFocus,
-          isFocused: this.#focusManager.isFocused(currentFocus.id),
-        });
+        WebContentsWrapper.send(this.#webContents, "tellFocus", this.#markIsFocused(currentFocus));
       }
     } else {
       WebContentsWrapper.send(this.#webContents, "tellFocus", undefined);
@@ -406,6 +389,19 @@ class LiveChatManager {
 
   #to2Digit(value: string) {
     return value.length === 1 ? "0" + value : value;
+  }
+
+  #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & { isStocked: boolean } {
+    return { ...item, isStocked: this.#stockManager.isStocked(item.id) };
+  }
+
+  #markIsFocused<
+    T extends
+      | NonMarkedExtendedChatItemText
+      | NonMarkedExtendedChatItemSuperChat
+      | NonMarkedExtendedChatItemSuperSticker,
+  >(item: T): T & { isFocused: boolean } {
+    return { ...item, isFocused: this.#focusManager.isFocused(item.id) };
   }
 }
 
