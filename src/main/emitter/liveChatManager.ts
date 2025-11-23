@@ -111,7 +111,7 @@ class LiveChatManager {
         ...item,
         ...{
           indexOfWhole: this.#textIndexOfWhole,
-          formatedTime: formatDate(new Date(item.timestamp / 1000)), // microsecond to millisecond
+          formatedTime: this.#formatDate(new Date(item.timestamp / 1000)), // microsecond to millisecond
           isFirst: isFirstChat,
         },
       } satisfies NonMarkedExtendedChatItemText;
@@ -120,7 +120,10 @@ class LiveChatManager {
     } else if (item.type === "superChat") {
       const convertedItem = {
         ...item,
-        ...{ formatedTime: formatDate(new Date(item.timestamp / 1000)), isFirst: isFirstChat },
+        ...{
+          formatedTime: this.#formatDate(new Date(item.timestamp / 1000)),
+          isFirst: isFirstChat,
+        },
       } satisfies NonMarkedExtendedChatItemSuperChat;
       this.#superChats = [...this.#superChats, convertedItem];
 
@@ -129,7 +132,10 @@ class LiveChatManager {
     } else {
       const convertedItem = {
         ...item,
-        ...{ formatedTime: formatDate(new Date(item.timestamp / 1000)), isFirst: isFirstChat },
+        ...{
+          formatedTime: this.#formatDate(new Date(item.timestamp / 1000)),
+          isFirst: isFirstChat,
+        },
       } satisfies NonMarkedExtendedChatItemSuperSticker;
       this.#superChats = [...this.#superChats, convertedItem];
       console.log(item.superSticker);
@@ -183,7 +189,7 @@ class LiveChatManager {
   #onMembershipsListener(item: MembershipItem) {
     const convertedItem = {
       ...item,
-      ...{ formatedTime: formatDate(new Date(item.timestamp / 1000)) },
+      ...{ formatedTime: this.#formatDate(new Date(item.timestamp / 1000)) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
 
@@ -244,7 +250,7 @@ class LiveChatManager {
     const convertedItem = {
       ...item,
       type: "redemption",
-      formatedTime: formatDate(new Date(item.timestamp / 1000)),
+      formatedTime: this.#formatDate(new Date(item.timestamp / 1000)),
     } satisfies ExtendedGiftRedemption;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
 
@@ -387,6 +393,18 @@ class LiveChatManager {
   cleanup() {
     this.#emitter.close();
   }
+
+  #formatDate(date: Date) {
+    const hour = date.getHours() + "";
+    const minute = date.getMinutes() + "";
+    const second = date.getSeconds() + "";
+
+    return `${this.#to2Digit(hour)}:${this.#to2Digit(minute)}:${this.#to2Digit(second)}`;
+  }
+
+  #to2Digit(value: string) {
+    return value.length === 1 ? "0" + value : value;
+  }
 }
 
 export function cleanUpLiveChatEmitter() {
@@ -414,16 +432,4 @@ export function getLiveChatManager() {
     throw new Error("LiveChatManager is not setup, call setupLiveChatEmitter()");
   }
   return liveChatManager;
-}
-
-function formatDate(date: Date) {
-  const hour = date.getHours() + "";
-  const minute = date.getMinutes() + "";
-  const second = date.getSeconds() + "";
-
-  return `${to2Digit(hour)}:${to2Digit(minute)}:${to2Digit(second)}`;
-}
-
-function to2Digit(value: string) {
-  return value.length === 1 ? "0" + value : value;
 }
