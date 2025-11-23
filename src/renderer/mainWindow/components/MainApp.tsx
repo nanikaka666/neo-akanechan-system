@@ -11,10 +11,11 @@ export function MainApp() {
   useEffect(() => {
     window.ipcApi.requestInitialMainAppPage().then((page) => {
       setMainAppPage((_) => page);
-      window.ipcApi.registerMainAppPage((e, page) => {
-        setMainAppPage((_) => page);
-      });
     });
+    const remover = window.ipcApi.registerMainAppPage((e, page) => {
+      setMainAppPage((_) => page);
+    });
+    return () => remover();
   }, []);
 
   return mainAppPage ? (

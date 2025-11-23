@@ -13,7 +13,7 @@ type Invoke<K extends keyof IpcEvent> = (
 
 type Listen<K extends keyof IpcEvent> = (
   callback: (e: IpcRendererEvent, ...args: Parameters<IpcEvent[K]>) => void,
-) => void;
+) => () => void;
 
 /**
  * Api interface exposed to Renderer process.
@@ -21,11 +21,11 @@ type Listen<K extends keyof IpcEvent> = (
 export interface IpcApi {
   ipcApi: {
     requestConfirmingInputChannelId: Invoke<"confirmInputChannelId">;
-    registerChannel: Invoke<"registerChannel">;
+    requestSaveChannel: Invoke<"registerChannel">;
     requestChannelTop: Invoke<"getChannelTop">;
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestUserSettings: Invoke<"getUserSettings">;
-    registerUserSettings: Invoke<"saveUserSettings">;
+    requestSaveUserSettings: Invoke<"saveUserSettings">;
     requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
     registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
     requestRegisteredChannels: Invoke<"getRegisterdChannels">;
@@ -50,12 +50,12 @@ export const IpcApi: IpcApi = {
   ipcApi: {
     requestConfirmingInputChannelId: (inputChannelId) =>
       IpcRendererWrapper.invoke("confirmInputChannelId", inputChannelId),
-    registerChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
+    requestSaveChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
     requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
     requestOpenOverlay: (channelTop) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
     requestUserSettings: (channelId) => IpcRendererWrapper.invoke("getUserSettings", channelId),
-    registerUserSettings: (channelId, userSettings) =>
+    requestSaveUserSettings: (channelId, userSettings) =>
       IpcRendererWrapper.invoke("saveUserSettings", channelId, userSettings),
     requestCheckHavingDifferenceAmongUserSettings: (settingsA, settingsB) =>
       IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),

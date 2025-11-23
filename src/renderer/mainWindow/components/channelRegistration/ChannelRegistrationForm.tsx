@@ -45,7 +45,7 @@ export function ChannelRegistrationForm({
 
   async function onClickConfirmationYes(e: MouseEvent) {
     e.preventDefault();
-    const res = await window.ipcApi.registerChannel(channelData!.channelId);
+    const res = await window.ipcApi.requestSaveChannel(channelData!.channelId);
     if (res) {
       setIsComplete((_) => true);
     } else {

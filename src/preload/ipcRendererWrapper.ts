@@ -18,8 +18,8 @@ export const IpcRendererWrapper = {
     key: K,
     callback: (e: IpcRendererEvent, ...args: Parameters<IpcEvent[K]>) => void,
   ) => {
-    ipcRenderer.removeAllListeners(key);
     ipcRenderer.on(key, callback);
+    return () => ipcRenderer.off(key, callback);
   },
 };
 
@@ -36,6 +36,10 @@ declare global {
        * @deprecated use IpcRendererWrapper.on() instead.
        */
       on(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): this;
+      /**
+       * @deprecated use IpcRendererWrapper.off() instead.
+       */
+      off(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): this;
     }
   }
 }

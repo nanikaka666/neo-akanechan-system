@@ -21,9 +21,10 @@ export function SideBarInfoArea() {
   });
 
   useEffect(() => {
-    window.ipcApi.registerLiveStatisticsListener((e, newLiveStatistics) => {
+    const remover = window.ipcApi.registerLiveStatisticsListener((e, newLiveStatistics) => {
       setLiveStatistics((_) => newLiveStatistics);
     });
+    return () => remover();
   }, []);
 
   return (
