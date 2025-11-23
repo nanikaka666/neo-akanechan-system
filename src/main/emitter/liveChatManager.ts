@@ -135,7 +135,7 @@ class LiveChatManager {
       this.#superChats = [...this.#superChats, convertedItem];
       console.log(item.superSticker);
     }
-    this.refreshChatsRenderer();
+    this.#refreshChatsOnRenderer();
   }
 
   #onRemoveChatListener(itemId: LiveChatItemId) {
@@ -153,7 +153,7 @@ class LiveChatManager {
       this.#focusManager.updateFocus(undefined);
     }
 
-    this.refreshChatsRenderer();
+    this.#refreshChatsOnRenderer();
   }
 
   #onBlockUserListener(blockedChannelId: ChannelId) {
@@ -178,7 +178,7 @@ class LiveChatManager {
       this.#focusManager.updateFocus(undefined);
     }
 
-    this.refreshChatsRenderer();
+    this.#refreshChatsOnRenderer();
   }
 
   #onMembershipsListener(item: MembershipItem) {
@@ -187,7 +187,7 @@ class LiveChatManager {
       ...{ formatedTime: this.#formatDate(item) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
-    this.refreshMembershipsRenderer();
+    this.#refreshMembershipsOnRenderer();
 
     if (item.type === "new") {
       console.log("New Memberships.", item);
@@ -211,7 +211,7 @@ class LiveChatManager {
     } satisfies ExtendedMembershipAndGiftItem;
 
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
-    this.refreshMembershipsRenderer();
+    this.#refreshMembershipsOnRenderer();
     console.log("Gift purchased!", convertedItem);
   }
 
@@ -222,7 +222,7 @@ class LiveChatManager {
       formatedTime: this.#formatDate(item),
     } satisfies ExtendedGiftRedemption;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
-    this.refreshMembershipsRenderer();
+    this.#refreshMembershipsOnRenderer();
     console.log("Gift redemption!", convertedItem);
   }
 
@@ -231,7 +231,7 @@ class LiveChatManager {
       return false;
     }
     this.#stockManager.add(item);
-    this.refreshChatsRenderer();
+    this.#refreshChatsOnRenderer();
     return true;
   }
 
@@ -240,19 +240,19 @@ class LiveChatManager {
       return false;
     }
     this.#stockManager.remove(item);
-    this.refreshChatsRenderer();
+    this.#refreshChatsOnRenderer();
     return true;
   }
 
   updateFocus(item?: FocusedOnChatItem) {
     this.#focusManager.updateFocus(item);
-    this.refreshChatsRenderer();
+    this.#refreshChatsOnRenderer();
   }
 
   /**
    * Reflect latest chat list (text, superchat, supersticker), stocks, focus and statistics to renderer.
    */
-  refreshChatsRenderer() {
+  #refreshChatsOnRenderer() {
     // text chats
     const markedTextChats = this.#textChats
       .map((item) => this.#markIsStocked(item))
@@ -314,7 +314,7 @@ class LiveChatManager {
     updateLiveStatistics(latestStatistics);
   }
 
-  refreshMembershipsRenderer() {
+  #refreshMembershipsOnRenderer() {
     WebContentsWrapper.send(
       this.#webContents,
       "tellMembershipsAndGifts",
