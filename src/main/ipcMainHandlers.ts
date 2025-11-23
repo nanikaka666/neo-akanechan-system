@@ -7,7 +7,7 @@ import { UserSettingsService } from "./userSettings";
 import { BeginningBlankPage, ChannelSummary, InLivePage, LiveSelectionPage } from "../ipcEvent";
 import {
   cleanUpLiveChatEmitter,
-  sendTextChatsToRenderer,
+  getLiveChatManager,
   setupLiveChatEmitter,
 } from "./emitter/liveChatManager";
 import { cleanUpLikeCountEmitter, setupLikeCountEmitter } from "./emitter/likeCountManager";
@@ -19,7 +19,6 @@ import {
   cleanUpSubscriberCountEmitter,
   setupSubscriberCountEmitter,
 } from "./emitter/subscriberCountManager";
-import { addStock, cleanUpStocks, removeStock, setupStocks } from "./stock";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 
 /**
@@ -220,7 +219,6 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
-    setupStocks(e.sender);
     setupLiveStatistics(e.sender);
 
     await Promise.all([
@@ -233,19 +231,11 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("addStock", (e, item) => {
-    if (!addStock(item)) {
-      return Promise.resolve(false);
-    }
-    sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
-    return Promise.resolve(true);
+    return Promise.resolve(getLiveChatManager().addStock(item));
   });
 
   IpcMainWrapper.handle("removeStock", (e, item) => {
-    if (!removeStock(item)) {
-      return Promise.resolve(false);
-    }
-    sendTextChatsToRenderer(); // to re-render text chats to reflect updated stocks.
-    return Promise.resolve(true);
+    return Promise.resolve(getLiveChatManager().removeStock(item));
   });
 
   IpcMainWrapper.handle("getInitialMainAppPage", () => {
@@ -291,7 +281,6 @@ export function setupIpcMainHandlers() {
     cleanUpLiveViewCountEmitter();
     cleanUpSubscriberCountEmitter();
 
-    cleanUpStocks();
     cleanUpLiveStatistics();
 
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
@@ -299,5 +288,10 @@ export function setupIpcMainHandlers() {
       mainChannelId: liveLaunchProperties.channel.channel.channelId,
     } satisfies LiveSelectionPage);
     return true;
+  });
+
+  IpcMainWrapper.handle("updateFocus", (e, focus) => {
+    getLiveChatManager().updateFocus(focus);
+    return Promise.resolve(true);
   });
 }
