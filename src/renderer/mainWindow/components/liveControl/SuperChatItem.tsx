@@ -1,5 +1,6 @@
 import { ExtendedChatItemSuperChat } from "../../../../ipcEvent";
 import { Author } from "./Author";
+import { FocusButton } from "./FocusButton";
 import { Messages } from "./Messages";
 
 export function SuperChatItem({ item }: { item: ExtendedChatItemSuperChat }) {
@@ -10,6 +11,7 @@ export function SuperChatItem({ item }: { item: ExtendedChatItemSuperChat }) {
       <span style={{ fontWeight: "bold", fontSize: "24px" }}>{item.superChat.amount}</span>
 
       {item.messages && <Messages messages={item.messages} />}
+      <FocusButton item={item} />
     </div>
   );
 }
