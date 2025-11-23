@@ -44,7 +44,6 @@ export function CommentViewer() {
   const [textChatNum, setTextChatNum] = useState(0);
 
   const [superChatAndStickers, setSuperChatAndStickers] = useState<ExtendedSuperItem[]>([]);
-  const [superChatAndStickersNum, setSuperChatAndStickersNum] = useState(0);
 
   const [membershipsAndGifts, setMembershipsAndGifts] = useState<ExtendedMembershipAndGiftItem[]>(
     [],
@@ -52,7 +51,6 @@ export function CommentViewer() {
   const [membershipsAndGiftsNum, setMembershipsAndGiftsNum] = useState(0);
 
   const [stocks, setStocks] = useState<ExtendedChatItemText[]>([]);
-  const [stocksNum, setStocksNum] = useState(0);
 
   const [focus, setFocus] = useState<FocusedOnChatItem>();
 
@@ -62,10 +60,15 @@ export function CommentViewer() {
       {
         viewerMode: "superchatAndStickers",
         label: "スパチャ & Sticker",
-        disabled: superChatAndStickersNum === 0,
-        itemNum: superChatAndStickersNum,
+        disabled: superChatAndStickers.length === 0,
+        itemNum: superChatAndStickers.length,
       },
-      { viewerMode: "stocks", label: "ストック", disabled: stocksNum === 0, itemNum: stocksNum },
+      {
+        viewerMode: "stocks",
+        label: "ストック",
+        disabled: stocks.length === 0,
+        itemNum: stocks.length,
+      },
       {
         viewerMode: "membershipsAndGifts",
         label: "メンバーシップ & ギフト",
@@ -74,29 +77,21 @@ export function CommentViewer() {
       },
       { viewerMode: "focus", label: "フォーカス中", disabled: !focus, itemNum: focus ? 1 : 0 },
     ];
-  }, [textChatNum, superChatAndStickersNum, membershipsAndGiftsNum, stocksNum, focus]);
+  }, [textChatNum, superChatAndStickers, membershipsAndGiftsNum, stocks, focus]);
 
   useEffect(() => {
-    window.ipcApi.registerTextChatsListener((e, newTextChats, newTextChatNum) => {
-      setTextChats((_) => newTextChats);
-      setTextChatNum((_) => newTextChatNum);
-    });
-    window.ipcApi.registerSuperChatsListener((e, newSuperChats, newSuperChatsNum) => {
-      setSuperChatAndStickers((_) => newSuperChats);
-      setSuperChatAndStickersNum((_) => newSuperChatsNum);
-    });
     window.ipcApi.registerMembershipsAndGiftsListener(
       (e, newMembershipsAndGifts, newMembershipsAndGiftsNum) => {
         setMembershipsAndGifts((_) => newMembershipsAndGifts);
         setMembershipsAndGiftsNum((_) => newMembershipsAndGiftsNum);
       },
     );
-    window.ipcApi.registerStocksListener((e, newStocks, newStocksNum) => {
-      setStocks((_) => newStocks);
-      setStocksNum((_) => newStocksNum);
-    });
-    window.ipcApi.registerFocusListener((e, newFocus) => {
-      setFocus((_) => newFocus);
+    window.ipcApi.registerChatsListener((e, chats) => {
+      setTextChats((_) => chats.textChats.items);
+      setTextChatNum((_) => chats.textChats.num);
+      setSuperChatAndStickers((_) => chats.superChatAndStickers);
+      setStocks((_) => chats.stocks);
+      setFocus((_) => chats.focus);
     });
   }, []);
 
@@ -111,13 +106,10 @@ export function CommentViewer() {
         <TextChatViewer textChats={textChats} textChatNum={textChatNum} />
       </div>
       <div style={viewerMode !== "superchatAndStickers" ? displayNone : {}}>
-        <SuperChatAndStickersViewer
-          superChatAndStickers={superChatAndStickers}
-          superChatAndStickersNum={superChatAndStickersNum}
-        />
+        <SuperChatAndStickersViewer superChatAndStickers={superChatAndStickers} />
       </div>
       <div style={viewerMode !== "stocks" ? displayNone : {}}>
-        <TextChatViewer textChats={stocks} textChatNum={stocksNum} />
+        <TextChatViewer textChats={stocks} textChatNum={stocks.length} />
       </div>
       <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>
         <MembershipsAndGiftsViewer

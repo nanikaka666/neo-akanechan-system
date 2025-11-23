@@ -237,22 +237,8 @@ class LiveChatManager {
       .map((item) => this.#markIsStocked(item))
       .map((item) => this.#markIsFocused(item));
 
-    WebContentsWrapper.send(
-      this.#webContents,
-      "tellTextChats",
-      markedTextChats,
-      this.#textChatCount,
-    );
-
     // super chat and stickers
     const markedSuperChatAndStickers = this.#superChats.map((item) => this.#markIsFocused(item));
-
-    WebContentsWrapper.send(
-      this.#webContents,
-      "tellSuperChats",
-      markedSuperChatAndStickers,
-      markedSuperChatAndStickers.length,
-    );
 
     // stocks
     const markedStocks = this.#stockManager
@@ -260,23 +246,23 @@ class LiveChatManager {
       .map((item) => this.#markIsStocked(item))
       .map((item) => this.#markIsFocused(item));
 
-    WebContentsWrapper.send(this.#webContents, "tellStocks", markedStocks, markedStocks.length);
-
     // Focus
     const currentFocus = this.#focusManager.getFocus();
-    if (currentFocus) {
-      if (currentFocus.type === "text") {
-        WebContentsWrapper.send(
-          this.#webContents,
-          "tellFocus",
-          this.#markIsFocused(this.#markIsStocked(currentFocus)),
-        );
-      } else {
-        WebContentsWrapper.send(this.#webContents, "tellFocus", this.#markIsFocused(currentFocus));
-      }
-    } else {
-      WebContentsWrapper.send(this.#webContents, "tellFocus", undefined);
-    }
+    const markedFocus = !currentFocus
+      ? undefined
+      : currentFocus.type === "text"
+        ? this.#markIsFocused(this.#markIsStocked(currentFocus))
+        : this.#markIsFocused(currentFocus);
+
+    WebContentsWrapper.send(this.#webContents, "tellChats", {
+      textChats: {
+        items: markedTextChats,
+        num: this.#textChatCount,
+      },
+      superChatAndStickers: markedSuperChatAndStickers,
+      stocks: markedStocks,
+      focus: markedFocus,
+    });
 
     // statistics
     const latestStatistics: Pick<

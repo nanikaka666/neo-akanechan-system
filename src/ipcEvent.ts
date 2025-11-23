@@ -194,6 +194,19 @@ export type FocusedOnChatItem =
   | ExtendedChatItemSuperSticker;
 
 /**
+ * Unit of chat data for transfer to renderer.
+ */
+export interface Chats {
+  textChats: {
+    items: ExtendedChatItemText[];
+    num: number;
+  };
+  superChatAndStickers: ExtendedSuperItem[];
+  stocks: ExtendedChatItemText[];
+  focus?: FocusedOnChatItem;
+}
+
+/**
  * Ipc channel interfaces.
  *
  * key represents channel name.
@@ -349,4 +362,9 @@ export interface IpcEvent {
    * `undefined` means focused item will be unfocused.
    */
   updateFocus: (focus?: FocusedOnChatItem) => boolean;
+
+  /**
+   * Notify latest chat data.
+   */
+  tellChats: (chats: Chats) => void;
 }
