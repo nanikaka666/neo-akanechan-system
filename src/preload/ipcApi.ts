@@ -13,7 +13,7 @@ type Invoke<K extends keyof IpcEvent> = (
 
 type Listen<K extends keyof IpcEvent> = (
   callback: (e: IpcRendererEvent, ...args: Parameters<IpcEvent[K]>) => void,
-) => void;
+) => () => void;
 
 /**
  * Api interface exposed to Renderer process.
