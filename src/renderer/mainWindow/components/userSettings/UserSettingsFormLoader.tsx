@@ -9,12 +9,13 @@ export function UserSettingsFormLoader({ channelSummary }: { channelSummary: Cha
   useEffect(() => {
     window.ipcApi.requestUserSettings(channelSummary.channelId).then((res) => {
       setUserSettings((_) => res);
-      window.ipcApi.registerUpdatedUserSettingsListener((e, channelId, settings) => {
-        if (channelId.id === channelSummary.channelId.id) {
-          setUserSettings((_) => settings);
-        }
-      });
     });
+    const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, channelId, settings) => {
+      if (channelSummary.channelId.id === channelId.id) {
+        setUserSettings((_) => settings);
+      }
+    });
+    return () => remover();
   }, []);
 
   return userSettings ? (

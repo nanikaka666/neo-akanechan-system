@@ -79,16 +79,22 @@ export function CommentViewer() {
   }, [textChatNum, superChatAndStickers, membershipsAndGifts, stocks, focus]);
 
   useEffect(() => {
-    window.ipcApi.registerMembershipsAndGiftsListener((e, newMembershipsAndGifts) => {
-      setMembershipsAndGifts((_) => newMembershipsAndGifts);
-    });
-    window.ipcApi.registerChatsListener((e, chats) => {
+    const membershipsRemover = window.ipcApi.registerMembershipsAndGiftsListener(
+      (e, newMembershipsAndGifts) => {
+        setMembershipsAndGifts((_) => newMembershipsAndGifts);
+      },
+    );
+    const chatsRemover = window.ipcApi.registerChatsListener((e, chats) => {
       setTextChats((_) => chats.textChats.items);
       setTextChatNum((_) => chats.textChats.num);
       setSuperChatAndStickers((_) => chats.superChatAndStickers);
       setStocks((_) => chats.stocks);
       setFocus((_) => chats.focus);
     });
+    return () => {
+      membershipsRemover();
+      chatsRemover();
+    };
   }, []);
 
   return (

@@ -17,14 +17,15 @@ export function ChannelList({ currentMainChannelId }: { currentMainChannelId: Ch
   useEffect(() => {
     window.ipcApi.requestRegisteredChannels().then((lists) => {
       setChannels((_) => lists);
-      window.ipcApi.registerUpdatedChannelListListener((e, lists) => {
-        setChannels((_) => lists);
-      });
+    });
+    const remover = window.ipcApi.registerUpdatedChannelListListener((e, lists) => {
+      setChannels((_) => lists);
     });
 
     // close modal when re-render this component.
     turnOff();
-  }, [currentMainChannelId]);
+    return () => remover();
+  }, []);
 
   return channels ? (
     <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
