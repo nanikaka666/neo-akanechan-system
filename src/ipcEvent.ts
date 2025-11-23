@@ -168,6 +168,16 @@ export type ExtendedMembershipAndGiftItem =
   | ExtendedGiftRedemption;
 
 /**
+ * A chat item on which owner focuses.
+ *
+ * Owner can have only one focused item at time.
+ */
+export type FocusedOnChatItem =
+  | ExtendedChatItemText
+  | ExtendedChatItemSuperChat
+  | ExtendedChatItemSuperSticker;
+
+/**
  * Ipc channel interfaces.
  *
  * key represents channel name.
@@ -309,4 +319,11 @@ export interface IpcEvent {
    * transit MainAppPage status to "liveSelection"
    */
   quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+
+  /**
+   * Notify latest focused item.
+   *
+   * `undefined` means nothing focused item.
+   */
+  tellFocus: (focus?: FocusedOnChatItem) => void;
 }

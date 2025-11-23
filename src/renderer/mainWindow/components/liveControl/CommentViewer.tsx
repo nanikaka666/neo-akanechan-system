@@ -4,10 +4,12 @@ import {
   ExtendedChatItemText,
   ExtendedMembershipAndGiftItem,
   ExtendedSuperItem,
+  FocusedOnChatItem,
 } from "../../../../ipcEvent";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 import { ViewerModeSelector } from "./ViewerModeSelector";
+import { FocusViewer } from "./FocusViewer";
 
 export interface RangeInfo {
   time: {
@@ -20,7 +22,12 @@ export interface RangeInfo {
   };
 }
 
-export type ViewerMode = "text" | "superchatAndStickers" | "stocks" | "membershipsAndGifts";
+export type ViewerMode =
+  | "text"
+  | "superchatAndStickers"
+  | "stocks"
+  | "membershipsAndGifts"
+  | "focus";
 
 export interface ViewerModeSelectOption {
   viewerMode: ViewerMode;
@@ -47,6 +54,8 @@ export function CommentViewer() {
   const [stocks, setStocks] = useState<ExtendedChatItemText[]>([]);
   const [stocksNum, setStocksNum] = useState(0);
 
+  const [focus, setFocus] = useState<FocusedOnChatItem>();
+
   const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
     return [
       { viewerMode: "text", label: "テキストチャット", disabled: false, itemNum: textChatNum },
@@ -63,8 +72,9 @@ export function CommentViewer() {
         disabled: membershipsAndGiftsNum === 0,
         itemNum: membershipsAndGiftsNum,
       },
+      { viewerMode: "focus", label: "フォーカス中", disabled: !focus, itemNum: focus ? 1 : 0 },
     ];
-  }, [textChatNum, superChatAndStickersNum, membershipsAndGiftsNum, stocksNum]);
+  }, [textChatNum, superChatAndStickersNum, membershipsAndGiftsNum, stocksNum, focus]);
 
   useEffect(() => {
     window.ipcApi.registerTextChatsListener((e, newTextChats, newTextChatNum) => {
@@ -82,9 +92,11 @@ export function CommentViewer() {
       },
     );
     window.ipcApi.registerStocksListener((e, newStocks, newStocksNum) => {
-      console.log(newStocks);
       setStocks((_) => newStocks);
       setStocksNum((_) => newStocksNum);
+    });
+    window.ipcApi.registerFocusListener((e, newFocus) => {
+      setFocus((_) => newFocus);
     });
   }, []);
 
@@ -112,6 +124,9 @@ export function CommentViewer() {
           membershipsAndGifts={membershipsAndGifts}
           membershipsAndGiftsNum={membershipsAndGiftsNum}
         />
+      </div>
+      <div style={viewerMode !== "focus" ? displayNone : {}}>
+        <FocusViewer focus={focus} />
       </div>
     </div>
   );
