@@ -50,17 +50,6 @@ class LiveChatManager {
   #membershipsAndGifts: ExtendedMembershipAndGiftItem[];
   readonly #authorChannelIds = new Set<string>();
   readonly #webContents: WebContents;
-  #counts: Pick<
-    LiveStatistics,
-    | "textChatCount"
-    | "chatUUCount"
-    | "superChatCount"
-    | "superStickerCount"
-    | "newMembershipsCount"
-    | "membershipMilestoneCount"
-    | "giftCount"
-    | "redemptionGiftCount"
-  >;
   readonly #emitter: YoutubeLiveChatEmitter;
   readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #stockManager: StockManager;
@@ -74,16 +63,6 @@ class LiveChatManager {
     this.#superChats = [];
     this.#membershipsAndGifts = [];
     this.#authorChannelIds = new Set<string>();
-    this.#counts = {
-      textChatCount: 0,
-      chatUUCount: 0,
-      superChatCount: 0,
-      superStickerCount: 0,
-      newMembershipsCount: 0,
-      membershipMilestoneCount: 0,
-      giftCount: 0,
-      redemptionGiftCount: 0,
-    };
     this.#emitter = new YoutubeLiveChatEmitter(
       liveLaunchProperties.channel.channel.channelId.id,
       1 * 1000,
@@ -207,7 +186,7 @@ class LiveChatManager {
       type: "gift",
       num: Number.parseInt(res[1]),
       formatedTime: "???", // todo: livechat emitter update
-      id: this.#counts.giftCount + "", // todo: given by emitter module
+      id: this.#membershipsAndGifts.length + "", // todo: given by emitter module
     } satisfies ExtendedMembershipAndGiftItem;
 
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
