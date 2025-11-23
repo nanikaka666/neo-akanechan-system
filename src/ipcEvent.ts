@@ -292,27 +292,12 @@ export interface IpcEvent {
   tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
 
   /**
-   * Notify latest 1000 text chats to renderer.
-   */
-  tellTextChats: (textChats: ExtendedChatItemText[], textChatNum: number) => void;
-
-  /**
-   * Notify all superchat and supersticker item to renderer.
-   */
-  tellSuperChats: (superChats: ExtendedSuperItem[], superChatsNum: number) => void;
-
-  /**
    * Notify all memberships and gifts item to renderer.
    */
   tellMembershipsAndGifts: (
     membershipsAndGifts: ExtendedMembershipAndGiftItem[],
     membershipsAndGiftsNum: number,
   ) => void;
-
-  /**
-   * Notify all stocks to renderer.
-   */
-  tellStocks: (stocks: ExtendedChatItemText[], stocksNum: number) => void;
 
   /**
    * Add chat item to stock list.
@@ -348,13 +333,6 @@ export interface IpcEvent {
    * transit MainAppPage status to "liveSelection"
    */
   quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
-
-  /**
-   * Notify latest focused item.
-   *
-   * `undefined` means nothing focused item.
-   */
-  tellFocus: (focus?: FocusedOnChatItem) => void;
 
   /**
    * Update focus item.
