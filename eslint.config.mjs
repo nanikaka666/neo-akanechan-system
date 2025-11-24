@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
+import reactPlugin from "eslint-plugin-react";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,20 +26,31 @@ export default defineConfig([
     ".webpack/**/*.js",
   ]),
   {
-    extends: fixupConfigRules(
-      compat.extends(
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:import/recommended",
-        "plugin:import/electron",
-        "plugin:import/typescript",
+    extends: [
+      ...fixupConfigRules(
+        compat.extends(
+          "eslint:recommended",
+          "plugin:@typescript-eslint/eslint-recommended",
+          "plugin:@typescript-eslint/recommended",
+          "plugin:import/recommended",
+          "plugin:import/electron",
+          "plugin:import/typescript",
+        ),
       ),
-    ),
+      reactPlugin.configs.flat.recommended,
+      reactPlugin.configs.flat["jsx-runtime"], // if React +17, need it
+    ],
+
+    settings: {
+      react: {
+        version: "detect", // for avoid warning.
+      },
+    },
 
     files: ["**/*.ts", "**/*.tsx"],
 
     languageOptions: {
+      ...reactPlugin.configs.flat.recommended.languageOptions,
       globals: {
         ...globals.browser,
         ...globals.node,
