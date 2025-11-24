@@ -1,7 +1,7 @@
 import { ExtendedChatItemText } from "../../../../ipcEvent";
 import { Author } from "./Author";
 import { Messages } from "./Messages";
-import { StockButton } from "./StockButton";
+import { StockForm } from "./StockForm";
 import { FocusForm } from "./FocusForm";
 
 export function TextChatItem({ item }: { item: ExtendedChatItemText }) {
@@ -9,7 +9,7 @@ export function TextChatItem({ item }: { item: ExtendedChatItemText }) {
     <div style={item.isFirst ? { backgroundColor: "yellowgreen" } : {}}>
       <Author author={item.author} />
       <Messages messages={item.messages} />
-      <StockButton item={item} />
+      <StockForm item={item} />
       <FocusForm item={item} />
     </div>
   );

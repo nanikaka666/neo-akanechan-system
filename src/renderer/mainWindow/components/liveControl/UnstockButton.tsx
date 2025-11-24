@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ExtendedChatItemText } from "../../../../ipcEvent";
 
-export function StockButton({ item }: { item: ExtendedChatItemText }) {
+export function UnstockButton({ item }: { item: ExtendedChatItemText }) {
   const [disabled, setDisabled] = useState(false);
 
   return (
@@ -10,11 +10,11 @@ export function StockButton({ item }: { item: ExtendedChatItemText }) {
         e.preventDefault();
         e.stopPropagation();
         setDisabled((_) => true);
-        window.ipcApi.requestAddStock(item);
+        window.ipcApi.requestRemoveStock(item);
       }}
       disabled={disabled}
     >
-      ストックする
+      ストックから外す
     </button>
   );
 }
