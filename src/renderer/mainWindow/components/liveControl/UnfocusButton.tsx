@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { FocusedOnChatItem } from "../../../../ipcEvent";
 
-export function FocusButton({ item }: { item: FocusedOnChatItem }) {
+export function UnfocusButton() {
   const [disabled, setDisabled] = useState(false);
 
   return (
@@ -11,10 +10,10 @@ export function FocusButton({ item }: { item: FocusedOnChatItem }) {
         e.preventDefault();
         e.stopPropagation();
         setDisabled((_) => true);
-        window.ipcApi.requestUpdateFocus(item);
+        window.ipcApi.requestUpdateFocus(undefined);
       }}
     >
-      フォーカスする
+      フォーカスを外す
     </button>
   );
 }

@@ -1,6 +1,6 @@
 import { ExtendedChatItemSuperSticker } from "../../../../ipcEvent";
 import { Author } from "./Author";
-import { FocusButton } from "./FocusButton";
+import { FocusForm } from "./FocusForm";
 import { Messages } from "./Messages";
 
 export function SuperStickerItem({ item }: { item: ExtendedChatItemSuperSticker }) {
@@ -13,7 +13,7 @@ export function SuperStickerItem({ item }: { item: ExtendedChatItemSuperSticker 
       {item.messages && <Messages messages={item.messages} />}
 
       <img src={item.superSticker.thumbnails[0].url} style={{ width: "64px" }} />
-      <FocusButton item={item} />
+      <FocusForm item={item} />
     </div>
   );
 }
