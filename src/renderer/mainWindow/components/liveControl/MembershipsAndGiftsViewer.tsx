@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { ExtendedMembershipAndGiftItem } from "../../../../ipcEvent";
 import { RangeInfo } from "./CommentViewer";
@@ -14,13 +14,13 @@ export function MembershipsAndGiftsViewer({
 }) {
   const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
-  const [rangeInfo, setRangeInfo] = useState<RangeInfo>();
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
-  useEffect(() => {
-    if (membershipsAndGifts.length !== 0) {
-      setRangeInfo((_) => {
-        return {
+  const rangeInfo: RangeInfo | undefined =
+    membershipsAndGifts.length !== 0 &&
+    range.startIndex < membershipsAndGifts.length &&
+    range.endIndex < membershipsAndGifts.length
+      ? {
           time: {
             start: membershipsAndGifts[range.startIndex].formatedTime,
             end: membershipsAndGifts[range.endIndex].formatedTime,
@@ -29,10 +29,8 @@ export function MembershipsAndGiftsViewer({
             start: range.startIndex + 1,
             end: range.endIndex + 1,
           },
-        };
-      });
-    }
-  }, [membershipsAndGifts, range]);
+        }
+      : undefined;
 
   return (
     <div>
