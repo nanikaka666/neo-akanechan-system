@@ -5,15 +5,11 @@ import {
   OAuth2Client,
   GenerateAuthUrlOpts,
   CodeChallengeMethod,
-  Credentials,
 } from "google-auth-library";
 import { URL } from "node:url";
 import destroyer from "server-destroy";
-// import { getCredentials, saveCredentials, store } from "./storage";
 import credentialsJson from "./oauthClientCredentials.json";
-import { StorageService } from "../storage/storageService";
 import { getStorageService } from "../storage";
-// import { webContentsSendWrapper } from "../../ipcEvent";
 
 let authClient: OAuth2Client | undefined;
 
@@ -25,21 +21,11 @@ export function isUserAuthorized() {
  * If the credentials stored, retrieve it.
  */
 export async function setupAuth() {
-  //   const credentials = getCredentials();
-  //   if (credentials) {
-  //     authClient = new OAuth2Client(OAUTH_CLIENT_OPTIONS);
-  //     authClient.setCredentials(credentials);
-  //     if (isExpired(credentials)) {
-  //       console.log("Refresh Access Token explicitly.");
-  //       try {
-  //         const res = await authClient.refreshAccessToken();
-  //         saveCredentials(res.credentials);
-  //         console.log("After refresh token client: ", authClient);
-  //       } catch (e: unknown) {
-  //         console.log(e);
-  //       }
-  //     }
-  //   }
+  const credentials = getStorageService().getAuthCredentials();
+  if (credentials) {
+    authClient = new OAuth2Client(OAUTH_CLIENT_OPTIONS);
+    authClient.setCredentials(credentials);
+  }
 }
 
 const PORT = 49999;
@@ -52,21 +38,11 @@ const OAUTH_CLIENT_OPTIONS: OAuth2ClientOptions = {
 /**
  * Begin auth flow.
  */
-export async function doAuthFlow(w: WebContents): Promise<boolean> {
+export async function doAuthFlow(): Promise<boolean> {
   // if local scope possess client instance, auth flow already finished.
   if (authClient) {
     return true;
   }
-
-  // if the auth credentials already stored, return immediately OAuth2Client.
-  //   const credentials = getCredentials();
-  //   if (credentials) {
-  //     console.log("NOw", new Date().getTime());
-  //     const client = new OAuth2Client(OAUTH_CLIENT_OPTIONS);
-  //     client.setCredentials(credentials);
-  //     authClient = client;
-  //     return authClient;
-  //   }
 
   const client = new OAuth2Client(OAUTH_CLIENT_OPTIONS);
 
@@ -130,8 +106,6 @@ export async function doAuthFlow(w: WebContents): Promise<boolean> {
             response.end(`Authentication successful!!`);
             server.destroy();
 
-            // todo: mainWindow.focus for convenient
-
             authClient = client;
             resolve(true);
           } else {
@@ -170,6 +144,11 @@ export async function revokeCredentials(w: WebContents) {
   }
 }
 
+/**
+ * Get Access Token.
+ *
+ * It is valid in at least 5 minutes.
+ */
 export async function getAccessToken() {
   if (!authClient) {
     return undefined;

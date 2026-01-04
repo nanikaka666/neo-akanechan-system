@@ -142,6 +142,13 @@ export class StorageService {
   }
 
   /**
+   * Retrieve auth credentials.
+   */
+  getAuthCredentials() {
+    return this.#dao.get("authCredentials");
+  }
+
+  /**
    * Set credentials of Google OAuth.
    *
    * NOTE: this value must be encrypted but not here, because safeStorage is unavailable in apps which not code-signed.
