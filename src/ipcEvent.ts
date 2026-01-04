@@ -11,6 +11,13 @@ import {
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
 
 /**
+ * User doesn't authorized.
+ */
+export interface AuthPage {
+  type: "auth";
+}
+
+/**
  * Represents page which first status of this app.
  *
  * User does not any channel yet.
@@ -48,7 +55,12 @@ export interface InLivePage {
 /**
  * Represents MainApp status where user is in.
  */
-export type MainAppPage = BeginningBlankPage | LiveSelectionPage | LiveStandByPage | InLivePage;
+export type MainAppPage =
+  | AuthPage
+  | BeginningBlankPage
+  | LiveSelectionPage
+  | LiveStandByPage
+  | InLivePage;
 
 export interface ChannelSummary {
   channelId: ChannelId;
@@ -314,7 +326,7 @@ export interface IpcEvent {
   /**
    * Return MainAppPage for initial status.
    */
-  getInitialMainAppPage: () => BeginningBlankPage | LiveSelectionPage;
+  getInitialMainAppPage: () => AuthPage | BeginningBlankPage | LiveSelectionPage;
 
   /**
    * Notify latest MainAppPage to renderer.

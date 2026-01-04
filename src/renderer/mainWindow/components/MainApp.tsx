@@ -25,6 +25,8 @@ export function MainApp() {
       <LiveControlPanelInStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveSelection" ? (
       <MainChannelTopLoader mainChannelId={mainAppPage.mainChannelId} />
+    ) : mainAppPage.type === "auth" ? (
+      <div>Auth page</div>
     ) : (
       <ChannelRegistrationLoader />
     )

@@ -4,7 +4,13 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
-import { BeginningBlankPage, ChannelSummary, InLivePage, LiveSelectionPage } from "../ipcEvent";
+import {
+  AuthPage,
+  BeginningBlankPage,
+  ChannelSummary,
+  InLivePage,
+  LiveSelectionPage,
+} from "../ipcEvent";
 import {
   cleanUpLiveChatEmitter,
   getLiveChatManager,
@@ -20,6 +26,7 @@ import {
   setupSubscriberCountEmitter,
 } from "./emitter/subscriberCountManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
+import { isUserAuthorized } from "./auth/google";
 
 async function getChannelSummary(channelId: ChannelId) {
   return {
@@ -219,6 +226,9 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("getInitialMainAppPage", () => {
+    if (!isUserAuthorized()) {
+      return Promise.resolve({ type: "auth" } satisfies AuthPage);
+    }
     const maybeMainChannelId = getStorageService().getMainChannelId();
     if (maybeMainChannelId) {
       return Promise.resolve({
