@@ -1,3 +1,24 @@
+export interface Image {
+  url: string;
+  width: number;
+  height: number;
+}
+
+export interface Channel {
+  id: ChannelId;
+  snippet?: {
+    title: string;
+    description: string;
+    customUrl: string;
+    publishedAt: Date;
+    thumbnails: {
+      default: Image;
+      medium: Image;
+      high: Image;
+    };
+  };
+}
+
 export class ChannelId {
   readonly id: string;
   constructor(id: string) {
