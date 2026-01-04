@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { ExtendedChatItemText } from "../../../../ipcEvent";
 import { RangeInfo } from "./CommentViewer";
@@ -13,17 +13,13 @@ export function TextChatViewer({
 }) {
   const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
-  const [rangeInfo, setRangeInfo] = useState<RangeInfo>();
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
-  useEffect(() => {
-    if (
-      textChats.length !== 0 &&
-      range.startIndex < textChats.length &&
-      range.endIndex < textChats.length
-    ) {
-      setRangeInfo((_) => {
-        return {
+  const rangeInfo: RangeInfo | undefined =
+    textChats.length !== 0 &&
+    range.startIndex < textChats.length &&
+    range.endIndex < textChats.length
+      ? {
           time: {
             start: textChats[range.startIndex].formatedTime,
             end: textChats[range.endIndex].formatedTime,
@@ -32,10 +28,8 @@ export function TextChatViewer({
             start: textChats[range.startIndex].indexOfWhole,
             end: textChats[range.endIndex].indexOfWhole,
           },
-        };
-      });
-    }
-  }, [textChats, range]);
+        }
+      : undefined;
 
   return (
     <div>

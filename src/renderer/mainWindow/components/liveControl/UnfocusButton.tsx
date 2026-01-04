@@ -1,20 +1,19 @@
 import { useState } from "react";
-import { ExtendedChatItemText } from "../../../../ipcEvent";
 
-export function StockButton({ item }: { item: ExtendedChatItemText }) {
+export function UnfocusButton() {
   const [disabled, setDisabled] = useState(false);
 
   return (
     <button
+      disabled={disabled}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
         setDisabled((_) => true);
-        window.ipcApi.requestAddStock(item);
+        window.ipcApi.requestUpdateFocus(undefined);
       }}
-      disabled={disabled}
     >
-      ストックする
+      フォーカスを外す
     </button>
   );
 }
