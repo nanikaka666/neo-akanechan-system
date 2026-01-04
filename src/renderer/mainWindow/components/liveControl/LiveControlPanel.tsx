@@ -14,7 +14,7 @@ export function LiveControlPanel({
 
   useEffect(() => {
     window.ipcApi.requestLaunchEmitters(liveLaunchProperties).then(console.log);
-  }, []);
+  }, [liveLaunchProperties]);
 
   return (
     <>
