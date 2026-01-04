@@ -284,4 +284,9 @@ export function setupIpcMainHandlers() {
     getLiveChatManager().updateFocus(focus);
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("startAuthFlow", () => {
+    console.log("start!!");
+    return Promise.resolve(true);
+  });
 }

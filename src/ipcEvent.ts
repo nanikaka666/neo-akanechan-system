@@ -354,4 +354,9 @@ export interface IpcEvent {
    * Notify latest chat data.
    */
   tellChats: (chats: Chats) => void;
+
+  /**
+   * Start auth flow.
+   */
+  startAuthFlow: () => boolean;
 }
