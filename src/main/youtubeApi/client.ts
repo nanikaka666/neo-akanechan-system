@@ -1,7 +1,14 @@
 import axios from "axios";
 import { getAccessToken } from "../auth/google";
+import { ChannelId } from "./model";
 
+/**
+ * Handle access to Youtube Data and LiveStreaming API
+ */
 export const YoutubeApiClient = {
+  /**
+   * Get ChannelId of user's channel.
+   */
   getChannelIdOfMine: async () => {
     const accessToken = await getAccessToken();
     if (!accessToken) {
@@ -18,7 +25,6 @@ export const YoutubeApiClient = {
       return undefined;
     }
 
-    console.log(res.data.items[0].id);
-    return res.data.items[0].id as string;
+    return new ChannelId(res.data.items[0].id);
   },
 };
