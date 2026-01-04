@@ -2,6 +2,7 @@ import { ChannelId } from "youtube-live-scraper";
 import { StorageDao } from "./types";
 import { UserSettings } from "../userSettings";
 import { ChannelSummary } from "../../ipcEvent";
+import { Credentials } from "google-auth-library";
 
 /**
  * This class operates storage data controls.
@@ -138,6 +139,17 @@ export class StorageService {
     } else {
       this.#dao.set("userSettings", { ...current, ...{ [channelId.id]: settings } });
     }
+  }
+
+  /**
+   * Set credentials of Google OAuth.
+   *
+   * NOTE: this value must be encrypted but not here, because safeStorage is unavailable in apps which not code-signed.
+   *
+   * @param credentials
+   */
+  registerAuthCredentials(credentials: Credentials) {
+    this.#dao.set("authCredentials", credentials);
   }
 
   /**

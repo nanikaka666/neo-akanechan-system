@@ -26,7 +26,7 @@ import {
   setupSubscriberCountEmitter,
 } from "./emitter/subscriberCountManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
-import { isUserAuthorized } from "./auth/google";
+import { doAuthFlow, isUserAuthorized } from "./auth/google";
 
 async function getChannelSummary(channelId: ChannelId) {
   return {
@@ -285,8 +285,10 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("startAuthFlow", () => {
-    console.log("start!!");
-    return Promise.resolve(true);
+  IpcMainWrapper.handle("startAuthFlow", async (e) => {
+    if (await doAuthFlow(e.sender)) {
+      return true;
+    }
+    return false;
   });
 }

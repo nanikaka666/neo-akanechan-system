@@ -1,3 +1,4 @@
+import { Credentials } from "google-auth-library";
 import { UserSettings } from "../userSettings";
 
 /**
@@ -7,6 +8,7 @@ export interface StorageData {
   mainChannelId: string;
   registeredChannelIds: string[];
   userSettings: Record<string, Partial<UserSettings>>;
+  authCredentials: Credentials;
 }
 
 /**

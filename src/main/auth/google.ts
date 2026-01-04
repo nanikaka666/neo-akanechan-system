@@ -11,6 +11,8 @@ import { URL } from "node:url";
 import destroyer from "server-destroy";
 // import { getCredentials, saveCredentials, store } from "./storage";
 import credentialsJson from "./oauthClientCredentials.json";
+import { StorageService } from "../storage/storageService";
+import { getStorageService } from "../storage";
 // import { webContentsSendWrapper } from "../../ipcEvent";
 
 let authClient: OAuth2Client | undefined;
@@ -47,10 +49,13 @@ const OAUTH_CLIENT_OPTIONS: OAuth2ClientOptions = {
   redirectUri: `http://127.0.0.1:${PORT}/auth/receive`,
 };
 
-export async function getOAuthClient(w: WebContents): Promise<OAuth2Client> {
-  // if local scope possess client instance, return it.
+/**
+ * Begin auth flow.
+ */
+export async function doAuthFlow(w: WebContents): Promise<boolean> {
+  // if local scope possess client instance, auth flow already finished.
   if (authClient) {
-    return authClient;
+    return true;
   }
 
   // if the auth credentials already stored, return immediately OAuth2Client.
@@ -113,12 +118,10 @@ export async function getOAuthClient(w: WebContents): Promise<OAuth2Client> {
             console.log(token);
 
             // store to storage
-            // saveCredentials(token.tokens);
+            getStorageService().registerAuthCredentials(token.tokens);
 
             // tell to renderer
             // webContentsSendWrapper(w, "tellCredentials", token.tokens);
-
-            // retrieve for test
 
             // set credentials to OAuth2Client
             client.setCredentials(token.tokens);
@@ -130,7 +133,7 @@ export async function getOAuthClient(w: WebContents): Promise<OAuth2Client> {
             // todo: mainWindow.focus for convenient
 
             authClient = client;
-            resolve(authClient);
+            resolve(true);
           } else {
             reject(new Error("url pattern is unexpected."));
           }
