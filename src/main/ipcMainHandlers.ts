@@ -44,17 +44,6 @@ async function checkChannelExistence(inputChannelId: string) {
   return channel ? convertToChannelSummary(channel) : undefined;
 }
 
-async function getChannelSummary(channelId: ChannelId) {
-  // todo: implements here
-  return {
-    channelId: new ChannelId("UCtysnf2SGXI9IQi-WLFv0vw"),
-    channelTitle: "nanikaka",
-    subscribersCount: 100,
-    ownerIcon: "hoge",
-    channelBanner: "banner",
-  } satisfies ChannelSummary;
-}
-
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("checkExistenceOfChannel", async (e, inputChannelId) => {
     try {
