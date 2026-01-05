@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { UserSettings } from "../../../../main/userSettings";
 import { UserSettingsForm } from "./UserSettingsForm";
 
-export function UserSettingsFormLoader() {
+export function UserSettingsFormLoader({ turnOff }: { turnOff: () => void }) {
   const [userSettings, setUserSettings] = useState<UserSettings>();
 
   useEffect(() => {
@@ -11,9 +11,10 @@ export function UserSettingsFormLoader() {
     });
     const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, settings) => {
       setUserSettings((_) => settings);
+      turnOff();
     });
     return () => remover();
-  }, []);
+  }, [turnOff]);
 
   return userSettings ? (
     <UserSettingsForm userSettings={userSettings} />

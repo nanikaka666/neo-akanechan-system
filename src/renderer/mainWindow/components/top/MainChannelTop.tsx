@@ -28,7 +28,7 @@ export function MainChannelTop({
       <ChannelSummaryView channelSummary={channel} />
       <button onClick={turnOn}>ライブの設定</button>
       <ReactModal isOpen={showModal} onRequestClose={turnOff}>
-        <UserSettingsFormLoader />
+        <UserSettingsFormLoader turnOff={turnOff} />
       </ReactModal>
       {liveBroadcasts.map((live) => {
         return (
