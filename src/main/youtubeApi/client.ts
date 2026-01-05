@@ -10,10 +10,7 @@ export const YoutubeApiClient = {
    * Get ChannelId of user's channel.
    */
   getChannelIdOfMine: async () => {
-    const accessToken = await getAccessToken();
-    if (!accessToken) {
-      throw new Error("Access Token unavailable.");
-    }
+    const accessToken = await googleAccessToken();
     const url = "https://www.googleapis.com/youtube/v3/channels";
 
     const res = await axios.get(url, {
@@ -39,10 +36,7 @@ export const YoutubeApiClient = {
       throw new Error(`Too many channel ids. Max is 50. Length: ${channelIds.length}`);
     }
 
-    const accessToken = await getAccessToken();
-    if (!accessToken) {
-      throw new Error("Access Token unavailable.");
-    }
+    const accessToken = await googleAccessToken();
     const url = "https://www.googleapis.com/youtube/v3/channels";
 
     const res = await axios.get(url, {
@@ -76,10 +70,7 @@ export const YoutubeApiClient = {
       ? { forHandle: channelIdishString }
       : { id: channelIdishString };
 
-    const accessToken = await getAccessToken();
-    if (!accessToken) {
-      throw new Error("Access Token unavailable.");
-    }
+    const accessToken = await googleAccessToken();
     const url = "https://www.googleapis.com/youtube/v3/channels";
 
     const res = await axios.get(url, {
@@ -100,6 +91,14 @@ export const YoutubeApiClient = {
     return buildChannel(res.data.items[0]);
   },
 };
+
+async function googleAccessToken() {
+  const accessToken = await getAccessToken();
+  if (!accessToken) {
+    throw new Error("Access Token unavailable.");
+  }
+  return accessToken;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildChannel(item: any): Channel {
