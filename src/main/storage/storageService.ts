@@ -1,6 +1,5 @@
 import { StorageDao } from "./types";
 import { UserSettings } from "../userSettings";
-import { ChannelSummary } from "../../ipcEvent";
 import { Credentials } from "google-auth-library";
 import { ChannelId } from "../youtubeApi/model";
 
@@ -32,12 +31,6 @@ export class StorageService {
     }
   }
 
-  getRegisteredChannelIds() {
-    return this.#dao.get("registeredChannelIds").map((id) => {
-      return new ChannelId(id);
-    });
-  }
-
   /**
    * Add channel id to list and mark as main channel.
    *
@@ -54,46 +47,6 @@ export class StorageService {
     this.#dao.set("registeredChannelIds", newList);
     this.#dao.set("mainChannelId", channelId.id);
     return true;
-  }
-
-  /**
-   * Switch main channel.
-   *
-   * main channel is must be listed in `registeredChannelIds`.
-   */
-  switchMainChannel(channelId: ChannelId) {
-    const list = this.#dao.get("registeredChannelIds") ?? [];
-
-    // check: channelId is registered.
-    if (list.filter((id) => id === channelId.id).length === 0) {
-      return false;
-    }
-    this.#dao.set("mainChannelId", channelId.id);
-    return true;
-  }
-
-  /**
-   * Delete channel data.
-   */
-  deleteChannel(channel: ChannelSummary) {
-    const nextChannelIds = (this.#dao.get("registeredChannelIds") ?? []).filter(
-      (id) => id !== channel.channelId.id,
-    );
-    this.#dao.set("registeredChannelIds", nextChannelIds);
-
-    if (this.#dao.get("mainChannelId") === channel.channelId.id) {
-      if (nextChannelIds.length === 0) {
-        this.#dao.delete("mainChannelId");
-      } else {
-        this.#dao.set("mainChannelId", nextChannelIds[0]);
-      }
-    }
-
-    // const userSettings = this.#dao.get("userSettings");
-    // if (userSettings !== undefined && channel.channelId.id in userSettings) {
-    //   const { [channel.channelId.id]: _, ...rest } = userSettings;
-    //   this.#dao.set("userSettings", rest);
-    // }
   }
 
   /**
