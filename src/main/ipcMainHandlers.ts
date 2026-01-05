@@ -1,4 +1,4 @@
-import { ChannelId, ChannelTitle } from "youtube-live-scraper";
+import { ChannelTitle } from "youtube-live-scraper";
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
@@ -27,6 +27,8 @@ import {
 } from "./emitter/subscriberCountManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
+import { YoutubeApiClient } from "./youtubeApi/client";
+import { ChannelId } from "./youtubeApi/model";
 
 async function getChannelSummary(channelId: ChannelId) {
   return {
@@ -48,9 +50,6 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("registerChannel", (e, channelId) => {
-    if (channelId.isHandle) {
-      return Promise.resolve(false);
-    }
     if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
       return Promise.resolve(false);
     }
@@ -286,9 +285,15 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("startAuthFlow", async (e) => {
-    if (await doAuthFlow()) {
-      return true;
+    if (!(await doAuthFlow())) {
+      return false;
     }
-    return false;
+    const channelId = await YoutubeApiClient.getChannelIdOfMine();
+    if (!channelId) {
+      throw new Error(
+        "Auth is succeeded, but your channel ID registration is failed. Please retry auth again.",
+      );
+    }
+    return true;
   });
 }

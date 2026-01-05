@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { ChannelTop } from "../../../../ipcEvent";
-import { ChannelId } from "youtube-live-scraper";
 import { ChannelHasNoClosestLiveView } from "./ChannelHasNoClosestLiveView";
 import { ChannelHavingClosestLiveView } from "./ChannelHavingClosestLiveView";
+import { ChannelId } from "../../../../main/youtubeApi/model";
 
 export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) {
   const [channelTop, setChannelTop] = useState<ChannelTop>();

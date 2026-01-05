@@ -1,7 +1,7 @@
 import { ChangeEvent, useState, MouseEvent } from "react";
-import { ChannelId } from "youtube-live-scraper";
 import type { Dispatch, SetStateAction } from "react";
 import { ChannelSummary } from "../../../../ipcEvent";
+import { ChannelId } from "../../../../main/youtubeApi/model";
 
 export function ChannelRegistrationForm({
   setIsComplete,
@@ -27,9 +27,10 @@ export function ChannelRegistrationForm({
       const res = await window.ipcApi.requestConfirmingInputChannelId(channelId);
 
       if (res === undefined) {
-        const msg = channelId.isHandle
-          ? `入力されたYoutubeハンドル ${channelId.id} に該当するチャンネルが見つかりませんでした`
-          : `入力されたチャンネルID ${channelId.id} に該当するチャンネルが見つかりませんでした`;
+        const msg = `入力されたチャンネルID ${channelId.id} に該当するチャンネルが見つかりませんでした`;
+        // const msg = channelId.isHandle
+        //   ? `入力されたYoutubeハンドル ${channelId.id} に該当するチャンネルが見つかりませんでした`
+        //   : `入力されたチャンネルID ${channelId.id} に該当するチャンネルが見つかりませんでした`;
         setErrorMessage((_) => msg);
       } else {
         setErrorMessage((_) => undefined);

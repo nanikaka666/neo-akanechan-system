@@ -1,4 +1,4 @@
-import { ChannelId, ChannelTitle, VideoTitle } from "youtube-live-scraper";
+import { ChannelTitle, VideoTitle } from "youtube-live-scraper";
 import { UserSettings } from "./main/userSettings";
 import {
   ChatItemSuperChat,
@@ -9,6 +9,7 @@ import {
   NewMembership,
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
+import { ChannelId } from "./main/youtubeApi/model";
 
 /**
  * User doesn't authorized.
