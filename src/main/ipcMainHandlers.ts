@@ -299,17 +299,17 @@ export function setupIpcMainHandlers() {
     if (!(await doAuthFlow())) {
       return false;
     }
-    const channelId = await YoutubeApiClient.getChannelIdOfMine();
-    if (!channelId) {
-      throw new Error(
-        "Auth is succeeded, but your channel ID registration is failed. Please retry auth again.",
-      );
+    try {
+      const channel = await YoutubeApiClient.getChannelOfMine();
+      getStorageService().registerChannelIdAndMarkAsMain(channel.id);
+      // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      //   type: "liveSelection",
+      //   mainChannelId: getStorageService().getMainChannelId()!,
+      // });
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
     }
-    getStorageService().registerChannelIdAndMarkAsMain(channelId);
-    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-    //   type: "liveSelection",
-    //   mainChannelId: getStorageService().getMainChannelId()!,
-    // });
-    return true;
   });
 }

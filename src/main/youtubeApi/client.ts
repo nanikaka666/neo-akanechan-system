@@ -7,22 +7,24 @@ import { Channel, ChannelId, LiveBroadcast, VideoId } from "./model";
  */
 export const YoutubeApiClient = {
   /**
-   * Get ChannelId of user's channel.
+   * Get Channel of user's channel.
    */
-  getChannelIdOfMine: async () => {
+  getChannelOfMine: async () => {
     const accessToken = await googleAccessToken();
     const url = "https://www.googleapis.com/youtube/v3/channels";
 
     const res = await axios.get(url, {
-      params: { mine: true, part: ["id"].join(",") },
+      params: {
+        mine: true,
+        part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
+      },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     if (res.status < 200 || 300 <= res.status) {
-      console.log(res);
-      return undefined;
+      throw new Error("Get Channels failed.");
     }
 
-    return new ChannelId(res.data.items[0].id);
+    return buildChannel(res.data.items[0]);
   },
 
   /**
