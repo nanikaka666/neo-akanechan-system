@@ -48,7 +48,7 @@ export const YoutubeApiClient = {
     const res = await axios.get(url, {
       params: {
         id: channelIds.map((channelId) => channelId.id).join(","),
-        part: ["id", "snippet", "brandingSettings"].join(","),
+        part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
         maxResults: channelIds.length,
       },
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -85,7 +85,7 @@ export const YoutubeApiClient = {
     const res = await axios.get(url, {
       params: {
         ...filter,
-        part: ["id", "snippet", "brandingSettings"].join(","),
+        part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
         maxResults: 1,
       },
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -115,6 +115,9 @@ function buildChannel(item: any): Channel {
       customUrl: item.snippet.customUrl,
       publishedAt: new Date(item.snippet.publishedAt),
       thumbnails: item.snippet.thumbnails,
+    },
+    statistics: {
+      subscriberCount: item.statistics.subscriberCount,
     },
     brandingSettings: {
       ...imageInBrandingSettings,
