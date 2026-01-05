@@ -31,20 +31,23 @@ import { YoutubeApiClient } from "./youtubeApi/client";
 import { ChannelId } from "./youtubeApi/model";
 
 async function checkChannelExistence(inputChannelId: string) {
-  return {
-    channelId: new ChannelId("UCtysnf2SGXI9IQi-WLFv0vw"),
-    channelTitle: new ChannelTitle("nanikaka"),
-    subscribersCount: 100,
-    ownerIcon: "hoge",
-    channelBanner: "banner",
-  } satisfies ChannelSummary;
+  const channel = await YoutubeApiClient.getChannel(inputChannelId);
+  return channel
+    ? ({
+        channelId: channel.id,
+        channelTitle: channel.snippet.title,
+        subscribersCount: channel.statistics.subscriberCount,
+        ownerIcon: channel.snippet.thumbnails.default.url,
+        channelBanner: channel.brandingSettings.image?.bannerExternalUrl,
+      } satisfies ChannelSummary)
+    : undefined;
 }
 
 async function getChannelSummary(channelId: ChannelId) {
   // todo: implements here
   return {
     channelId: new ChannelId("UCtysnf2SGXI9IQi-WLFv0vw"),
-    channelTitle: new ChannelTitle("nanikaka"),
+    channelTitle: "nanikaka",
     subscribersCount: 100,
     ownerIcon: "hoge",
     channelBanner: "banner",
@@ -186,7 +189,7 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${channel.channelTitle.title}`,
+      detail: `${channel.channelTitle}`,
     });
     if (res.response !== 0) {
       return false;

@@ -18,7 +18,7 @@ export interface ChannelStatistics {
  * BrandingSettings in Channel data structure in Youtube Api Response.
  */
 export interface BrandingSettings {
-  image: {
+  image?: {
     bannerExternalUrl: string;
   };
 }
@@ -28,10 +28,10 @@ export interface BrandingSettings {
  */
 export interface Channel {
   id: ChannelId;
-  snippet?: {
+  snippet: {
     title: string;
     description: string;
-    customUrl: string;
+    customUrl?: string;
     publishedAt: Date;
     thumbnails: {
       default: Image;
@@ -39,8 +39,8 @@ export interface Channel {
       high: Image;
     };
   };
-  statistics?: ChannelStatistics;
-  brandingSettings?: BrandingSettings;
+  statistics: ChannelStatistics;
+  brandingSettings: BrandingSettings;
 }
 
 export class ChannelId {

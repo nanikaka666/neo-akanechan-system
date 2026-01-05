@@ -72,7 +72,7 @@ export function ChannelRegistrationForm({
       <div>
         <img src={channelData.ownerIcon} style={{ width: "64px", height: "64px" }}></img>
       </div>
-      <div>{channelData.channelTitle.title}</div>
+      <div>{channelData.channelTitle}</div>
       <div>{channelData.subscribersCount} 人</div>
       <div>このチャンネルをアプリに登録しますか？</div>
       <button onClick={onClickConfirmationYes}>OK</button>

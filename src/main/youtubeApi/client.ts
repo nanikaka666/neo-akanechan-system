@@ -48,7 +48,7 @@ export const YoutubeApiClient = {
     const res = await axios.get(url, {
       params: {
         id: channelIds.map((channelId) => channelId.id).join(","),
-        part: ["id", "snippet"].join(","),
+        part: ["id", "snippet", "brandingSettings"].join(","),
         maxResults: channelIds.length,
       },
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -103,27 +103,21 @@ export const YoutubeApiClient = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildChannel(item: any): Channel {
-  const snippet =
-    "snippet" in item
-      ? {
-          title: item.snippet.title,
-          description: item.snippet.description,
-          customUrl: item.snippet.customUrl,
-          publishedAt: new Date(item.snippet.publishedAt),
-          thumbnails: item.snippet.thumbnails,
-        }
-      : {};
-  const brandingSettings =
-    "brandingSettings" in item
-      ? {
-          image: {
-            bannerExternalUrl: item.brandingSettings.image.bannerExternalUrl,
-          },
-        }
+  const imageInBrandingSettings =
+    "image" in item.brandingSettings
+      ? { image: { bannerExternalUrl: item.brandingSettings.image.bannerExternalUrl } }
       : {};
   return {
     id: new ChannelId(item.id),
-    ...snippet,
-    ...brandingSettings,
-  } satisfies Channel;
+    snippet: {
+      title: item.snippet.title,
+      description: item.snippet.description,
+      customUrl: item.snippet.customUrl,
+      publishedAt: new Date(item.snippet.publishedAt),
+      thumbnails: item.snippet.thumbnails,
+    },
+    brandingSettings: {
+      ...imageInBrandingSettings,
+    },
+  } as Channel;
 }

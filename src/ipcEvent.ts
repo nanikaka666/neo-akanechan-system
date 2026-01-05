@@ -1,4 +1,4 @@
-import { ChannelTitle, VideoTitle } from "youtube-live-scraper";
+import { VideoTitle } from "youtube-live-scraper";
 import { UserSettings } from "./main/userSettings";
 import {
   ChatItemSuperChat,
@@ -65,7 +65,7 @@ export type MainAppPage =
 
 export interface ChannelSummary {
   channelId: ChannelId;
-  channelTitle: ChannelTitle;
+  channelTitle: string;
   subscribersCount: number;
   ownerIcon: string;
   channelBanner?: string;

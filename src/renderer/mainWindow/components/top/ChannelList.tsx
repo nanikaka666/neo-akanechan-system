@@ -48,7 +48,7 @@ export function ChannelList({ currentMainChannelId }: { currentMainChannelId: Ch
             }}
           >
             <img src={channel.ownerIcon} style={{ width: "32px", height: "32px" }} />
-            {channel.channelTitle.title}
+            {channel.channelTitle}
             <button onClick={(e) => deleteChannel(e, channel)}>削除</button>
           </div>
         );

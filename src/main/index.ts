@@ -6,6 +6,7 @@ import { platform } from "./environment";
 import { setupIpcMainHandlers } from "./ipcMainHandlers";
 import { setupReactDevtools } from "./reactDevtools";
 import { setupAuth } from "./auth/google";
+import { YoutubeApiClient } from "./youtubeApi/client";
 
 /**
  * Quit when all windows are closed, except on macOS. There, it's common
@@ -47,6 +48,8 @@ function main() {
     setupApplicationMenu();
     await setupReactDevtools();
     await setupAuth();
+
+    console.log(await YoutubeApiClient.getChannel("@KazunokoChannel"));
 
     createMainWindow();
     app.on("activate", onActivate);
