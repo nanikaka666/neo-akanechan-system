@@ -308,6 +308,11 @@ export function setupIpcMainHandlers() {
         "Auth is succeeded, but your channel ID registration is failed. Please retry auth again.",
       );
     }
+    getStorageService().registerChannelIdAndMarkAsMain(channelId);
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveSelection",
+      mainChannelId: getStorageService().getMainChannelId()!,
+    });
     return true;
   });
 }
