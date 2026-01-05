@@ -28,7 +28,6 @@ export interface IpcApi {
     requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
     registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
     requestRegisteredChannels: Invoke<"getRegisterdChannels">;
-    requestSwitchMainChannel: Invoke<"switchMainChannel">;
     requestDeletingChannel: Invoke<"deleteChannelWithUserConfirmation">;
     registerUpdatedChannelListListener: Listen<"tellUpdatedChannelIds">;
     requestLaunchEmitters: Invoke<"launchEmitters">;
@@ -61,7 +60,6 @@ export const IpcApi: IpcApi = {
     registerUpdatedUserSettingsListener: (callback) =>
       IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
     requestRegisteredChannels: () => IpcRendererWrapper.invoke("getRegisterdChannels"),
-    requestSwitchMainChannel: (to) => IpcRendererWrapper.invoke("switchMainChannel", to),
     requestDeletingChannel: (channel) =>
       IpcRendererWrapper.invoke("deleteChannelWithUserConfirmation", channel),
     registerUpdatedChannelListListener: (callback) =>

@@ -149,17 +149,6 @@ export function setupIpcMainHandlers() {
     );
   });
 
-  IpcMainWrapper.handle("switchMainChannel", (e, to) => {
-    if (getStorageService().switchMainChannel(to)) {
-      // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      //   type: "liveSelection",
-      //   mainChannelId: to,
-      // } satisfies LiveSelectionPage);
-      return Promise.resolve(true);
-    }
-    return Promise.resolve(false);
-  });
-
   IpcMainWrapper.handle("deleteChannelWithUserConfirmation", async (e, channel) => {
     const window = BrowserWindow.fromWebContents(e.sender);
     if (window === null) {

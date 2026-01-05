@@ -235,14 +235,6 @@ export interface IpcEvent {
   checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
 
   /**
-   * Switch "MainChannel" to another one.
-   *
-   * The channel id must be stored in storage.
-   * when failed switching, `false` will be returned.
-   */
-  switchMainChannel: (to: ChannelId) => boolean;
-
-  /**
    * Delete channel data from storage.
    *
    * it affects on registeredChannelIds, userSettings, mainChannelId.
