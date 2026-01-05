@@ -57,10 +57,10 @@ export function setupIpcMainHandlers() {
     if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
       return Promise.resolve(false);
     }
-    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      type: "liveSelection",
-      mainChannelId: channelId,
-    } satisfies LiveSelectionPage);
+    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+    //   type: "liveSelection",
+    //   mainChannelId: channelId,
+    // } satisfies LiveSelectionPage);
     const res = await (
       await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
     ).map(convertToChannelSummary);
@@ -166,10 +166,10 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("switchMainChannel", (e, to) => {
     if (getStorageService().switchMainChannel(to)) {
-      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-        type: "liveSelection",
-        mainChannelId: to,
-      } satisfies LiveSelectionPage);
+      // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      //   type: "liveSelection",
+      //   mainChannelId: to,
+      // } satisfies LiveSelectionPage);
       return Promise.resolve(true);
     }
     return Promise.resolve(false);
@@ -195,16 +195,16 @@ export function setupIpcMainHandlers() {
     getStorageService().deleteChannel(channel);
     const latestMainChannelId = getStorageService().getMainChannelId();
     if (oldMainChannelId?.id !== latestMainChannelId?.id) {
-      WebContentsWrapper.send(
-        e.sender,
-        "tellMainAppPage",
-        latestMainChannelId
-          ? ({
-              type: "liveSelection",
-              mainChannelId: latestMainChannelId,
-            } satisfies LiveSelectionPage)
-          : ({ type: "beginningBlank" } satisfies BeginningBlankPage),
-      );
+      // WebContentsWrapper.send(
+      //   e.sender,
+      //   "tellMainAppPage",
+      //   latestMainChannelId
+      //     ? ({
+      //         type: "liveSelection",
+      //         mainChannelId: latestMainChannelId,
+      //       } satisfies LiveSelectionPage)
+      //     : ({ type: "beginningBlank" } satisfies BeginningBlankPage),
+      // );
     }
     const nextChannels = await (
       await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
@@ -233,7 +233,7 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(getLiveChatManager().removeStock(item));
   });
 
-  IpcMainWrapper.handle("getInitialMainAppPage", () => {
+  IpcMainWrapper.handle("getInitialMainAppPage", async () => {
     if (!isUserAuthorized()) {
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
@@ -242,6 +242,8 @@ export function setupIpcMainHandlers() {
       return Promise.resolve({
         type: "liveSelection",
         mainChannelId: maybeMainChannelId,
+        channel: (await YoutubeApiClient.getChannels([maybeMainChannelId]))[0],
+        liveBroadcasts: await YoutubeApiClient.getLiveBroadcasts(),
       } satisfies LiveSelectionPage);
     } else {
       return Promise.resolve({ type: "beginningBlank" } satisfies BeginningBlankPage);
@@ -281,10 +283,10 @@ export function setupIpcMainHandlers() {
 
     cleanUpLiveStatistics();
 
-    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      type: "liveSelection",
-      mainChannelId: liveLaunchProperties.channel.channel.channelId,
-    } satisfies LiveSelectionPage);
+    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+    //   type: "liveSelection",
+    //   mainChannelId: liveLaunchProperties.channel.channel.channelId,
+    // } satisfies LiveSelectionPage);
     return true;
   });
 
@@ -304,10 +306,10 @@ export function setupIpcMainHandlers() {
       );
     }
     getStorageService().registerChannelIdAndMarkAsMain(channelId);
-    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      type: "liveSelection",
-      mainChannelId: getStorageService().getMainChannelId()!,
-    });
+    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+    //   type: "liveSelection",
+    //   mainChannelId: getStorageService().getMainChannelId()!,
+    // });
     return true;
   });
 }
