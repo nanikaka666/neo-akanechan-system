@@ -7,13 +7,11 @@ export function UserSettingsFormLoader({ channelSummary }: { channelSummary: Cha
   const [userSettings, setUserSettings] = useState<UserSettings>();
 
   useEffect(() => {
-    window.ipcApi.requestUserSettings(channelSummary.id).then((res) => {
+    window.ipcApi.requestUserSettings().then((res) => {
       setUserSettings((_) => res);
     });
-    const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, channelId, settings) => {
-      if (channelSummary.id.id === channelId.id) {
-        setUserSettings((_) => settings);
-      }
+    const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, settings) => {
+      setUserSettings((_) => settings);
     });
     return () => remover();
   }, []);

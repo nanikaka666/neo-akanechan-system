@@ -93,10 +93,10 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(UserSettingsService.getUserSettings());
   });
 
-  IpcMainWrapper.handle("saveUserSettings", (e, channelId, userSettings) => {
+  IpcMainWrapper.handle("saveUserSettings", (e, userSettings) => {
     try {
       UserSettingsService.setUserSettings(userSettings);
-      WebContentsWrapper.send(e.sender, "tellUpdatedUserSettings", channelId, userSettings);
+      WebContentsWrapper.send(e.sender, "tellUpdatedUserSettings", userSettings);
       return Promise.resolve(true);
     } catch (e: unknown) {
       console.log(e);

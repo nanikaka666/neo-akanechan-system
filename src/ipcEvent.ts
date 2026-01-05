@@ -256,7 +256,7 @@ export interface IpcEvent {
    *
    * if saving will be failed by some reasons, `false` will be returned.
    */
-  saveUserSettings: (channelId: ChannelId, userSettings: UserSettings) => boolean;
+  saveUserSettings: (userSettings: UserSettings) => boolean;
 
   /**
    * Check existance of difference of user settings.
@@ -266,7 +266,7 @@ export interface IpcEvent {
   /**
    * Notify updated UserSettings to renderer.
    */
-  tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
+  tellUpdatedUserSettings: (settings: UserSettings) => void;
 
   /**
    * Notify all memberships and gifts item to renderer.
