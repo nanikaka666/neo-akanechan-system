@@ -235,11 +235,6 @@ export interface IpcEvent {
   checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
 
   /**
-   * Get data for main channel top page.
-   */
-  getChannelTop: (channelId: ChannelId) => ChannelTop | undefined;
-
-  /**
    * Confirm to user that overlay feature should starts.
    */
   startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;

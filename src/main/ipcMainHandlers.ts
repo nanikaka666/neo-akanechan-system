@@ -53,41 +53,6 @@ export function setupIpcMainHandlers() {
     }
   });
 
-  IpcMainWrapper.handle("getChannelTop", async (e, channelId) => {
-    return Promise.resolve(undefined);
-    // try {
-    //   const channel = await getChannelSummary(channelId);
-    //   const maybeClosestLivePage = await PageFetcher.getLivePage(channelId);
-
-    //   const closestLive =
-    //     maybeClosestLivePage.type === "channel"
-    //       ? undefined
-    //       : {
-    //           title: Scraper.getVideoTitle(maybeClosestLivePage),
-    //           // thumbnail: Scraper.getVideoThumbnail(maybeClosestLivePage),
-    //           thumbnail: `https://i.ytimg.com/vi/${maybeClosestLivePage.videoId.id}/maxresdefault.jpg`, // temporary aid
-    //           // isOnAir: Scraper.isLiveNow(maybeClosestLivePage),
-    //           isOnAir: !maybeClosestLivePage.html.includes(`"scheduledStartTime"`), // temporary aid
-    //         };
-
-    //   if (closestLive === undefined) {
-    //     return {
-    //       type: "has_no_closest_live",
-    //       channel: channel,
-    //     };
-    //   } else {
-    //     return {
-    //       type: "has_closest_live",
-    //       channel: channel,
-    //       closestLive: closestLive,
-    //     };
-    //   }
-    // } catch (e: unknown) {
-    //   console.log(e);
-    //   return undefined;
-    // }
-  });
-
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channelHavingClosestLive) => {
     if (BrowserWindow.getAllWindows().length === 2) {
       // already overlay window opened.
