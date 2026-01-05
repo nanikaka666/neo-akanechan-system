@@ -132,7 +132,7 @@ export function setupIpcMainHandlers() {
       type: "liveStandBy",
       liveLaunchProperties: {
         channel: channelHavingClosestLive,
-        settings: UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
+        settings: UserSettingsService.getUserSettings(),
         overlayWindowTitle: overlayWindowTitle,
       },
     });
@@ -140,12 +140,12 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("getUserSettings", (e, channelId) => {
-    return Promise.resolve(UserSettingsService.getUserSettings(channelId));
+    return Promise.resolve(UserSettingsService.getUserSettings());
   });
 
   IpcMainWrapper.handle("saveUserSettings", (e, channelId, userSettings) => {
     try {
-      UserSettingsService.setUserSettings(channelId, userSettings);
+      UserSettingsService.setUserSettings(userSettings);
       WebContentsWrapper.send(e.sender, "tellUpdatedUserSettings", channelId, userSettings);
       return Promise.resolve(true);
     } catch (e: unknown) {

@@ -89,11 +89,11 @@ export class StorageService {
       }
     }
 
-    const userSettings = this.#dao.get("userSettings");
-    if (userSettings !== undefined && channel.channelId.id in userSettings) {
-      const { [channel.channelId.id]: _, ...rest } = userSettings;
-      this.#dao.set("userSettings", rest);
-    }
+    // const userSettings = this.#dao.get("userSettings");
+    // if (userSettings !== undefined && channel.channelId.id in userSettings) {
+    //   const { [channel.channelId.id]: _, ...rest } = userSettings;
+    //   this.#dao.set("userSettings", rest);
+    // }
   }
 
   /**
@@ -102,16 +102,8 @@ export class StorageService {
    * if no settings, `undefined` will be returned.
    * this function return *Partial* UserSettings because StorageData has possibility changing structure.
    */
-  getUserSettings(channelId: ChannelId): Partial<UserSettings> | undefined {
-    const res = this.#dao.get("userSettings");
-    if (res === undefined) {
-      return undefined;
-    }
-    if (channelId.id in res) {
-      return res[channelId.id];
-    } else {
-      return undefined;
-    }
+  getUserSettings(): Partial<UserSettings> | undefined {
+    return this.#dao.get("userSettings");
   }
 
   /**
@@ -120,13 +112,8 @@ export class StorageService {
    * given new user settings must be complete shape UserSettings.
    * old settings data will be completely rewrote.
    */
-  registerUserSettings(channelId: ChannelId, settings: UserSettings) {
-    const current = this.#dao.get("userSettings");
-    if (current === undefined) {
-      this.#dao.set("userSettings", { [channelId.id]: settings });
-    } else {
-      this.#dao.set("userSettings", { ...current, ...{ [channelId.id]: settings } });
-    }
+  registerUserSettings(settings: UserSettings) {
+    this.#dao.set("userSettings", settings);
   }
 
   /**

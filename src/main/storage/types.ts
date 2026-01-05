@@ -7,7 +7,7 @@ import { UserSettings } from "../userSettings";
 export interface StorageData {
   mainChannelId: string;
   registeredChannelIds: string[];
-  userSettings: Record<string, Partial<UserSettings>>;
+  userSettings: Partial<UserSettings>;
   authCredentials: Credentials;
 }
 
