@@ -20,7 +20,7 @@ type Listen<K extends keyof IpcEvent> = (
  */
 export interface IpcApi {
   ipcApi: {
-    requestConfirmingInputChannelId: Invoke<"confirmInputChannelId">;
+    requestCheckExistenceOfChannel: Invoke<"checkExistenceOfChannel">;
     requestSaveChannel: Invoke<"registerChannel">;
     requestChannelTop: Invoke<"getChannelTop">;
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
@@ -49,8 +49,8 @@ export interface IpcApi {
 
 export const IpcApi: IpcApi = {
   ipcApi: {
-    requestConfirmingInputChannelId: (inputChannelId) =>
-      IpcRendererWrapper.invoke("confirmInputChannelId", inputChannelId),
+    requestCheckExistenceOfChannel: (inputChannelId) =>
+      IpcRendererWrapper.invoke("checkExistenceOfChannel", inputChannelId),
     requestSaveChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
     requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
     requestOpenOverlay: (channelTop) =>

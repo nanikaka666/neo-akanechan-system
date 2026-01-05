@@ -30,7 +30,18 @@ import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiClient } from "./youtubeApi/client";
 import { ChannelId } from "./youtubeApi/model";
 
+async function checkChannelExistence(inputChannelId: string) {
+  return {
+    channelId: new ChannelId("UCtysnf2SGXI9IQi-WLFv0vw"),
+    channelTitle: new ChannelTitle("nanikaka"),
+    subscribersCount: 100,
+    ownerIcon: "hoge",
+    channelBanner: "banner",
+  } satisfies ChannelSummary;
+}
+
 async function getChannelSummary(channelId: ChannelId) {
+  // todo: implements here
   return {
     channelId: new ChannelId("UCtysnf2SGXI9IQi-WLFv0vw"),
     channelTitle: new ChannelTitle("nanikaka"),
@@ -41,9 +52,9 @@ async function getChannelSummary(channelId: ChannelId) {
 }
 
 export function setupIpcMainHandlers() {
-  IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
+  IpcMainWrapper.handle("checkExistenceOfChannel", async (e, inputChannelId) => {
     try {
-      return await getChannelSummary(inputChannelId);
+      return await checkChannelExistence(inputChannelId);
     } catch {
       return undefined;
     }

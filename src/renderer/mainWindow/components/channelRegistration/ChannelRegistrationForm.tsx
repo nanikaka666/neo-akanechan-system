@@ -1,7 +1,6 @@
 import { ChangeEvent, useState, MouseEvent } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { ChannelSummary } from "../../../../ipcEvent";
-import { ChannelId } from "../../../../main/youtubeApi/model";
 
 export function ChannelRegistrationForm({
   setIsComplete,
@@ -23,11 +22,10 @@ export function ChannelRegistrationForm({
     setIsSubmitting((_) => true);
 
     try {
-      const channelId = new ChannelId(input);
-      const res = await window.ipcApi.requestConfirmingInputChannelId(channelId);
+      const res = await window.ipcApi.requestCheckExistenceOfChannel(input);
 
       if (res === undefined) {
-        const msg = `入力されたチャンネルID ${channelId.id} に該当するチャンネルが見つかりませんでした`;
+        const msg = `入力されたチャンネルID ${input} に該当するチャンネルが見つかりませんでした`;
         // const msg = channelId.isHandle
         //   ? `入力されたYoutubeハンドル ${channelId.id} に該当するチャンネルが見つかりませんでした`
         //   : `入力されたチャンネルID ${channelId.id} に該当するチャンネルが見つかりませんでした`;

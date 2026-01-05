@@ -231,7 +231,7 @@ export interface IpcEvent {
    *
    * if the channel was not found match to `inputChannelId`, `undefined` will be returned.
    */
-  confirmInputChannelId: (inputChannelId: ChannelId) => ChannelSummary | undefined;
+  checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
 
   /**
    * Register new channel, and mark as main channel.
