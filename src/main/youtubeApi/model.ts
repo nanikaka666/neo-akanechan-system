@@ -1,9 +1,15 @@
+/**
+ * Image data structure in Youtube Api Response.
+ */
 export interface Image {
   url: string;
   width: number;
   height: number;
 }
 
+/**
+ * Channel data structure in Youtube Api Response.
+ */
 export interface Channel {
   id: ChannelId;
   snippet?: {
