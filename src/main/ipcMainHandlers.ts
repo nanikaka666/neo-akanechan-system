@@ -3,13 +3,7 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
-import {
-  AuthPage,
-  BeginningBlankPage,
-  ChannelSummary,
-  InLivePage,
-  LiveSelectionPage,
-} from "../ipcEvent";
+import { AuthPage, BeginningBlankPage, InLivePage, LiveSelectionPage } from "../ipcEvent";
 import {
   cleanUpLiveChatEmitter,
   getLiveChatManager,
@@ -27,32 +21,8 @@ import {
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiClient } from "./youtubeApi/client";
-import { Channel } from "./youtubeApi/model";
-
-function convertToChannelSummary(channel: Channel) {
-  return {
-    channelId: channel.id,
-    channelTitle: channel.snippet.title,
-    subscribersCount: channel.statistics.subscriberCount,
-    ownerIcon: channel.snippet.thumbnails.default.url,
-    channelBanner: channel.brandingSettings.image?.bannerExternalUrl,
-  } satisfies ChannelSummary;
-}
-
-async function checkChannelExistence(inputChannelId: string) {
-  const channel = await YoutubeApiClient.getChannel(inputChannelId);
-  return channel ? convertToChannelSummary(channel) : undefined;
-}
 
 export function setupIpcMainHandlers() {
-  IpcMainWrapper.handle("checkExistenceOfChannel", async (e, inputChannelId) => {
-    try {
-      return await checkChannelExistence(inputChannelId);
-    } catch {
-      return undefined;
-    }
-  });
-
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channelHavingClosestLive) => {
     if (BrowserWindow.getAllWindows().length === 2) {
       // already overlay window opened.

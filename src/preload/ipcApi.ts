@@ -20,7 +20,6 @@ type Listen<K extends keyof IpcEvent> = (
  */
 export interface IpcApi {
   ipcApi: {
-    requestCheckExistenceOfChannel: Invoke<"checkExistenceOfChannel">;
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestUserSettings: Invoke<"getUserSettings">;
     requestSaveUserSettings: Invoke<"saveUserSettings">;
@@ -43,8 +42,6 @@ export interface IpcApi {
 
 export const IpcApi: IpcApi = {
   ipcApi: {
-    requestCheckExistenceOfChannel: (inputChannelId) =>
-      IpcRendererWrapper.invoke("checkExistenceOfChannel", inputChannelId),
     requestOpenOverlay: (channelTop) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
     requestUserSettings: () => IpcRendererWrapper.invoke("getUserSettings"),

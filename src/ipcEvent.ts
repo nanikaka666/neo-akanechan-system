@@ -227,14 +227,6 @@ export interface Chats {
  */
 export interface IpcEvent {
   /**
-   * this event will be fired when need to check channel id.
-   * "check" means confirm of existing or fetch data about the channel.
-   *
-   * if the channel was not found match to `inputChannelId`, `undefined` will be returned.
-   */
-  checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
-
-  /**
    * Confirm to user that overlay feature should starts.
    */
   startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
