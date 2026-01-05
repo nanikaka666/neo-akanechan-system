@@ -47,7 +47,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.invoke("checkExistenceOfChannel", inputChannelId),
     requestOpenOverlay: (channelTop) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
-    requestUserSettings: (channelId) => IpcRendererWrapper.invoke("getUserSettings", channelId),
+    requestUserSettings: () => IpcRendererWrapper.invoke("getUserSettings"),
     requestSaveUserSettings: (channelId, userSettings) =>
       IpcRendererWrapper.invoke("saveUserSettings", channelId, userSettings),
     requestCheckHavingDifferenceAmongUserSettings: (settingsA, settingsB) =>

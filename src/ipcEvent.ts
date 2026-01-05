@@ -245,11 +245,11 @@ export interface IpcEvent {
   launchEmitters: (liveLaunchProperties: LiveLaunchProperties) => boolean;
 
   /**
-   * Get UserSettings attached to given channel id.
+   * Get UserSettings.
    *
    * if no settings then filled with default value.
    */
-  getUserSettings: (channelId: ChannelId) => UserSettings;
+  getUserSettings: () => UserSettings;
 
   /**
    * Save userSettings to storage.

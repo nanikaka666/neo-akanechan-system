@@ -89,7 +89,7 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("getUserSettings", (e, channelId) => {
+  IpcMainWrapper.handle("getUserSettings", () => {
     return Promise.resolve(UserSettingsService.getUserSettings());
   });
 
