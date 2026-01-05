@@ -128,13 +128,13 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${channelHavingClosestLive.closestLive.title.title}`,
+      detail: `${channelHavingClosestLive.closestLive.title}`,
     });
     if (res.response !== 0) {
       return Promise.resolve(false);
     }
     // shown on title bar of overlay window.
-    const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title.title}`;
+    const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title}`;
 
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
@@ -278,7 +278,7 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${liveLaunchProperties.channel.closestLive.title.title}`,
+      detail: `${liveLaunchProperties.channel.closestLive.title}`,
     });
     if (res.response !== 0) {
       return false;

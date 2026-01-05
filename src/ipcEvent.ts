@@ -1,4 +1,3 @@
-import { VideoTitle } from "youtube-live-scraper";
 import { UserSettings } from "./main/userSettings";
 import {
   ChatItemSuperChat,
@@ -72,7 +71,7 @@ export interface ChannelSummary {
 }
 
 export interface LiveSummary {
-  title: VideoTitle;
+  title: string;
   thumbnail: string;
   isOnAir: boolean;
 }
