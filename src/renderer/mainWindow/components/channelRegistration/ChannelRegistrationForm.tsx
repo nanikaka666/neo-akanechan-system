@@ -25,10 +25,9 @@ export function ChannelRegistrationForm({
       const res = await window.ipcApi.requestCheckExistenceOfChannel(input);
 
       if (res === undefined) {
-        const msg = `入力されたチャンネルID ${input} に該当するチャンネルが見つかりませんでした`;
-        // const msg = channelId.isHandle
-        //   ? `入力されたYoutubeハンドル ${channelId.id} に該当するチャンネルが見つかりませんでした`
-        //   : `入力されたチャンネルID ${channelId.id} に該当するチャンネルが見つかりませんでした`;
+        const msg = input.startsWith("@")
+          ? `入力されたYoutubeハンドル ${input} に該当するチャンネルが見つかりませんでした`
+          : `入力されたチャンネルID ${input} に該当するチャンネルが見つかりませんでした`;
         setErrorMessage((_) => msg);
       } else {
         setErrorMessage((_) => undefined);
