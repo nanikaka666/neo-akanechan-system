@@ -235,13 +235,6 @@ export interface IpcEvent {
   checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
 
   /**
-   * Register new channel, and mark as main channel.
-   *
-   * if given channelId was already registered, `false` will be returned.
-   */
-  registerChannel: (channelId: ChannelId) => boolean;
-
-  /**
    * Switch "MainChannel" to another one.
    *
    * The channel id must be stored in storage.

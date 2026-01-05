@@ -53,21 +53,6 @@ export function setupIpcMainHandlers() {
     }
   });
 
-  IpcMainWrapper.handle("registerChannel", async (e, channelId) => {
-    if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
-      return Promise.resolve(false);
-    }
-    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-    //   type: "liveSelection",
-    //   mainChannelId: channelId,
-    // } satisfies LiveSelectionPage);
-    const res = await (
-      await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
-    ).map(convertToChannelSummary);
-    WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
-    return Promise.resolve(true);
-  });
-
   IpcMainWrapper.handle("getChannelTop", async (e, channelId) => {
     return Promise.resolve(undefined);
     // try {
