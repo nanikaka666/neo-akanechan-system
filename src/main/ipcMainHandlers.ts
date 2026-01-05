@@ -1,4 +1,3 @@
-import { ChannelTitle } from "youtube-live-scraper";
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
@@ -28,19 +27,21 @@ import {
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiClient } from "./youtubeApi/client";
-import { ChannelId } from "./youtubeApi/model";
+import { Channel, ChannelId } from "./youtubeApi/model";
+
+function convertToChannelSummary(channel: Channel) {
+  return {
+    channelId: channel.id,
+    channelTitle: channel.snippet.title,
+    subscribersCount: channel.statistics.subscriberCount,
+    ownerIcon: channel.snippet.thumbnails.default.url,
+    channelBanner: channel.brandingSettings.image?.bannerExternalUrl,
+  } satisfies ChannelSummary;
+}
 
 async function checkChannelExistence(inputChannelId: string) {
   const channel = await YoutubeApiClient.getChannel(inputChannelId);
-  return channel
-    ? ({
-        channelId: channel.id,
-        channelTitle: channel.snippet.title,
-        subscribersCount: channel.statistics.subscriberCount,
-        ownerIcon: channel.snippet.thumbnails.default.url,
-        channelBanner: channel.brandingSettings.image?.bannerExternalUrl,
-      } satisfies ChannelSummary)
-    : undefined;
+  return channel ? convertToChannelSummary(channel) : undefined;
 }
 
 async function getChannelSummary(channelId: ChannelId) {
@@ -164,8 +165,10 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
   });
 
-  IpcMainWrapper.handle("getRegisterdChannels", () => {
-    return Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary));
+  IpcMainWrapper.handle("getRegisterdChannels", async () => {
+    return (await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())).map(
+      convertToChannelSummary,
+    );
   });
 
   IpcMainWrapper.handle("switchMainChannel", (e, to) => {
