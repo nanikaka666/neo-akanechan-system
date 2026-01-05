@@ -11,12 +11,12 @@ export function ChannelHasNoClosestLiveView({
 }) {
   const [showModal, turnOn, turnOff] = useModal();
   return (
-    <div style={{ position: "absolute", left: "100px" }}>
-      <ChannelSummaryView channelSummary={channelHasNoClosestLive.channel} />
+    <div>
+      {/* <ChannelSummaryView channelSummary={channelHasNoClosestLive.channel} /> */}
       <div>予定されているライブはありません</div>
       <button onClick={turnOn}>ライブの設定</button>
       <ReactModal isOpen={showModal} onRequestClose={turnOff}>
-        <UserSettingsFormLoader channelSummary={channelHasNoClosestLive.channel} />
+        {/* <UserSettingsFormLoader channelSummary={channelHasNoClosestLive.channel} /> */}
       </ReactModal>
     </div>
   );

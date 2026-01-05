@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { ChannelRegistrationLoader } from "./channelRegistration/ChannelRegistrationLoader";
-import { MainChannelTopLoader } from "./top/MainChannelTopLoader";
 import { MainAppPage } from "../../../ipcEvent";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
 import { LiveControlPanel } from "./liveControl/LiveControlPanel";
 import { AuthFlow } from "./auth/AuthFlow";
+import { MainChannelTop } from "./top/MainChannelTop";
 
 export function MainApp() {
   const [mainAppPage, setMainAppPage] = useState<MainAppPage>();
@@ -25,7 +25,7 @@ export function MainApp() {
     ) : mainAppPage.type === "liveStandBy" ? (
       <LiveControlPanelInStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveSelection" ? (
-      <MainChannelTopLoader mainChannelId={mainAppPage.mainChannelId} />
+      <MainChannelTop channel={mainAppPage.channel} liveBroadcasts={mainAppPage.liveBroadcasts} />
     ) : mainAppPage.type === "auth" ? (
       <AuthFlow />
     ) : (

@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { ChannelSummary } from "../../../../ipcEvent";
 import { UserSettings } from "../../../../main/userSettings";
 import { UserSettingsForm } from "./UserSettingsForm";
+import { Channel } from "../../../../main/youtubeApi/model";
 
-export function UserSettingsFormLoader({ channelSummary }: { channelSummary: ChannelSummary }) {
+export function UserSettingsFormLoader({ channelSummary }: { channelSummary: Channel }) {
   const [userSettings, setUserSettings] = useState<UserSettings>();
 
   useEffect(() => {
-    window.ipcApi.requestUserSettings(channelSummary.channelId).then((res) => {
+    window.ipcApi.requestUserSettings(channelSummary.id).then((res) => {
       setUserSettings((_) => res);
     });
     const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, channelId, settings) => {
-      if (channelSummary.channelId.id === channelId.id) {
+      if (channelSummary.id.id === channelId.id) {
         setUserSettings((_) => settings);
       }
     });

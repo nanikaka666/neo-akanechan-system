@@ -1,14 +1,14 @@
 import { useState, MouseEvent, useEffect, useMemo } from "react";
 import { UserSettings } from "../../../../main/userSettings";
 import { LiveChatSettingsForm } from "./LiveChatSettingsForm";
-import { ChannelSummary } from "../../../../ipcEvent";
 import { GoalsSettingsForm } from "./GoalsSettingsForm";
+import { Channel } from "../../../../main/youtubeApi/model";
 
 export function UserSettingsForm({
   channelSummary,
   userSettings,
 }: {
-  channelSummary: ChannelSummary;
+  channelSummary: Channel;
   userSettings: UserSettings;
 }) {
   const originalUserSettings = useMemo<UserSettings>(() => {
@@ -28,7 +28,7 @@ export function UserSettingsForm({
 
   async function onClick(e: MouseEvent) {
     e.preventDefault();
-    await window.ipcApi.requestSaveUserSettings(channelSummary.channelId, currentUserSettings);
+    await window.ipcApi.requestSaveUserSettings(channelSummary.id, currentUserSettings);
     // todo: Now saving message should be displayed.
     console.log("User settings saved.");
   }

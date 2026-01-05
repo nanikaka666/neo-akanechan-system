@@ -1,23 +1,57 @@
-import { useEffect, useState } from "react";
-import { ChannelTop } from "../../../../ipcEvent";
-import { ChannelHasNoClosestLiveView } from "./ChannelHasNoClosestLiveView";
-import { ChannelHavingClosestLiveView } from "./ChannelHavingClosestLiveView";
-import { ChannelId } from "../../../../main/youtubeApi/model";
+import { useState, MouseEvent } from "react";
+import { Channel, LiveBroadcast } from "../../../../main/youtubeApi/model";
+import { ChannelSummaryView } from "./ChannelSummaryView";
+import ReactModal from "react-modal";
+import { useModal } from "../hooks/useModal";
+import { UserSettingsFormLoader } from "../userSettings/UserSettingsFormLoader";
 
-export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) {
-  const [channelTop, setChannelTop] = useState<ChannelTop>();
+export function MainChannelTop({
+  channel,
+  liveBroadcasts,
+}: {
+  channel: Channel;
+  liveBroadcasts: LiveBroadcast[];
+}) {
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [showModal, turnOn, turnOff] = useModal();
 
-  useEffect(() => {
-    window.ipcApi.requestChannelTop(mainChannelId).then(setChannelTop).catch(console.log);
-  }, [mainChannelId]);
+  async function onClick(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setIsConfirming((_) => true);
 
-  return channelTop ? (
-    channelTop.type === "has_no_closest_live" ? (
-      <ChannelHasNoClosestLiveView channelHasNoClosestLive={channelTop} />
-    ) : (
-      <ChannelHavingClosestLiveView channelHavingClosestLive={channelTop} />
-    )
-  ) : (
-    <div style={{ position: "absolute", left: "100px" }}>Now Loading...</div>
+    // todo: call this function
+    // await window.ipcApi.requestOpenOverlay(channelHavingClosestLive);
+    setIsConfirming((_) => false);
+  }
+  return (
+    <div>
+      <ChannelSummaryView channelSummary={channel} />
+      <button onClick={turnOn}>ライブの設定</button>
+      <ReactModal isOpen={showModal} onRequestClose={turnOff}>
+        <UserSettingsFormLoader channelSummary={channel} />
+      </ReactModal>
+      {liveBroadcasts.map((live) => {
+        return (
+          <div key={live.videoId.id}>
+            <img
+              src={live.snippet.thumbnails.default.url}
+              alt="next live thumbnail"
+              style={{ width: "360px" }}
+            />
+            <p>{live.snippet.title}</p>
+            <p>{live.snippet.scheduledStartTime.toLocaleString()}</p>
+            <p>{live.status.lifeCycleStatus}</p>
+            <p>{live.status.privacyStatus}</p>
+            {live.status.lifeCycleStatus !== "complete" && (
+              <p>
+                <button onClick={onClick} disabled={isConfirming}>
+                  Live Start
+                </button>
+              </p>
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 }

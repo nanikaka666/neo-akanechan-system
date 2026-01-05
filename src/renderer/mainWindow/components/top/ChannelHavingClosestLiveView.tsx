@@ -23,7 +23,7 @@ export function ChannelHavingClosestLiveView({
 
   return (
     <div style={{ position: "absolute", left: "100px" }}>
-      <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} />
+      {/* <ChannelSummaryView channelSummary={channelHavingClosestLive.channel} /> */}
       <div>
         <p>Next Live</p>
         <img
@@ -39,7 +39,7 @@ export function ChannelHavingClosestLiveView({
       </div>
       <button onClick={turnOn}>ライブの設定</button>
       <ReactModal isOpen={showModal} onRequestClose={turnOff}>
-        <UserSettingsFormLoader channelSummary={channelHavingClosestLive.channel} />
+        {/* <UserSettingsFormLoader channelSummary={channelHavingClosestLive.channel} /> */}
       </ReactModal>
     </div>
   );

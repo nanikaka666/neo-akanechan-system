@@ -6,7 +6,7 @@ export function MainChannelTopLoader({ mainChannelId }: { mainChannelId: Channel
   return (
     <>
       <ChannelList currentMainChannelId={mainChannelId} />
-      <MainChannelTop mainChannelId={mainChannelId} key={mainChannelId.id} />
+      {/* <MainChannelTop mainChannelId={mainChannelId} key={mainChannelId.id} /> */}
     </>
   );
 }
