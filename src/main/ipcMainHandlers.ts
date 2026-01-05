@@ -149,44 +149,6 @@ export function setupIpcMainHandlers() {
     );
   });
 
-  IpcMainWrapper.handle("deleteChannelWithUserConfirmation", async (e, channel) => {
-    const window = BrowserWindow.fromWebContents(e.sender);
-    if (window === null) {
-      return false;
-    }
-    const res = await dialog.showMessageBox(window, {
-      message: `このチャンネルをリストから削除しますか？`,
-      type: "question",
-      buttons: ["OK", "NO"],
-      defaultId: 0,
-      detail: `${channel.channelTitle}`,
-    });
-    if (res.response !== 0) {
-      return false;
-    }
-
-    const oldMainChannelId = getStorageService().getMainChannelId();
-    getStorageService().deleteChannel(channel);
-    const latestMainChannelId = getStorageService().getMainChannelId();
-    if (oldMainChannelId?.id !== latestMainChannelId?.id) {
-      // WebContentsWrapper.send(
-      //   e.sender,
-      //   "tellMainAppPage",
-      //   latestMainChannelId
-      //     ? ({
-      //         type: "liveSelection",
-      //         mainChannelId: latestMainChannelId,
-      //       } satisfies LiveSelectionPage)
-      //     : ({ type: "beginningBlank" } satisfies BeginningBlankPage),
-      // );
-    }
-    const nextChannels = await (
-      await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
-    ).map(convertToChannelSummary);
-    WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", nextChannels);
-    return true;
-  });
-
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
     setupLiveStatistics(e.sender);
 

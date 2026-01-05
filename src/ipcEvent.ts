@@ -235,13 +235,6 @@ export interface IpcEvent {
   checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
 
   /**
-   * Delete channel data from storage.
-   *
-   * it affects on registeredChannelIds, userSettings, mainChannelId.
-   */
-  deleteChannelWithUserConfirmation: (channel: ChannelSummary) => boolean;
-
-  /**
    * Get channels stored in storage.
    */
   getRegisterdChannels: () => ChannelSummary[];
