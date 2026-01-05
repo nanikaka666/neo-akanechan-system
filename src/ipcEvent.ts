@@ -84,13 +84,6 @@ export interface ChannelHavingClosestLive {
   closestLive: LiveSummary;
 }
 
-export interface ChannelHasNoClosestLive {
-  type: "has_no_closest_live";
-  channel: ChannelSummary;
-}
-
-export type ChannelTop = ChannelHavingClosestLive | ChannelHasNoClosestLive;
-
 export interface LiveLaunchProperties {
   channel: ChannelHavingClosestLive;
   settings: UserSettings;
