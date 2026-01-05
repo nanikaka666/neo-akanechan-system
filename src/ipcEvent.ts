@@ -235,11 +235,6 @@ export interface IpcEvent {
   checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
 
   /**
-   * Tell latest channel list to renderer.
-   */
-  tellUpdatedChannelIds: (channels: ChannelSummary[]) => void;
-
-  /**
    * Get data for main channel top page.
    */
   getChannelTop: (channelId: ChannelId) => ChannelTop | undefined;
