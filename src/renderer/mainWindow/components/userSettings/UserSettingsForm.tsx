@@ -2,15 +2,8 @@ import { useState, MouseEvent, useEffect, useMemo } from "react";
 import { UserSettings } from "../../../../main/userSettings";
 import { LiveChatSettingsForm } from "./LiveChatSettingsForm";
 import { GoalsSettingsForm } from "./GoalsSettingsForm";
-import { Channel } from "../../../../main/youtubeApi/model";
 
-export function UserSettingsForm({
-  channelSummary,
-  userSettings,
-}: {
-  channelSummary: Channel;
-  userSettings: UserSettings;
-}) {
+export function UserSettingsForm({ userSettings }: { userSettings: UserSettings }) {
   const originalUserSettings = useMemo<UserSettings>(() => {
     return { ...userSettings };
   }, [userSettings]);

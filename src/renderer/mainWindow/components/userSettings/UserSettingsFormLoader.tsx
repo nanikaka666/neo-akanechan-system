@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { UserSettings } from "../../../../main/userSettings";
 import { UserSettingsForm } from "./UserSettingsForm";
-import { Channel } from "../../../../main/youtubeApi/model";
 
-export function UserSettingsFormLoader({ channelSummary }: { channelSummary: Channel }) {
+export function UserSettingsFormLoader() {
   const [userSettings, setUserSettings] = useState<UserSettings>();
 
   useEffect(() => {
@@ -17,7 +16,7 @@ export function UserSettingsFormLoader({ channelSummary }: { channelSummary: Cha
   }, []);
 
   return userSettings ? (
-    <UserSettingsForm channelSummary={channelSummary} userSettings={userSettings} />
+    <UserSettingsForm userSettings={userSettings} />
   ) : (
     <div>Now Loading...</div>
   );
