@@ -27,7 +27,7 @@ import {
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiClient } from "./youtubeApi/client";
-import { Channel, ChannelId } from "./youtubeApi/model";
+import { Channel } from "./youtubeApi/model";
 
 function convertToChannelSummary(channel: Channel) {
   return {

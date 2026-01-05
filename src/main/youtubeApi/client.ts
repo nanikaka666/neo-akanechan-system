@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "../auth/google";
-import { Channel, ChannelId } from "./model";
+import { Channel, ChannelId, LiveBroadcast, VideoId } from "./model";
 
 /**
  * Handle access to Youtube Data and LiveStreaming API
@@ -86,9 +86,30 @@ export const YoutubeApiClient = {
       return undefined;
     }
 
-    console.log(res.data.items[0]);
-
     return buildChannel(res.data.items[0]);
+  },
+
+  /**
+   * Get LiveBroadcasts of user's channel.
+   */
+  getLiveBroadcasts: async (): Promise<LiveBroadcast[]> => {
+    const accessToken = await googleAccessToken();
+    const url = "https://www.googleapis.com/youtube/v3/liveBroadcasts";
+
+    const res = await axios.get(url, {
+      params: {
+        mine: true,
+        part: ["id", "snippet", "status"].join(","),
+        maxResults: 10,
+      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (res.status < 200 || 300 <= res.status) {
+      console.log(res);
+      return [];
+    }
+
+    return res.data.items.map(buildLiveBroadcast) as LiveBroadcast[];
   },
 };
 
@@ -121,5 +142,28 @@ function buildChannel(item: any): Channel {
     brandingSettings: {
       ...imageInBrandingSettings,
     },
-  } as Channel;
+  } satisfies Channel;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildLiveBroadcast(item: any): LiveBroadcast {
+  return {
+    videoId: new VideoId(item.id),
+    snippet: {
+      title: item.snippet.title,
+      description: item.snippet.description,
+      publishedAt: new Date(item.snippet.publishedAt),
+      thumbnails: item.snippet.thumbnails,
+      scheduledStartTime: new Date(item.snippet.scheduledStartTime),
+      actualStartTime: item.snippet.actualStartTime
+        ? new Date(item.snippet.actualStartTime)
+        : undefined,
+      actualEndTime: item.snippet.actualEndTime ? new Date(item.snippet.actualEndTime) : undefined,
+      liveChatId: item.snippet.liveChatId,
+    },
+    status: {
+      lifeCycleStatus: item.status.lifeCycleStatus,
+      privacyStatus: item.status.privacyStatus,
+    },
+  } satisfies LiveBroadcast;
 }
