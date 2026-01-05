@@ -31,7 +31,7 @@ export function ChannelHavingClosestLiveView({
           alt="next live thumbnail"
           style={{ width: "360px" }}
         />
-        <div>{channelHavingClosestLive.closestLive.title.title}</div>
+        <div>{channelHavingClosestLive.closestLive.title}</div>
         <div>{channelHavingClosestLive.closestLive.isOnAir ? "On Air" : "Prepareing"}</div>
         <button onClick={onClick} disabled={isConfirming}>
           Live Start

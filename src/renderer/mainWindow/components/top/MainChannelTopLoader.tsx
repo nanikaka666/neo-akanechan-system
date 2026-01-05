@@ -1,4 +1,4 @@
-import { ChannelId } from "youtube-live-scraper";
+import { ChannelId } from "../../../../main/youtubeApi/model";
 import { ChannelList } from "./ChannelList";
 import { MainChannelTop } from "./MainChannelTop";
 

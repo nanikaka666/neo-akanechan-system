@@ -1,5 +1,5 @@
-import { ChannelId } from "youtube-live-scraper";
 import { getStorageService } from "./storage";
+import { ChannelId } from "./youtubeApi/model";
 
 /**
  * Top level interface represents user settings.
@@ -91,9 +91,6 @@ export const UserSettingsService = {
    * This function will return non-partial UserSettings.
    */
   getUserSettings: (channelId: ChannelId): UserSettings => {
-    if (channelId.isHandle) {
-      throw new Error(`ChannelId must be Youtube ID style. ${channelId.id}`);
-    }
     const storedSettings = getStorageService().getUserSettings(channelId);
     if (storedSettings === undefined) {
       return DefaultSettings;
@@ -109,9 +106,6 @@ export const UserSettingsService = {
    * settings properties not included in given settings will not be changed.
    */
   setUserSettings: (channelId: ChannelId, newSettings: Partial<UserSettings>) => {
-    if (channelId.isHandle) {
-      throw new Error(`ChannelId must be Youtube ID style. ${channelId.id}`);
-    }
     const current = UserSettingsService.getUserSettings(channelId);
     getStorageService().registerUserSettings(channelId, { ...current, ...newSettings });
   },

@@ -1,7 +1,8 @@
-import { ChannelId } from "youtube-live-scraper";
 import { StorageDao } from "./types";
 import { UserSettings } from "../userSettings";
 import { ChannelSummary } from "../../ipcEvent";
+import { Credentials } from "google-auth-library";
+import { ChannelId } from "../youtubeApi/model";
 
 /**
  * This class operates storage data controls.
@@ -43,9 +44,6 @@ export class StorageService {
    * Prerequisites: given channelId must be in Youtube ID style.
    */
   registerChannelIdAndMarkAsMain(channelId: ChannelId) {
-    if (channelId.isHandle) {
-      throw new Error(`Registering channelId must be Youtube ID style. ${channelId.id}`);
-    }
     const list = this.#dao.get("registeredChannelIds") ?? [];
 
     // check it is already registered.
@@ -64,9 +62,6 @@ export class StorageService {
    * main channel is must be listed in `registeredChannelIds`.
    */
   switchMainChannel(channelId: ChannelId) {
-    if (channelId.isHandle) {
-      throw new Error(`Registering channelId must be Youtube ID style. ${channelId.id}`);
-    }
     const list = this.#dao.get("registeredChannelIds") ?? [];
 
     // check: channelId is registered.
@@ -108,9 +103,6 @@ export class StorageService {
    * this function return *Partial* UserSettings because StorageData has possibility changing structure.
    */
   getUserSettings(channelId: ChannelId): Partial<UserSettings> | undefined {
-    if (channelId.isHandle) {
-      throw new Error(`ChannelId must be Youtube ID style. ${channelId.id}`);
-    }
     const res = this.#dao.get("userSettings");
     if (res === undefined) {
       return undefined;
@@ -129,15 +121,30 @@ export class StorageService {
    * old settings data will be completely rewrote.
    */
   registerUserSettings(channelId: ChannelId, settings: UserSettings) {
-    if (channelId.isHandle) {
-      throw new Error(`ChannelId must be Youtube ID style. ${channelId.id}`);
-    }
     const current = this.#dao.get("userSettings");
     if (current === undefined) {
       this.#dao.set("userSettings", { [channelId.id]: settings });
     } else {
       this.#dao.set("userSettings", { ...current, ...{ [channelId.id]: settings } });
     }
+  }
+
+  /**
+   * Retrieve auth credentials.
+   */
+  getAuthCredentials() {
+    return this.#dao.get("authCredentials");
+  }
+
+  /**
+   * Set credentials of Google OAuth.
+   *
+   * NOTE: this value must be encrypted but not here, because safeStorage is unavailable in apps which not code-signed.
+   *
+   * @param credentials
+   */
+  registerAuthCredentials(credentials: Credentials) {
+    this.#dao.set("authCredentials", credentials);
   }
 
   /**

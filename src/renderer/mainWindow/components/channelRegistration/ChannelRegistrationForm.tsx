@@ -1,5 +1,4 @@
 import { ChangeEvent, useState, MouseEvent } from "react";
-import { ChannelId } from "youtube-live-scraper";
 import type { Dispatch, SetStateAction } from "react";
 import { ChannelSummary } from "../../../../ipcEvent";
 
@@ -23,13 +22,12 @@ export function ChannelRegistrationForm({
     setIsSubmitting((_) => true);
 
     try {
-      const channelId = new ChannelId(input);
-      const res = await window.ipcApi.requestConfirmingInputChannelId(channelId);
+      const res = await window.ipcApi.requestCheckExistenceOfChannel(input);
 
       if (res === undefined) {
-        const msg = channelId.isHandle
-          ? `入力されたYoutubeハンドル ${channelId.id} に該当するチャンネルが見つかりませんでした`
-          : `入力されたチャンネルID ${channelId.id} に該当するチャンネルが見つかりませんでした`;
+        const msg = input.startsWith("@")
+          ? `入力されたYoutubeハンドル ${input} に該当するチャンネルが見つかりませんでした`
+          : `入力されたチャンネルID ${input} に該当するチャンネルが見つかりませんでした`;
         setErrorMessage((_) => msg);
       } else {
         setErrorMessage((_) => undefined);
@@ -73,7 +71,7 @@ export function ChannelRegistrationForm({
       <div>
         <img src={channelData.ownerIcon} style={{ width: "64px", height: "64px" }}></img>
       </div>
-      <div>{channelData.channelTitle.title}</div>
+      <div>{channelData.channelTitle}</div>
       <div>{channelData.subscribersCount} 人</div>
       <div>このチャンネルをアプリに登録しますか？</div>
       <button onClick={onClickConfirmationYes}>OK</button>

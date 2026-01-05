@@ -21,8 +21,8 @@ import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";
 import { FocusManager } from "../focus";
 import { LiveChatItemId } from "youtube-livechat-emitter/dist/src/core/LiveChatItemId";
-import { ChannelId } from "youtube-live-scraper/dist/src";
 import { getLiveStatisticsManager } from "../liveStatistics";
+import { ChannelId } from "../youtubeApi/model";
 
 class LiveChatManager {
   #textChats: NonMarkedExtendedChatItemText[];

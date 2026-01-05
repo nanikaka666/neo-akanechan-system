@@ -11,7 +11,7 @@ export function ChannelSummaryView({ channelSummary }: { channelSummary: Channel
         alt="owner icon"
         style={{ width: "64px", height: "64px" }}
       />
-      <div>{channelSummary.channelTitle.title}</div>
+      <div>{channelSummary.channelTitle}</div>
       <div>Subsriber: {channelSummary.subscribersCount}</div>
     </div>
   );

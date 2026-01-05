@@ -1,4 +1,3 @@
-import { ChannelId, ChannelTitle, VideoTitle } from "youtube-live-scraper";
 import { UserSettings } from "./main/userSettings";
 import {
   ChatItemSuperChat,
@@ -9,6 +8,14 @@ import {
   NewMembership,
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
+import { ChannelId } from "./main/youtubeApi/model";
+
+/**
+ * User doesn't authorized.
+ */
+export interface AuthPage {
+  type: "auth";
+}
 
 /**
  * Represents page which first status of this app.
@@ -48,18 +55,23 @@ export interface InLivePage {
 /**
  * Represents MainApp status where user is in.
  */
-export type MainAppPage = BeginningBlankPage | LiveSelectionPage | LiveStandByPage | InLivePage;
+export type MainAppPage =
+  | AuthPage
+  | BeginningBlankPage
+  | LiveSelectionPage
+  | LiveStandByPage
+  | InLivePage;
 
 export interface ChannelSummary {
   channelId: ChannelId;
-  channelTitle: ChannelTitle;
+  channelTitle: string;
   subscribersCount: number;
   ownerIcon: string;
   channelBanner?: string;
 }
 
 export interface LiveSummary {
-  title: VideoTitle;
+  title: string;
   thumbnail: string;
   isOnAir: boolean;
 }
@@ -218,7 +230,7 @@ export interface IpcEvent {
    *
    * if the channel was not found match to `inputChannelId`, `undefined` will be returned.
    */
-  confirmInputChannelId: (inputChannelId: ChannelId) => ChannelSummary | undefined;
+  checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
 
   /**
    * Register new channel, and mark as main channel.
@@ -314,7 +326,7 @@ export interface IpcEvent {
   /**
    * Return MainAppPage for initial status.
    */
-  getInitialMainAppPage: () => BeginningBlankPage | LiveSelectionPage;
+  getInitialMainAppPage: () => AuthPage | BeginningBlankPage | LiveSelectionPage;
 
   /**
    * Notify latest MainAppPage to renderer.
@@ -342,4 +354,9 @@ export interface IpcEvent {
    * Notify latest chat data.
    */
   tellChats: (chats: Chats) => void;
+
+  /**
+   * Start auth flow.
+   */
+  startAuthFlow: () => boolean;
 }

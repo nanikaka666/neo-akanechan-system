@@ -1,9 +1,9 @@
 import { CSSProperties, useEffect, useState, MouseEvent } from "react";
 import { ChannelSummary } from "../../../../ipcEvent";
-import { ChannelId } from "youtube-live-scraper";
 import ReactModal from "react-modal";
 import { ChannelRegistrationLoader } from "../channelRegistration/ChannelRegistrationLoader";
 import { useModal } from "../hooks/useModal";
+import { ChannelId } from "../../../../main/youtubeApi/model";
 
 export function ChannelList({ currentMainChannelId }: { currentMainChannelId: ChannelId }) {
   const [channels, setChannels] = useState<ChannelSummary[]>();
@@ -48,7 +48,7 @@ export function ChannelList({ currentMainChannelId }: { currentMainChannelId: Ch
             }}
           >
             <img src={channel.ownerIcon} style={{ width: "32px", height: "32px" }} />
-            {channel.channelTitle.title}
+            {channel.channelTitle}
             <button onClick={(e) => deleteChannel(e, channel)}>削除</button>
           </div>
         );

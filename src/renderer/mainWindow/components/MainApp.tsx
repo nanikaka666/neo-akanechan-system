@@ -4,6 +4,7 @@ import { MainChannelTopLoader } from "./top/MainChannelTopLoader";
 import { MainAppPage } from "../../../ipcEvent";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
 import { LiveControlPanel } from "./liveControl/LiveControlPanel";
+import { AuthFlow } from "./auth/AuthFlow";
 
 export function MainApp() {
   const [mainAppPage, setMainAppPage] = useState<MainAppPage>();
@@ -25,6 +26,8 @@ export function MainApp() {
       <LiveControlPanelInStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveSelection" ? (
       <MainChannelTopLoader mainChannelId={mainAppPage.mainChannelId} />
+    ) : mainAppPage.type === "auth" ? (
+      <AuthFlow />
     ) : (
       <ChannelRegistrationLoader />
     )

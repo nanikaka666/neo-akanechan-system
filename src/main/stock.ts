@@ -1,6 +1,6 @@
 import { LiveChatItemId } from "youtube-livechat-emitter/dist/src/core/LiveChatItemId";
-import { ChannelId } from "youtube-live-scraper";
 import { NonMarkedExtendedChatItemText } from "../ipcEvent";
+import { ChannelId } from "./youtubeApi/model";
 
 export class StockManager {
   #stocks: NonMarkedExtendedChatItemText[];

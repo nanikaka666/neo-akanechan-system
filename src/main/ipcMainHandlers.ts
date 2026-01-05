@@ -1,10 +1,15 @@
-import { ChannelId, ChannelTitle } from "youtube-live-scraper";
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
-import { BeginningBlankPage, ChannelSummary, InLivePage, LiveSelectionPage } from "../ipcEvent";
+import {
+  AuthPage,
+  BeginningBlankPage,
+  ChannelSummary,
+  InLivePage,
+  LiveSelectionPage,
+} from "../ipcEvent";
 import {
   cleanUpLiveChatEmitter,
   getLiveChatManager,
@@ -20,30 +25,35 @@ import {
   setupSubscriberCountEmitter,
 } from "./emitter/subscriberCountManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
+import { doAuthFlow, isUserAuthorized } from "./auth/google";
+import { YoutubeApiClient } from "./youtubeApi/client";
+import { Channel } from "./youtubeApi/model";
 
-async function getChannelSummary(channelId: ChannelId) {
+function convertToChannelSummary(channel: Channel) {
   return {
-    channelId: new ChannelId("UCtysnf2SGXI9IQi-WLFv0vw"),
-    channelTitle: new ChannelTitle("nanikaka"),
-    subscribersCount: 100,
-    ownerIcon: "hoge",
-    channelBanner: "banner",
+    channelId: channel.id,
+    channelTitle: channel.snippet.title,
+    subscribersCount: channel.statistics.subscriberCount,
+    ownerIcon: channel.snippet.thumbnails.default.url,
+    channelBanner: channel.brandingSettings.image?.bannerExternalUrl,
   } satisfies ChannelSummary;
 }
 
+async function checkChannelExistence(inputChannelId: string) {
+  const channel = await YoutubeApiClient.getChannel(inputChannelId);
+  return channel ? convertToChannelSummary(channel) : undefined;
+}
+
 export function setupIpcMainHandlers() {
-  IpcMainWrapper.handle("confirmInputChannelId", async (e, inputChannelId) => {
+  IpcMainWrapper.handle("checkExistenceOfChannel", async (e, inputChannelId) => {
     try {
-      return await getChannelSummary(inputChannelId);
+      return await checkChannelExistence(inputChannelId);
     } catch {
       return undefined;
     }
   });
 
-  IpcMainWrapper.handle("registerChannel", (e, channelId) => {
-    if (channelId.isHandle) {
-      return Promise.resolve(false);
-    }
+  IpcMainWrapper.handle("registerChannel", async (e, channelId) => {
     if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
       return Promise.resolve(false);
     }
@@ -51,6 +61,10 @@ export function setupIpcMainHandlers() {
       type: "liveSelection",
       mainChannelId: channelId,
     } satisfies LiveSelectionPage);
+    const res = await (
+      await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
+    ).map(convertToChannelSummary);
+    WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
     return Promise.resolve(true);
   });
 
@@ -103,13 +117,13 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${channelHavingClosestLive.closestLive.title.title}`,
+      detail: `${channelHavingClosestLive.closestLive.title}`,
     });
     if (res.response !== 0) {
       return Promise.resolve(false);
     }
     // shown on title bar of overlay window.
-    const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title.title}`;
+    const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title}`;
 
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
@@ -144,8 +158,10 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
   });
 
-  IpcMainWrapper.handle("getRegisterdChannels", () => {
-    return Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary));
+  IpcMainWrapper.handle("getRegisterdChannels", async () => {
+    return (await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())).map(
+      convertToChannelSummary,
+    );
   });
 
   IpcMainWrapper.handle("switchMainChannel", (e, to) => {
@@ -169,7 +185,7 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${channel.channelTitle.title}`,
+      detail: `${channel.channelTitle}`,
     });
     if (res.response !== 0) {
       return false;
@@ -189,12 +205,11 @@ export function setupIpcMainHandlers() {
             } satisfies LiveSelectionPage)
           : ({ type: "beginningBlank" } satisfies BeginningBlankPage),
       );
-    } else {
-      const res =
-        (await Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary))) ??
-        [];
-      WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
     }
+    const nextChannels = await (
+      await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
+    ).map(convertToChannelSummary);
+    WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", nextChannels);
     return true;
   });
 
@@ -219,6 +234,9 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("getInitialMainAppPage", () => {
+    if (!isUserAuthorized()) {
+      return Promise.resolve({ type: "auth" } satisfies AuthPage);
+    }
     const maybeMainChannelId = getStorageService().getMainChannelId();
     if (maybeMainChannelId) {
       return Promise.resolve({
@@ -249,7 +267,7 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${liveLaunchProperties.channel.closestLive.title.title}`,
+      detail: `${liveLaunchProperties.channel.closestLive.title}`,
     });
     if (res.response !== 0) {
       return false;
@@ -273,5 +291,23 @@ export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("updateFocus", (e, focus) => {
     getLiveChatManager().updateFocus(focus);
     return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("startAuthFlow", async (e) => {
+    if (!(await doAuthFlow())) {
+      return false;
+    }
+    const channelId = await YoutubeApiClient.getChannelIdOfMine();
+    if (!channelId) {
+      throw new Error(
+        "Auth is succeeded, but your channel ID registration is failed. Please retry auth again.",
+      );
+    }
+    getStorageService().registerChannelIdAndMarkAsMain(channelId);
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveSelection",
+      mainChannelId: getStorageService().getMainChannelId()!,
+    });
+    return true;
   });
 }
