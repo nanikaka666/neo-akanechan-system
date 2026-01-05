@@ -8,6 +8,22 @@ export interface Image {
 }
 
 /**
+ * Statistics in Channel data structure in Youtube Api Response.
+ */
+export interface ChannelStatistics {
+  subscriberCount: number;
+}
+
+/**
+ * BrandingSettings in Channel data structure in Youtube Api Response.
+ */
+export interface BrandingSettings {
+  image: {
+    bannerExternalUrl: string;
+  };
+}
+
+/**
  * Channel data structure in Youtube Api Response.
  */
 export interface Channel {
@@ -23,6 +39,8 @@ export interface Channel {
       high: Image;
     };
   };
+  statistics?: ChannelStatistics;
+  brandingSettings?: BrandingSettings;
 }
 
 export class ChannelId {

@@ -28,7 +28,10 @@ export const YoutubeApiClient = {
     return new ChannelId(res.data.items[0].id);
   },
 
-  getChannels: async (channelIds: ChannelId[]) => {
+  /**
+   * Get multiple Channel info.
+   */
+  getChannels: async (channelIds: ChannelId[]): Promise<Channel[]> => {
     if (channelIds.length === 0) {
       return [];
     }
@@ -55,18 +58,72 @@ export const YoutubeApiClient = {
       return [];
     }
 
-    // @ts-expect-error ignore implicit any
-    return res.data.items.map((item) => {
-      return {
-        id: new ChannelId(item.id),
-        snippet: {
+    return res.data.items.map(buildChannel);
+  },
+
+  /**
+   * Get Channel info with ChannelId-ish string.
+   */
+  getChannel: async (channelIdishString: string) => {
+    if (channelIdishString === "") {
+      throw new Error(`empty string.`);
+    }
+    if (channelIdishString.length > 30) {
+      throw new Error(`Too long channelId. Max is 30.`);
+    }
+
+    const filter = channelIdishString.startsWith("@")
+      ? { forHandle: channelIdishString }
+      : { id: channelIdishString };
+
+    const accessToken = await getAccessToken();
+    if (!accessToken) {
+      throw new Error("Access Token unavailable.");
+    }
+    const url = "https://www.googleapis.com/youtube/v3/channels";
+
+    const res = await axios.get(url, {
+      params: {
+        ...filter,
+        part: ["id", "snippet", "brandingSettings"].join(","),
+        maxResults: 1,
+      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (res.status < 200 || 300 <= res.status) {
+      console.log(res);
+      return undefined;
+    }
+
+    console.log(res.data.items[0]);
+
+    return buildChannel(res.data.items[0]);
+  },
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildChannel(item: any): Channel {
+  const snippet =
+    "snippet" in item
+      ? {
           title: item.snippet.title,
           description: item.snippet.description,
           customUrl: item.snippet.customUrl,
           publishedAt: new Date(item.snippet.publishedAt),
           thumbnails: item.snippet.thumbnails,
-        },
-      } satisfies Channel;
-    }) as Channel[];
-  },
-};
+        }
+      : {};
+  const brandingSettings =
+    "brandingSettings" in item
+      ? {
+          image: {
+            bannerExternalUrl: item.brandingSettings.image.bannerExternalUrl,
+          },
+        }
+      : {};
+  return {
+    id: new ChannelId(item.id),
+    ...snippet,
+    ...brandingSettings,
+  } satisfies Channel;
+}
