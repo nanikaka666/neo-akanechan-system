@@ -143,12 +143,6 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
   });
 
-  IpcMainWrapper.handle("getRegisterdChannels", async () => {
-    return (await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())).map(
-      convertToChannelSummary,
-    );
-  });
-
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
     setupLiveStatistics(e.sender);
 

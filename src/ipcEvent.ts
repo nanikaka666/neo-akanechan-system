@@ -235,11 +235,6 @@ export interface IpcEvent {
   checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
 
   /**
-   * Get channels stored in storage.
-   */
-  getRegisterdChannels: () => ChannelSummary[];
-
-  /**
    * Tell latest channel list to renderer.
    */
   tellUpdatedChannelIds: (channels: ChannelSummary[]) => void;
