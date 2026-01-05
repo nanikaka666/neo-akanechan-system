@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ChannelRegistrationLoader } from "./channelRegistration/ChannelRegistrationLoader";
 import { MainAppPage } from "../../../ipcEvent";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
 import { LiveControlPanel } from "./liveControl/LiveControlPanel";
@@ -29,7 +28,7 @@ export function MainApp() {
     ) : mainAppPage.type === "auth" ? (
       <AuthFlow />
     ) : (
-      <ChannelRegistrationLoader />
+      <div>No channel data.</div>
     )
   ) : (
     <div>Now Loading...</div>
