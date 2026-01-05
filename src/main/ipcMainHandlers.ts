@@ -64,7 +64,7 @@ export function setupIpcMainHandlers() {
     }
   });
 
-  IpcMainWrapper.handle("registerChannel", (e, channelId) => {
+  IpcMainWrapper.handle("registerChannel", async (e, channelId) => {
     if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
       return Promise.resolve(false);
     }
@@ -72,6 +72,10 @@ export function setupIpcMainHandlers() {
       type: "liveSelection",
       mainChannelId: channelId,
     } satisfies LiveSelectionPage);
+    const res = await (
+      await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
+    ).map(convertToChannelSummary);
+    WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
     return Promise.resolve(true);
   });
 
@@ -212,12 +216,11 @@ export function setupIpcMainHandlers() {
             } satisfies LiveSelectionPage)
           : ({ type: "beginningBlank" } satisfies BeginningBlankPage),
       );
-    } else {
-      const res =
-        (await Promise.all(getStorageService().getRegisteredChannelIds().map(getChannelSummary))) ??
-        [];
-      WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
     }
+    const nextChannels = await (
+      await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
+    ).map(convertToChannelSummary);
+    WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", nextChannels);
     return true;
   });
 
