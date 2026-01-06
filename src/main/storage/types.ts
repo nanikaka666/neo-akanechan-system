@@ -5,8 +5,6 @@ import { UserSettings } from "../userSettings";
  * data interface which persisted in this app.
  */
 export interface StorageData {
-  mainChannelId: string;
-  registeredChannelIds: string[];
   userSettings: Partial<UserSettings>;
   authCredentials: Credentials;
 }

@@ -1,6 +1,5 @@
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
-import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, InLivePage, LiveSelectionPage } from "../ipcEvent";
@@ -159,17 +158,10 @@ export function setupIpcMainHandlers() {
     if (!(await doAuthFlow())) {
       return false;
     }
-    try {
-      const channel = await YoutubeApiClient.getChannelOfMine();
-      getStorageService().registerChannelIdAndMarkAsMain(channel.id);
-      // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      //   type: "liveSelection",
-      //   mainChannelId: getStorageService().getMainChannelId()!,
-      // });
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
+    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+    //   type: "liveSelection",
+    //   mainChannelId: getStorageService().getMainChannelId()!,
+    // });
+    return true;
   });
 }
