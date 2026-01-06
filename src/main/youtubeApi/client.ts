@@ -104,7 +104,7 @@ export const YoutubeApiClient = {
     });
     checkStatus(res);
 
-    if (res.data.items.length === 0) {
+    if (!("items" in res.data)) {
       return undefined;
     }
 

@@ -170,10 +170,23 @@ export function setupIpcMainHandlers() {
     if (!(await doAuthFlow())) {
       return false;
     }
-    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-    //   type: "liveSelection",
-    //   mainChannelId: getStorageService().getMainChannelId()!,
-    // });
+
+    const maybeChannel = await YoutubeApiClient.getChannelOfMine();
+
+    if (!maybeChannel) {
+      dialog.showErrorBox(
+        "Please OAuth flow again",
+        "Youtube Channel associated with oauth accound is not found.",
+      );
+      await revokeCredentials();
+      return false;
+    }
+
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveSelection",
+      channel: maybeChannel,
+      live: await YoutubeApiClient.getLiveBroadcasts(),
+    });
     return true;
   });
 }
