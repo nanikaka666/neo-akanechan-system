@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from "react";
+import { useState } from "react";
 import { ChannelSummaryView } from "./ChannelSummaryView";
 import { Channel, YoutubeLive } from "../../../../ipcEvent";
 import { UserSettingsButton } from "./UserSettingsButton";
@@ -6,14 +6,6 @@ import { UserSettingsButton } from "./UserSettingsButton";
 export function MainChannelTop({ channel, live }: { channel: Channel; live: YoutubeLive[] }) {
   const [isConfirming, setIsConfirming] = useState(false);
 
-  async function onClick(e: MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    setIsConfirming((_) => true);
-
-    // todo: call this function
-    // await window.ipcApi.requestOpenOverlay(channelHavingClosestLive);
-    setIsConfirming((_) => false);
-  }
   return (
     <div>
       <ChannelSummaryView channel={channel} />
@@ -26,7 +18,16 @@ export function MainChannelTop({ channel, live }: { channel: Channel; live: Yout
             <p>{live.scheduledStartTime.toLocaleString()}</p>
             <p>{live.isPublic ? "public" : "private"}</p>
             <p>
-              <button onClick={onClick} disabled={isConfirming}>
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  setIsConfirming((_) => true);
+
+                  await window.ipcApi.requestOpenOverlay(channel, live);
+                  setIsConfirming((_) => false);
+                }}
+                disabled={isConfirming}
+              >
                 Live Start
               </button>
             </p>

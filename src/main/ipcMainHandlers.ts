@@ -153,10 +153,11 @@ export function setupIpcMainHandlers() {
 
     cleanUpLiveStatistics();
 
-    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-    //   type: "liveSelection",
-    //   mainChannelId: liveLaunchProperties.channel.channel.channelId,
-    // } satisfies LiveSelectionPage);
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      type: "liveSelection",
+      channel: liveLaunchProperties.channel,
+      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
+    } satisfies LiveSelectionPage);
     return true;
   });
 
