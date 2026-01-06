@@ -3,7 +3,7 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
-import { AuthPage, BeginningBlankPage, InLivePage, LiveSelectionPage } from "../ipcEvent";
+import { AuthPage, InLivePage, LiveSelectionPage } from "../ipcEvent";
 import {
   cleanUpLiveChatEmitter,
   getLiveChatManager,

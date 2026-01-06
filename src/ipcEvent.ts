@@ -18,15 +18,6 @@ export interface AuthPage {
 }
 
 /**
- * Represents page which first status of this app.
- *
- * User does not any channel yet.
- */
-export interface BeginningBlankPage {
-  type: "beginningBlank";
-}
-
-/**
  * Represents page which user selects a live from registered channels.
  */
 export interface LiveSelectionPage {
@@ -56,12 +47,7 @@ export interface InLivePage {
 /**
  * Represents MainApp status where user is in.
  */
-export type MainAppPage =
-  | AuthPage
-  | BeginningBlankPage
-  | LiveSelectionPage
-  | LiveStandByPage
-  | InLivePage;
+export type MainAppPage = AuthPage | LiveSelectionPage | LiveStandByPage | InLivePage;
 
 export interface Channel {
   id: ChannelId;
@@ -287,7 +273,7 @@ export interface IpcEvent {
   /**
    * Return MainAppPage for initial status.
    */
-  getInitialMainAppPage: () => AuthPage | BeginningBlankPage | LiveSelectionPage;
+  getInitialMainAppPage: () => AuthPage | LiveSelectionPage;
 
   /**
    * Notify latest MainAppPage to renderer.
