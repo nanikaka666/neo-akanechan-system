@@ -253,7 +253,7 @@ function buildChannelResponse(item: any): ChannelResponse {
       thumbnails: item.snippet.thumbnails,
     },
     statistics: {
-      subscriberCount: item.statistics.subscriberCount,
+      subscriberCount: Number.parseInt(item.statistics.subscriberCount),
     },
     brandingSettings: {
       ...imageInBrandingSettings,
