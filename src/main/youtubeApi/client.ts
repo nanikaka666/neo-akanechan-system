@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getAccessToken } from "../auth/google";
 import { ChannelResponse, ChannelId, LiveBroadcastYoutubeApiResponse, VideoId } from "./model";
+import { Channel, YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../../ipcEvent";
 
 /**
  * Handle access to Youtube Data and LiveStreaming API
@@ -24,13 +25,13 @@ export const YoutubeApiClient = {
       throw new Error("Get Channels failed.");
     }
 
-    return buildChannelResponse(res.data.items[0]);
+    return convertToChannel(buildChannelResponse(res.data.items[0]));
   },
 
   /**
    * Get multiple Channel info.
    */
-  getChannels: async (channelIds: ChannelId[]): Promise<ChannelResponse[]> => {
+  getChannels: async (channelIds: ChannelId[]): Promise<Channel[]> => {
     if (channelIds.length === 0) {
       return [];
     }
@@ -50,11 +51,10 @@ export const YoutubeApiClient = {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     if (res.status < 200 || 300 <= res.status) {
-      console.log(res);
-      return [];
+      throw new Error("Get Channels failed.");
     }
 
-    return res.data.items.map(buildChannelResponse);
+    return res.data.items.map(buildChannelResponse).map(convertToChannel);
   },
 
   /**
@@ -84,8 +84,7 @@ export const YoutubeApiClient = {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     if (res.status < 200 || 300 <= res.status) {
-      console.log(res);
-      return undefined;
+      throw new Error(`Fail api call. ${res.status} : ${res.statusText}`);
     }
 
     return buildChannelResponse(res.data.items[0]);
@@ -94,7 +93,7 @@ export const YoutubeApiClient = {
   /**
    * Get LiveBroadcasts of user's channel.
    */
-  getLiveBroadcasts: async (): Promise<LiveBroadcastYoutubeApiResponse[]> => {
+  getLiveBroadcasts: async (): Promise<YoutubeLive[]> => {
     const accessToken = await googleAccessToken();
     const url = "https://www.googleapis.com/youtube/v3/liveBroadcasts";
 
@@ -111,7 +110,9 @@ export const YoutubeApiClient = {
       return [];
     }
 
-    return res.data.items.map(buildLiveBroadcastResponse) as LiveBroadcastYoutubeApiResponse[];
+    return (res.data.items.map(buildLiveBroadcastResponse) as LiveBroadcastYoutubeApiResponse[])
+      .filter((res) => res.snippet.actualEndTime === undefined)
+      .map(convertToLive);
   },
 };
 
@@ -147,6 +148,19 @@ function buildChannelResponse(item: any): ChannelResponse {
   } satisfies ChannelResponse;
 }
 
+/**
+ * Convert to app domain model from Youtube api response domain.
+ */
+function convertToChannel(res: ChannelResponse) {
+  return {
+    id: res.id,
+    title: res.snippet.title,
+    subscribersCount: res.statistics.subscriberCount,
+    ownerIconUrl: res.snippet.thumbnails.default.url,
+    bannerUrl: res.brandingSettings.image?.bannerExternalUrl,
+  } satisfies Channel;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildLiveBroadcastResponse(item: any): LiveBroadcastYoutubeApiResponse {
   return {
@@ -168,4 +182,33 @@ function buildLiveBroadcastResponse(item: any): LiveBroadcastYoutubeApiResponse 
       privacyStatus: item.status.privacyStatus,
     },
   } satisfies LiveBroadcastYoutubeApiResponse;
+}
+
+/**
+ * Convert to app domain model from Youtube api response domain.
+ */
+function convertToLive(res: LiveBroadcastYoutubeApiResponse) {
+  if (res.snippet.actualEndTime) {
+    throw new Error("completed live can not be converted.");
+  }
+  return res.snippet.actualStartTime
+    ? ({
+        type: "inLive",
+        videoId: res.videoId,
+        liveChatId: res.snippet.liveChatId,
+        title: res.snippet.title,
+        thumbnailUrl: res.snippet.thumbnails.default.url,
+        scheduledStartTime: res.snippet.scheduledStartTime,
+        actualStartTime: res.snippet.actualStartTime,
+        isPublic: res.status.privacyStatus === "public",
+      } satisfies YoutubeLiveInLive)
+    : ({
+        type: "inReady",
+        videoId: res.videoId,
+        liveChatId: res.snippet.liveChatId,
+        title: res.snippet.title,
+        thumbnailUrl: res.snippet.thumbnails.default.url,
+        scheduledStartTime: res.snippet.scheduledStartTime,
+        isPublic: res.status.privacyStatus === "public",
+      } satisfies YoutubeLiveInReady);
 }
