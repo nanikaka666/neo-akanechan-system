@@ -106,6 +106,10 @@ export const YoutubeApiClient = {
       throw new Error("Get Channels failed.");
     }
 
+    if (res.data.items.length === 0) {
+      return undefined;
+    }
+
     return convertToChannel(buildChannelResponse(res.data.items[0]));
   },
 

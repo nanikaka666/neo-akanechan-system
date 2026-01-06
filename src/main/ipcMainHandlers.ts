@@ -98,13 +98,25 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(getLiveChatManager().removeStock(item));
   });
 
-  IpcMainWrapper.handle("getInitialMainAppPage", async () => {
+  IpcMainWrapper.handle("getInitialMainAppPage", async (e) => {
     if (!isUserAuthorized()) {
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
+
+    const maybeChannel = await YoutubeApiClient.getChannelOfMine();
+
+    if (!maybeChannel) {
+      dialog.showErrorBox(
+        "Please OAuth flow again",
+        "Youtube Channel associated with oauth accound is not found.",
+      );
+      // todo: oauth revoke
+      return Promise.resolve({ type: "auth" } satisfies AuthPage);
+    }
+
     return Promise.resolve({
       type: "liveSelection",
-      channel: await YoutubeApiClient.getChannelOfMine(),
+      channel: maybeChannel,
       live: await YoutubeApiClient.getLiveBroadcasts(),
     } satisfies LiveSelectionPage);
   });
