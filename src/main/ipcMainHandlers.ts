@@ -16,7 +16,7 @@ import {
 import {
   cleanupChannelStatisticsEmitter,
   setupChannelStatisticsEmitter,
-} from "./emitter/subscriberCountManager";
+} from "./emitter/channelStatisticsManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiService } from "./youtubeApi/service";

@@ -1,7 +1,22 @@
-import { Channel, YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../../ipcEvent";
+import {
+  Channel,
+  NotLiveVideo,
+  VideoFinishedLive,
+  VideoInLive,
+  VideoUpcomingLive,
+  YoutubeLive,
+  YoutubeLiveInLive,
+  YoutubeLiveInReady,
+  YoutubeVideo,
+} from "../../ipcEvent";
 import { getAccessToken, revokeCredentials } from "../auth/google";
-import { ChannelResponse, LiveBroadcastYoutubeApiResponse, YoutubeApiClient } from "./client";
-import { ChannelId } from "./model";
+import {
+  ChannelResponse,
+  LiveBroadcastYoutubeApiResponse,
+  VideoYoutubeApiResponse,
+  YoutubeApiClient,
+} from "./client";
+import { ChannelId, VideoId } from "./model";
 
 export const YoutubeApiService = {
   getChannelOfMine: async () => {
@@ -41,6 +56,14 @@ export const YoutubeApiService = {
     return (await YoutubeApiClient.getLiveBroadcasts(accessToken))
       .filter((item) => item.snippet.actualEndTime === undefined)
       .map(convertToLive);
+  },
+
+  getVideo: async (videoId: VideoId) => {
+    const accessToken = await googleAccessToken();
+
+    const res = await YoutubeApiClient.getVideo(accessToken, videoId);
+
+    return res ? convertToVideo(res) : undefined;
   },
 };
 
@@ -92,4 +115,63 @@ function convertToLive(res: LiveBroadcastYoutubeApiResponse): YoutubeLive {
         scheduledStartTime: res.snippet.scheduledStartTime,
         isPublic: res.status.privacyStatus === "public",
       } satisfies YoutubeLiveInReady);
+}
+
+/**
+ * Convert to app domain model from Youtube api response domain.
+ */
+function convertToVideo(res: VideoYoutubeApiResponse): YoutubeVideo {
+  if (!("liveStreamingDetails" in res)) {
+    return {
+      type: "notLive",
+      id: res.id,
+      title: res.snippet.title,
+      description: res.snippet.description,
+      channelId: res.snippet.channelId,
+      channelTitle: res.snippet.channelTitle,
+      thumbnailUrl: res.snippet.thumbnails.default.url,
+      likeCount: res.statistics.likeCount,
+    } satisfies NotLiveVideo;
+  }
+  if (res.snippet.liveBroadcastContent === "none") {
+    return {
+      type: "finishedLive",
+      id: res.id,
+      title: res.snippet.title,
+      description: res.snippet.description,
+      channelId: res.snippet.channelId,
+      channelTitle: res.snippet.channelTitle,
+      thumbnailUrl: res.snippet.thumbnails.default.url,
+      likeCount: res.statistics.likeCount,
+      actualStartTime: res.liveStreamingDetails!.actualStartTime!,
+      actualEndTime: res.liveStreamingDetails!.actualEndTime!,
+    } satisfies VideoFinishedLive;
+  } else if (res.snippet.liveBroadcastContent === "upcoming") {
+    return {
+      type: "upcomingLive",
+      id: res.id,
+      title: res.snippet.title,
+      description: res.snippet.description,
+      channelId: res.snippet.channelId,
+      channelTitle: res.snippet.channelTitle,
+      thumbnailUrl: res.snippet.thumbnails.default.url,
+      likeCount: res.statistics.likeCount,
+      scheduledStartTime: res.liveStreamingDetails!.scheduledStartTime!,
+      activeLiveChatId: res.liveStreamingDetails!.activeLiveChatId!,
+    } satisfies VideoUpcomingLive;
+  } else {
+    return {
+      type: "inLive",
+      id: res.id,
+      title: res.snippet.title,
+      description: res.snippet.description,
+      channelId: res.snippet.channelId,
+      channelTitle: res.snippet.channelTitle,
+      thumbnailUrl: res.snippet.thumbnails.default.url,
+      likeCount: res.statistics.likeCount,
+      actualStartTime: res.liveStreamingDetails!.actualStartTime!,
+      activeLiveChatId: res.liveStreamingDetails!.activeLiveChatId!,
+      concurrentViewers: res.liveStreamingDetails!.concurrentViewers!,
+    } satisfies VideoInLive;
+  }
 }

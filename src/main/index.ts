@@ -49,6 +49,7 @@ function main() {
     await setupAuth();
 
     createMainWindow();
+
     app.on("activate", onActivate);
   });
 }

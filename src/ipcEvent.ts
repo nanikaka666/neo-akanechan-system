@@ -8,7 +8,7 @@ import {
   NewMembership,
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
-import { ChannelId, LiveChatId, VideoId } from "./main/youtubeApi/model";
+import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "./main/youtubeApi/model";
 
 /**
  * User doesn't authorized.
@@ -78,6 +78,59 @@ export interface YoutubeLiveInLive {
   scheduledStartTime: Date;
   actualStartTime: Date;
   isPublic: boolean;
+}
+
+export type YoutubeVideo = VideoUpcomingLive | VideoInLive | VideoFinishedLive | NotLiveVideo;
+
+export interface VideoUpcomingLive {
+  type: "upcomingLive";
+  id: VideoId;
+  title: string;
+  description: string;
+  channelId: ChannelId;
+  channelTitle: string;
+  thumbnailUrl: string;
+  likeCount: number;
+  scheduledStartTime: Date;
+  activeLiveChatId: ActiveLiveChatId;
+}
+
+export interface VideoInLive {
+  type: "inLive";
+  id: VideoId;
+  title: string;
+  description: string;
+  channelId: ChannelId;
+  channelTitle: string;
+  thumbnailUrl: string;
+  likeCount: number;
+  actualStartTime: Date;
+  activeLiveChatId: ActiveLiveChatId;
+  concurrentViewers: number;
+}
+
+export interface VideoFinishedLive {
+  type: "finishedLive";
+  id: VideoId;
+  title: string;
+  description: string;
+  channelId: ChannelId;
+  channelTitle: string;
+  thumbnailUrl: string;
+  likeCount: number;
+  actualStartTime: Date;
+  actualEndTime: Date;
+}
+
+export interface NotLiveVideo {
+  type: "notLive";
+  id: VideoId;
+  title: string;
+  description: string;
+  channelId: ChannelId;
+  channelTitle: string;
+  thumbnailUrl: string;
+  likeCount: number;
 }
 
 export interface LiveLaunchProperties {
