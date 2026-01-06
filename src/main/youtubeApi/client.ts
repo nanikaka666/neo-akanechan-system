@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "../auth/google";
-import { Channel, ChannelId, LiveBroadcastYoutubeApiResponse, VideoId } from "./model";
+import { ChannelResponse, ChannelId, LiveBroadcastYoutubeApiResponse, VideoId } from "./model";
 
 /**
  * Handle access to Youtube Data and LiveStreaming API
@@ -24,13 +24,13 @@ export const YoutubeApiClient = {
       throw new Error("Get Channels failed.");
     }
 
-    return buildChannel(res.data.items[0]);
+    return buildChannelResponse(res.data.items[0]);
   },
 
   /**
    * Get multiple Channel info.
    */
-  getChannels: async (channelIds: ChannelId[]): Promise<Channel[]> => {
+  getChannels: async (channelIds: ChannelId[]): Promise<ChannelResponse[]> => {
     if (channelIds.length === 0) {
       return [];
     }
@@ -54,7 +54,7 @@ export const YoutubeApiClient = {
       return [];
     }
 
-    return res.data.items.map(buildChannel);
+    return res.data.items.map(buildChannelResponse);
   },
 
   /**
@@ -88,7 +88,7 @@ export const YoutubeApiClient = {
       return undefined;
     }
 
-    return buildChannel(res.data.items[0]);
+    return buildChannelResponse(res.data.items[0]);
   },
 
   /**
@@ -111,7 +111,7 @@ export const YoutubeApiClient = {
       return [];
     }
 
-    return res.data.items.map(buildLiveBroadcast) as LiveBroadcastYoutubeApiResponse[];
+    return res.data.items.map(buildLiveBroadcastResponse) as LiveBroadcastYoutubeApiResponse[];
   },
 };
 
@@ -124,7 +124,7 @@ async function googleAccessToken() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildChannel(item: any): Channel {
+function buildChannelResponse(item: any): ChannelResponse {
   const imageInBrandingSettings =
     "image" in item.brandingSettings
       ? { image: { bannerExternalUrl: item.brandingSettings.image.bannerExternalUrl } }
@@ -144,11 +144,11 @@ function buildChannel(item: any): Channel {
     brandingSettings: {
       ...imageInBrandingSettings,
     },
-  } satisfies Channel;
+  } satisfies ChannelResponse;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildLiveBroadcast(item: any): LiveBroadcastYoutubeApiResponse {
+function buildLiveBroadcastResponse(item: any): LiveBroadcastYoutubeApiResponse {
   return {
     videoId: new VideoId(item.id),
     snippet: {
