@@ -18,8 +18,8 @@ import {
   setupSubscriberCountEmitter,
 } from "./emitter/subscriberCountManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
-import { doAuthFlow, isUserAuthorized, revokeCredentials } from "./auth/google";
-import { YoutubeApiClient } from "./youtubeApi/client";
+import { doAuthFlow, isUserAuthorized } from "./auth/google";
+import { YoutubeApiService } from "./youtubeApi/service";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -103,21 +103,20 @@ export function setupIpcMainHandlers() {
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
 
-    const maybeChannel = await YoutubeApiClient.getChannelOfMine();
+    const maybeChannel = await YoutubeApiService.getChannelOfMine();
 
     if (!maybeChannel) {
       dialog.showErrorBox(
         "Please OAuth flow again",
         "Youtube Channel associated with oauth accound is not found.",
       );
-      await revokeCredentials();
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
 
     return Promise.resolve({
       type: "liveSelection",
       channel: maybeChannel,
-      live: await YoutubeApiClient.getLiveBroadcasts(),
+      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
     } satisfies LiveSelectionPage);
   });
 
@@ -173,21 +172,20 @@ export function setupIpcMainHandlers() {
       return false;
     }
 
-    const maybeChannel = await YoutubeApiClient.getChannelOfMine();
+    const maybeChannel = await YoutubeApiService.getChannelOfMine();
 
     if (!maybeChannel) {
       dialog.showErrorBox(
         "Please OAuth flow again",
         "Youtube Channel associated with oauth accound is not found.",
       );
-      await revokeCredentials();
       return false;
     }
 
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveSelection",
       channel: maybeChannel,
-      live: await YoutubeApiClient.getLiveBroadcasts(),
+      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
     });
     return true;
   });

@@ -1,4 +1,4 @@
-import { shell, WebContents } from "electron";
+import { shell } from "electron";
 import http from "node:http";
 import {
   OAuth2ClientOptions,

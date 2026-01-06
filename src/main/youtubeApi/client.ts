@@ -1,6 +1,4 @@
 import axios, { AxiosResponse } from "axios";
-import { getAccessToken } from "../auth/google";
-import { Channel, YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../../ipcEvent";
 import { ChannelId, LiveChatId, VideoId } from "./model";
 
 /**
@@ -40,7 +38,7 @@ type LifeCycleStatusYoutubeApiResponse =
 
 type PrivacyStatusYoutubeApiResponse = "private" | "public" | "unlisted";
 
-interface LiveBroadcastYoutubeApiResponse {
+export interface LiveBroadcastYoutubeApiResponse {
   videoId: VideoId;
   snippet: {
     publishedAt: Date;
@@ -67,7 +65,7 @@ interface LiveBroadcastYoutubeApiResponse {
 /**
  * Channel data structure in Youtube Api Response.
  */
-interface ChannelResponse {
+export interface ChannelResponse {
   id: ChannelId;
   snippet: {
     title: string;
@@ -91,8 +89,7 @@ export const YoutubeApiClient = {
   /**
    * Get Channel of user's channel.
    */
-  getChannelOfMine: async () => {
-    const accessToken = await googleAccessToken();
+  getChannelOfMine: async (accessToken: string) => {
     const url = "https://www.googleapis.com/youtube/v3/channels";
 
     const res = await axios.get(url, {
@@ -108,30 +105,44 @@ export const YoutubeApiClient = {
       return undefined;
     }
 
-    return convertToChannel(buildChannelResponse(res.data.items[0]));
+    return buildChannelResponse(res.data.items[0]);
   },
 
-  /**
-   * Get Channel info with ChannelId-ish string.
-   */
-  getChannel: async (channelIdishString: string) => {
-    if (channelIdishString === "") {
+  getChannelByHandle: async (accessToken: string, handle: string) => {
+    if (handle === "") {
       throw new Error(`empty string.`);
     }
-    if (channelIdishString.length > 30) {
+    if (!handle.startsWith("@")) {
+      throw new Error(`invalid handle format`);
+    }
+    if (handle.length > 30) {
       throw new Error(`Too long channelId. Max is 30.`);
     }
 
-    const filter = channelIdishString.startsWith("@")
-      ? { forHandle: channelIdishString }
-      : { id: channelIdishString };
-
-    const accessToken = await googleAccessToken();
     const url = "https://www.googleapis.com/youtube/v3/channels";
 
     const res = await axios.get(url, {
       params: {
-        ...filter,
+        forHandle: handle,
+        part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
+        maxResults: 1,
+      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    checkStatus(res);
+    if (!("items" in res.data)) {
+      return undefined;
+    }
+
+    return buildChannelResponse(res.data.items[0]);
+  },
+
+  getChannelById: async (accessToken: string, channelId: ChannelId) => {
+    const url = "https://www.googleapis.com/youtube/v3/channels";
+
+    const res = await axios.get(url, {
+      params: {
+        id: channelId.id,
         part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
         maxResults: 1,
       },
@@ -148,8 +159,7 @@ export const YoutubeApiClient = {
   /**
    * Get LiveBroadcasts of user's channel.
    */
-  getLiveBroadcasts: async (): Promise<YoutubeLive[]> => {
-    const accessToken = await googleAccessToken();
+  getLiveBroadcasts: async (accessToken: string): Promise<LiveBroadcastYoutubeApiResponse[]> => {
     const url = "https://www.googleapis.com/youtube/v3/liveBroadcasts";
 
     const res = await axios.get(url, {
@@ -162,9 +172,7 @@ export const YoutubeApiClient = {
     });
     checkStatus(res);
 
-    return (res.data.items.map(buildLiveBroadcastResponse) as LiveBroadcastYoutubeApiResponse[])
-      .filter((res) => res.snippet.actualEndTime === undefined)
-      .map(convertToLive);
+    return res.data.items.map(buildLiveBroadcastResponse) as LiveBroadcastYoutubeApiResponse[];
   },
 };
 
@@ -172,14 +180,6 @@ function checkStatus(res: AxiosResponse) {
   if (res.status < 200 || 300 <= res.status) {
     throw new Error(`Api call failed. Status(${res.status}). StatusText: (${res.statusText})`);
   }
-}
-
-async function googleAccessToken() {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    throw new Error("Access Token unavailable.");
-  }
-  return accessToken;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -206,19 +206,6 @@ function buildChannelResponse(item: any): ChannelResponse {
   } satisfies ChannelResponse;
 }
 
-/**
- * Convert to app domain model from Youtube api response domain.
- */
-function convertToChannel(res: ChannelResponse) {
-  return {
-    id: res.id,
-    title: res.snippet.title,
-    subscribersCount: res.statistics.subscriberCount,
-    ownerIconUrl: res.snippet.thumbnails.default.url,
-    bannerUrl: res.brandingSettings.image?.bannerExternalUrl,
-  } satisfies Channel;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildLiveBroadcastResponse(item: any): LiveBroadcastYoutubeApiResponse {
   return {
@@ -240,33 +227,4 @@ function buildLiveBroadcastResponse(item: any): LiveBroadcastYoutubeApiResponse 
       privacyStatus: item.status.privacyStatus,
     },
   } satisfies LiveBroadcastYoutubeApiResponse;
-}
-
-/**
- * Convert to app domain model from Youtube api response domain.
- */
-function convertToLive(res: LiveBroadcastYoutubeApiResponse) {
-  if (res.snippet.actualEndTime) {
-    throw new Error("completed live can not be converted.");
-  }
-  return res.snippet.actualStartTime
-    ? ({
-        type: "inLive",
-        videoId: res.videoId,
-        liveChatId: res.snippet.liveChatId,
-        title: res.snippet.title,
-        thumbnailUrl: res.snippet.thumbnails.default.url,
-        scheduledStartTime: res.snippet.scheduledStartTime,
-        actualStartTime: res.snippet.actualStartTime,
-        isPublic: res.status.privacyStatus === "public",
-      } satisfies YoutubeLiveInLive)
-    : ({
-        type: "inReady",
-        videoId: res.videoId,
-        liveChatId: res.snippet.liveChatId,
-        title: res.snippet.title,
-        thumbnailUrl: res.snippet.thumbnails.default.url,
-        scheduledStartTime: res.snippet.scheduledStartTime,
-        isPublic: res.status.privacyStatus === "public",
-      } satisfies YoutubeLiveInReady);
 }
