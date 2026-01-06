@@ -18,7 +18,7 @@ import {
   setupSubscriberCountEmitter,
 } from "./emitter/subscriberCountManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
-import { doAuthFlow, isUserAuthorized } from "./auth/google";
+import { doAuthFlow, isUserAuthorized, revokeCredentials } from "./auth/google";
 import { YoutubeApiClient } from "./youtubeApi/client";
 
 export function setupIpcMainHandlers() {
@@ -98,7 +98,7 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(getLiveChatManager().removeStock(item));
   });
 
-  IpcMainWrapper.handle("getInitialMainAppPage", async (e) => {
+  IpcMainWrapper.handle("getInitialMainAppPage", async () => {
     if (!isUserAuthorized()) {
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
@@ -110,7 +110,7 @@ export function setupIpcMainHandlers() {
         "Please OAuth flow again",
         "Youtube Channel associated with oauth accound is not found.",
       );
-      // todo: oauth revoke
+      await revokeCredentials();
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
 

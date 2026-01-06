@@ -50,6 +50,13 @@ export class StorageService {
   }
 
   /**
+   * Delete Auth credentials.
+   */
+  deleteAuthCredentials() {
+    this.#dao.delete("authCredentials");
+  }
+
+  /**
    * Get whole object stored in storage.
    */
   getAll() {

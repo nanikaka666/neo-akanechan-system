@@ -117,23 +117,17 @@ export async function doAuthFlow(): Promise<boolean> {
   });
 }
 
-export async function revokeCredentials(w: WebContents) {
+export async function revokeCredentials() {
   if (!authClient) {
-    return true;
+    return;
   }
-  try {
-    const res = await authClient.revokeCredentials();
-    if (res.status !== 200) {
-      console.log(res);
-      return false;
-    }
-    authClient = undefined;
-    // store.delete("credentials");
-    // webContentsSendWrapper(w, "tellCredentials", undefined);
-    return true;
-  } catch (e: unknown) {
-    console.log(e);
+  const res = await authClient.revokeCredentials();
+  if (res.status !== 200) {
+    throw new Error(`Revoke credentials failed. ${await res.json()}`);
   }
+  getStorageService().deleteAuthCredentials();
+  authClient = undefined;
+  return;
 }
 
 /**
