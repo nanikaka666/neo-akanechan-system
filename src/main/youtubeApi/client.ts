@@ -138,6 +138,9 @@ export const YoutubeApiClient = {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     checkStatus(res);
+    if (!("items" in res.data)) {
+      return undefined;
+    }
 
     return buildChannelResponse(res.data.items[0]);
   },
