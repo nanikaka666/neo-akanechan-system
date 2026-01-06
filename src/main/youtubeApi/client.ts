@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../auth/google";
 import { Channel, YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../../ipcEvent";
 import { ChannelId, LiveChatId, VideoId } from "./model";
@@ -102,9 +102,7 @@ export const YoutubeApiClient = {
       },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    if (res.status < 200 || 300 <= res.status) {
-      throw new Error("Get Channels failed.");
-    }
+    checkStatus(res);
 
     if (res.data.items.length === 0) {
       return undefined;
@@ -135,9 +133,7 @@ export const YoutubeApiClient = {
       },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    if (res.status < 200 || 300 <= res.status) {
-      throw new Error("Get Channels failed.");
-    }
+    checkStatus(res);
 
     return res.data.items.map(buildChannelResponse).map(convertToChannel);
   },
@@ -168,9 +164,7 @@ export const YoutubeApiClient = {
       },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    if (res.status < 200 || 300 <= res.status) {
-      throw new Error(`Fail api call. ${res.status} : ${res.statusText}`);
-    }
+    checkStatus(res);
 
     return buildChannelResponse(res.data.items[0]);
   },
@@ -190,16 +184,19 @@ export const YoutubeApiClient = {
       },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    if (res.status < 200 || 300 <= res.status) {
-      console.log(res);
-      return [];
-    }
+    checkStatus(res);
 
     return (res.data.items.map(buildLiveBroadcastResponse) as LiveBroadcastYoutubeApiResponse[])
       .filter((res) => res.snippet.actualEndTime === undefined)
       .map(convertToLive);
   },
 };
+
+function checkStatus(res: AxiosResponse) {
+  if (res.status < 200 || 300 <= res.status) {
+    throw new Error(`Api call failed. Status(${res.status}). StatusText: (${res.statusText})`);
+  }
+}
 
 async function googleAccessToken() {
   const accessToken = await getAccessToken();
