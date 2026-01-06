@@ -3,14 +3,14 @@ import { ChannelSummaryView } from "./ChannelSummaryView";
 import { Channel, YoutubeLive } from "../../../../ipcEvent";
 import { UserSettingsButton } from "./UserSettingsButton";
 
-export function MainChannelTop({ channel, live }: { channel: Channel; live: YoutubeLive[] }) {
+export function MainChannelTop({ channel, lives }: { channel: Channel; lives: YoutubeLive[] }) {
   const [isConfirming, setIsConfirming] = useState(false);
 
   return (
     <div>
       <ChannelSummaryView channel={channel} />
       <UserSettingsButton />
-      {live.map((live) => {
+      {lives.map((live) => {
         return (
           <div key={live.videoId.id}>
             <img src={live.thumbnailUrl} alt="next live thumbnail" style={{ width: "360px" }} />

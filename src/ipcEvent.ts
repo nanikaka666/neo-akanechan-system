@@ -23,7 +23,7 @@ export interface AuthPage {
 export interface LiveSelectionPage {
   type: "liveSelection";
   channel: Channel;
-  live: YoutubeLive[];
+  lives: YoutubeLive[];
 }
 
 /**

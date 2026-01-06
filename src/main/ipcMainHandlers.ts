@@ -116,7 +116,7 @@ export function setupIpcMainHandlers() {
     return Promise.resolve({
       type: "liveSelection",
       channel: maybeChannel,
-      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
+      lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
     } satisfies LiveSelectionPage);
   });
 
@@ -156,7 +156,7 @@ export function setupIpcMainHandlers() {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveSelection",
       channel: liveLaunchProperties.channel,
-      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
+      lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
     } satisfies LiveSelectionPage);
     return true;
   });
@@ -186,7 +186,7 @@ export function setupIpcMainHandlers() {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveSelection",
       channel: maybeChannel,
-      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
+      lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
     });
     return true;
   });
