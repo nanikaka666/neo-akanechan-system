@@ -8,7 +8,12 @@ import {
   NewMembership,
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
-import { Channel, ChannelId, LiveBroadcastYoutubeApiResponse } from "./main/youtubeApi/model";
+import {
+  ChannelId,
+  LiveBroadcastYoutubeApiResponse,
+  LiveChatId,
+  VideoId,
+} from "./main/youtubeApi/model";
 
 /**
  * User doesn't authorized.
@@ -64,28 +69,40 @@ export type MainAppPage =
   | LiveStandByPage
   | InLivePage;
 
-export interface ChannelSummary {
-  channelId: ChannelId;
-  channelTitle: string;
-  subscribersCount: number;
-  ownerIcon: string;
-  channelBanner?: string;
-}
-
-export interface LiveSummary {
+export interface Channel {
+  id: ChannelId;
   title: string;
-  thumbnail: string;
-  isOnAir: boolean;
+  subscribersCount: number;
+  ownerIconUrl: string;
+  bannerUrl?: string;
 }
 
-export interface ChannelHavingClosestLive {
-  type: "has_closest_live";
-  channel: ChannelSummary;
-  closestLive: LiveSummary;
+export type YoutubeLive = YoutubeLiveInReady | YoutubeLiveInLive;
+
+export interface YoutubeLiveInReady {
+  type: "inReady";
+  videoId: VideoId;
+  liveChatId: LiveChatId;
+  title: string;
+  thumbnailUrl: string;
+  scheduledStartTime: Date;
+  isPublic: boolean;
+}
+
+export interface YoutubeLiveInLive {
+  type: "inLive";
+  videoId: VideoId;
+  liveChatId: LiveChatId;
+  title: string;
+  thumbnailUrl: string;
+  scheduledStartTime: Date;
+  actualStartTime: Date;
+  isPublic: boolean;
 }
 
 export interface LiveLaunchProperties {
-  channel: ChannelHavingClosestLive;
+  channel: Channel;
+  live: YoutubeLive;
   settings: UserSettings;
   overlayWindowTitle: string;
 }
@@ -222,7 +239,7 @@ export interface IpcEvent {
   /**
    * Confirm to user that overlay feature should starts.
    */
-  startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
+  startOverlayWithUserConfirmation: (channel: Channel, live: YoutubeLive) => boolean;
 
   /**
    * Start emitters depend on user settings.
