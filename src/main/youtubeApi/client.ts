@@ -112,33 +112,6 @@ export const YoutubeApiClient = {
   },
 
   /**
-   * Get multiple Channel info.
-   */
-  getChannels: async (channelIds: ChannelId[]): Promise<Channel[]> => {
-    if (channelIds.length === 0) {
-      return [];
-    }
-    if (channelIds.length > 50) {
-      throw new Error(`Too many channel ids. Max is 50. Length: ${channelIds.length}`);
-    }
-
-    const accessToken = await googleAccessToken();
-    const url = "https://www.googleapis.com/youtube/v3/channels";
-
-    const res = await axios.get(url, {
-      params: {
-        id: channelIds.map((channelId) => channelId.id).join(","),
-        part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
-        maxResults: channelIds.length,
-      },
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    checkStatus(res);
-
-    return res.data.items.map(buildChannelResponse).map(convertToChannel);
-  },
-
-  /**
    * Get Channel info with ChannelId-ish string.
    */
   getChannel: async (channelIdishString: string) => {
