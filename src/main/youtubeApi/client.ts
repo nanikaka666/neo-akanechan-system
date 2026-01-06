@@ -1,7 +1,88 @@
 import axios from "axios";
 import { getAccessToken } from "../auth/google";
-import { ChannelResponse, ChannelId, LiveBroadcastYoutubeApiResponse, VideoId } from "./model";
 import { Channel, YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../../ipcEvent";
+import { ChannelId, LiveChatId, VideoId } from "./model";
+
+/**
+ * Image data structure in Youtube Api Response.
+ */
+interface ImageYoutubeApiResponse {
+  url: string;
+  width: number;
+  height: number;
+}
+
+/**
+ * Statistics in Channel data structure in Youtube Api Response.
+ */
+interface ChannelStatisticsYoutubeApiResponse {
+  subscriberCount: number;
+}
+
+/**
+ * BrandingSettings in Channel data structure in Youtube Api Response.
+ */
+interface BrandingSettingsYoutubeApiResponse {
+  image?: {
+    bannerExternalUrl: string;
+  };
+}
+
+type LifeCycleStatusYoutubeApiResponse =
+  | "complete"
+  | "created"
+  | "live"
+  | "liveStarting"
+  | "ready"
+  | "revoked"
+  | "testStarting"
+  | "testing";
+
+type PrivacyStatusYoutubeApiResponse = "private" | "public" | "unlisted";
+
+interface LiveBroadcastYoutubeApiResponse {
+  videoId: VideoId;
+  snippet: {
+    publishedAt: Date;
+    title: string;
+    description: string;
+    thumbnails: {
+      default: ImageYoutubeApiResponse;
+      medium: ImageYoutubeApiResponse;
+      high: ImageYoutubeApiResponse;
+      standard: ImageYoutubeApiResponse;
+      maxres: ImageYoutubeApiResponse;
+    };
+    scheduledStartTime: Date;
+    actualStartTime?: Date;
+    actualEndTime?: Date;
+    liveChatId: LiveChatId;
+  };
+  status: {
+    lifeCycleStatus: LifeCycleStatusYoutubeApiResponse;
+    privacyStatus: PrivacyStatusYoutubeApiResponse;
+  };
+}
+
+/**
+ * Channel data structure in Youtube Api Response.
+ */
+interface ChannelResponse {
+  id: ChannelId;
+  snippet: {
+    title: string;
+    description: string;
+    customUrl?: string;
+    publishedAt: Date;
+    thumbnails: {
+      default: ImageYoutubeApiResponse;
+      medium: ImageYoutubeApiResponse;
+      high: ImageYoutubeApiResponse;
+    };
+  };
+  statistics: ChannelStatisticsYoutubeApiResponse;
+  brandingSettings: BrandingSettingsYoutubeApiResponse;
+}
 
 /**
  * Handle access to Youtube Data and LiveStreaming API
