@@ -167,7 +167,9 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("startAuthFlow", async (e) => {
-    if (!(await doAuthFlow())) {
+    const authFlowResult = await doAuthFlow();
+
+    if (!authFlowResult) {
       return false;
     }
 

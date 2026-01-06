@@ -107,7 +107,8 @@ export async function doAuthFlow(): Promise<boolean> {
           // Return 200 OK to authentication server on Google.
           response.end(`Authentication failure!!`);
           server.destroy();
-          reject(e);
+          console.log(e);
+          resolve(false);
         }
       })
       .listen(PORT, () => {
