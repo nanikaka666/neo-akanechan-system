@@ -7,13 +7,11 @@ export class ChannelStatisticsEmitter extends (EventEmitter as new () => TypedEm
   readonly #channelId: ChannelId;
   readonly #pollingInterval: number;
   #isActivated: boolean;
-  #bestSubscribersCountSoFar: number;
   constructor(channelId: ChannelId) {
     super();
     this.#channelId = channelId;
     this.#pollingInterval = 60 * 1000;
     this.#isActivated = false;
-    this.#bestSubscribersCountSoFar = 0;
   }
 
   async #execute() {
@@ -25,10 +23,6 @@ export class ChannelStatisticsEmitter extends (EventEmitter as new () => TypedEm
       const res = await YoutubeApiService.getChannel(this.#channelId.id);
       if (res) {
         this.emit("nextSubscriberCount", res.subscribersCount);
-        if (this.#bestSubscribersCountSoFar < res.subscribersCount) {
-          this.emit("subscriberCountRaised", this.#bestSubscribersCountSoFar, res.subscribersCount);
-          this.#bestSubscribersCountSoFar = res.subscribersCount;
-        }
       }
     } catch (e: unknown) {
       if (e instanceof Error) {
@@ -51,13 +45,11 @@ export class ChannelStatisticsEmitter extends (EventEmitter as new () => TypedEm
       return false;
     }
 
-    this.emit("nextSubscriberCount", res.subscribersCount);
-    this.#bestSubscribersCountSoFar = res.subscribersCount;
-
     setTimeout(() => this.#execute(), this.#pollingInterval);
 
     this.#isActivated = true;
-    this.emit("start");
+    this.emit("start", res.subscribersCount);
+
     return true;
   }
 
@@ -66,15 +58,13 @@ export class ChannelStatisticsEmitter extends (EventEmitter as new () => TypedEm
       return;
     }
     this.#isActivated = false;
-    this.#bestSubscribersCountSoFar = 0;
     this.emit("end");
   }
 }
 
 export type ChannelStatisticsEvent = {
-  subscriberCountRaised: (before: number, after: number) => void;
-  nextSubscriberCount: (value: number) => void;
-  start: () => void;
+  nextSubscriberCount: (nextSubscriberCount: number) => void;
+  start: (initialValue: number) => void;
   end: () => void;
   error: (err: Error) => void;
 };
