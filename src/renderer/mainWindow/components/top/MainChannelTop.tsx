@@ -1,13 +1,10 @@
 import { useState, MouseEvent } from "react";
 import { ChannelSummaryView } from "./ChannelSummaryView";
-import ReactModal from "react-modal";
-import { useModal } from "../hooks/useModal";
-import { UserSettingsFormLoader } from "../userSettings/UserSettingsFormLoader";
 import { Channel, YoutubeLive } from "../../../../ipcEvent";
+import { UserSettingsButton } from "./UserSettingsButton";
 
 export function MainChannelTop({ channel, live }: { channel: Channel; live: YoutubeLive[] }) {
   const [isConfirming, setIsConfirming] = useState(false);
-  const [showModal, turnOn, turnOff] = useModal();
 
   async function onClick(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -20,10 +17,7 @@ export function MainChannelTop({ channel, live }: { channel: Channel; live: Yout
   return (
     <div>
       <ChannelSummaryView channel={channel} />
-      <button onClick={turnOn}>ライブの設定</button>
-      <ReactModal isOpen={showModal} onRequestClose={turnOff}>
-        <UserSettingsFormLoader turnOff={turnOff} />
-      </ReactModal>
+      <UserSettingsButton />
       {live.map((live) => {
         return (
           <div key={live.videoId.id}>
