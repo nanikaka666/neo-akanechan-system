@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "../auth/google";
-import { Channel, ChannelId, LiveBroadcast, VideoId } from "./model";
+import { Channel, ChannelId, LiveBroadcastYoutubeApiResponse, VideoId } from "./model";
 
 /**
  * Handle access to Youtube Data and LiveStreaming API
@@ -94,7 +94,7 @@ export const YoutubeApiClient = {
   /**
    * Get LiveBroadcasts of user's channel.
    */
-  getLiveBroadcasts: async (): Promise<LiveBroadcast[]> => {
+  getLiveBroadcasts: async (): Promise<LiveBroadcastYoutubeApiResponse[]> => {
     const accessToken = await googleAccessToken();
     const url = "https://www.googleapis.com/youtube/v3/liveBroadcasts";
 
@@ -111,7 +111,7 @@ export const YoutubeApiClient = {
       return [];
     }
 
-    return res.data.items.map(buildLiveBroadcast) as LiveBroadcast[];
+    return res.data.items.map(buildLiveBroadcast) as LiveBroadcastYoutubeApiResponse[];
   },
 };
 
@@ -148,7 +148,7 @@ function buildChannel(item: any): Channel {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildLiveBroadcast(item: any): LiveBroadcast {
+function buildLiveBroadcast(item: any): LiveBroadcastYoutubeApiResponse {
   return {
     videoId: new VideoId(item.id),
     snippet: {
@@ -167,5 +167,5 @@ function buildLiveBroadcast(item: any): LiveBroadcast {
       lifeCycleStatus: item.status.lifeCycleStatus,
       privacyStatus: item.status.privacyStatus,
     },
-  } satisfies LiveBroadcast;
+  } satisfies LiveBroadcastYoutubeApiResponse;
 }

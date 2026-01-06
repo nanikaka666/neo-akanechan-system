@@ -1,7 +1,7 @@
 /**
  * Image data structure in Youtube Api Response.
  */
-export interface Image {
+export interface ImageYoutubeApiResponse {
   url: string;
   width: number;
   height: number;
@@ -10,20 +10,20 @@ export interface Image {
 /**
  * Statistics in Channel data structure in Youtube Api Response.
  */
-export interface ChannelStatistics {
+export interface ChannelStatisticsYoutubeApiResponse {
   subscriberCount: number;
 }
 
 /**
  * BrandingSettings in Channel data structure in Youtube Api Response.
  */
-export interface BrandingSettings {
+export interface BrandingSettingsYoutubeApiResponse {
   image?: {
     bannerExternalUrl: string;
   };
 }
 
-export type LifeCycleStatus =
+export type LifeCycleStatusYoutubeApiResponse =
   | "complete"
   | "created"
   | "live"
@@ -33,20 +33,20 @@ export type LifeCycleStatus =
   | "testStarting"
   | "testing";
 
-export type PrivacyStatus = "private" | "public" | "unlisted";
+export type PrivacyStatusYoutubeApiResponse = "private" | "public" | "unlisted";
 
-export interface LiveBroadcast {
+export interface LiveBroadcastYoutubeApiResponse {
   videoId: VideoId;
   snippet: {
     publishedAt: Date;
     title: string;
     description: string;
     thumbnails: {
-      default: Image;
-      medium: Image;
-      high: Image;
-      standard: Image;
-      maxres: Image;
+      default: ImageYoutubeApiResponse;
+      medium: ImageYoutubeApiResponse;
+      high: ImageYoutubeApiResponse;
+      standard: ImageYoutubeApiResponse;
+      maxres: ImageYoutubeApiResponse;
     };
     scheduledStartTime: Date;
     actualStartTime?: Date;
@@ -54,15 +54,15 @@ export interface LiveBroadcast {
     liveChatId: LiveChatId;
   };
   status: {
-    lifeCycleStatus: LifeCycleStatus;
-    privacyStatus: PrivacyStatus;
+    lifeCycleStatus: LifeCycleStatusYoutubeApiResponse;
+    privacyStatus: PrivacyStatusYoutubeApiResponse;
   };
 }
 
 /**
  * Channel data structure in Youtube Api Response.
  */
-export interface Channel {
+export interface ChannelResponse {
   id: ChannelId;
   snippet: {
     title: string;
@@ -70,13 +70,13 @@ export interface Channel {
     customUrl?: string;
     publishedAt: Date;
     thumbnails: {
-      default: Image;
-      medium: Image;
-      high: Image;
+      default: ImageYoutubeApiResponse;
+      medium: ImageYoutubeApiResponse;
+      high: ImageYoutubeApiResponse;
     };
   };
-  statistics: ChannelStatistics;
-  brandingSettings: BrandingSettings;
+  statistics: ChannelStatisticsYoutubeApiResponse;
+  brandingSettings: BrandingSettingsYoutubeApiResponse;
 }
 
 export class ChannelId {

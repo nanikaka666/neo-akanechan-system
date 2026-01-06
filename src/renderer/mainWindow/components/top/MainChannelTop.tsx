@@ -1,5 +1,5 @@
 import { useState, MouseEvent } from "react";
-import { Channel, LiveBroadcast } from "../../../../main/youtubeApi/model";
+import { Channel, LiveBroadcastYoutubeApiResponse } from "../../../../main/youtubeApi/model";
 import { ChannelSummaryView } from "./ChannelSummaryView";
 import ReactModal from "react-modal";
 import { useModal } from "../hooks/useModal";
@@ -10,7 +10,7 @@ export function MainChannelTop({
   liveBroadcasts,
 }: {
   channel: Channel;
-  liveBroadcasts: LiveBroadcast[];
+  liveBroadcasts: LiveBroadcastYoutubeApiResponse[];
 }) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [showModal, turnOn, turnOff] = useModal();

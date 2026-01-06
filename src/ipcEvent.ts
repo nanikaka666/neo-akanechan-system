@@ -8,7 +8,7 @@ import {
   NewMembership,
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
-import { Channel, ChannelId, LiveBroadcast } from "./main/youtubeApi/model";
+import { Channel, ChannelId, LiveBroadcastYoutubeApiResponse } from "./main/youtubeApi/model";
 
 /**
  * User doesn't authorized.
@@ -33,7 +33,7 @@ export interface LiveSelectionPage {
   type: "liveSelection";
   mainChannelId: ChannelId;
   channel: Channel;
-  liveBroadcasts: LiveBroadcast[];
+  liveBroadcasts: LiveBroadcastYoutubeApiResponse[];
 }
 
 /**
