@@ -47,10 +47,8 @@ export async function doAuthFlow(): Promise<boolean> {
   const client = new OAuth2Client(OAUTH_CLIENT_OPTIONS);
 
   const codeVerifierResult = await client.generateCodeVerifierAsync();
-  console.log(codeVerifierResult);
 
   const state = crypto.randomUUID();
-  console.log(`state: ${state}`);
 
   const genOptions: GenerateAuthUrlOpts = {
     access_type: "offline",
@@ -61,7 +59,6 @@ export async function doAuthFlow(): Promise<boolean> {
   };
 
   const authUrl = client.generateAuthUrl(genOptions);
-  console.log(`authUrl: ${authUrl}`);
 
   return new Promise((resolve, reject) => {
     const server = http
@@ -71,15 +68,12 @@ export async function doAuthFlow(): Promise<boolean> {
             reject(new Error("url not found."));
           } else if (request.url.indexOf("/auth/receive") > -1) {
             const q = new URL(request.url, `http://127.0.0.1:${PORT}`).searchParams;
-            console.log(`query: `, q);
 
             const res = {
               state: q.get("state"),
               code: q.get("code"),
               scope: q.get("scope"),
             };
-
-            console.log(res);
 
             // check state
             if (state !== res.state) {
@@ -90,8 +84,6 @@ export async function doAuthFlow(): Promise<boolean> {
               code: res.code!,
               codeVerifier: codeVerifierResult.codeVerifier,
             });
-
-            console.log(token);
 
             // store to storage
             getStorageService().registerAuthCredentials(token.tokens);
