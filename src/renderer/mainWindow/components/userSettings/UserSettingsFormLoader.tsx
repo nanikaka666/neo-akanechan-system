@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
-import { ChannelSummary } from "../../../../ipcEvent";
 import { UserSettings } from "../../../../main/userSettings";
 import { UserSettingsForm } from "./UserSettingsForm";
 
-export function UserSettingsFormLoader({ channelSummary }: { channelSummary: ChannelSummary }) {
+export function UserSettingsFormLoader({ turnOff }: { turnOff: () => void }) {
   const [userSettings, setUserSettings] = useState<UserSettings>();
 
   useEffect(() => {
-    window.ipcApi.requestUserSettings(channelSummary.channelId).then((res) => {
+    window.ipcApi.requestUserSettings().then((res) => {
       setUserSettings((_) => res);
     });
-    const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, channelId, settings) => {
-      if (channelSummary.channelId.id === channelId.id) {
-        setUserSettings((_) => settings);
-      }
+    const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, settings) => {
+      setUserSettings((_) => settings);
+      turnOff();
     });
     return () => remover();
-  }, []);
+  }, [turnOff]);
 
   return userSettings ? (
-    <UserSettingsForm channelSummary={channelSummary} userSettings={userSettings} />
+    <UserSettingsForm userSettings={userSettings} />
   ) : (
     <div>Now Loading...</div>
   );

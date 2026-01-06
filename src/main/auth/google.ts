@@ -1,4 +1,4 @@
-import { shell, WebContents } from "electron";
+import { shell } from "electron";
 import http from "node:http";
 import {
   OAuth2ClientOptions,
@@ -47,10 +47,8 @@ export async function doAuthFlow(): Promise<boolean> {
   const client = new OAuth2Client(OAUTH_CLIENT_OPTIONS);
 
   const codeVerifierResult = await client.generateCodeVerifierAsync();
-  console.log(codeVerifierResult);
 
   const state = crypto.randomUUID();
-  console.log(`state: ${state}`);
 
   const genOptions: GenerateAuthUrlOpts = {
     access_type: "offline",
@@ -61,7 +59,6 @@ export async function doAuthFlow(): Promise<boolean> {
   };
 
   const authUrl = client.generateAuthUrl(genOptions);
-  console.log(`authUrl: ${authUrl}`);
 
   return new Promise((resolve, reject) => {
     const server = http
@@ -71,15 +68,12 @@ export async function doAuthFlow(): Promise<boolean> {
             reject(new Error("url not found."));
           } else if (request.url.indexOf("/auth/receive") > -1) {
             const q = new URL(request.url, `http://127.0.0.1:${PORT}`).searchParams;
-            console.log(`query: `, q);
 
             const res = {
               state: q.get("state"),
               code: q.get("code"),
               scope: q.get("scope"),
             };
-
-            console.log(res);
 
             // check state
             if (state !== res.state) {
@@ -90,8 +84,6 @@ export async function doAuthFlow(): Promise<boolean> {
               code: res.code!,
               codeVerifier: codeVerifierResult.codeVerifier,
             });
-
-            console.log(token);
 
             // store to storage
             getStorageService().registerAuthCredentials(token.tokens);
@@ -115,7 +107,8 @@ export async function doAuthFlow(): Promise<boolean> {
           // Return 200 OK to authentication server on Google.
           response.end(`Authentication failure!!`);
           server.destroy();
-          reject(e);
+          console.log(e);
+          resolve(false);
         }
       })
       .listen(PORT, () => {
@@ -125,23 +118,17 @@ export async function doAuthFlow(): Promise<boolean> {
   });
 }
 
-export async function revokeCredentials(w: WebContents) {
+export async function revokeCredentials() {
   if (!authClient) {
-    return true;
+    return;
   }
-  try {
-    const res = await authClient.revokeCredentials();
-    if (res.status !== 200) {
-      console.log(res);
-      return false;
-    }
-    authClient = undefined;
-    // store.delete("credentials");
-    // webContentsSendWrapper(w, "tellCredentials", undefined);
-    return true;
-  } catch (e: unknown) {
-    console.log(e);
+  const res = await authClient.revokeCredentials();
+  if (res.status !== 200) {
+    throw new Error(`Revoke credentials failed. ${await res.json()}`);
   }
+  getStorageService().deleteAuthCredentials();
+  authClient = undefined;
+  return;
 }
 
 /**

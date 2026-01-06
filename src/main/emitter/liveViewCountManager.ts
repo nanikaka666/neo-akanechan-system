@@ -24,28 +24,28 @@ export async function setupLiveViewCountEmitter(liveLaunchProperties: LiveLaunch
     maxLiveViewCount: 0,
   };
 
-  liveViewCountEmitter = LiveViewCountRaisedEventEmitter.initWithoutCredential(
-    liveLaunchProperties.channel.channel.channelId.id,
-    10 * 1000,
-  );
+  // liveViewCountEmitter = LiveViewCountRaisedEventEmitter.initWithoutCredential(
+  //   liveLaunchProperties.channel.channel.channelId.id,
+  //   10 * 1000,
+  // );
 
-  liveViewCountEmitter.on("start", () => {
-    console.log("LiveViewCountEmitter started.");
-  });
-  liveViewCountEmitter.on("end", () => {
-    console.log("LiveViewCountEmitter finished.");
-  });
-  liveViewCountEmitter.on("error", (error) => {
-    console.log(error);
-  });
-  liveViewCountEmitter.on("raised", (before, after) => {
-    console.log(`LiveViewCount: ${before.value} -> ${after.value}`);
+  // liveViewCountEmitter.on("start", () => {
+  //   console.log("LiveViewCountEmitter started.");
+  // });
+  // liveViewCountEmitter.on("end", () => {
+  //   console.log("LiveViewCountEmitter finished.");
+  // });
+  // liveViewCountEmitter.on("error", (error) => {
+  //   console.log(error);
+  // });
+  // liveViewCountEmitter.on("raised", (before, after) => {
+  //   console.log(`LiveViewCount: ${before.value} -> ${after.value}`);
 
-    counts.maxLiveViewCount = after.value;
-    counts.currentLiveViewCount = after.value;
+  //   counts.maxLiveViewCount = after.value;
+  //   counts.currentLiveViewCount = after.value;
 
-    getLiveStatisticsManager().updateLiveStatistics(counts);
-  });
+  //   getLiveStatisticsManager().updateLiveStatistics(counts);
+  // });
 
-  await liveViewCountEmitter.start();
+  // await liveViewCountEmitter.start();
 }

@@ -20,18 +20,11 @@ type Listen<K extends keyof IpcEvent> = (
  */
 export interface IpcApi {
   ipcApi: {
-    requestCheckExistenceOfChannel: Invoke<"checkExistenceOfChannel">;
-    requestSaveChannel: Invoke<"registerChannel">;
-    requestChannelTop: Invoke<"getChannelTop">;
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestUserSettings: Invoke<"getUserSettings">;
     requestSaveUserSettings: Invoke<"saveUserSettings">;
     requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
     registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
-    requestRegisteredChannels: Invoke<"getRegisterdChannels">;
-    requestSwitchMainChannel: Invoke<"switchMainChannel">;
-    requestDeletingChannel: Invoke<"deleteChannelWithUserConfirmation">;
-    registerUpdatedChannelListListener: Listen<"tellUpdatedChannelIds">;
     requestLaunchEmitters: Invoke<"launchEmitters">;
     registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
     requestAddStock: Invoke<"addStock">;
@@ -49,25 +42,15 @@ export interface IpcApi {
 
 export const IpcApi: IpcApi = {
   ipcApi: {
-    requestCheckExistenceOfChannel: (inputChannelId) =>
-      IpcRendererWrapper.invoke("checkExistenceOfChannel", inputChannelId),
-    requestSaveChannel: (channelId) => IpcRendererWrapper.invoke("registerChannel", channelId),
-    requestChannelTop: (channelId) => IpcRendererWrapper.invoke("getChannelTop", channelId),
-    requestOpenOverlay: (channelTop) =>
-      IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
-    requestUserSettings: (channelId) => IpcRendererWrapper.invoke("getUserSettings", channelId),
-    requestSaveUserSettings: (channelId, userSettings) =>
-      IpcRendererWrapper.invoke("saveUserSettings", channelId, userSettings),
+    requestOpenOverlay: (channel, live) =>
+      IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
+    requestUserSettings: () => IpcRendererWrapper.invoke("getUserSettings"),
+    requestSaveUserSettings: (userSettings) =>
+      IpcRendererWrapper.invoke("saveUserSettings", userSettings),
     requestCheckHavingDifferenceAmongUserSettings: (settingsA, settingsB) =>
       IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),
     registerUpdatedUserSettingsListener: (callback) =>
       IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
-    requestRegisteredChannels: () => IpcRendererWrapper.invoke("getRegisterdChannels"),
-    requestSwitchMainChannel: (to) => IpcRendererWrapper.invoke("switchMainChannel", to),
-    requestDeletingChannel: (channel) =>
-      IpcRendererWrapper.invoke("deleteChannelWithUserConfirmation", channel),
-    registerUpdatedChannelListListener: (callback) =>
-      IpcRendererWrapper.on("tellUpdatedChannelIds", callback),
     requestLaunchEmitters: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
     registerMembershipsAndGiftsListener: (callback) =>

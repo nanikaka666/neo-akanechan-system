@@ -1,23 +1,38 @@
-import { useEffect, useState } from "react";
-import { ChannelTop } from "../../../../ipcEvent";
-import { ChannelHasNoClosestLiveView } from "./ChannelHasNoClosestLiveView";
-import { ChannelHavingClosestLiveView } from "./ChannelHavingClosestLiveView";
-import { ChannelId } from "../../../../main/youtubeApi/model";
+import { useState, MouseEvent } from "react";
+import { ChannelSummaryView } from "./ChannelSummaryView";
+import { Channel, YoutubeLive } from "../../../../ipcEvent";
+import { UserSettingsButton } from "./UserSettingsButton";
 
-export function MainChannelTop({ mainChannelId }: { mainChannelId: ChannelId }) {
-  const [channelTop, setChannelTop] = useState<ChannelTop>();
+export function MainChannelTop({ channel, live }: { channel: Channel; live: YoutubeLive[] }) {
+  const [isConfirming, setIsConfirming] = useState(false);
 
-  useEffect(() => {
-    window.ipcApi.requestChannelTop(mainChannelId).then(setChannelTop).catch(console.log);
-  }, [mainChannelId]);
+  async function onClick(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setIsConfirming((_) => true);
 
-  return channelTop ? (
-    channelTop.type === "has_no_closest_live" ? (
-      <ChannelHasNoClosestLiveView channelHasNoClosestLive={channelTop} />
-    ) : (
-      <ChannelHavingClosestLiveView channelHavingClosestLive={channelTop} />
-    )
-  ) : (
-    <div style={{ position: "absolute", left: "100px" }}>Now Loading...</div>
+    // todo: call this function
+    // await window.ipcApi.requestOpenOverlay(channelHavingClosestLive);
+    setIsConfirming((_) => false);
+  }
+  return (
+    <div>
+      <ChannelSummaryView channel={channel} />
+      <UserSettingsButton />
+      {live.map((live) => {
+        return (
+          <div key={live.videoId.id}>
+            <img src={live.thumbnailUrl} alt="next live thumbnail" style={{ width: "360px" }} />
+            <p>{live.title}</p>
+            <p>{live.scheduledStartTime.toLocaleString()}</p>
+            <p>{live.isPublic ? "public" : "private"}</p>
+            <p>
+              <button onClick={onClick} disabled={isConfirming}>
+                Live Start
+              </button>
+            </p>
+          </div>
+        );
+      })}
+    </div>
   );
 }

@@ -1,5 +1,4 @@
 import { getStorageService } from "./storage";
-import { ChannelId } from "./youtubeApi/model";
 
 /**
  * Top level interface represents user settings.
@@ -90,8 +89,8 @@ export const UserSettingsService = {
    *
    * This function will return non-partial UserSettings.
    */
-  getUserSettings: (channelId: ChannelId): UserSettings => {
-    const storedSettings = getStorageService().getUserSettings(channelId);
+  getUserSettings: (): UserSettings => {
+    const storedSettings = getStorageService().getUserSettings();
     if (storedSettings === undefined) {
       return DefaultSettings;
     } else {
@@ -105,9 +104,9 @@ export const UserSettingsService = {
    * this function allow to receive partial settings data.
    * settings properties not included in given settings will not be changed.
    */
-  setUserSettings: (channelId: ChannelId, newSettings: Partial<UserSettings>) => {
-    const current = UserSettingsService.getUserSettings(channelId);
-    getStorageService().registerUserSettings(channelId, { ...current, ...newSettings });
+  setUserSettings: (newSettings: Partial<UserSettings>) => {
+    const current = UserSettingsService.getUserSettings();
+    getStorageService().registerUserSettings({ ...current, ...newSettings });
   },
 
   /**

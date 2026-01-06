@@ -18,10 +18,7 @@ export function SideBar({
   return (
     <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
       <div>
-        <img
-          src={liveLaunchProperties.channel.closestLive.thumbnail}
-          style={{ width: "100px" }}
-        ></img>
+        <img src={liveLaunchProperties.live.thumbnailUrl} style={{ width: "100px" }}></img>
       </div>
       <div
         onClick={() => setMode((_) => "commentViewer")}

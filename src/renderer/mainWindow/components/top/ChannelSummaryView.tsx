@@ -1,18 +1,14 @@
-import { ChannelSummary } from "../../../../ipcEvent";
+import { Channel } from "../../../../ipcEvent";
 
-export function ChannelSummaryView({ channelSummary }: { channelSummary: ChannelSummary }) {
+export function ChannelSummaryView({ channel }: { channel: Channel }) {
   return (
     <div>
-      {channelSummary.channelBanner && (
-        <img src={channelSummary.channelBanner} alt="channel banner" style={{ width: "100%" }} />
+      {channel.bannerUrl && (
+        <img src={channel.bannerUrl} alt="channel banner" style={{ width: "100%" }} />
       )}
-      <img
-        src={channelSummary.ownerIcon}
-        alt="owner icon"
-        style={{ width: "64px", height: "64px" }}
-      />
-      <div>{channelSummary.channelTitle}</div>
-      <div>Subsriber: {channelSummary.subscribersCount}</div>
+      <img src={channel.ownerIconUrl} alt="owner icon" style={{ width: "64px", height: "64px" }} />
+      <div>{channel.title}</div>
+      <div>Subsriber: {channel.subscribersCount}</div>
     </div>
   );
 }

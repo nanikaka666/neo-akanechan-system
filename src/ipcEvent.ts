@@ -8,7 +8,7 @@ import {
   NewMembership,
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
-import { ChannelId } from "./main/youtubeApi/model";
+import { ChannelId, LiveChatId, VideoId } from "./main/youtubeApi/model";
 
 /**
  * User doesn't authorized.
@@ -18,20 +18,12 @@ export interface AuthPage {
 }
 
 /**
- * Represents page which first status of this app.
- *
- * User does not any channel yet.
- */
-export interface BeginningBlankPage {
-  type: "beginningBlank";
-}
-
-/**
  * Represents page which user selects a live from registered channels.
  */
 export interface LiveSelectionPage {
   type: "liveSelection";
-  mainChannelId: ChannelId;
+  channel: Channel;
+  live: YoutubeLive[];
 }
 
 /**
@@ -55,42 +47,42 @@ export interface InLivePage {
 /**
  * Represents MainApp status where user is in.
  */
-export type MainAppPage =
-  | AuthPage
-  | BeginningBlankPage
-  | LiveSelectionPage
-  | LiveStandByPage
-  | InLivePage;
+export type MainAppPage = AuthPage | LiveSelectionPage | LiveStandByPage | InLivePage;
 
-export interface ChannelSummary {
-  channelId: ChannelId;
-  channelTitle: string;
-  subscribersCount: number;
-  ownerIcon: string;
-  channelBanner?: string;
-}
-
-export interface LiveSummary {
+export interface Channel {
+  id: ChannelId;
   title: string;
-  thumbnail: string;
-  isOnAir: boolean;
+  subscribersCount: number;
+  ownerIconUrl: string;
+  bannerUrl?: string;
 }
 
-export interface ChannelHavingClosestLive {
-  type: "has_closest_live";
-  channel: ChannelSummary;
-  closestLive: LiveSummary;
+export type YoutubeLive = YoutubeLiveInReady | YoutubeLiveInLive;
+
+export interface YoutubeLiveInReady {
+  type: "inReady";
+  videoId: VideoId;
+  liveChatId: LiveChatId;
+  title: string;
+  thumbnailUrl: string;
+  scheduledStartTime: Date;
+  isPublic: boolean;
 }
 
-export interface ChannelHasNoClosestLive {
-  type: "has_no_closest_live";
-  channel: ChannelSummary;
+export interface YoutubeLiveInLive {
+  type: "inLive";
+  videoId: VideoId;
+  liveChatId: LiveChatId;
+  title: string;
+  thumbnailUrl: string;
+  scheduledStartTime: Date;
+  actualStartTime: Date;
+  isPublic: boolean;
 }
-
-export type ChannelTop = ChannelHavingClosestLive | ChannelHasNoClosestLive;
 
 export interface LiveLaunchProperties {
-  channel: ChannelHavingClosestLive;
+  channel: Channel;
+  live: YoutubeLive;
   settings: UserSettings;
   overlayWindowTitle: string;
 }
@@ -225,54 +217,9 @@ export interface Chats {
  */
 export interface IpcEvent {
   /**
-   * this event will be fired when need to check channel id.
-   * "check" means confirm of existing or fetch data about the channel.
-   *
-   * if the channel was not found match to `inputChannelId`, `undefined` will be returned.
-   */
-  checkExistenceOfChannel: (inputChannelId: string) => ChannelSummary | undefined;
-
-  /**
-   * Register new channel, and mark as main channel.
-   *
-   * if given channelId was already registered, `false` will be returned.
-   */
-  registerChannel: (channelId: ChannelId) => boolean;
-
-  /**
-   * Switch "MainChannel" to another one.
-   *
-   * The channel id must be stored in storage.
-   * when failed switching, `false` will be returned.
-   */
-  switchMainChannel: (to: ChannelId) => boolean;
-
-  /**
-   * Delete channel data from storage.
-   *
-   * it affects on registeredChannelIds, userSettings, mainChannelId.
-   */
-  deleteChannelWithUserConfirmation: (channel: ChannelSummary) => boolean;
-
-  /**
-   * Get channels stored in storage.
-   */
-  getRegisterdChannels: () => ChannelSummary[];
-
-  /**
-   * Tell latest channel list to renderer.
-   */
-  tellUpdatedChannelIds: (channels: ChannelSummary[]) => void;
-
-  /**
-   * Get data for main channel top page.
-   */
-  getChannelTop: (channelId: ChannelId) => ChannelTop | undefined;
-
-  /**
    * Confirm to user that overlay feature should starts.
    */
-  startOverlayWithUserConfirmation: (channelHavingClosestLive: ChannelHavingClosestLive) => boolean;
+  startOverlayWithUserConfirmation: (channel: Channel, live: YoutubeLive) => boolean;
 
   /**
    * Start emitters depend on user settings.
@@ -280,18 +227,18 @@ export interface IpcEvent {
   launchEmitters: (liveLaunchProperties: LiveLaunchProperties) => boolean;
 
   /**
-   * Get UserSettings attached to given channel id.
+   * Get UserSettings.
    *
    * if no settings then filled with default value.
    */
-  getUserSettings: (channelId: ChannelId) => UserSettings;
+  getUserSettings: () => UserSettings;
 
   /**
    * Save userSettings to storage.
    *
    * if saving will be failed by some reasons, `false` will be returned.
    */
-  saveUserSettings: (channelId: ChannelId, userSettings: UserSettings) => boolean;
+  saveUserSettings: (userSettings: UserSettings) => boolean;
 
   /**
    * Check existance of difference of user settings.
@@ -301,7 +248,7 @@ export interface IpcEvent {
   /**
    * Notify updated UserSettings to renderer.
    */
-  tellUpdatedUserSettings: (channelId: ChannelId, settings: UserSettings) => void;
+  tellUpdatedUserSettings: (settings: UserSettings) => void;
 
   /**
    * Notify all memberships and gifts item to renderer.
@@ -326,7 +273,7 @@ export interface IpcEvent {
   /**
    * Return MainAppPage for initial status.
    */
-  getInitialMainAppPage: () => AuthPage | BeginningBlankPage | LiveSelectionPage;
+  getInitialMainAppPage: () => AuthPage | LiveSelectionPage;
 
   /**
    * Notify latest MainAppPage to renderer.

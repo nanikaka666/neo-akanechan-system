@@ -1,99 +1,165 @@
-import axios from "axios";
-import { getAccessToken } from "../auth/google";
-import { Channel, ChannelId, LiveBroadcast, VideoId } from "./model";
+import axios, { AxiosResponse } from "axios";
+import { ChannelId, LiveChatId, VideoId } from "./model";
+
+/**
+ * Image data structure in Youtube Api Response.
+ */
+interface ImageYoutubeApiResponse {
+  url: string;
+  width: number;
+  height: number;
+}
+
+/**
+ * Statistics in Channel data structure in Youtube Api Response.
+ */
+interface ChannelStatisticsYoutubeApiResponse {
+  subscriberCount: number;
+}
+
+/**
+ * BrandingSettings in Channel data structure in Youtube Api Response.
+ */
+interface BrandingSettingsYoutubeApiResponse {
+  image?: {
+    bannerExternalUrl: string;
+  };
+}
+
+type LifeCycleStatusYoutubeApiResponse =
+  | "complete"
+  | "created"
+  | "live"
+  | "liveStarting"
+  | "ready"
+  | "revoked"
+  | "testStarting"
+  | "testing";
+
+type PrivacyStatusYoutubeApiResponse = "private" | "public" | "unlisted";
+
+export interface LiveBroadcastYoutubeApiResponse {
+  videoId: VideoId;
+  snippet: {
+    publishedAt: Date;
+    title: string;
+    description: string;
+    thumbnails: {
+      default: ImageYoutubeApiResponse;
+      medium: ImageYoutubeApiResponse;
+      high: ImageYoutubeApiResponse;
+      standard: ImageYoutubeApiResponse;
+      maxres: ImageYoutubeApiResponse;
+    };
+    scheduledStartTime: Date;
+    actualStartTime?: Date;
+    actualEndTime?: Date;
+    liveChatId: LiveChatId;
+  };
+  status: {
+    lifeCycleStatus: LifeCycleStatusYoutubeApiResponse;
+    privacyStatus: PrivacyStatusYoutubeApiResponse;
+  };
+}
+
+/**
+ * Channel data structure in Youtube Api Response.
+ */
+export interface ChannelResponse {
+  id: ChannelId;
+  snippet: {
+    title: string;
+    description: string;
+    customUrl?: string;
+    publishedAt: Date;
+    thumbnails: {
+      default: ImageYoutubeApiResponse;
+      medium: ImageYoutubeApiResponse;
+      high: ImageYoutubeApiResponse;
+    };
+  };
+  statistics: ChannelStatisticsYoutubeApiResponse;
+  brandingSettings: BrandingSettingsYoutubeApiResponse;
+}
 
 /**
  * Handle access to Youtube Data and LiveStreaming API
  */
 export const YoutubeApiClient = {
   /**
-   * Get ChannelId of user's channel.
+   * Get Channel of user's channel.
    */
-  getChannelIdOfMine: async () => {
-    const accessToken = await googleAccessToken();
-    const url = "https://www.googleapis.com/youtube/v3/channels";
-
-    const res = await axios.get(url, {
-      params: { mine: true, part: ["id"].join(",") },
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    if (res.status < 200 || 300 <= res.status) {
-      console.log(res);
-      return undefined;
-    }
-
-    return new ChannelId(res.data.items[0].id);
-  },
-
-  /**
-   * Get multiple Channel info.
-   */
-  getChannels: async (channelIds: ChannelId[]): Promise<Channel[]> => {
-    if (channelIds.length === 0) {
-      return [];
-    }
-    if (channelIds.length > 50) {
-      throw new Error(`Too many channel ids. Max is 50. Length: ${channelIds.length}`);
-    }
-
-    const accessToken = await googleAccessToken();
+  getChannelOfMine: async (accessToken: string) => {
     const url = "https://www.googleapis.com/youtube/v3/channels";
 
     const res = await axios.get(url, {
       params: {
-        id: channelIds.map((channelId) => channelId.id).join(","),
+        mine: true,
         part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
-        maxResults: channelIds.length,
       },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    if (res.status < 200 || 300 <= res.status) {
-      console.log(res);
-      return [];
+    checkStatus(res);
+
+    if (!("items" in res.data)) {
+      return undefined;
     }
 
-    return res.data.items.map(buildChannel);
+    return buildChannelResponse(res.data.items[0]);
   },
 
-  /**
-   * Get Channel info with ChannelId-ish string.
-   */
-  getChannel: async (channelIdishString: string) => {
-    if (channelIdishString === "") {
+  getChannelByHandle: async (accessToken: string, handle: string) => {
+    if (handle === "") {
       throw new Error(`empty string.`);
     }
-    if (channelIdishString.length > 30) {
+    if (!handle.startsWith("@")) {
+      throw new Error(`invalid handle format`);
+    }
+    if (handle.length > 30) {
       throw new Error(`Too long channelId. Max is 30.`);
     }
 
-    const filter = channelIdishString.startsWith("@")
-      ? { forHandle: channelIdishString }
-      : { id: channelIdishString };
-
-    const accessToken = await googleAccessToken();
     const url = "https://www.googleapis.com/youtube/v3/channels";
 
     const res = await axios.get(url, {
       params: {
-        ...filter,
+        forHandle: handle,
         part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
         maxResults: 1,
       },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    if (res.status < 200 || 300 <= res.status) {
-      console.log(res);
+    checkStatus(res);
+    if (!("items" in res.data)) {
       return undefined;
     }
 
-    return buildChannel(res.data.items[0]);
+    return buildChannelResponse(res.data.items[0]);
+  },
+
+  getChannelById: async (accessToken: string, channelId: ChannelId) => {
+    const url = "https://www.googleapis.com/youtube/v3/channels";
+
+    const res = await axios.get(url, {
+      params: {
+        id: channelId.id,
+        part: ["id", "snippet", "statistics", "brandingSettings"].join(","),
+        maxResults: 1,
+      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    checkStatus(res);
+    if (!("items" in res.data)) {
+      return undefined;
+    }
+
+    return buildChannelResponse(res.data.items[0]);
   },
 
   /**
    * Get LiveBroadcasts of user's channel.
    */
-  getLiveBroadcasts: async (): Promise<LiveBroadcast[]> => {
-    const accessToken = await googleAccessToken();
+  getLiveBroadcasts: async (accessToken: string): Promise<LiveBroadcastYoutubeApiResponse[]> => {
     const url = "https://www.googleapis.com/youtube/v3/liveBroadcasts";
 
     const res = await axios.get(url, {
@@ -104,25 +170,20 @@ export const YoutubeApiClient = {
       },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    if (res.status < 200 || 300 <= res.status) {
-      console.log(res);
-      return [];
-    }
+    checkStatus(res);
 
-    return res.data.items.map(buildLiveBroadcast) as LiveBroadcast[];
+    return res.data.items.map(buildLiveBroadcastResponse) as LiveBroadcastYoutubeApiResponse[];
   },
 };
 
-async function googleAccessToken() {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    throw new Error("Access Token unavailable.");
+function checkStatus(res: AxiosResponse) {
+  if (res.status < 200 || 300 <= res.status) {
+    throw new Error(`Api call failed. Status(${res.status}). StatusText: (${res.statusText})`);
   }
-  return accessToken;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildChannel(item: any): Channel {
+function buildChannelResponse(item: any): ChannelResponse {
   const imageInBrandingSettings =
     "image" in item.brandingSettings
       ? { image: { bannerExternalUrl: item.brandingSettings.image.bannerExternalUrl } }
@@ -142,11 +203,11 @@ function buildChannel(item: any): Channel {
     brandingSettings: {
       ...imageInBrandingSettings,
     },
-  } satisfies Channel;
+  } satisfies ChannelResponse;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildLiveBroadcast(item: any): LiveBroadcast {
+function buildLiveBroadcastResponse(item: any): LiveBroadcastYoutubeApiResponse {
   return {
     videoId: new VideoId(item.id),
     snippet: {
@@ -165,5 +226,5 @@ function buildLiveBroadcast(item: any): LiveBroadcast {
       lifeCycleStatus: item.status.lifeCycleStatus,
       privacyStatus: item.status.privacyStatus,
     },
-  } satisfies LiveBroadcast;
+  } satisfies LiveBroadcastYoutubeApiResponse;
 }

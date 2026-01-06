@@ -50,8 +50,8 @@ class LiveChatManager {
   #membershipsAndGifts: ExtendedMembershipAndGiftItem[];
   readonly #authorChannelIds = new Set<string>();
   readonly #webContents: WebContents;
-  readonly #emitter: YoutubeLiveChatEmitter;
-  readonly #liveLaunchProperties: LiveLaunchProperties;
+  // readonly #emitter: YoutubeLiveChatEmitter;
+  // readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #stockManager: StockManager;
   readonly #focusManager: FocusManager;
 
@@ -63,11 +63,11 @@ class LiveChatManager {
     this.#superChats = [];
     this.#membershipsAndGifts = [];
     this.#authorChannelIds = new Set<string>();
-    this.#emitter = new YoutubeLiveChatEmitter(
-      liveLaunchProperties.channel.channel.channelId.id,
-      1 * 1000,
-    );
-    this.#liveLaunchProperties = liveLaunchProperties;
+    // this.#emitter = new YoutubeLiveChatEmitter(
+    //   liveLaunchProperties.channel.channel.channelId.id,
+    //   1 * 1000,
+    // );
+    // this.#liveLaunchProperties = liveLaunchProperties;
     this.#stockManager = new StockManager();
     this.#focusManager = new FocusManager();
   }
@@ -304,26 +304,26 @@ class LiveChatManager {
   }
 
   async setup() {
-    this.#emitter.on("addChat", (item) => this.#onAddChatListener(item));
-    this.#emitter.on("removeChat", (id) => this.#onRemoveChatListener(id));
-    this.#emitter.on("blockUser", (channelId) => this.#onBlockUserListener(channelId));
-    this.#emitter.on("memberships", (item) => this.#onMembershipsListener(item));
-    this.#emitter.on("sponsorshipsGift", (item) => this.#onSponsorshipsGiftListener(item));
-    this.#emitter.on("redemptionGift", (item) => this.#onRedemptionGiftListener(item));
-    this.#emitter.on("start", () => {
-      console.log("LiveChatEmitter started.");
-    });
-    this.#emitter.on("end", () => {
-      console.log("LiveChatEmitter finished.");
-    });
-    this.#emitter.on("error", (error) => {
-      console.log(error);
-    });
-    await this.#emitter.start();
+    // this.#emitter.on("addChat", (item) => this.#onAddChatListener(item));
+    // this.#emitter.on("removeChat", (id) => this.#onRemoveChatListener(id));
+    // this.#emitter.on("blockUser", (channelId) => this.#onBlockUserListener(channelId));
+    // this.#emitter.on("memberships", (item) => this.#onMembershipsListener(item));
+    // this.#emitter.on("sponsorshipsGift", (item) => this.#onSponsorshipsGiftListener(item));
+    // this.#emitter.on("redemptionGift", (item) => this.#onRedemptionGiftListener(item));
+    // this.#emitter.on("start", () => {
+    //   console.log("LiveChatEmitter started.");
+    // });
+    // this.#emitter.on("end", () => {
+    //   console.log("LiveChatEmitter finished.");
+    // });
+    // this.#emitter.on("error", (error) => {
+    //   console.log(error);
+    // });
+    // await this.#emitter.start();
   }
 
   cleanup() {
-    this.#emitter.close();
+    // this.#emitter.close();
   }
 
   // todo: accept SponsorshipGift

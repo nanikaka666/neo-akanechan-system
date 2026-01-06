@@ -1,15 +1,8 @@
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
-import { getStorageService } from "./storage";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
-import {
-  AuthPage,
-  BeginningBlankPage,
-  ChannelSummary,
-  InLivePage,
-  LiveSelectionPage,
-} from "../ipcEvent";
+import { AuthPage, InLivePage, LiveSelectionPage } from "../ipcEvent";
 import {
   cleanUpLiveChatEmitter,
   getLiveChatManager,
@@ -26,84 +19,10 @@ import {
 } from "./emitter/subscriberCountManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
-import { YoutubeApiClient } from "./youtubeApi/client";
-import { Channel } from "./youtubeApi/model";
-
-function convertToChannelSummary(channel: Channel) {
-  return {
-    channelId: channel.id,
-    channelTitle: channel.snippet.title,
-    subscribersCount: channel.statistics.subscriberCount,
-    ownerIcon: channel.snippet.thumbnails.default.url,
-    channelBanner: channel.brandingSettings.image?.bannerExternalUrl,
-  } satisfies ChannelSummary;
-}
-
-async function checkChannelExistence(inputChannelId: string) {
-  const channel = await YoutubeApiClient.getChannel(inputChannelId);
-  return channel ? convertToChannelSummary(channel) : undefined;
-}
+import { YoutubeApiService } from "./youtubeApi/service";
 
 export function setupIpcMainHandlers() {
-  IpcMainWrapper.handle("checkExistenceOfChannel", async (e, inputChannelId) => {
-    try {
-      return await checkChannelExistence(inputChannelId);
-    } catch {
-      return undefined;
-    }
-  });
-
-  IpcMainWrapper.handle("registerChannel", async (e, channelId) => {
-    if (!getStorageService().registerChannelIdAndMarkAsMain(channelId)) {
-      return Promise.resolve(false);
-    }
-    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      type: "liveSelection",
-      mainChannelId: channelId,
-    } satisfies LiveSelectionPage);
-    const res = await (
-      await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
-    ).map(convertToChannelSummary);
-    WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", res);
-    return Promise.resolve(true);
-  });
-
-  IpcMainWrapper.handle("getChannelTop", async (e, channelId) => {
-    return Promise.resolve(undefined);
-    // try {
-    //   const channel = await getChannelSummary(channelId);
-    //   const maybeClosestLivePage = await PageFetcher.getLivePage(channelId);
-
-    //   const closestLive =
-    //     maybeClosestLivePage.type === "channel"
-    //       ? undefined
-    //       : {
-    //           title: Scraper.getVideoTitle(maybeClosestLivePage),
-    //           // thumbnail: Scraper.getVideoThumbnail(maybeClosestLivePage),
-    //           thumbnail: `https://i.ytimg.com/vi/${maybeClosestLivePage.videoId.id}/maxresdefault.jpg`, // temporary aid
-    //           // isOnAir: Scraper.isLiveNow(maybeClosestLivePage),
-    //           isOnAir: !maybeClosestLivePage.html.includes(`"scheduledStartTime"`), // temporary aid
-    //         };
-
-    //   if (closestLive === undefined) {
-    //     return {
-    //       type: "has_no_closest_live",
-    //       channel: channel,
-    //     };
-    //   } else {
-    //     return {
-    //       type: "has_closest_live",
-    //       channel: channel,
-    //       closestLive: closestLive,
-    //     };
-    //   }
-    // } catch (e: unknown) {
-    //   console.log(e);
-    //   return undefined;
-    // }
-  });
-
-  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channelHavingClosestLive) => {
+  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
     if (BrowserWindow.getAllWindows().length === 2) {
       // already overlay window opened.
       return Promise.resolve(false);
@@ -117,13 +36,13 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${channelHavingClosestLive.closestLive.title}`,
+      detail: `${live.title}`,
     });
     if (res.response !== 0) {
       return Promise.resolve(false);
     }
     // shown on title bar of overlay window.
-    const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title}`;
+    const overlayWindowTitle = `*CAPTURE* ${live.title}`;
 
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
@@ -131,22 +50,23 @@ export function setupIpcMainHandlers() {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
       liveLaunchProperties: {
-        channel: channelHavingClosestLive,
-        settings: UserSettingsService.getUserSettings(channelHavingClosestLive.channel.channelId),
+        channel: channel,
+        live: live,
+        settings: UserSettingsService.getUserSettings(),
         overlayWindowTitle: overlayWindowTitle,
       },
     });
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("getUserSettings", (e, channelId) => {
-    return Promise.resolve(UserSettingsService.getUserSettings(channelId));
+  IpcMainWrapper.handle("getUserSettings", () => {
+    return Promise.resolve(UserSettingsService.getUserSettings());
   });
 
-  IpcMainWrapper.handle("saveUserSettings", (e, channelId, userSettings) => {
+  IpcMainWrapper.handle("saveUserSettings", (e, userSettings) => {
     try {
-      UserSettingsService.setUserSettings(channelId, userSettings);
-      WebContentsWrapper.send(e.sender, "tellUpdatedUserSettings", channelId, userSettings);
+      UserSettingsService.setUserSettings(userSettings);
+      WebContentsWrapper.send(e.sender, "tellUpdatedUserSettings", userSettings);
       return Promise.resolve(true);
     } catch (e: unknown) {
       console.log(e);
@@ -156,61 +76,6 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("hasDifferenceAmongUserSettings", (e, settingsA, settingsB) => {
     return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
-  });
-
-  IpcMainWrapper.handle("getRegisterdChannels", async () => {
-    return (await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())).map(
-      convertToChannelSummary,
-    );
-  });
-
-  IpcMainWrapper.handle("switchMainChannel", (e, to) => {
-    if (getStorageService().switchMainChannel(to)) {
-      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-        type: "liveSelection",
-        mainChannelId: to,
-      } satisfies LiveSelectionPage);
-      return Promise.resolve(true);
-    }
-    return Promise.resolve(false);
-  });
-
-  IpcMainWrapper.handle("deleteChannelWithUserConfirmation", async (e, channel) => {
-    const window = BrowserWindow.fromWebContents(e.sender);
-    if (window === null) {
-      return false;
-    }
-    const res = await dialog.showMessageBox(window, {
-      message: `このチャンネルをリストから削除しますか？`,
-      type: "question",
-      buttons: ["OK", "NO"],
-      defaultId: 0,
-      detail: `${channel.channelTitle}`,
-    });
-    if (res.response !== 0) {
-      return false;
-    }
-
-    const oldMainChannelId = getStorageService().getMainChannelId();
-    getStorageService().deleteChannel(channel);
-    const latestMainChannelId = getStorageService().getMainChannelId();
-    if (oldMainChannelId?.id !== latestMainChannelId?.id) {
-      WebContentsWrapper.send(
-        e.sender,
-        "tellMainAppPage",
-        latestMainChannelId
-          ? ({
-              type: "liveSelection",
-              mainChannelId: latestMainChannelId,
-            } satisfies LiveSelectionPage)
-          : ({ type: "beginningBlank" } satisfies BeginningBlankPage),
-      );
-    }
-    const nextChannels = await (
-      await YoutubeApiClient.getChannels(getStorageService().getRegisteredChannelIds())
-    ).map(convertToChannelSummary);
-    WebContentsWrapper.send(e.sender, "tellUpdatedChannelIds", nextChannels);
-    return true;
   });
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
@@ -233,19 +98,26 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(getLiveChatManager().removeStock(item));
   });
 
-  IpcMainWrapper.handle("getInitialMainAppPage", () => {
+  IpcMainWrapper.handle("getInitialMainAppPage", async () => {
     if (!isUserAuthorized()) {
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
-    const maybeMainChannelId = getStorageService().getMainChannelId();
-    if (maybeMainChannelId) {
-      return Promise.resolve({
-        type: "liveSelection",
-        mainChannelId: maybeMainChannelId,
-      } satisfies LiveSelectionPage);
-    } else {
-      return Promise.resolve({ type: "beginningBlank" } satisfies BeginningBlankPage);
+
+    const maybeChannel = await YoutubeApiService.getChannelOfMine();
+
+    if (!maybeChannel) {
+      dialog.showErrorBox(
+        "Please OAuth flow again",
+        "Youtube Channel associated with oauth accound is not found.",
+      );
+      return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
+
+    return Promise.resolve({
+      type: "liveSelection",
+      channel: maybeChannel,
+      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
+    } satisfies LiveSelectionPage);
   });
 
   IpcMainWrapper.handle("startLive", (e, liveLaunchProperties) => {
@@ -267,7 +139,7 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${liveLaunchProperties.channel.closestLive.title}`,
+      detail: `${liveLaunchProperties.live.title}`,
     });
     if (res.response !== 0) {
       return false;
@@ -281,10 +153,10 @@ export function setupIpcMainHandlers() {
 
     cleanUpLiveStatistics();
 
-    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      type: "liveSelection",
-      mainChannelId: liveLaunchProperties.channel.channel.channelId,
-    } satisfies LiveSelectionPage);
+    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+    //   type: "liveSelection",
+    //   mainChannelId: liveLaunchProperties.channel.channel.channelId,
+    // } satisfies LiveSelectionPage);
     return true;
   });
 
@@ -294,19 +166,26 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("startAuthFlow", async (e) => {
-    if (!(await doAuthFlow())) {
+    const authFlowResult = await doAuthFlow();
+
+    if (!authFlowResult) {
       return false;
     }
-    const channelId = await YoutubeApiClient.getChannelIdOfMine();
-    if (!channelId) {
-      throw new Error(
-        "Auth is succeeded, but your channel ID registration is failed. Please retry auth again.",
+
+    const maybeChannel = await YoutubeApiService.getChannelOfMine();
+
+    if (!maybeChannel) {
+      dialog.showErrorBox(
+        "Please OAuth flow again",
+        "Youtube Channel associated with oauth accound is not found.",
       );
+      return false;
     }
-    getStorageService().registerChannelIdAndMarkAsMain(channelId);
+
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveSelection",
-      mainChannelId: getStorageService().getMainChannelId()!,
+      channel: maybeChannel,
+      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
     });
     return true;
   });
