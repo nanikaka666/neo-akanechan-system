@@ -23,7 +23,7 @@ import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiClient } from "./youtubeApi/client";
 
 export function setupIpcMainHandlers() {
-  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channelHavingClosestLive) => {
+  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
     if (BrowserWindow.getAllWindows().length === 2) {
       // already overlay window opened.
       return Promise.resolve(false);
@@ -37,13 +37,13 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${channelHavingClosestLive.closestLive.title}`,
+      detail: `${live.title}`,
     });
     if (res.response !== 0) {
       return Promise.resolve(false);
     }
     // shown on title bar of overlay window.
-    const overlayWindowTitle = `*CAPTURE* ${channelHavingClosestLive.closestLive.title}`;
+    const overlayWindowTitle = `*CAPTURE* ${live.title}`;
 
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
@@ -51,7 +51,8 @@ export function setupIpcMainHandlers() {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
       liveLaunchProperties: {
-        channel: channelHavingClosestLive,
+        channel: channel,
+        live: live,
         settings: UserSettingsService.getUserSettings(),
         overlayWindowTitle: overlayWindowTitle,
       },
@@ -102,17 +103,11 @@ export function setupIpcMainHandlers() {
     if (!isUserAuthorized()) {
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
-    const maybeMainChannelId = getStorageService().getMainChannelId();
-    if (maybeMainChannelId) {
-      return Promise.resolve({
-        type: "liveSelection",
-        mainChannelId: maybeMainChannelId,
-        channel: (await YoutubeApiClient.getChannels([maybeMainChannelId]))[0],
-        liveBroadcasts: await YoutubeApiClient.getLiveBroadcasts(),
-      } satisfies LiveSelectionPage);
-    } else {
-      return Promise.resolve({ type: "beginningBlank" } satisfies BeginningBlankPage);
-    }
+    return Promise.resolve({
+      type: "liveSelection",
+      channel: await YoutubeApiClient.getChannelOfMine(),
+      live: await YoutubeApiClient.getLiveBroadcasts(),
+    } satisfies LiveSelectionPage);
   });
 
   IpcMainWrapper.handle("startLive", (e, liveLaunchProperties) => {
@@ -134,7 +129,7 @@ export function setupIpcMainHandlers() {
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `${liveLaunchProperties.channel.closestLive.title}`,
+      detail: `${liveLaunchProperties.live.title}`,
     });
     if (res.response !== 0) {
       return false;

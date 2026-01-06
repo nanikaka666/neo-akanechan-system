@@ -1,22 +1,14 @@
-import { Channel } from "../../../../main/youtubeApi/model";
+import { Channel } from "../../../../ipcEvent";
 
-export function ChannelSummaryView({ channelSummary }: { channelSummary: Channel }) {
+export function ChannelSummaryView({ channel }: { channel: Channel }) {
   return (
     <div>
-      {channelSummary.brandingSettings.image && (
-        <img
-          src={channelSummary.brandingSettings.image.bannerExternalUrl}
-          alt="channel banner"
-          style={{ width: "100%" }}
-        />
+      {channel.bannerUrl && (
+        <img src={channel.bannerUrl} alt="channel banner" style={{ width: "100%" }} />
       )}
-      <img
-        src={channelSummary.snippet.thumbnails.default.url}
-        alt="owner icon"
-        style={{ width: "64px", height: "64px" }}
-      />
-      <div>{channelSummary.snippet.title}</div>
-      <div>Subsriber: {channelSummary.statistics.subscriberCount}</div>
+      <img src={channel.ownerIconUrl} alt="owner icon" style={{ width: "64px", height: "64px" }} />
+      <div>{channel.title}</div>
+      <div>Subsriber: {channel.subscribersCount}</div>
     </div>
   );
 }

@@ -42,8 +42,8 @@ export interface IpcApi {
 
 export const IpcApi: IpcApi = {
   ipcApi: {
-    requestOpenOverlay: (channelTop) =>
-      IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channelTop),
+    requestOpenOverlay: (channel, live) =>
+      IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
     requestUserSettings: () => IpcRendererWrapper.invoke("getUserSettings"),
     requestSaveUserSettings: (userSettings) =>
       IpcRendererWrapper.invoke("saveUserSettings", userSettings),
