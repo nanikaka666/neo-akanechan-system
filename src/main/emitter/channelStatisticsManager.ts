@@ -20,13 +20,13 @@ export async function setupChannelStatisticsEmitter(liveLaunchProperties: LiveLa
   cleanupChannelStatisticsEmitter();
   emitter = new ChannelStatisticsEmitter(liveLaunchProperties.channel.id);
   emitter.on("start", (initialValue) => {
-    console.log("SubscriberCountEmitter started. " + initialValue);
+    console.log("ChannelStatisticsEmitter started. " + initialValue);
     counts.currentSubscriberCount = initialValue;
     counts.maxSubscriberCount = initialValue;
     getLiveStatisticsManager().updateLiveStatistics(counts);
   });
   emitter.on("end", () => {
-    console.log("SubscriberCountEmitter finished.");
+    console.log("ChannelStatisticsEmitter finished.");
   });
   emitter.on("error", (error) => {
     console.log(error);
