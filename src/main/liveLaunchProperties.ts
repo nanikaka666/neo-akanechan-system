@@ -1,5 +1,13 @@
-import { Channel, LiveLaunchProperties, YoutubeLive } from "../ipcEvent";
+import {
+  Channel,
+  LiveLaunchProperties,
+  YoutubeLive,
+  YoutubeLiveInLive,
+  YoutubeLiveInReady,
+} from "../ipcEvent";
 import { UserSettingsService } from "./userSettings";
+import { VideoId } from "./youtubeApi/model";
+import { YoutubeApiService } from "./youtubeApi/service";
 
 export function buildLiveLaunchProperties(
   channel: Channel,
@@ -8,6 +16,48 @@ export function buildLiveLaunchProperties(
   // shown on title bar of overlay window.
   const overlayWindowTitle = `*CAPTURE* ${live.title}`;
 
+  return {
+    channel: channel,
+    live: live,
+    settings: UserSettingsService.getUserSettings(),
+    overlayWindowTitle: overlayWindowTitle,
+  };
+}
+
+export async function buildLiveLaunchPropertiesForDebug(): Promise<LiveLaunchProperties> {
+  const videoId = new VideoId("");
+  const video = await YoutubeApiService.getVideo(videoId);
+  if (!video || video.type === "notLive" || video.type === "finishedLive") {
+    throw new Error("Invalid video Id");
+  }
+
+  const live =
+    video.type === "inLive"
+      ? ({
+          type: "inLive",
+          videoId: video.id,
+          liveChatId: video.activeLiveChatId,
+          title: video.title,
+          thumbnailUrl: video.thumbnailUrl,
+          actualStartTime: video.actualStartTime,
+          isPublic: video.isPublic,
+        } satisfies YoutubeLiveInLive)
+      : ({
+          type: "inReady",
+          videoId: video.id,
+          liveChatId: video.activeLiveChatId,
+          title: video.title,
+          thumbnailUrl: video.thumbnailUrl,
+          scheduledStartTime: video.scheduledStartTime,
+          isPublic: video.isPublic,
+        } satisfies YoutubeLiveInReady);
+
+  const channel = await YoutubeApiService.getChannel(video.channelId.id);
+  if (!channel) {
+    throw new Error("Channel not found.");
+  }
+
+  const overlayWindowTitle = `*CAPTURE* ${live.title}`;
   return {
     channel: channel,
     live: live,

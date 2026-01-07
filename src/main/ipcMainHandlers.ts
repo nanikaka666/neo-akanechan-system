@@ -39,6 +39,7 @@ export function setupIpcMainHandlers() {
     }
 
     const liveLaunchProperties = buildLiveLaunchProperties(channel, live);
+    // const liveLaunchProperties = await buildLiveLaunchPropertiesForDebug();
 
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
