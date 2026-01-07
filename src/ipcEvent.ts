@@ -62,7 +62,7 @@ export type YoutubeLive = YoutubeLiveInReady | YoutubeLiveInLive;
 export interface YoutubeLiveInReady {
   type: "inReady";
   videoId: VideoId;
-  liveChatId: LiveChatId;
+  liveChatId: LiveChatId | ActiveLiveChatId;
   title: string;
   thumbnailUrl: string;
   scheduledStartTime: Date;
@@ -72,7 +72,7 @@ export interface YoutubeLiveInReady {
 export interface YoutubeLiveInLive {
   type: "inLive";
   videoId: VideoId;
-  liveChatId: LiveChatId;
+  liveChatId: LiveChatId | ActiveLiveChatId;
   title: string;
   thumbnailUrl: string;
   scheduledStartTime: Date;
