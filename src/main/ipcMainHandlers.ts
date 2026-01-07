@@ -8,7 +8,10 @@ import {
   getLiveChatManager,
   setupLiveChatEmitter,
 } from "./emitter/liveChatManager";
-import { cleanUpLikeCountEmitter, setupLikeCountEmitter } from "./emitter/likeCountManager";
+import {
+  cleanupVideoStatisticsManager,
+  setupVideoStatisticsManager,
+} from "./emitter/videoStatisticsManager";
 import {
   cleanUpLiveViewCountEmitter,
   setupLiveViewCountEmitter,
@@ -86,6 +89,7 @@ export function setupIpcMainHandlers() {
       // setupLikeCountEmitter(liveLaunchProperties),
       // setupLiveViewCountEmitter(liveLaunchProperties),
       setupChannelStatisticsEmitter(liveLaunchProperties),
+      setupVideoStatisticsManager(liveLaunchProperties),
     ]);
     return true;
   });
@@ -147,7 +151,7 @@ export function setupIpcMainHandlers() {
 
     // clean up emitters
     cleanUpLiveChatEmitter();
-    cleanUpLikeCountEmitter();
+    cleanupVideoStatisticsManager();
     cleanUpLiveViewCountEmitter();
     cleanupChannelStatisticsEmitter();
 
