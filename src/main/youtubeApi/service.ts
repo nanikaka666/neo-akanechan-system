@@ -171,7 +171,7 @@ function convertToVideo(res: VideoYoutubeApiResponse): YoutubeVideo {
       likeCount: res.statistics.likeCount,
       actualStartTime: res.liveStreamingDetails!.actualStartTime!,
       activeLiveChatId: res.liveStreamingDetails!.activeLiveChatId!,
-      concurrentViewers: res.liveStreamingDetails!.concurrentViewers!,
+      concurrentViewers: res.liveStreamingDetails!.concurrentViewers,
     } satisfies VideoInLive;
   }
 }

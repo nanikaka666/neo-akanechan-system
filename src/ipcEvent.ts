@@ -106,7 +106,7 @@ export interface VideoInLive {
   likeCount?: number;
   actualStartTime: Date;
   activeLiveChatId: ActiveLiveChatId;
-  concurrentViewers: number;
+  concurrentViewers?: number;
 }
 
 export interface VideoFinishedLive {
