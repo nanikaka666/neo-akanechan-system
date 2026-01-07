@@ -15,6 +15,7 @@ import {
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiService } from "./youtubeApi/service";
+import { buildLiveLaunchProperties } from "./liveLaunchProperties";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -36,20 +37,15 @@ export function setupIpcMainHandlers() {
     if (res.response !== 0) {
       return Promise.resolve(false);
     }
-    // shown on title bar of overlay window.
-    const overlayWindowTitle = `*CAPTURE* ${live.title}`;
+
+    const liveLaunchProperties = buildLiveLaunchProperties(channel, live);
 
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
 
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
-      liveLaunchProperties: {
-        channel: channel,
-        live: live,
-        settings: UserSettingsService.getUserSettings(),
-        overlayWindowTitle: overlayWindowTitle,
-      },
+      liveLaunchProperties: liveLaunchProperties,
     });
     return Promise.resolve(true);
   });
