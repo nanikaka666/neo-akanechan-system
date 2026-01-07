@@ -88,65 +88,203 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
     }
   }
 
+  #extractCommonPart(item: LiveChatMessage) {
+    return {
+      id: item.getId(),
+      snippet: {
+        authorChannelId: item.getSnippet()?.getAuthorChannelId(),
+        publishedAt: item.getSnippet()?.getPublishedAt()
+          ? new Date(item.getSnippet()!.getPublishedAt()!)
+          : undefined,
+        displayMessage: item.getSnippet()?.getDisplayMessage(),
+      },
+      authorDetails: {
+        channelId: item.getAuthorDetails()?.getChannelId(),
+        channelUrl: item.getAuthorDetails()?.getChannelUrl(),
+        displayName: item.getAuthorDetails()?.getDisplayName(),
+        profileImageUrl: item.getAuthorDetails()?.getProfileImageUrl(),
+        isVerified: item.getAuthorDetails()?.getIsVerified(),
+        isChatOwner: item.getAuthorDetails()?.getIsChatOwner(),
+        isChatSponsor: item.getAuthorDetails()?.getIsChatSponsor(),
+        isChatModerator: item.getAuthorDetails()?.getIsChatModerator(),
+      },
+    };
+  }
+
   #handleTextMessageEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.textMessageEvent);
 
-    let data = { id: item.getId() };
+    const data = {
+      ...this.#extractCommonPart(item),
+      textMessageDetails: {
+        messageText: item.getSnippet()?.getTextMessageDetails()?.getMessageText(),
+      },
+    };
 
-    const snippet = item.getSnippet();
-
-    if (snippet) {
-      data = {
-        ...data,
-        ...{
-          authorChannelId: snippet.getAuthorChannelId(),
-          publishedAt: snippet.getPublishedAt() ? new Date(snippet.getPublishedAt()!) : undefined,
-          displayMessage: snippet.getDisplayMessage(),
-          messageText: snippet.getTextMessageDetails()?.getMessageText(),
-        },
-      };
-    }
-    const authorDetails = item.getAuthorDetails();
-    if (authorDetails) {
-      data = {
-        ...data,
-        ...{
-          channelId: authorDetails.getChannelId(),
-          channelUrl: authorDetails.getChannelUrl(),
-          displayName: authorDetails.getDisplayName(),
-          profileImageUrl: authorDetails.getProfileImageUrl(),
-          isVerified: authorDetails.getIsVerified(),
-          isChatOwner: authorDetails.getIsChatOwner(),
-          isChatSponsor: authorDetails.getIsChatSponsor(),
-          isChatModerator: authorDetails.getIsChatModerator(),
-        },
-      };
-    }
-    console.log(data);
+    console.log("Text");
   }
+
   #handleNewMembershipsEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.newSponsorEvent);
+    const data = {
+      ...this.#extractCommonPart(item),
+      newSponsorDetails: {
+        memberLevelName: item.getSnippet()?.getNewSponsorDetails()?.getMemberLevelName(),
+        isUpgrade: item.getSnippet()?.getNewSponsorDetails()?.getIsUpgrade(),
+      },
+    };
+
+    console.log("NewMembership", data);
   }
+
   #handleMessageDeletedEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.messageDeletedEvent);
+    const data = {
+      ...this.#extractCommonPart(item),
+      messageDeletedDetails: {
+        deletedMessageId: item.getSnippet()?.getMessageDeletedDetails()?.getDeletedMessageId(),
+      },
+    };
+
+    console.log("Message Delete", data);
   }
+
   #handleUserBannedEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.userBannedEvent);
+    const data = {
+      ...this.#extractCommonPart(item),
+      userBannedDetails: {
+        bannedUserDetails: {
+          channelId: item
+            .getSnippet()
+            ?.getUserBannedDetails()
+            ?.getBannedUserDetails()
+            ?.getChannelId(),
+          channelUrl: item
+            .getSnippet()
+            ?.getUserBannedDetails()
+            ?.getBannedUserDetails()
+            ?.getChannelUrl(),
+          displayName: item
+            .getSnippet()
+            ?.getUserBannedDetails()
+            ?.getBannedUserDetails()
+            ?.getDisplayName(),
+          profileImageUrl: item
+            .getSnippet()
+            ?.getUserBannedDetails()
+            ?.getBannedUserDetails()
+            ?.getProfileImageUrl(),
+        },
+        banType: item.getSnippet()?.getUserBannedDetails()?.getBanType(),
+        banDurationSeconds: item.getSnippet()?.getUserBannedDetails()?.getBanDurationSeconds(),
+      },
+    };
+    console.log("User Banned.", data);
   }
+
   #handleSuperChatEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.superChatEvent);
+    const data = {
+      ...this.#extractCommonPart(item),
+      superChatDetails: {
+        amountMicros: item.getSnippet()?.getSuperChatDetails()?.getAmountMicros(),
+        currency: item.getSnippet()?.getSuperChatDetails()?.getCurrency(),
+        amountDisplayString: item.getSnippet()?.getSuperChatDetails()?.getAmountDisplayString(),
+        userComment: item.getSnippet()?.getSuperChatDetails()?.getUserComment(),
+        tier: item.getSnippet()?.getSuperChatDetails()?.getTier(),
+      },
+    };
+
+    console.log("SuperChat.", data);
   }
+
   #handleSuperStickerEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.superStickerEvent);
+    const data = {
+      ...this.#extractCommonPart(item),
+      superStickerDetails: {
+        superStickerMetadata: {
+          stickerId: item
+            .getSnippet()
+            ?.getSuperStickerDetails()
+            ?.getSuperStickerMetadata()
+            ?.getStickerId(),
+          altText: item
+            .getSnippet()
+            ?.getSuperStickerDetails()
+            ?.getSuperStickerMetadata()
+            ?.getAltText(),
+          language: item
+            .getSnippet()
+            ?.getSuperStickerDetails()
+            ?.getSuperStickerMetadata()
+            ?.getAltTextLanguage(),
+        },
+        amountMicros: item.getSnippet()?.getSuperStickerDetails()?.getAmountMicros(),
+        currency: item.getSnippet()?.getSuperStickerDetails()?.getCurrency(),
+        amountDisplayString: item.getSnippet()?.getSuperStickerDetails()?.getAmountDisplayString(),
+        tier: item.getSnippet()?.getSuperStickerDetails()?.getTier(),
+      },
+    };
+
+    console.log("SuperSticker.", data);
   }
+
   #handleMemberMilestoneChatEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.memberMilestoneChatEvent);
+    const data = {
+      ...this.#extractCommonPart(item),
+      memberMilestoneChatDetails: {
+        userComment: item.getSnippet()?.getMemberMilestoneChatDetails()?.getUserComment(),
+        memberMonth: item.getSnippet()?.getMemberMilestoneChatDetails()?.getMemberMonth(),
+        memberLevelName: item.getSnippet()?.getMemberMilestoneChatDetails()?.getMemberLevelName(),
+      },
+    };
+
+    console.log("MemberMilestone.", data);
   }
+
   #handleMembershipGiftEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.membershipGiftingEvent);
+    const data = {
+      ...this.#extractCommonPart(item),
+      membershipGiftingDetails: {
+        giftMembershipsCount: item
+          .getSnippet()
+          ?.getMembershipGiftingDetails()
+          ?.getGiftMembershipsCount(),
+        giftMembershipsLevelName: item
+          .getSnippet()
+          ?.getMembershipGiftingDetails()
+          ?.getGiftMembershipsLevelName(),
+      },
+    };
+
+    console.log("Membership Gift", data);
   }
+
   #handleMembershipGiftReceivedEvent(item: LiveChatMessage) {
     this.#checkItemType(item, itemTypeMap.giftMembershipReceivedEvent);
+    const data = {
+      ...this.#extractCommonPart(item),
+      giftMembershipReceivedDetails: {
+        memberLevelName: item
+          .getSnippet()
+          ?.getGiftMembershipReceivedDetails()
+          ?.getMemberLevelName(),
+        gifterChannelId: item
+          .getSnippet()
+          ?.getGiftMembershipReceivedDetails()
+          ?.getGifterChannelId(),
+        associatedMembershipGiftingMessageId: item
+          .getSnippet()
+          ?.getGiftMembershipReceivedDetails()
+          ?.getAssociatedMembershipGiftingMessageId(),
+      },
+    };
+
+    console.log("Gift Received.", data);
   }
 
   async #execute() {
@@ -208,10 +346,10 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
         }
         if (res.getOfflineAt()) {
           this.#isActivated = false;
-          this.emit("end", "Live becomes finished.");
         }
       });
     }
+    this.emit("end", "Live becomes finished.");
   }
 
   start() {
