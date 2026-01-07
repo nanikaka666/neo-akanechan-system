@@ -145,11 +145,19 @@ export function setupIpcMainHandlers() {
 
     cleanUpLiveStatistics();
 
-    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      type: "liveSelection",
-      channel: liveLaunchProperties.channel,
-      lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
-    } satisfies LiveSelectionPage);
+    const channel = await YoutubeApiService.getChannelOfMine();
+    if (!channel) {
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+        type: "auth",
+      } satisfies AuthPage);
+    } else {
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+        type: "liveSelection",
+        channel: channel,
+        lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
+      } satisfies LiveSelectionPage);
+    }
+
     return true;
   });
 
