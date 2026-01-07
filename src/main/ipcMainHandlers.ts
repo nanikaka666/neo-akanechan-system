@@ -3,23 +3,19 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, InLivePage, LiveSelectionPage } from "../ipcEvent";
+import { cleanUpLiveChatEmitter, getLiveChatManager } from "./emitter/liveChatManager";
 import {
-  cleanUpLiveChatEmitter,
-  getLiveChatManager,
-  setupLiveChatEmitter,
-} from "./emitter/liveChatManager";
-import { cleanUpLikeCountEmitter, setupLikeCountEmitter } from "./emitter/likeCountManager";
+  cleanupVideoStatisticsManager,
+  setupVideoStatisticsManager,
+} from "./emitter/videoStatisticsManager";
 import {
-  cleanUpLiveViewCountEmitter,
-  setupLiveViewCountEmitter,
-} from "./emitter/liveViewCountManager";
-import {
-  cleanUpSubscriberCountEmitter,
-  setupSubscriberCountEmitter,
-} from "./emitter/subscriberCountManager";
+  cleanupChannelStatisticsManager,
+  setupChannelStatisticsManager,
+} from "./emitter/channelStatisticsManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiService } from "./youtubeApi/service";
+import { buildLiveLaunchProperties } from "./liveLaunchProperties";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -41,20 +37,16 @@ export function setupIpcMainHandlers() {
     if (res.response !== 0) {
       return Promise.resolve(false);
     }
-    // shown on title bar of overlay window.
-    const overlayWindowTitle = `*CAPTURE* ${live.title}`;
+
+    const liveLaunchProperties = buildLiveLaunchProperties(channel, live);
+    // const liveLaunchProperties = await buildLiveLaunchPropertiesForDebug();
 
     // memo: temporary turn off
     // createOverlayWindow(overlayWindowTitle);
 
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
-      liveLaunchProperties: {
-        channel: channel,
-        live: live,
-        settings: UserSettingsService.getUserSettings(),
-        overlayWindowTitle: overlayWindowTitle,
-      },
+      liveLaunchProperties: liveLaunchProperties,
     });
     return Promise.resolve(true);
   });
@@ -82,10 +74,11 @@ export function setupIpcMainHandlers() {
     setupLiveStatistics(e.sender);
 
     await Promise.all([
-      setupLiveChatEmitter(e.sender, liveLaunchProperties),
-      setupLikeCountEmitter(liveLaunchProperties),
-      setupLiveViewCountEmitter(liveLaunchProperties),
-      setupSubscriberCountEmitter(liveLaunchProperties),
+      // setupLiveChatEmitter(e.sender, liveLaunchProperties),
+      // setupLikeCountEmitter(liveLaunchProperties),
+      // setupLiveViewCountEmitter(liveLaunchProperties),
+      setupChannelStatisticsManager(liveLaunchProperties),
+      setupVideoStatisticsManager(liveLaunchProperties),
     ]);
     return true;
   });
@@ -116,7 +109,7 @@ export function setupIpcMainHandlers() {
     return Promise.resolve({
       type: "liveSelection",
       channel: maybeChannel,
-      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
+      lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
     } satisfies LiveSelectionPage);
   });
 
@@ -147,16 +140,24 @@ export function setupIpcMainHandlers() {
 
     // clean up emitters
     cleanUpLiveChatEmitter();
-    cleanUpLikeCountEmitter();
-    cleanUpLiveViewCountEmitter();
-    cleanUpSubscriberCountEmitter();
+    cleanupVideoStatisticsManager();
+    cleanupChannelStatisticsManager();
 
     cleanUpLiveStatistics();
 
-    // WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-    //   type: "liveSelection",
-    //   mainChannelId: liveLaunchProperties.channel.channel.channelId,
-    // } satisfies LiveSelectionPage);
+    const channel = await YoutubeApiService.getChannelOfMine();
+    if (!channel) {
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+        type: "auth",
+      } satisfies AuthPage);
+    } else {
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+        type: "liveSelection",
+        channel: channel,
+        lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
+      } satisfies LiveSelectionPage);
+    }
+
     return true;
   });
 
@@ -185,7 +186,7 @@ export function setupIpcMainHandlers() {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveSelection",
       channel: maybeChannel,
-      live: await YoutubeApiService.getNotFinishedLivesOfMine(),
+      lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
     });
     return true;
   });

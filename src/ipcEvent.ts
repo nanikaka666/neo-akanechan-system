@@ -8,7 +8,7 @@ import {
   NewMembership,
   SponsorshipsGift,
 } from "youtube-livechat-emitter/dist/src/types/liveChat";
-import { ChannelId, LiveChatId, VideoId } from "./main/youtubeApi/model";
+import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "./main/youtubeApi/model";
 
 /**
  * User doesn't authorized.
@@ -23,7 +23,7 @@ export interface AuthPage {
 export interface LiveSelectionPage {
   type: "liveSelection";
   channel: Channel;
-  live: YoutubeLive[];
+  lives: YoutubeLive[];
 }
 
 /**
@@ -62,7 +62,7 @@ export type YoutubeLive = YoutubeLiveInReady | YoutubeLiveInLive;
 export interface YoutubeLiveInReady {
   type: "inReady";
   videoId: VideoId;
-  liveChatId: LiveChatId;
+  liveChatId: LiveChatId | ActiveLiveChatId;
   title: string;
   thumbnailUrl: string;
   scheduledStartTime: Date;
@@ -72,11 +72,67 @@ export interface YoutubeLiveInReady {
 export interface YoutubeLiveInLive {
   type: "inLive";
   videoId: VideoId;
-  liveChatId: LiveChatId;
+  liveChatId: LiveChatId | ActiveLiveChatId;
   title: string;
   thumbnailUrl: string;
-  scheduledStartTime: Date;
   actualStartTime: Date;
+  isPublic: boolean;
+}
+
+export type YoutubeVideo = VideoUpcomingLive | VideoInLive | VideoFinishedLive | NotLiveVideo;
+
+export interface VideoUpcomingLive {
+  type: "upcomingLive";
+  id: VideoId;
+  title: string;
+  description: string;
+  channelId: ChannelId;
+  channelTitle: string;
+  thumbnailUrl: string;
+  likeCount?: number;
+  scheduledStartTime: Date;
+  activeLiveChatId: ActiveLiveChatId;
+  isPublic: boolean;
+}
+
+export interface VideoInLive {
+  type: "inLive";
+  id: VideoId;
+  title: string;
+  description: string;
+  channelId: ChannelId;
+  channelTitle: string;
+  thumbnailUrl: string;
+  likeCount?: number;
+  actualStartTime: Date;
+  activeLiveChatId: ActiveLiveChatId;
+  concurrentViewers?: number;
+  isPublic: boolean;
+}
+
+export interface VideoFinishedLive {
+  type: "finishedLive";
+  id: VideoId;
+  title: string;
+  description: string;
+  channelId: ChannelId;
+  channelTitle: string;
+  thumbnailUrl: string;
+  likeCount?: number;
+  actualStartTime: Date;
+  actualEndTime: Date;
+  isPublic: boolean;
+}
+
+export interface NotLiveVideo {
+  type: "notLive";
+  id: VideoId;
+  title: string;
+  description: string;
+  channelId: ChannelId;
+  channelTitle: string;
+  thumbnailUrl: string;
+  likeCount?: number;
   isPublic: boolean;
 }
 

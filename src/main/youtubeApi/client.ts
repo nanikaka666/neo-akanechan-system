@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { ChannelId, LiveChatId, VideoId } from "./model";
+import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "./model";
 
 /**
  * Image data structure in Youtube Api Response.
@@ -59,6 +59,39 @@ export interface LiveBroadcastYoutubeApiResponse {
   status: {
     lifeCycleStatus: LifeCycleStatusYoutubeApiResponse;
     privacyStatus: PrivacyStatusYoutubeApiResponse;
+  };
+}
+
+type LiveBroadcastContentYoutubeApiResponse = "live" | "none" | "upcoming";
+
+export interface VideoYoutubeApiResponse {
+  id: VideoId;
+  snippet: {
+    channelId: ChannelId;
+    title: string;
+    description: string;
+    channelTitle: string;
+    thumbnails: {
+      default: ImageYoutubeApiResponse;
+      medium: ImageYoutubeApiResponse;
+      high: ImageYoutubeApiResponse;
+      standard: ImageYoutubeApiResponse;
+      maxres: ImageYoutubeApiResponse;
+    };
+    liveBroadcastContent: LiveBroadcastContentYoutubeApiResponse;
+  };
+  statistics: {
+    likeCount?: number;
+  };
+  status: {
+    privacyStatus: PrivacyStatusYoutubeApiResponse;
+  };
+  liveStreamingDetails?: {
+    scheduledStartTime?: Date;
+    actualStartTime?: Date;
+    actualEndTime?: Date;
+    activeLiveChatId?: ActiveLiveChatId;
+    concurrentViewers?: number;
   };
 }
 
@@ -174,6 +207,28 @@ export const YoutubeApiClient = {
 
     return res.data.items.map(buildLiveBroadcastResponse) as LiveBroadcastYoutubeApiResponse[];
   },
+
+  /**
+   * Get LiveBroadcasts of user's channel.
+   */
+  getVideo: async (accessToken: string, videoId: VideoId) => {
+    const url = "https://www.googleapis.com/youtube/v3/videos";
+
+    const res = await axios.get(url, {
+      params: {
+        id: videoId.id,
+        part: ["id", "snippet", "statistics", "status", "liveStreamingDetails"].join(","),
+      },
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    checkStatus(res);
+
+    if (!("items" in res.data)) {
+      return undefined;
+    }
+
+    return buildVideoResponse(res.data.items[0]);
+  },
 };
 
 function checkStatus(res: AxiosResponse) {
@@ -198,7 +253,7 @@ function buildChannelResponse(item: any): ChannelResponse {
       thumbnails: item.snippet.thumbnails,
     },
     statistics: {
-      subscriberCount: item.statistics.subscriberCount,
+      subscriberCount: Number.parseInt(item.statistics.subscriberCount),
     },
     brandingSettings: {
       ...imageInBrandingSettings,
@@ -227,4 +282,51 @@ function buildLiveBroadcastResponse(item: any): LiveBroadcastYoutubeApiResponse 
       privacyStatus: item.status.privacyStatus,
     },
   } satisfies LiveBroadcastYoutubeApiResponse;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function buildVideoResponse(item: any): VideoYoutubeApiResponse {
+  const liveStreamingDetails =
+    "liveStreamingDetails" in item
+      ? {
+          liveStreamingDetails: {
+            scheduledStartTime: item.liveStreamingDetails.scheduledStartTime
+              ? new Date(item.liveStreamingDetails.scheduledStartTime)
+              : undefined,
+            actualStartTime: item.liveStreamingDetails.actualStartTime
+              ? new Date(item.liveStreamingDetails.actualStartTime)
+              : undefined,
+            actualEndTime: item.liveStreamingDetails.actualEndTime
+              ? new Date(item.liveStreamingDetails.actualEndTime)
+              : undefined,
+            activeLiveChatId: item.liveStreamingDetails.activeLiveChatId
+              ? new ActiveLiveChatId(item.liveStreamingDetails.activeLiveChatId)
+              : undefined,
+            concurrentViewers: item.liveStreamingDetails.concurrentViewers
+              ? Number.parseInt(item.liveStreamingDetails.concurrentViewers)
+              : undefined,
+          },
+        }
+      : {};
+  return {
+    id: new VideoId(item.id),
+    snippet: {
+      channelId: new ChannelId(item.snippet.channelId),
+      title: item.snippet.title,
+      description: item.snippet.description,
+      channelTitle: item.snippet.channelTitle,
+      thumbnails: item.snippet.thumbnails,
+      liveBroadcastContent: item.snippet.liveBroadcastContent,
+    },
+    status: {
+      privacyStatus: item.status.privacyStatus,
+    },
+    statistics: {
+      likeCount:
+        item.statistics.likeCount === undefined
+          ? undefined
+          : Number.parseInt(item.statistics.likeCount),
+    },
+    ...liveStreamingDetails,
+  } satisfies VideoYoutubeApiResponse;
 }

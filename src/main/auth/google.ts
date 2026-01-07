@@ -88,9 +88,6 @@ export async function doAuthFlow(): Promise<boolean> {
             // store to storage
             getStorageService().registerAuthCredentials(token.tokens);
 
-            // tell to renderer
-            // webContentsSendWrapper(w, "tellCredentials", token.tokens);
-
             // set credentials to OAuth2Client
             client.setCredentials(token.tokens);
 
