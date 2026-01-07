@@ -20,7 +20,7 @@ import { ChannelId, VideoId } from "./model";
 
 export const YoutubeApiService = {
   getChannelOfMine: async () => {
-    const accessToken = await googleAccessToken();
+    const accessToken = await getAccessToken();
     const res = await YoutubeApiClient.getChannelOfMine(accessToken);
 
     if (!res) {
@@ -41,7 +41,7 @@ export const YoutubeApiService = {
       throw new Error("Too long string.");
     }
 
-    const accessToken = await googleAccessToken();
+    const accessToken = await getAccessToken();
 
     const res = channelIdish.startsWith("@")
       ? await YoutubeApiClient.getChannelByHandle(accessToken, channelIdish)
@@ -51,7 +51,7 @@ export const YoutubeApiService = {
   },
 
   getNotFinishedLivesOfMine: async () => {
-    const accessToken = await googleAccessToken();
+    const accessToken = await getAccessToken();
 
     return (await YoutubeApiClient.getLiveBroadcasts(accessToken))
       .filter((item) => item.snippet.actualEndTime === undefined)
@@ -59,21 +59,13 @@ export const YoutubeApiService = {
   },
 
   getVideo: async (videoId: VideoId) => {
-    const accessToken = await googleAccessToken();
+    const accessToken = await getAccessToken();
 
     const res = await YoutubeApiClient.getVideo(accessToken, videoId);
 
     return res ? convertToVideo(res) : undefined;
   },
 };
-
-async function googleAccessToken() {
-  const accessToken = await getAccessToken();
-  if (!accessToken) {
-    throw new Error("Access Token unavailable.");
-  }
-  return accessToken;
-}
 
 /**
  * Convert to app domain model from Youtube api response domain.
