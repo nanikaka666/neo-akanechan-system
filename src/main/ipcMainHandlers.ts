@@ -17,8 +17,8 @@ import {
   setupLiveViewCountEmitter,
 } from "./emitter/liveViewCountManager";
 import {
-  cleanupChannelStatisticsEmitter,
-  setupChannelStatisticsEmitter,
+  cleanupChannelStatisticsManager,
+  setupChannelStatisticsManager,
 } from "./emitter/channelStatisticsManager";
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
@@ -88,7 +88,7 @@ export function setupIpcMainHandlers() {
       // setupLiveChatEmitter(e.sender, liveLaunchProperties),
       // setupLikeCountEmitter(liveLaunchProperties),
       // setupLiveViewCountEmitter(liveLaunchProperties),
-      setupChannelStatisticsEmitter(liveLaunchProperties),
+      setupChannelStatisticsManager(liveLaunchProperties),
       setupVideoStatisticsManager(liveLaunchProperties),
     ]);
     return true;
@@ -153,7 +153,7 @@ export function setupIpcMainHandlers() {
     cleanUpLiveChatEmitter();
     cleanupVideoStatisticsManager();
     cleanUpLiveViewCountEmitter();
-    cleanupChannelStatisticsEmitter();
+    cleanupChannelStatisticsManager();
 
     cleanUpLiveStatistics();
 
