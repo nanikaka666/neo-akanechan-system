@@ -131,6 +131,7 @@ function convertToVideo(res: VideoYoutubeApiResponse): YoutubeVideo {
       channelTitle: res.snippet.channelTitle,
       thumbnailUrl: res.snippet.thumbnails.default.url,
       likeCount: res.statistics.likeCount,
+      isPublic: res.status.privacyStatus === "public",
     } satisfies NotLiveVideo;
   }
   if (res.snippet.liveBroadcastContent === "none") {
@@ -145,6 +146,7 @@ function convertToVideo(res: VideoYoutubeApiResponse): YoutubeVideo {
       likeCount: res.statistics.likeCount,
       actualStartTime: res.liveStreamingDetails!.actualStartTime!,
       actualEndTime: res.liveStreamingDetails!.actualEndTime!,
+      isPublic: res.status.privacyStatus === "public",
     } satisfies VideoFinishedLive;
   } else if (res.snippet.liveBroadcastContent === "upcoming") {
     return {
@@ -158,6 +160,7 @@ function convertToVideo(res: VideoYoutubeApiResponse): YoutubeVideo {
       likeCount: res.statistics.likeCount,
       scheduledStartTime: res.liveStreamingDetails!.scheduledStartTime!,
       activeLiveChatId: res.liveStreamingDetails!.activeLiveChatId!,
+      isPublic: res.status.privacyStatus === "public",
     } satisfies VideoUpcomingLive;
   } else {
     return {
@@ -172,6 +175,7 @@ function convertToVideo(res: VideoYoutubeApiResponse): YoutubeVideo {
       actualStartTime: res.liveStreamingDetails!.actualStartTime!,
       activeLiveChatId: res.liveStreamingDetails!.activeLiveChatId!,
       concurrentViewers: res.liveStreamingDetails!.concurrentViewers,
+      isPublic: res.status.privacyStatus === "public",
     } satisfies VideoInLive;
   }
 }

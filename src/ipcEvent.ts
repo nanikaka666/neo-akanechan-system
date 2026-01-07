@@ -93,6 +93,7 @@ export interface VideoUpcomingLive {
   likeCount?: number;
   scheduledStartTime: Date;
   activeLiveChatId: ActiveLiveChatId;
+  isPublic: boolean;
 }
 
 export interface VideoInLive {
@@ -107,6 +108,7 @@ export interface VideoInLive {
   actualStartTime: Date;
   activeLiveChatId: ActiveLiveChatId;
   concurrentViewers?: number;
+  isPublic: boolean;
 }
 
 export interface VideoFinishedLive {
@@ -120,6 +122,7 @@ export interface VideoFinishedLive {
   likeCount?: number;
   actualStartTime: Date;
   actualEndTime: Date;
+  isPublic: boolean;
 }
 
 export interface NotLiveVideo {
@@ -131,6 +134,7 @@ export interface NotLiveVideo {
   channelTitle: string;
   thumbnailUrl: string;
   likeCount?: number;
+  isPublic: boolean;
 }
 
 export interface LiveLaunchProperties {
