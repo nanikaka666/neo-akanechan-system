@@ -81,7 +81,7 @@ export interface VideoYoutubeApiResponse {
     liveBroadcastContent: LiveBroadcastContentYoutubeApiResponse;
   };
   statistics: {
-    likeCount: number;
+    likeCount?: number;
   };
   status: {
     privacyStatus: PrivacyStatusYoutubeApiResponse;
@@ -322,7 +322,10 @@ function buildVideoResponse(item: any): VideoYoutubeApiResponse {
       privacyStatus: item.status.privacyStatus,
     },
     statistics: {
-      likeCount: Number.parseInt(item.statistics.likeCount),
+      likeCount:
+        item.statistics.likeCount === undefined
+          ? undefined
+          : Number.parseInt(item.statistics.likeCount),
     },
     ...liveStreamingDetails,
   } satisfies VideoYoutubeApiResponse;

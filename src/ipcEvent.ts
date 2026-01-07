@@ -90,7 +90,7 @@ export interface VideoUpcomingLive {
   channelId: ChannelId;
   channelTitle: string;
   thumbnailUrl: string;
-  likeCount: number;
+  likeCount?: number;
   scheduledStartTime: Date;
   activeLiveChatId: ActiveLiveChatId;
 }
@@ -103,7 +103,7 @@ export interface VideoInLive {
   channelId: ChannelId;
   channelTitle: string;
   thumbnailUrl: string;
-  likeCount: number;
+  likeCount?: number;
   actualStartTime: Date;
   activeLiveChatId: ActiveLiveChatId;
   concurrentViewers: number;
@@ -117,7 +117,7 @@ export interface VideoFinishedLive {
   channelId: ChannelId;
   channelTitle: string;
   thumbnailUrl: string;
-  likeCount: number;
+  likeCount?: number;
   actualStartTime: Date;
   actualEndTime: Date;
 }
@@ -130,7 +130,7 @@ export interface NotLiveVideo {
   channelId: ChannelId;
   channelTitle: string;
   thumbnailUrl: string;
-  likeCount: number;
+  likeCount?: number;
 }
 
 export interface LiveLaunchProperties {
