@@ -75,7 +75,6 @@ export interface YoutubeLiveInLive {
   liveChatId: LiveChatId | ActiveLiveChatId;
   title: string;
   thumbnailUrl: string;
-  scheduledStartTime: Date;
   actualStartTime: Date;
   isPublic: boolean;
 }

@@ -102,7 +102,6 @@ function convertToLive(res: LiveBroadcastYoutubeApiResponse): YoutubeLive {
         liveChatId: res.snippet.liveChatId,
         title: res.snippet.title,
         thumbnailUrl: res.snippet.thumbnails.default.url,
-        scheduledStartTime: res.snippet.scheduledStartTime,
         actualStartTime: res.snippet.actualStartTime,
         isPublic: res.status.privacyStatus === "public",
       } satisfies YoutubeLiveInLive)
