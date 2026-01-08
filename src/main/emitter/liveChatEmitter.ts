@@ -121,7 +121,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    console.log("Text");
+    // console.log("Text");
   }
 
   #handleNewMembershipsEvent(item: LiveChatMessage) {
@@ -196,7 +196,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    console.log("SuperChat.", data);
+    // console.log("SuperChat.", data);
   }
 
   #handleSuperStickerEvent(item: LiveChatMessage) {
@@ -290,64 +290,79 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
   async #execute() {
     let num = 0;
     while (this.#isActivated) {
-      console.log(`Call Num: (${++num})`);
-      const [request, metadata] = await this.#buildParams();
-      await this.#client.streamList(request, metadata).forEach((data) => {
-        const res = data as LiveChatMessageListResponse;
+      if (num % 10 === 0) {
+        console.log(`Call Num: (${num})`);
+      }
+      num++;
+      try {
+        const [request, metadata] = await this.#buildParams();
+        await this.#client.streamList(request, metadata).forEach((data) => {
+          const res = data as LiveChatMessageListResponse;
 
-        console.log(
-          `Total: ${res.getPageInfo()?.getTotalResults()}, Per page: ${res.getPageInfo()?.getResultsPerPage()}`,
-        );
+          // console.log(
+          //   `Total: ${res.getPageInfo()?.getTotalResults()}, Per page: ${res.getPageInfo()?.getResultsPerPage()}`,
+          // );
 
-        res.getItemsList().forEach((item) => {
-          const itemType = item.getSnippet()?.getType();
-          if (itemType === itemTypeMap.invalid) {
-            // do nothing.
-          } else if (itemType === itemTypeMap.textMessageEvent) {
-            this.#handleTextMessageEvent(item);
-          } else if (itemType === itemTypeMap.tombstone) {
-            // do nothing.
-          } else if (itemType === itemTypeMap.fanFundingEvent) {
-            // do nothing.
-          } else if (itemType === itemTypeMap.chatEndedEvent) {
-            // do nothing.
-          } else if (itemType === itemTypeMap.sponsorOnlyModeStartedEvent) {
-            // do nothing.
-          } else if (itemType === itemTypeMap.sponsorOnlyModeEndedEvent) {
-            // do nothing.
-          } else if (itemType === itemTypeMap.newSponsorEvent) {
-            this.#handleNewMembershipsEvent(item);
-          } else if (itemType === itemTypeMap.messageDeletedEvent) {
-            this.#handleMessageDeletedEvent(item);
-          } else if (itemType === itemTypeMap.messageRetractedEvent) {
-            // do nothing.
-          } else if (itemType === itemTypeMap.userBannedEvent) {
-            this.#handleUserBannedEvent(item);
-          } else if (itemType === itemTypeMap.superChatEvent) {
-            this.#handleSuperChatEvent(item);
-          } else if (itemType === itemTypeMap.superStickerEvent) {
-            this.#handleSuperStickerEvent(item);
-          } else if (itemType === itemTypeMap.memberMilestoneChatEvent) {
-            this.#handleMemberMilestoneChatEvent(item);
-          } else if (itemType === itemTypeMap.membershipGiftingEvent) {
-            this.#handleMembershipGiftEvent(item);
-          } else if (itemType === itemTypeMap.giftMembershipReceivedEvent) {
-            this.#handleMembershipGiftReceivedEvent(item);
-          } else if (itemType === itemTypeMap.pollEvent) {
-            // do nothing.
-          } else {
-            this.emit("error", new Error(`Unknown Item Type Detected. ${itemType}`));
+          res.getItemsList().forEach((item) => {
+            const itemType = item.getSnippet()?.getType();
+            if (itemType === itemTypeMap.invalid) {
+              // do nothing.
+            } else if (itemType === itemTypeMap.textMessageEvent) {
+              this.#handleTextMessageEvent(item);
+            } else if (itemType === itemTypeMap.tombstone) {
+              // do nothing.
+            } else if (itemType === itemTypeMap.fanFundingEvent) {
+              // do nothing.
+            } else if (itemType === itemTypeMap.chatEndedEvent) {
+              // do nothing.
+            } else if (itemType === itemTypeMap.sponsorOnlyModeStartedEvent) {
+              // do nothing.
+            } else if (itemType === itemTypeMap.sponsorOnlyModeEndedEvent) {
+              // do nothing.
+            } else if (itemType === itemTypeMap.newSponsorEvent) {
+              this.#handleNewMembershipsEvent(item);
+            } else if (itemType === itemTypeMap.messageDeletedEvent) {
+              this.#handleMessageDeletedEvent(item);
+            } else if (itemType === itemTypeMap.messageRetractedEvent) {
+              // do nothing.
+            } else if (itemType === itemTypeMap.userBannedEvent) {
+              this.#handleUserBannedEvent(item);
+            } else if (itemType === itemTypeMap.superChatEvent) {
+              this.#handleSuperChatEvent(item);
+            } else if (itemType === itemTypeMap.superStickerEvent) {
+              this.#handleSuperStickerEvent(item);
+            } else if (itemType === itemTypeMap.memberMilestoneChatEvent) {
+              this.#handleMemberMilestoneChatEvent(item);
+            } else if (itemType === itemTypeMap.membershipGiftingEvent) {
+              this.#handleMembershipGiftEvent(item);
+            } else if (itemType === itemTypeMap.giftMembershipReceivedEvent) {
+              this.#handleMembershipGiftReceivedEvent(item);
+            } else if (itemType === itemTypeMap.pollEvent) {
+              // do nothing.
+            } else {
+              this.emit("error", new Error(`Unknown Item Type Detected. ${itemType}`));
+            }
+          });
+
+          const nextPageToken = res.getNextPageToken();
+          if (nextPageToken) {
+            this.#pageToken = nextPageToken;
+          }
+          if (res.getOfflineAt()) {
+            this.#isActivated = false;
           }
         });
-
-        const nextPageToken = res.getNextPageToken();
-        if (nextPageToken) {
-          this.#pageToken = nextPageToken;
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          this.emit("error", e);
+        } else {
+          this.emit("error", new Error(`${e}`));
         }
-        if (res.getOfflineAt()) {
-          this.#isActivated = false;
-        }
-      });
+        // Wait 11 seconds. And then go to next streamList loop.
+        await new Promise<void>((resolve) => {
+          setTimeout(() => resolve(), 11 * 1000);
+        });
+      }
     }
     this.emit("end", "Live becomes finished.");
   }
