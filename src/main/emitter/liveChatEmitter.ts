@@ -2,14 +2,14 @@ import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
 import { ActiveLiveChatId, LiveChatId } from "../youtubeApi/model";
 import { V3DataLiveChatMessageServiceClient } from "../grpc/generated/proto/stream_list_grpc_pb";
-import { credentials, Metadata } from "@grpc/grpc-js/build/src";
+import { credentials, Metadata, ServerErrorResponse } from "@grpc/grpc-js";
 import {
   LiveChatMessage,
   LiveChatMessageListRequest,
   LiveChatMessageListResponse,
-  LiveChatMessageSnippet,
 } from "../grpc/generated/proto/stream_list_pb";
 import { getAccessToken } from "../auth/google";
+import { Status } from "@grpc/grpc-js/build/src/constants";
 
 type ItemType =
   | "invalid"
@@ -49,6 +49,10 @@ const itemTypeMap: Record<ItemType, number> = {
   superStickerEvent: 16,
   pollEvent: 20,
 };
+
+function isServerErrorResponse(e: Error): e is ServerErrorResponse {
+  return "code" in e;
+}
 
 export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<LiveChatEvent>) {
   readonly #liveChatId: LiveChatId | ActiveLiveChatId;
@@ -134,7 +138,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    console.log("NewMembership", data);
+    // console.log("NewMembership", data);
   }
 
   #handleMessageDeletedEvent(item: LiveChatMessage) {
@@ -180,7 +184,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
         banDurationSeconds: item.getSnippet()?.getUserBannedDetails()?.getBanDurationSeconds(),
       },
     };
-    console.log("User Banned.", data);
+    // console.log("User Banned.", data);
   }
 
   #handleSuperChatEvent(item: LiveChatMessage) {
@@ -242,7 +246,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    console.log("MemberMilestone.", data);
+    // console.log("MemberMilestone.", data);
   }
 
   #handleMembershipGiftEvent(item: LiveChatMessage) {
@@ -261,7 +265,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    console.log("Membership Gift", data);
+    // console.log("Membership Gift", data);
   }
 
   #handleMembershipGiftReceivedEvent(item: LiveChatMessage) {
@@ -284,7 +288,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    console.log("Gift Received.", data);
+    // console.log("Gift Received.", data);
   }
 
   async #execute() {
@@ -298,10 +302,6 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
         const [request, metadata] = await this.#buildParams();
         await this.#client.streamList(request, metadata).forEach((data) => {
           const res = data as LiveChatMessageListResponse;
-
-          // console.log(
-          //   `Total: ${res.getPageInfo()?.getTotalResults()}, Per page: ${res.getPageInfo()?.getResultsPerPage()}`,
-          // );
 
           res.getItemsList().forEach((item) => {
             const itemType = item.getSnippet()?.getType();
@@ -355,6 +355,41 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       } catch (e: unknown) {
         if (e instanceof Error) {
           this.emit("error", e);
+          if (isServerErrorResponse(e)) {
+            if (e.code === Status.RESOURCE_EXHAUSTED) {
+              // code 8 includes several means.
+              // 1. quota beyounds limit.
+              // 2. this api so many called frequentially.
+              // So, retrying api will end in meaningless, stop the loop.
+              this.emit("end", "RESOURCE_EXHAUSTED error returns.");
+              this.#isActivated = false;
+            } else if (e.code === Status.NOT_FOUND) {
+              // code 5 means possibility that given live chat id is invalid.
+              // but sequential calling with valid live chat id, sometime returns this error.
+              // So, let try next loop even if catch this error.
+              // do nothing, go to next loop.
+            } else if (e.code === Status.PERMISSION_DENIED) {
+              // code 7 means permission denied.
+              // So, close the loop immediately.
+              this.emit("end", "try to connect a chat without permission.");
+              this.#isActivated = false;
+            } else if (e.code === Status.INVALID_ARGUMENT) {
+              // code 3 means invalid argument.
+              // So, close the loop.
+              this.emit("end", "try to connect a chat with invalid arguments.");
+              this.#isActivated = false;
+            } else if (e.code === Status.FAILED_PRECONDITION) {
+              // code 9 include multiple meaning, but what app should do is closing the loop whichever.
+              this.emit("end", "given chat is already invalid.");
+              this.#isActivated = false;
+            } else {
+              // other error code is not shown up the document.
+              // So, app doesn't know best thing how app should do.
+              // in site of security, let close the loop.
+              this.emit("end", "Appearance of unknown error code.");
+              this.#isActivated = false;
+            }
+          }
         } else {
           this.emit("error", new Error(`${e}`));
         }
