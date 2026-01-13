@@ -74,9 +74,7 @@ export function setupIpcMainHandlers() {
     setupLiveStatistics(e.sender);
 
     await Promise.all([
-      // setupLiveChatEmitter(e.sender, liveLaunchProperties),
-      // setupLikeCountEmitter(liveLaunchProperties),
-      // setupLiveViewCountEmitter(liveLaunchProperties),
+      setupLiveChatEmitter(e.sender, liveLaunchProperties),
       setupChannelStatisticsManager(liveLaunchProperties),
       setupVideoStatisticsManager(liveLaunchProperties),
     ]);
