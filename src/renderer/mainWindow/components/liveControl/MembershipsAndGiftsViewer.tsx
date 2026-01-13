@@ -73,12 +73,12 @@ export function MembershipsAndGiftsViewer({
           setRange((_) => newRange);
         }}
         itemContent={(index, item) => {
-          return item.type === "new" ? (
+          return item.type === "newMembership" ? (
             <NewMembershipsItem item={item} key={item.id.id} />
           ) : item.type === "milestone" ? (
             <MilestoneMembershipsItem item={item} key={item.id.id} />
           ) : item.type === "gift" ? (
-            <GiftItem item={item} key={item.id} />
+            <GiftItem item={item} key={item.id.id} />
           ) : (
             <RedemptionItem item={item} key={item.id.id} />
           );

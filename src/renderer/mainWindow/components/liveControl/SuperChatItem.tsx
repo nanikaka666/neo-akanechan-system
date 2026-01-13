@@ -1,16 +1,15 @@
 import { ExtendedChatItemSuperChat } from "../../../../ipcEvent";
 import { Author } from "./Author";
 import { FocusForm } from "./FocusForm";
-import { Messages } from "./Messages";
 
 export function SuperChatItem({ item }: { item: ExtendedChatItemSuperChat }) {
   return (
-    <div style={{ backgroundColor: `#${item.superChat.color.hex}` }}>
+    <div style={{ backgroundColor: `#${item.tier.hex}` }}>
       <Author author={item.author} />
 
-      <span style={{ fontWeight: "bold", fontSize: "24px" }}>{item.superChat.amount}</span>
+      <span style={{ fontWeight: "bold", fontSize: "24px" }}>{item.amount}</span>
 
-      {item.messages && <Messages messages={item.messages} />}
+      {item.displayMessage}
       <FocusForm item={item} />
     </div>
   );

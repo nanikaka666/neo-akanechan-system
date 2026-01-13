@@ -1,26 +1,18 @@
-import { type Author } from "youtube-livechat-emitter/dist/src/types/liveChat";
+import { ChatAuthor } from "../../../../ipcEvent";
 
-export function Author({ author }: { author: Author }) {
+export function Author({ author }: { author: ChatAuthor }) {
   return (
     <div>
-      <img src={author.thumbnails[0].url} style={{ width: "14px" }} />
+      <img src={author.profileImageUrl} style={{ width: "14px" }} />
       <span
         style={{
           marginLeft: "5px",
           marginRight: "5px",
           fontWeight: "bold",
-          color: author.memberships ? "red" : "black",
+          color: author.isMembership ? "red" : "black",
         }}
       >
         {author.name}
-      </span>
-      <span>
-        {author.memberships && (
-          <>
-            <img src={author.memberships.thumbnails[0].url} style={{ width: "16px" }}></img>
-            <span>{author.memberships.label}</span>
-          </>
-        )}
       </span>
     </div>
   );
