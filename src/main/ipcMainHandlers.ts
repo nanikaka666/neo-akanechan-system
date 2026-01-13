@@ -3,7 +3,11 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, InLivePage, LiveSelectionPage } from "../ipcEvent";
-import { cleanUpLiveChatEmitter, getLiveChatManager } from "./emitter/liveChatManager";
+import {
+  cleanUpLiveChatEmitter,
+  getLiveChatManager,
+  setupLiveChatEmitter,
+} from "./emitter/liveChatManager";
 import {
   cleanupVideoStatisticsManager,
   setupVideoStatisticsManager,
