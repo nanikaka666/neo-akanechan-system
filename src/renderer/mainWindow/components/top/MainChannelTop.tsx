@@ -15,7 +15,6 @@ export function MainChannelTop({ channel, lives }: { channel: Channel; lives: Yo
           <div key={live.videoId.id}>
             <img src={live.thumbnailUrl} alt="next live thumbnail" style={{ width: "360px" }} />
             <p>{live.title}</p>
-            <p>{live.scheduledStartTime.toLocaleString()}</p>
             <p>{live.isPublic ? "public" : "private"}</p>
             <p>
               <button

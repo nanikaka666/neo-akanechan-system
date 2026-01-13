@@ -1,14 +1,11 @@
 import { UserSettings } from "./main/userSettings";
 import {
-  ChatItemSuperChat,
-  ChatItemSuperSticker,
-  ChatItemText,
-  GiftRedemption,
-  MembershipMilestone,
-  NewMembership,
-  SponsorshipsGift,
-} from "youtube-livechat-emitter/dist/src/types/liveChat";
-import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "./main/youtubeApi/model";
+  ActiveLiveChatId,
+  ChannelId,
+  LiveChatId,
+  LiveChatItemId,
+  VideoId,
+} from "./main/youtubeApi/model";
 
 /**
  * User doesn't authorized.
@@ -173,10 +170,28 @@ export type NonMarkedExtendedChatItemText = Omit<ExtendedChatItemText, "isStocke
 export type NonMarkedExtendedChatItemSuperChat = Omit<ExtendedChatItemSuperChat, "isFocused">;
 export type NonMarkedExtendedChatItemSuperSticker = Omit<ExtendedChatItemSuperSticker, "isFocused">;
 
+export interface ChatAuthor {
+  channelId: ChannelId;
+  name: string;
+  profileImageUrl: string;
+  isMembership: boolean;
+  isOwner: boolean;
+  isModerator: boolean;
+}
+
+export interface ChatCommonPart {
+  id: LiveChatItemId;
+  author: ChatAuthor;
+  publishedAt: Date;
+  displayMessage: string;
+}
+
+export type TextMessageChat = ChatCommonPart & { type: "text" };
+
 /**
- * Append some data to ChatItemText from youtube-livechat-emitter
+ * Append some data.
  */
-export type ExtendedChatItemText = ChatItemText & {
+export type ExtendedChatItemText = TextMessageChat & {
   /**
    * index which means position of whole text chat list.
    */
@@ -203,13 +218,30 @@ export type ExtendedChatItemText = ChatItemText & {
   isFocused: boolean;
 };
 
-export type ExtendedChatItemSuperChat = ChatItemSuperChat & {
+export type SuperChat = ChatCommonPart & {
+  type: "superChat";
+  amount: string;
+  userComment: string;
+  tier: Color;
+};
+
+export type ExtendedChatItemSuperChat = SuperChat & {
   formatedTime: string;
   isFirst: boolean;
   isFocused: boolean;
 };
 
-export type ExtendedChatItemSuperSticker = ChatItemSuperSticker & {
+export type SuperSticker = ChatCommonPart & {
+  type: "superSticker";
+  sticker: {
+    stickerId: string;
+    altText: string;
+  };
+  amount: string;
+  tier: Color;
+};
+
+export type ExtendedChatItemSuperSticker = SuperSticker & {
   formatedTime: string;
   isFirst: boolean;
   isFocused: boolean;
@@ -217,23 +249,45 @@ export type ExtendedChatItemSuperSticker = ChatItemSuperSticker & {
 
 export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
 
+export type NewMembership = ChatCommonPart & {
+  type: "newMembership";
+  memberLevelName: string;
+  isUpgrade: boolean;
+};
+
 export type ExtendedNewMembership = NewMembership & {
   formatedTime: string;
+};
+
+export type MembershipMilestone = ChatCommonPart & {
+  type: "milestone";
+  userComment: string;
+  memberMonth: number;
+  memberLevelName: string;
 };
 
 export type ExtendedMembershipMilestone = MembershipMilestone & {
   formatedTime: string;
 };
 
-export type ExtendedSponsorshipsGift = SponsorshipsGift & {
+export type MembershipGift = ChatCommonPart & {
   type: "gift";
-  num: number;
-  formatedTime: string;
-  id: string; // todo: id must be given livechat-emitter module
+  giftCount: number;
+  giftMemberLevelName: string;
 };
 
-export type ExtendedGiftRedemption = GiftRedemption & {
-  type: "redemption";
+export type ExtendedSponsorshipsGift = MembershipGift & {
+  formatedTime: string;
+};
+
+export type GiftReceived = ChatCommonPart & {
+  type: "giftReceived";
+  receivedMemberLevelName: string;
+  gifterChannelId: ChannelId;
+  associatedItemId: LiveChatItemId;
+};
+
+export type ExtendedGiftRedemption = GiftReceived & {
   formatedTime: string;
 };
 
@@ -242,6 +296,32 @@ export type ExtendedMembershipAndGiftItem =
   | ExtendedMembershipMilestone
   | ExtendedSponsorshipsGift
   | ExtendedGiftRedemption;
+
+export type UserBannedEternalChatEvent = ChatCommonPart & {
+  type: "userBannedEternal";
+  bannedUser: {
+    channelId: ChannelId;
+    name: string;
+    profileImageUrl: string;
+  };
+};
+
+export type UserBannedTemporaryChatEvent = ChatCommonPart & {
+  type: "userBannedTemporary";
+  bannedUser: {
+    channelId: ChannelId;
+    name: string;
+    profileImageUrl: string;
+  };
+  durationSec: number;
+};
+
+export type UserBannedChatEvent = UserBannedEternalChatEvent | UserBannedTemporaryChatEvent;
+
+export type MessageDeletedChatEvent = ChatCommonPart & {
+  type: "messageDeleted";
+  deletedMessageId: LiveChatItemId;
+};
 
 /**
  * A chat item on which owner focuses.
@@ -265,6 +345,59 @@ export interface Chats {
   stocks: ExtendedChatItemText[];
   focus?: FocusedOnChatItem;
 }
+
+export const Blue = {
+  level: 1,
+  label: "BLUE",
+  hex: "1e88e5",
+} as const;
+
+export const LightBlue = {
+  level: 2,
+  label: "LIGHT BLUE",
+  hex: "00e5ff",
+} as const;
+
+export const YellowGreen = {
+  level: 3,
+  label: "YELLOW GREEN",
+  hex: "1de9b6",
+} as const;
+
+export const Yellow = {
+  level: 4,
+  label: "YELLOW",
+  hex: "ffca28",
+} as const;
+
+export const Orange = {
+  level: 5,
+  label: "ORANGE",
+  hex: "f57c00",
+} as const;
+
+export const Magenta = {
+  level: 6,
+  label: "MAGENTA",
+  hex: "e91e63",
+} as const;
+
+export const Red = {
+  level: 7,
+  label: "RED",
+  hex: "e62117",
+} as const;
+
+export const Colors: Color[] = [Blue, LightBlue, YellowGreen, Yellow, Orange, Magenta, Red];
+
+export type Color =
+  | typeof Blue
+  | typeof LightBlue
+  | typeof YellowGreen
+  | typeof Yellow
+  | typeof Orange
+  | typeof Magenta
+  | typeof Red;
 
 /**
  * Ipc channel interfaces.

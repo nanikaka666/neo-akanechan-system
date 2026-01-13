@@ -135,7 +135,11 @@ export async function revokeCredentials() {
  */
 export async function getAccessToken() {
   if (!authClient) {
-    return undefined;
+    throw new Error("Auth Client not initialized.");
   }
-  return (await authClient.getAccessToken()).token;
+  const res = (await authClient.getAccessToken()).token;
+  if (!res) {
+    throw new Error("Access Token not available.");
+  }
+  return res;
 }

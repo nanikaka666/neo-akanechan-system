@@ -1,28 +1,48 @@
 import {
-  GiftRedemption,
-  LiveChatItem,
-  MembershipItem,
-  SponsorshipsGift,
-  TextMessage,
-} from "youtube-livechat-emitter/dist/src/types/liveChat";
-import {
   ExtendedGiftRedemption,
   ExtendedMembershipAndGiftItem,
   FocusedOnChatItem,
+  GiftReceived,
   LiveLaunchProperties,
   LiveStatistics,
+  MembershipGift,
+  MembershipMilestone,
+  NewMembership,
   NonMarkedExtendedChatItemSuperChat,
   NonMarkedExtendedChatItemSuperSticker,
   NonMarkedExtendedChatItemText,
+  SuperChat,
+  SuperSticker,
+  TextMessageChat,
 } from "../../ipcEvent";
-import { YoutubeLiveChatEmitter } from "youtube-livechat-emitter";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";
 import { FocusManager } from "../focus";
-import { LiveChatItemId } from "youtube-livechat-emitter/dist/src/core/LiveChatItemId";
 import { getLiveStatisticsManager } from "../liveStatistics";
-import { ChannelId } from "../youtubeApi/model";
+import {
+  LiveChatEmitter,
+  LiveChatItemGiftMembershipReceived,
+  LiveChatItemMemberMilestoneChat,
+  LiveChatItemMembershipGifting,
+  LiveChatItemMessageDeleted,
+  LiveChatItemNewSponsor,
+  LiveChatItemSuperChat,
+  LiveChatItemSuperSticker,
+  LiveChatItemTextMessage,
+  LiveChatItemUserBanned,
+} from "./liveChatEmitter";
+import {
+  convertGiftReceivedItem,
+  convertMembershipGiftItem,
+  convertMembershipMilestoneItem,
+  convertMessageDeletedItem,
+  convertNewMembershipItem,
+  convertSuperChatItem,
+  convertSuperStickerItem,
+  convertTextItem,
+  convertUserBannedItem,
+} from "../youtubeApi/convert";
 
 class LiveChatManager {
   #textChats: NonMarkedExtendedChatItemText[];
@@ -50,7 +70,7 @@ class LiveChatManager {
   #membershipsAndGifts: ExtendedMembershipAndGiftItem[];
   readonly #authorChannelIds = new Set<string>();
   readonly #webContents: WebContents;
-  // readonly #emitter: YoutubeLiveChatEmitter;
+  readonly #emitter: LiveChatEmitter;
   // readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #stockManager: StockManager;
   readonly #focusManager: FocusManager;
@@ -63,146 +83,168 @@ class LiveChatManager {
     this.#superChats = [];
     this.#membershipsAndGifts = [];
     this.#authorChannelIds = new Set<string>();
-    // this.#emitter = new YoutubeLiveChatEmitter(
-    //   liveLaunchProperties.channel.channel.channelId.id,
-    //   1 * 1000,
-    // );
+    this.#emitter = new LiveChatEmitter(liveLaunchProperties.live.liveChatId);
     // this.#liveLaunchProperties = liveLaunchProperties;
     this.#stockManager = new StockManager();
     this.#focusManager = new FocusManager();
   }
 
-  #onAddChatListener(item: LiveChatItem) {
-    let isFirstChat = false;
-    if (!this.#authorChannelIds.has(item.author.channelId.id)) {
-      isFirstChat = true;
+  #onTextListener(value: LiveChatItemTextMessage) {
+    const item = convertTextItem(value);
+    const isFirstChat = !this.#authorChannelIds.has(item.author.channelId.id);
+    if (isFirstChat) {
       this.#authorChannelIds.add(item.author.channelId.id);
     }
-    if (item.type === "text") {
-      this.#textChatCount++;
-      this.#textIndexOfWhole++;
+    this.#textChatCount++;
+    this.#textIndexOfWhole++;
 
-      const convertedItem = {
-        ...item,
-        ...{
-          indexOfWhole: this.#textIndexOfWhole,
-          formatedTime: this.#formatDate(item),
-          isFirst: isFirstChat,
-        },
-      } satisfies NonMarkedExtendedChatItemText;
-      this.#textChats = [...this.#textChats, convertedItem].slice(-1000); // take latest 1000 items.
-      console.log(item.messages);
-    } else if (item.type === "superChat") {
-      const convertedItem = {
-        ...item,
-        ...{
-          formatedTime: this.#formatDate(item),
-          isFirst: isFirstChat,
-        },
-      } satisfies NonMarkedExtendedChatItemSuperChat;
-      this.#superChats = [...this.#superChats, convertedItem];
-
-      console.log(item.superChat);
-    } else {
-      const convertedItem = {
-        ...item,
-        ...{
-          formatedTime: this.#formatDate(item),
-          isFirst: isFirstChat,
-        },
-      } satisfies NonMarkedExtendedChatItemSuperSticker;
-      this.#superChats = [...this.#superChats, convertedItem];
-      console.log(item.superSticker);
-    }
+    const convertedItem = {
+      ...item,
+      ...{
+        indexOfWhole: this.#textIndexOfWhole,
+        formatedTime: this.#formatDate(item),
+        isFirst: isFirstChat,
+      },
+    } satisfies NonMarkedExtendedChatItemText;
+    this.#textChats = [...this.#textChats, convertedItem].slice(-1000); // take latest 1000 items.
     this.#refreshChatsOnRenderer();
+    console.log(item.displayMessage);
   }
 
-  #onRemoveChatListener(itemId: LiveChatItemId) {
+  #onSuperChatListener(value: LiveChatItemSuperChat) {
+    const item = convertSuperChatItem(value);
+    const isFirstChat = !this.#authorChannelIds.has(item.author.channelId.id);
+    if (isFirstChat) {
+      this.#authorChannelIds.add(item.author.channelId.id);
+    }
+
+    const convertedItem = {
+      ...item,
+      ...{
+        formatedTime: this.#formatDate(item),
+        isFirst: isFirstChat,
+      },
+    } satisfies NonMarkedExtendedChatItemSuperChat;
+    this.#superChats = [...this.#superChats, convertedItem];
+    this.#refreshChatsOnRenderer();
+    console.log(item.displayMessage);
+  }
+
+  #onSuperStickerListener(value: LiveChatItemSuperSticker) {
+    const item = convertSuperStickerItem(value);
+    const isFirstChat = !this.#authorChannelIds.has(item.author.channelId.id);
+    if (isFirstChat) {
+      this.#authorChannelIds.add(item.author.channelId.id);
+    }
+
+    const convertedItem = {
+      ...item,
+      ...{
+        formatedTime: this.#formatDate(item),
+        isFirst: isFirstChat,
+      },
+    } satisfies NonMarkedExtendedChatItemSuperSticker;
+    this.#superChats = [...this.#superChats, convertedItem];
+
+    this.#refreshChatsOnRenderer();
+    console.log(item.displayMessage);
+  }
+
+  #onMessageDeletedListener(value: LiveChatItemMessageDeleted) {
+    const item = convertMessageDeletedItem(value);
     // update textChatCount
-    const matchSize = this.#textChats.filter((item) => item.id.id === itemId.id).length;
+    const matchSize = this.#textChats.filter((item) => item.id.id === item.id.id).length;
     this.#textChatCount -= matchSize;
 
-    this.#textChats = this.#textChats.filter((item) => item.id.id !== itemId.id);
-    console.log(`remove item: ${itemId.id}`);
+    this.#textChats = this.#textChats.filter((item) => item.id.id !== item.id.id);
+    console.log(`remove item: ${item.id.id}`);
 
     // if removed chat is stocked one, remove it.
-    this.#stockManager.removeByIdIfNeeded(itemId);
+    this.#stockManager.removeByIdIfNeeded(item.id);
     // removed chat from focus.
-    if (this.#focusManager.isFocused(itemId)) {
+    if (this.#focusManager.isFocused(item.id)) {
       this.#focusManager.updateFocus(undefined);
     }
 
     this.#refreshChatsOnRenderer();
+    console.log(item.displayMessage);
   }
 
-  #onBlockUserListener(blockedChannelId: ChannelId) {
+  #onUserBannedListener(value: LiveChatItemUserBanned) {
+    const bannedItem = convertUserBannedItem(value);
+
+    if (bannedItem.type === "userBannedTemporary") {
+      return;
+    }
+
     // hold a count which how many text chat will be removed.
     const countOfRemoveTextChat = this.#textChats.filter(
-      (item) => item.author.channelId.id === blockedChannelId.id,
+      (item) => item.author.channelId.id === bannedItem.bannedUser.channelId.id,
     ).length;
 
     this.#textChats = this.#textChats.filter(
-      (item) => item.author.channelId.id !== blockedChannelId.id,
+      (item) => item.author.channelId.id !== bannedItem.bannedUser.channelId.id,
     );
     this.#superChats = this.#superChats.filter(
-      (item) => item.author.channelId.id !== blockedChannelId.id,
+      (item) => item.author.channelId.id !== bannedItem.bannedUser.channelId.id,
     );
-    console.log(`block user: ${blockedChannelId.id}`);
+    console.log(`block user: ${bannedItem.bannedUser.channelId.id}`);
 
     this.#textChatCount -= countOfRemoveTextChat;
-    this.#authorChannelIds.delete(blockedChannelId.id);
-    this.#stockManager.removeByAuthorChannelIdIfNeeded(blockedChannelId);
+    this.#authorChannelIds.delete(bannedItem.bannedUser.channelId.id);
+    this.#stockManager.removeByAuthorChannelIdIfNeeded(bannedItem.bannedUser.channelId);
 
-    if (this.#focusManager.isFocusedByAuthorChannelId(blockedChannelId)) {
+    if (this.#focusManager.isFocusedByAuthorChannelId(bannedItem.bannedUser.channelId)) {
       this.#focusManager.updateFocus(undefined);
     }
 
     this.#refreshChatsOnRenderer();
+    console.log(bannedItem.displayMessage);
   }
 
-  #onMembershipsListener(item: MembershipItem) {
+  #onNewMembershipListener(value: LiveChatItemNewSponsor) {
+    const item = convertNewMembershipItem(value);
     const convertedItem = {
       ...item,
       ...{ formatedTime: this.#formatDate(item) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();
-
-    if (item.type === "new") {
-      console.log("New Memberships.", item);
-    } else {
-      console.log("Membership Milestone.", item);
-    }
+    console.log(item.displayMessage);
   }
 
-  #onSponsorshipsGiftListener(item: SponsorshipsGift) {
-    const message = (item.messages![0] as TextMessage).text;
-    const res = message.match(/^[^0-9]*([0-9]+)/);
-    if (res === null) {
-      throw new Error(`Gift num not found. ${message}`);
-    }
+  #onMembershipMilestoneListener(value: LiveChatItemMemberMilestoneChat) {
+    const item = convertMembershipMilestoneItem(value);
     const convertedItem = {
       ...item,
-      type: "gift",
-      num: Number.parseInt(res[1]),
-      formatedTime: "???", // todo: livechat emitter update
-      id: this.#membershipsAndGifts.length + "", // todo: given by emitter module
+      ...{ formatedTime: this.#formatDate(item) },
+    } satisfies ExtendedMembershipAndGiftItem;
+    this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
+    this.#refreshMembershipsOnRenderer();
+    console.log(item.displayMessage);
+  }
+
+  #onMembershipGiftListener(value: LiveChatItemMembershipGifting) {
+    const item = convertMembershipGiftItem(value);
+    const convertedItem = {
+      ...item,
+      formatedTime: this.#formatDate(item),
     } satisfies ExtendedMembershipAndGiftItem;
 
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();
-    console.log("Gift purchased!", convertedItem);
+    console.log(item.displayMessage);
   }
 
-  #onRedemptionGiftListener(item: GiftRedemption) {
+  #onGiftReceivedListener(value: LiveChatItemGiftMembershipReceived) {
+    const item = convertGiftReceivedItem(value);
     const convertedItem = {
       ...item,
-      type: "redemption",
       formatedTime: this.#formatDate(item),
     } satisfies ExtendedGiftRedemption;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();
-    console.log("Gift redemption!", convertedItem);
+    console.log(item.displayMessage);
   }
 
   addStock(item: NonMarkedExtendedChatItemText) {
@@ -291,44 +333,57 @@ class LiveChatManager {
       LiveStatistics,
       "newMembershipsCount" | "membershipMilestoneCount" | "giftCount" | "redemptionGiftCount"
     > = {
-      newMembershipsCount: this.#membershipsAndGifts.filter((item) => item.type === "new").length,
+      newMembershipsCount: this.#membershipsAndGifts.filter((item) => item.type === "newMembership")
+        .length,
       membershipMilestoneCount: this.#membershipsAndGifts.filter(
         (item) => item.type === "milestone",
       ).length,
       giftCount: this.#membershipsAndGifts.filter((item) => item.type === "gift").length,
-      redemptionGiftCount: this.#membershipsAndGifts.filter((item) => item.type === "redemption")
+      redemptionGiftCount: this.#membershipsAndGifts.filter((item) => item.type === "giftReceived")
         .length,
     };
 
     getLiveStatisticsManager().updateLiveStatistics(latestStatistics);
   }
 
-  async setup() {
-    // this.#emitter.on("addChat", (item) => this.#onAddChatListener(item));
-    // this.#emitter.on("removeChat", (id) => this.#onRemoveChatListener(id));
-    // this.#emitter.on("blockUser", (channelId) => this.#onBlockUserListener(channelId));
-    // this.#emitter.on("memberships", (item) => this.#onMembershipsListener(item));
-    // this.#emitter.on("sponsorshipsGift", (item) => this.#onSponsorshipsGiftListener(item));
-    // this.#emitter.on("redemptionGift", (item) => this.#onRedemptionGiftListener(item));
-    // this.#emitter.on("start", () => {
-    //   console.log("LiveChatEmitter started.");
-    // });
-    // this.#emitter.on("end", () => {
-    //   console.log("LiveChatEmitter finished.");
-    // });
-    // this.#emitter.on("error", (error) => {
-    //   console.log(error);
-    // });
-    // await this.#emitter.start();
+  setup() {
+    this.#emitter.on("text", (item) => this.#onTextListener(item));
+    this.#emitter.on("superChat", (item) => this.#onSuperChatListener(item));
+    this.#emitter.on("superSticker", (item) => this.#onSuperStickerListener(item));
+    this.#emitter.on("newSponsor", (item) => this.#onNewMembershipListener(item));
+    this.#emitter.on("memberMilestoneChat", (item) => this.#onMembershipMilestoneListener(item));
+    this.#emitter.on("membershipGifting", (item) => this.#onMembershipGiftListener(item));
+    this.#emitter.on("giftMembershipReceived", (item) => this.#onGiftReceivedListener(item));
+    this.#emitter.on("messageDeleted", (item) => this.#onMessageDeletedListener(item));
+    this.#emitter.on("userBanned", (item) => this.#onUserBannedListener(item));
+
+    this.#emitter.on("start", () => {
+      console.log("LiveChatEmitter started.");
+    });
+    this.#emitter.on("end", (reason) => {
+      console.log(`LiveChatEmitter finished by ${reason}`);
+    });
+    this.#emitter.on("error", (error) => {
+      console.log(error);
+    });
+    this.#emitter.start();
   }
 
   cleanup() {
-    // this.#emitter.close();
+    this.#emitter.close();
   }
 
-  // todo: accept SponsorshipGift
-  #formatDate(item: LiveChatItem | MembershipItem | GiftRedemption) {
-    const date = new Date(item.timestamp / 1000); // microsecond to millisecond
+  #formatDate(
+    item:
+      | TextMessageChat
+      | SuperChat
+      | SuperSticker
+      | NewMembership
+      | MembershipMilestone
+      | MembershipGift
+      | GiftReceived,
+  ) {
+    const date = item.publishedAt;
 
     const hour = date.getHours() + "";
     const minute = date.getMinutes() + "";
@@ -365,16 +420,13 @@ export function cleanUpLiveChatEmitter() {
   liveChatManager = undefined;
 }
 
-export async function setupLiveChatEmitter(
-  w: WebContents,
-  liveLaunchProperties: LiveLaunchProperties,
-) {
+export function setupLiveChatEmitter(w: WebContents, liveLaunchProperties: LiveLaunchProperties) {
   if (liveChatManager) {
     liveChatManager.cleanup();
     liveChatManager = undefined;
   }
   liveChatManager = new LiveChatManager(liveLaunchProperties, w);
-  await liveChatManager.setup();
+  liveChatManager.setup();
 }
 
 export function getLiveChatManager() {
