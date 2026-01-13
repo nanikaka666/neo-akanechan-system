@@ -92,25 +92,23 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
     }
   }
 
-  #extractCommonPart(item: LiveChatMessage) {
+  #extractCommonPart(item: LiveChatMessage): LiveChatItemCommonPart {
     return {
-      id: item.getId(),
+      id: item.getId()!,
       snippet: {
-        authorChannelId: item.getSnippet()?.getAuthorChannelId(),
-        publishedAt: item.getSnippet()?.getPublishedAt()
-          ? new Date(item.getSnippet()!.getPublishedAt()!)
-          : undefined,
-        displayMessage: item.getSnippet()?.getDisplayMessage(),
+        authorChannelId: item.getSnippet()!.getAuthorChannelId()!,
+        publishedAt: new Date(item.getSnippet()!.getPublishedAt()!),
+        displayMessage: item.getSnippet()?.getDisplayMessage() ?? "",
       },
-      authorDetails: {
-        channelId: item.getAuthorDetails()?.getChannelId(),
-        channelUrl: item.getAuthorDetails()?.getChannelUrl(),
-        displayName: item.getAuthorDetails()?.getDisplayName(),
-        profileImageUrl: item.getAuthorDetails()?.getProfileImageUrl(),
-        isVerified: item.getAuthorDetails()?.getIsVerified(),
-        isChatOwner: item.getAuthorDetails()?.getIsChatOwner(),
-        isChatSponsor: item.getAuthorDetails()?.getIsChatSponsor(),
-        isChatModerator: item.getAuthorDetails()?.getIsChatModerator(),
+      author: {
+        channelId: item.getAuthorDetails()!.getChannelId()!,
+        channelUrl: item.getAuthorDetails()!.getChannelUrl()!,
+        displayName: item.getAuthorDetails()!.getDisplayName()!,
+        profileImageUrl: item.getAuthorDetails()!.getProfileImageUrl()!,
+        isVerified: item.getAuthorDetails()!.getIsVerified()!,
+        isChatOwner: item.getAuthorDetails()!.getIsChatOwner()!,
+        isChatSponsor: item.getAuthorDetails()!.getIsChatSponsor()!,
+        isChatModerator: item.getAuthorDetails()!.getIsChatModerator()!,
       },
     };
   }
@@ -121,11 +119,11 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
     const data = {
       ...this.#extractCommonPart(item),
       textMessageDetails: {
-        messageText: item.getSnippet()?.getTextMessageDetails()?.getMessageText(),
+        messageText: item.getSnippet()!.getTextMessageDetails()!.getMessageText()!,
       },
     };
 
-    // console.log("Text");
+    this.emit("text", data);
   }
 
   #handleNewMembershipsEvent(item: LiveChatMessage) {
@@ -133,12 +131,12 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
     const data = {
       ...this.#extractCommonPart(item),
       newSponsorDetails: {
-        memberLevelName: item.getSnippet()?.getNewSponsorDetails()?.getMemberLevelName(),
-        isUpgrade: item.getSnippet()?.getNewSponsorDetails()?.getIsUpgrade(),
+        memberLevelName: item.getSnippet()!.getNewSponsorDetails()!.getMemberLevelName()!,
+        isUpgrade: item.getSnippet()!.getNewSponsorDetails()!.getIsUpgrade()!,
       },
     };
 
-    // console.log("NewMembership", data);
+    this.emit("newSponsor", data);
   }
 
   #handleMessageDeletedEvent(item: LiveChatMessage) {
@@ -146,11 +144,11 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
     const data = {
       ...this.#extractCommonPart(item),
       messageDeletedDetails: {
-        deletedMessageId: item.getSnippet()?.getMessageDeletedDetails()?.getDeletedMessageId(),
+        deletedMessageId: item.getSnippet()!.getMessageDeletedDetails()!.getDeletedMessageId()!,
       },
     };
 
-    console.log("Message Delete", data);
+    this.emit("messageDeleted", data);
   }
 
   #handleUserBannedEvent(item: LiveChatMessage) {
@@ -160,31 +158,32 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       userBannedDetails: {
         bannedUserDetails: {
           channelId: item
-            .getSnippet()
-            ?.getUserBannedDetails()
-            ?.getBannedUserDetails()
-            ?.getChannelId(),
+            .getSnippet()!
+            .getUserBannedDetails()!
+            .getBannedUserDetails()!
+            .getChannelId()!,
           channelUrl: item
-            .getSnippet()
-            ?.getUserBannedDetails()
-            ?.getBannedUserDetails()
-            ?.getChannelUrl(),
+            .getSnippet()!
+            .getUserBannedDetails()!
+            .getBannedUserDetails()!
+            .getChannelUrl()!,
           displayName: item
-            .getSnippet()
-            ?.getUserBannedDetails()
-            ?.getBannedUserDetails()
-            ?.getDisplayName(),
+            .getSnippet()!
+            .getUserBannedDetails()!
+            .getBannedUserDetails()!
+            .getDisplayName()!,
           profileImageUrl: item
-            .getSnippet()
-            ?.getUserBannedDetails()
-            ?.getBannedUserDetails()
-            ?.getProfileImageUrl(),
+            .getSnippet()!
+            .getUserBannedDetails()!
+            .getBannedUserDetails()!
+            .getProfileImageUrl()!,
         },
-        banType: item.getSnippet()?.getUserBannedDetails()?.getBanType(),
-        banDurationSeconds: item.getSnippet()?.getUserBannedDetails()?.getBanDurationSeconds(),
+        banType: item.getSnippet()!.getUserBannedDetails()!.getBanType()!,
+        banDurationSeconds: item.getSnippet()!.getUserBannedDetails()!.getBanDurationSeconds()!,
       },
     };
-    // console.log("User Banned.", data);
+
+    this.emit("userBanned", data);
   }
 
   #handleSuperChatEvent(item: LiveChatMessage) {
@@ -192,15 +191,15 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
     const data = {
       ...this.#extractCommonPart(item),
       superChatDetails: {
-        amountMicros: item.getSnippet()?.getSuperChatDetails()?.getAmountMicros(),
-        currency: item.getSnippet()?.getSuperChatDetails()?.getCurrency(),
-        amountDisplayString: item.getSnippet()?.getSuperChatDetails()?.getAmountDisplayString(),
-        userComment: item.getSnippet()?.getSuperChatDetails()?.getUserComment(),
-        tier: item.getSnippet()?.getSuperChatDetails()?.getTier(),
+        amountMicros: item.getSnippet()!.getSuperChatDetails()!.getAmountMicros()!,
+        currency: item.getSnippet()!.getSuperChatDetails()!.getCurrency()!,
+        amountDisplayString: item.getSnippet()!.getSuperChatDetails()!.getAmountDisplayString()!,
+        userComment: item.getSnippet()!.getSuperChatDetails()!.getUserComment()!,
+        tier: item.getSnippet()!.getSuperChatDetails()!.getTier()!,
       },
     };
 
-    // console.log("SuperChat.", data);
+    this.emit("superChat", data);
   }
 
   #handleSuperStickerEvent(item: LiveChatMessage) {
@@ -210,29 +209,29 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       superStickerDetails: {
         superStickerMetadata: {
           stickerId: item
-            .getSnippet()
-            ?.getSuperStickerDetails()
-            ?.getSuperStickerMetadata()
-            ?.getStickerId(),
+            .getSnippet()!
+            .getSuperStickerDetails()!
+            .getSuperStickerMetadata()!
+            .getStickerId()!,
           altText: item
-            .getSnippet()
-            ?.getSuperStickerDetails()
-            ?.getSuperStickerMetadata()
-            ?.getAltText(),
+            .getSnippet()!
+            .getSuperStickerDetails()!
+            .getSuperStickerMetadata()!
+            .getAltText()!,
           language: item
-            .getSnippet()
-            ?.getSuperStickerDetails()
-            ?.getSuperStickerMetadata()
-            ?.getAltTextLanguage(),
+            .getSnippet()!
+            .getSuperStickerDetails()!
+            .getSuperStickerMetadata()!
+            .getAltTextLanguage()!,
         },
-        amountMicros: item.getSnippet()?.getSuperStickerDetails()?.getAmountMicros(),
-        currency: item.getSnippet()?.getSuperStickerDetails()?.getCurrency(),
-        amountDisplayString: item.getSnippet()?.getSuperStickerDetails()?.getAmountDisplayString(),
-        tier: item.getSnippet()?.getSuperStickerDetails()?.getTier(),
+        amountMicros: item.getSnippet()!.getSuperStickerDetails()!.getAmountMicros()!,
+        currency: item.getSnippet()!.getSuperStickerDetails()!.getCurrency()!,
+        amountDisplayString: item.getSnippet()!.getSuperStickerDetails()!.getAmountDisplayString()!,
+        tier: item.getSnippet()!.getSuperStickerDetails()!.getTier()!,
       },
     };
 
-    console.log("SuperSticker.", data);
+    this.emit("superSticker", data);
   }
 
   #handleMemberMilestoneChatEvent(item: LiveChatMessage) {
@@ -240,13 +239,13 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
     const data = {
       ...this.#extractCommonPart(item),
       memberMilestoneChatDetails: {
-        userComment: item.getSnippet()?.getMemberMilestoneChatDetails()?.getUserComment(),
-        memberMonth: item.getSnippet()?.getMemberMilestoneChatDetails()?.getMemberMonth(),
-        memberLevelName: item.getSnippet()?.getMemberMilestoneChatDetails()?.getMemberLevelName(),
+        userComment: item.getSnippet()!.getMemberMilestoneChatDetails()!.getUserComment()!,
+        memberMonth: item.getSnippet()!.getMemberMilestoneChatDetails()!.getMemberMonth()!,
+        memberLevelName: item.getSnippet()!.getMemberMilestoneChatDetails()!.getMemberLevelName()!,
       },
     };
 
-    // console.log("MemberMilestone.", data);
+    this.emit("memberMilestoneChat", data);
   }
 
   #handleMembershipGiftEvent(item: LiveChatMessage) {
@@ -255,17 +254,17 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       ...this.#extractCommonPart(item),
       membershipGiftingDetails: {
         giftMembershipsCount: item
-          .getSnippet()
-          ?.getMembershipGiftingDetails()
-          ?.getGiftMembershipsCount(),
+          .getSnippet()!
+          .getMembershipGiftingDetails()!
+          .getGiftMembershipsCount()!,
         giftMembershipsLevelName: item
-          .getSnippet()
-          ?.getMembershipGiftingDetails()
-          ?.getGiftMembershipsLevelName(),
+          .getSnippet()!
+          .getMembershipGiftingDetails()!
+          .getGiftMembershipsLevelName()!,
       },
     };
 
-    // console.log("Membership Gift", data);
+    this.emit("membershipGifting", data);
   }
 
   #handleMembershipGiftReceivedEvent(item: LiveChatMessage) {
@@ -274,21 +273,21 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       ...this.#extractCommonPart(item),
       giftMembershipReceivedDetails: {
         memberLevelName: item
-          .getSnippet()
-          ?.getGiftMembershipReceivedDetails()
-          ?.getMemberLevelName(),
+          .getSnippet()!
+          .getGiftMembershipReceivedDetails()!
+          .getMemberLevelName()!,
         gifterChannelId: item
-          .getSnippet()
-          ?.getGiftMembershipReceivedDetails()
-          ?.getGifterChannelId(),
+          .getSnippet()!
+          .getGiftMembershipReceivedDetails()!
+          .getGifterChannelId()!,
         associatedMembershipGiftingMessageId: item
-          .getSnippet()
-          ?.getGiftMembershipReceivedDetails()
-          ?.getAssociatedMembershipGiftingMessageId(),
+          .getSnippet()!
+          .getGiftMembershipReceivedDetails()!
+          .getAssociatedMembershipGiftingMessageId()!,
       },
     };
 
-    // console.log("Gift Received.", data);
+    this.emit("giftMembershipReceived", data);
   }
 
   async #execute() {
@@ -427,4 +426,117 @@ export type LiveChatEvent = {
   start: () => void;
   end: (reason: string) => void;
   error: (err: Error) => void;
+  text: (item: LiveChatItemCommonPart & { textMessageDetails: LiveChatItemTextMessage }) => void;
+  superChat: (item: LiveChatItemCommonPart & { superChatDetails: LiveChatItemSuperChat }) => void;
+  superSticker: (
+    item: LiveChatItemCommonPart & { superStickerDetails: LiveChatItemSuperSticker },
+  ) => void;
+  newSponsor: (
+    item: LiveChatItemCommonPart & { newSponsorDetails: LiveChatItemNewSponsor },
+  ) => void;
+  memberMilestoneChat: (
+    item: LiveChatItemCommonPart & { memberMilestoneChatDetails: LiveChatItemMemberMilestoneChat },
+  ) => void;
+  membershipGifting: (
+    item: LiveChatItemCommonPart & { membershipGiftingDetails: LiveChatItemMembershipGifting },
+  ) => void;
+  giftMembershipReceived: (
+    item: LiveChatItemCommonPart & {
+      giftMembershipReceivedDetails: LiveChatItemGiftMembershipReceived;
+    },
+  ) => void;
+  messageDeleted: (
+    item: LiveChatItemCommonPart & { messageDeletedDetails: LiveChatItemMessageDeleted },
+  ) => void;
+  userBanned: (
+    item: LiveChatItemCommonPart & { userBannedDetails: LiveChatItemUserBanned },
+  ) => void;
 };
+
+// LiveChat types.
+// types in below represents raw response.
+// these will be converted as domain model of this app.
+
+export interface LiveChatItemSnippet {
+  authorChannelId: string;
+  publishedAt: Date;
+  displayMessage: string;
+}
+
+export interface LiveChatItemAuthor {
+  channelId: string;
+  channelUrl: string;
+  displayName: string;
+  profileImageUrl: string;
+  isVerified: boolean;
+  isChatOwner: boolean;
+  isChatSponsor: boolean;
+  isChatModerator: boolean;
+}
+
+export interface LiveChatItemCommonPart {
+  id: string;
+  snippet: LiveChatItemSnippet;
+  author: LiveChatItemAuthor;
+}
+
+export interface LiveChatItemTextMessage {
+  messageText: string;
+}
+
+export interface LiveChatItemSuperChat {
+  amountMicros: number;
+  currency: string;
+  amountDisplayString: string;
+  userComment: string;
+  tier: number;
+}
+
+export interface LiveChatItemSuperSticker {
+  superStickerMetadata: {
+    stickerId: string;
+    altText: string;
+    language: string;
+  };
+  amountMicros: number;
+  currency: string;
+  amountDisplayString: string;
+  tier: number;
+}
+
+export interface LiveChatItemNewSponsor {
+  memberLevelName: string;
+  isUpgrade: boolean;
+}
+
+export interface LiveChatItemMemberMilestoneChat {
+  userComment: string;
+  memberMonth: number;
+  memberLevelName: string;
+}
+
+export interface LiveChatItemMembershipGifting {
+  giftMembershipsCount: number;
+  giftMembershipsLevelName: string;
+}
+
+export interface LiveChatItemGiftMembershipReceived {
+  memberLevelName: string;
+  gifterChannelId: string;
+  associatedMembershipGiftingMessageId: string;
+}
+
+export interface LiveChatItemUserBanned {
+  bannedUserDetails: {
+    channelId: string;
+    channelUrl: string;
+    displayName: string;
+    profileImageUrl: string;
+  };
+  banType: number;
+  banDurationSeconds: number;
+}
+
+export interface LiveChatItemMessageDeleted {
+  deletedMessageId: string;
+}
