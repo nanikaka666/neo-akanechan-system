@@ -6,9 +6,6 @@ import { platform } from "./environment";
 import { setupIpcMainHandlers } from "./ipcMainHandlers";
 import { setupReactDevtools } from "./reactDevtools";
 import { setupAuth } from "./auth/google";
-import { YoutubeApiService } from "./youtubeApi/service";
-import { VideoId } from "./youtubeApi/model";
-import { LiveChatEmitter } from "./emitter/liveChatEmitter";
 
 /**
  * Quit when all windows are closed, except on macOS. There, it's common
@@ -51,14 +48,7 @@ function main() {
     await setupReactDevtools();
     await setupAuth();
 
-    // createMainWindow();
-
-    const video = await YoutubeApiService.getVideo(new VideoId("f4LflEcxedw"));
-    if (video?.type === "inLive") {
-      console.log("emitter start");
-      const e = new LiveChatEmitter(video.activeLiveChatId);
-      e.start();
-    }
+    createMainWindow();
 
     app.on("activate", onActivate);
   });
