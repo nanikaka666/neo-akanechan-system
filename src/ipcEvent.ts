@@ -189,7 +189,7 @@ export interface ChatCommonPart {
 export type TextMessageChat = ChatCommonPart & { type: "text" };
 
 /**
- * Append some data to ChatItemText from youtube-livechat-emitter
+ * Append some data.
  */
 export type ExtendedChatItemText = TextMessageChat & {
   /**
