@@ -40,7 +40,17 @@ export class ActiveLiveChatId {
   readonly id: string;
   constructor(id: string) {
     if (id.match(/^[0-9a-zA-Z_-]{75}$/) === null) {
-      throw new Error("invalid format LiveChatId.");
+      throw new Error("invalid format ActiveLiveChatId.");
+    }
+
+    this.id = id;
+  }
+}
+export class LiveChatItemId {
+  readonly id: string;
+  constructor(id: string) {
+    if (id.match(/^[0-9a-zA-Z_-]{44}$/) === null) {
+      throw new Error("invalid format LiveChatItemId.");
     }
 
     this.id = id;
