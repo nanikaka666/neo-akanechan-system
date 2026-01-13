@@ -426,31 +426,15 @@ export type LiveChatEvent = {
   start: () => void;
   end: (reason: string) => void;
   error: (err: Error) => void;
-  text: (item: LiveChatItemCommonPart & { textMessageDetails: LiveChatItemTextMessage }) => void;
-  superChat: (item: LiveChatItemCommonPart & { superChatDetails: LiveChatItemSuperChat }) => void;
-  superSticker: (
-    item: LiveChatItemCommonPart & { superStickerDetails: LiveChatItemSuperSticker },
-  ) => void;
-  newSponsor: (
-    item: LiveChatItemCommonPart & { newSponsorDetails: LiveChatItemNewSponsor },
-  ) => void;
-  memberMilestoneChat: (
-    item: LiveChatItemCommonPart & { memberMilestoneChatDetails: LiveChatItemMemberMilestoneChat },
-  ) => void;
-  membershipGifting: (
-    item: LiveChatItemCommonPart & { membershipGiftingDetails: LiveChatItemMembershipGifting },
-  ) => void;
-  giftMembershipReceived: (
-    item: LiveChatItemCommonPart & {
-      giftMembershipReceivedDetails: LiveChatItemGiftMembershipReceived;
-    },
-  ) => void;
-  messageDeleted: (
-    item: LiveChatItemCommonPart & { messageDeletedDetails: LiveChatItemMessageDeleted },
-  ) => void;
-  userBanned: (
-    item: LiveChatItemCommonPart & { userBannedDetails: LiveChatItemUserBanned },
-  ) => void;
+  text: (item: LiveChatItemTextMessage) => void;
+  superChat: (item: LiveChatItemSuperChat) => void;
+  superSticker: (item: LiveChatItemSuperSticker) => void;
+  newSponsor: (item: LiveChatItemNewSponsor) => void;
+  memberMilestoneChat: (item: LiveChatItemMemberMilestoneChat) => void;
+  membershipGifting: (item: LiveChatItemMembershipGifting) => void;
+  giftMembershipReceived: (item: LiveChatItemGiftMembershipReceived) => void;
+  messageDeleted: (item: LiveChatItemMessageDeleted) => void;
+  userBanned: (item: LiveChatItemUserBanned) => void;
 };
 
 // LiveChat types.
@@ -480,63 +464,81 @@ export interface LiveChatItemCommonPart {
   author: LiveChatItemAuthor;
 }
 
-export interface LiveChatItemTextMessage {
-  messageText: string;
-}
-
-export interface LiveChatItemSuperChat {
-  amountMicros: number;
-  currency: string;
-  amountDisplayString: string;
-  userComment: string;
-  tier: number;
-}
-
-export interface LiveChatItemSuperSticker {
-  superStickerMetadata: {
-    stickerId: string;
-    altText: string;
-    language: string;
+export type LiveChatItemTextMessage = LiveChatItemCommonPart & {
+  textMessageDetails: {
+    messageText: string;
   };
-  amountMicros: number;
-  currency: string;
-  amountDisplayString: string;
-  tier: number;
-}
+};
 
-export interface LiveChatItemNewSponsor {
-  memberLevelName: string;
-  isUpgrade: boolean;
-}
-
-export interface LiveChatItemMemberMilestoneChat {
-  userComment: string;
-  memberMonth: number;
-  memberLevelName: string;
-}
-
-export interface LiveChatItemMembershipGifting {
-  giftMembershipsCount: number;
-  giftMembershipsLevelName: string;
-}
-
-export interface LiveChatItemGiftMembershipReceived {
-  memberLevelName: string;
-  gifterChannelId: string;
-  associatedMembershipGiftingMessageId: string;
-}
-
-export interface LiveChatItemUserBanned {
-  bannedUserDetails: {
-    channelId: string;
-    channelUrl: string;
-    displayName: string;
-    profileImageUrl: string;
+export type LiveChatItemSuperChat = LiveChatItemCommonPart & {
+  superChatDetails: {
+    amountMicros: number;
+    currency: string;
+    amountDisplayString: string;
+    userComment: string;
+    tier: number;
   };
-  banType: number;
-  banDurationSeconds: number;
-}
+};
 
-export interface LiveChatItemMessageDeleted {
-  deletedMessageId: string;
-}
+export type LiveChatItemSuperSticker = LiveChatItemCommonPart & {
+  superStickerDetails: {
+    superStickerMetadata: {
+      stickerId: string;
+      altText: string;
+      language: string;
+    };
+    amountMicros: number;
+    currency: string;
+    amountDisplayString: string;
+    tier: number;
+  };
+};
+
+export type LiveChatItemNewSponsor = LiveChatItemCommonPart & {
+  newSponsorDetails: {
+    memberLevelName: string;
+    isUpgrade: boolean;
+  };
+};
+
+export type LiveChatItemMemberMilestoneChat = LiveChatItemCommonPart & {
+  memberMilestoneChatDetails: {
+    userComment: string;
+    memberMonth: number;
+    memberLevelName: string;
+  };
+};
+
+export type LiveChatItemMembershipGifting = LiveChatItemCommonPart & {
+  membershipGiftingDetails: {
+    giftMembershipsCount: number;
+    giftMembershipsLevelName: string;
+  };
+};
+
+export type LiveChatItemGiftMembershipReceived = LiveChatItemCommonPart & {
+  giftMembershipReceivedDetails: {
+    memberLevelName: string;
+    gifterChannelId: string;
+    associatedMembershipGiftingMessageId: string;
+  };
+};
+
+export type LiveChatItemUserBanned = LiveChatItemCommonPart & {
+  userBannedDetails: {
+    bannedUserDetails: {
+      channelId: string;
+      channelUrl: string;
+      displayName: string;
+      profileImageUrl: string;
+    };
+    banType: number;
+    banDurationSeconds: number;
+  };
+};
+
+export type LiveChatItemMessageDeleted = LiveChatItemCommonPart & {
+  messageDeletedDetails: {
+    deletedMessageId: string;
+  };
+};
