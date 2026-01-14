@@ -1,18 +1,17 @@
+import { LiveLaunchProperties, LiveStatistics } from "../../types/ipcEvent";
 import {
-  MembershipAndGiftItem,
+  FirstMarkable,
+  Focusable,
   FocusedOnChatItem,
-  LiveLaunchProperties,
-  LiveStatistics,
+  MembershipAndGiftItem,
   NonMarkedExtendedChatItemSuperChat,
   NonMarkedExtendedChatItemSuperSticker,
   NonMarkedExtendedChatItemText,
   Stockable,
-  Focusable,
-  FirstMarkable,
-  TextMessageChat,
   SuperChat,
   SuperSticker,
-} from "../../types/ipcEvent";
+  TextMessageChat,
+} from "../../types/liveChatItem";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";

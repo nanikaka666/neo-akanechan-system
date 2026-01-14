@@ -1,4 +1,4 @@
-import { NewMembership } from "../../../../types/ipcEvent";
+import { NewMembership } from "../../../../types/liveChatItem";
 import { Author } from "./Author";
 
 export function NewMembershipItem({ item }: { item: NewMembership }) {

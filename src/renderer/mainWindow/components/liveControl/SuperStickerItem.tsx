@@ -1,4 +1,4 @@
-import { ExtendedChatItemSuperSticker } from "../../../../types/ipcEvent";
+import { ExtendedChatItemSuperSticker } from "../../../../types/liveChatItem";
 import { Author } from "./Author";
 import { FocusForm } from "./FocusForm";
 

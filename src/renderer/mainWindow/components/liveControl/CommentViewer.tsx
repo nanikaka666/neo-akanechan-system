@@ -2,10 +2,10 @@ import { CSSProperties, useEffect, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
 import {
   ExtendedChatItemText,
-  MembershipAndGiftItem,
   ExtendedSuperItem,
   FocusedOnChatItem,
-} from "../../../../types/ipcEvent";
+  MembershipAndGiftItem,
+} from "../../../../types/liveChatItem";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 import { ViewerModeSelector } from "./ViewerModeSelector";

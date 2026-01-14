@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FocusedOnChatItem } from "../../../../types/ipcEvent";
+import { FocusedOnChatItem } from "../../../../types/liveChatItem";
 
 export function FocusButton({ item }: { item: FocusedOnChatItem }) {
   const [disabled, setDisabled] = useState(false);

@@ -1,4 +1,4 @@
-import { NonMarkedExtendedChatItemText } from "../types/ipcEvent";
+import { NonMarkedExtendedChatItemText } from "../types/liveChatItem";
 import { ChannelId, LiveChatItemId } from "./youtubeApi/model";
 
 export class StockManager {
