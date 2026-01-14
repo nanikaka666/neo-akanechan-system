@@ -275,7 +275,7 @@ function buildLiveBroadcastResponse(item: any): LiveBroadcastYoutubeApiResponse 
         ? new Date(item.snippet.actualStartTime)
         : undefined,
       actualEndTime: item.snippet.actualEndTime ? new Date(item.snippet.actualEndTime) : undefined,
-      liveChatId: item.snippet.liveChatId,
+      liveChatId: new LiveChatId(item.snippet.liveChatId),
     },
     status: {
       lifeCycleStatus: item.status.lifeCycleStatus,
