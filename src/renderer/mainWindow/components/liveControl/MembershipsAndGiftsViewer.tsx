@@ -22,8 +22,8 @@ export function MembershipsAndGiftsViewer({
     range.endIndex < membershipsAndGifts.length
       ? {
           time: {
-            start: membershipsAndGifts[range.startIndex].formatedTime,
-            end: membershipsAndGifts[range.endIndex].formatedTime,
+            start: membershipsAndGifts[range.startIndex].formattedTimeString,
+            end: membershipsAndGifts[range.endIndex].formattedTimeString,
           },
           indexOfWhole: {
             start: range.startIndex + 1,

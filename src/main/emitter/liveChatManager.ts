@@ -102,7 +102,7 @@ class LiveChatManager {
       ...item,
       ...{
         indexOfWhole: this.#textIndexOfWhole,
-        formatedTime: this.#formatDate(item),
+        formattedTimeString: this.#formatDate(item),
         isFirst: isFirstChat,
       },
     } satisfies NonMarkedExtendedChatItemText;
@@ -121,7 +121,7 @@ class LiveChatManager {
     const convertedItem = {
       ...item,
       ...{
-        formatedTime: this.#formatDate(item),
+        formattedTimeString: this.#formatDate(item),
         isFirst: isFirstChat,
       },
     } satisfies NonMarkedExtendedChatItemSuperChat;
@@ -142,7 +142,7 @@ class LiveChatManager {
     const convertedItem = {
       ...item,
       ...{
-        formatedTime: this.#formatDate(item),
+        formattedTimeString: this.#formatDate(item),
         isFirst: isFirstChat,
       },
     } satisfies NonMarkedExtendedChatItemSuperSticker;
@@ -210,7 +210,7 @@ class LiveChatManager {
     const item = convertNewMembershipItem(value);
     const convertedItem = {
       ...item,
-      ...{ formatedTime: this.#formatDate(item) },
+      ...{ formattedTimeString: this.#formatDate(item) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();
@@ -221,7 +221,7 @@ class LiveChatManager {
     const item = convertMembershipMilestoneItem(value);
     const convertedItem = {
       ...item,
-      ...{ formatedTime: this.#formatDate(item) },
+      ...{ formattedTimeString: this.#formatDate(item) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();
@@ -232,7 +232,7 @@ class LiveChatManager {
     const item = convertMembershipGiftItem(value);
     const convertedItem = {
       ...item,
-      formatedTime: this.#formatDate(item),
+      formattedTimeString: this.#formatDate(item),
     } satisfies ExtendedMembershipAndGiftItem;
 
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
@@ -244,7 +244,7 @@ class LiveChatManager {
     const item = convertGiftReceivedItem(value);
     const convertedItem = {
       ...item,
-      formatedTime: this.#formatDate(item),
+      formattedTimeString: this.#formatDate(item),
     } satisfies ExtendedGiftRedemption;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();

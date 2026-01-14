@@ -20,8 +20,8 @@ export function SuperChatAndStickersViewer({
     range.endIndex < superChatAndStickers.length
       ? {
           time: {
-            start: superChatAndStickers[range.startIndex].formatedTime,
-            end: superChatAndStickers[range.endIndex].formatedTime,
+            start: superChatAndStickers[range.startIndex].formattedTimeString,
+            end: superChatAndStickers[range.endIndex].formattedTimeString,
           },
           indexOfWhole: {
             start: range.startIndex + 1,

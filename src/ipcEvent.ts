@@ -200,7 +200,7 @@ export type ExtendedChatItemText = TextMessageChat & {
   /**
    * HH:mm:ss style time format
    */
-  formatedTime: string;
+  formattedTimeString: string;
 
   /**
    * `true` means this is first chat for author.
@@ -226,7 +226,7 @@ export type SuperChat = ChatCommonPart & {
 };
 
 export type ExtendedChatItemSuperChat = SuperChat & {
-  formatedTime: string;
+  formattedTimeString: string;
   isFirst: boolean;
   isFocused: boolean;
 };
@@ -242,7 +242,7 @@ export type SuperSticker = ChatCommonPart & {
 };
 
 export type ExtendedChatItemSuperSticker = SuperSticker & {
-  formatedTime: string;
+  formattedTimeString: string;
   isFirst: boolean;
   isFocused: boolean;
 };
@@ -256,7 +256,7 @@ export type NewMembership = ChatCommonPart & {
 };
 
 export type ExtendedNewMembership = NewMembership & {
-  formatedTime: string;
+  formattedTimeString: string;
 };
 
 export type MembershipMilestone = ChatCommonPart & {
@@ -267,7 +267,7 @@ export type MembershipMilestone = ChatCommonPart & {
 };
 
 export type ExtendedMembershipMilestone = MembershipMilestone & {
-  formatedTime: string;
+  formattedTimeString: string;
 };
 
 export type MembershipGift = ChatCommonPart & {
@@ -277,7 +277,7 @@ export type MembershipGift = ChatCommonPart & {
 };
 
 export type ExtendedSponsorshipsGift = MembershipGift & {
-  formatedTime: string;
+  formattedTimeString: string;
 };
 
 export type GiftReceived = ChatCommonPart & {
@@ -288,7 +288,7 @@ export type GiftReceived = ChatCommonPart & {
 };
 
 export type ExtendedGiftRedemption = GiftReceived & {
-  formatedTime: string;
+  formattedTimeString: string;
 };
 
 export type ExtendedMembershipAndGiftItem =
