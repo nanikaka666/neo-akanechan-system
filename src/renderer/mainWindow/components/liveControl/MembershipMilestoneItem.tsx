@@ -1,4 +1,4 @@
-import { MembershipMilestone } from "../../../../ipcEvent";
+import { MembershipMilestone } from "../../../../types/liveChatItem";
 import { Author } from "./Author";
 
 export function MembershipMilestoneItem({ item }: { item: MembershipMilestone }) {

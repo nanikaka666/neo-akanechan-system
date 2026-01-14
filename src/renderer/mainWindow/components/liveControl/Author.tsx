@@ -1,4 +1,4 @@
-import { ChatAuthor } from "../../../../ipcEvent";
+import { ChatAuthor } from "../../../../types/liveChatItem";
 
 export function Author({ author }: { author: ChatAuthor }) {
   return (

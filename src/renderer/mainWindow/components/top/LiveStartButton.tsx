@@ -1,4 +1,5 @@
-import { Channel, YoutubeLive } from "../../../../ipcEvent";
+import { YoutubeLive } from "../../../../types/youtubeLive";
+import { Channel } from "../../../../types/youtubeChannel";
 import { useState } from "react";
 
 export function LiveStartButton({ channel, live }: { channel: Channel; live: YoutubeLive }) {

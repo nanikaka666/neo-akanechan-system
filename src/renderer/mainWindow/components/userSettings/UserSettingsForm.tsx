@@ -1,5 +1,5 @@
 import { useState, MouseEvent, useEffect, useMemo } from "react";
-import { UserSettings } from "../../../../main/userSettings";
+import { UserSettings } from "../../../../types/userSettings";
 import { LiveChatSettingsForm } from "./LiveChatSettingsForm";
 import { GoalsSettingsForm } from "./GoalsSettingsForm";
 

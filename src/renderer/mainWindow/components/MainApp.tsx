@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MainAppPage } from "../../../ipcEvent";
+import { MainAppPage } from "../../../types/mainAppPage";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
 import { LiveControlPanel } from "./liveControl/LiveControlPanel";
 import { AuthFlow } from "./auth/AuthFlow";

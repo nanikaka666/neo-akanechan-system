@@ -1,5 +1,5 @@
 import { WebContents } from "electron";
-import { LiveStatistics } from "../ipcEvent";
+import { LiveStatistics } from "../types/liveStatistics";
 import { WebContentsWrapper } from "./webContentsWrapper";
 
 export class LiveStatisticsManager {

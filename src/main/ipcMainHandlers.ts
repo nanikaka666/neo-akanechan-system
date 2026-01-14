@@ -2,7 +2,7 @@ import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
-import { AuthPage, InLivePage, LiveSelectionPage } from "../ipcEvent";
+import { AuthPage, InLivePage, LiveSelectionPage } from "../types/mainAppPage";
 import {
   cleanUpLiveChatEmitter,
   getLiveChatManager,
@@ -23,7 +23,7 @@ import {
   buildLiveLaunchProperties,
   buildLiveLaunchPropertiesForDebug,
 } from "./liveLaunchProperties";
-import { VideoId } from "./youtubeApi/model";
+import { VideoId } from "../types/youtubeDomainModel";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {

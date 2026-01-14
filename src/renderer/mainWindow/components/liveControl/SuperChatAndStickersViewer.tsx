@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
-import { ExtendedSuperItem } from "../../../../ipcEvent";
+import { ExtendedSuperItem } from "../../../../types/liveChatItem";
 import { RangeInfo } from "./CommentViewer";
 import { SuperChatItem } from "./SuperChatItem";
 import { SuperStickerItem } from "./SuperStickerItem";

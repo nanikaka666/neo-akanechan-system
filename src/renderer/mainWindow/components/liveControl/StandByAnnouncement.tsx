@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LiveLaunchProperties } from "../../../../ipcEvent";
+import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 
 export function StandByAnnouncement({
   liveLaunchProperties,

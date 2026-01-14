@@ -1,5 +1,5 @@
 import { CSSProperties, Dispatch, SetStateAction } from "react";
-import { LiveLaunchProperties } from "../../../../ipcEvent";
+import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { Mode } from "./LiveControlPanel";
 import { SideBarInfoArea } from "./SideBarInfoArea";
 import { QuitLiveButton } from "./QuitLiveButton";

@@ -1,5 +1,5 @@
 import { IpcRendererEvent } from "electron";
-import { IpcEvent } from "../ipcEvent";
+import { IpcEvent } from "../types/ipcEvent";
 import { IpcRendererWrapper } from "./ipcRendererWrapper";
 
 declare global {

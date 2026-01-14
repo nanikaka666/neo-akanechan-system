@@ -16,7 +16,7 @@ import {
   SuperSticker,
   TextMessageChat,
   UserBannedChatEvent,
-} from "../../ipcEvent";
+} from "../../types/liveChatItem";
 import {
   LiveChatItemCommonPart,
   LiveChatItemGiftMembershipReceived,
@@ -29,7 +29,7 @@ import {
   LiveChatItemTextMessage,
   LiveChatItemUserBanned,
 } from "../emitter/liveChatEmitter";
-import { ChannelId, LiveChatItemId } from "./model";
+import { ChannelId, LiveChatItemId } from "../../types/youtubeDomainModel";
 
 function to2Digit(value: string) {
   return value.length === 1 ? "0" + value : value;
@@ -73,7 +73,8 @@ export function convertSuperChatItem(item: LiveChatItemSuperChat): SuperChat {
     ...convertCommonPart(item),
     amount: item.superChatDetails.amountDisplayString,
     userComment: item.superChatDetails.userComment,
-    tier: Colors[item.superChatDetails.tier - 1],
+    // tier sometimes over 7, when so high price thrown.
+    tier: Colors[Math.min(7, item.superChatDetails.tier) - 1],
   };
 }
 
@@ -86,7 +87,8 @@ export function convertSuperStickerItem(item: LiveChatItemSuperSticker): SuperSt
       altText: item.superStickerDetails.superStickerMetadata.altText,
     },
     amount: item.superStickerDetails.amountDisplayString,
-    tier: Colors[item.superStickerDetails.tier - 1], // @see https://issuetracker.google.com/u/1/issues/474398428
+    // tier sometimes over 7, when so high price thrown.
+    tier: Colors[Math.min(7, item.superStickerDetails.tier) - 1], // @see https://issuetracker.google.com/u/1/issues/474398428
   };
 }
 

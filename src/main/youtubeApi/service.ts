@@ -1,14 +1,12 @@
 import {
-  Channel,
   NotLiveVideo,
   VideoFinishedLive,
   VideoInLive,
   VideoUpcomingLive,
-  YoutubeLive,
-  YoutubeLiveInLive,
-  YoutubeLiveInReady,
   YoutubeVideo,
-} from "../../ipcEvent";
+} from "../../types/youtubeVideo";
+import { YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../../types/youtubeLive";
+import { Channel } from "../../types/youtubeChannel";
 import { getAccessToken, revokeCredentials } from "../auth/google";
 import {
   ChannelResponse,
@@ -16,7 +14,7 @@ import {
   VideoYoutubeApiResponse,
   YoutubeApiClient,
 } from "./client";
-import { ChannelId, VideoId } from "./model";
+import { ChannelId, VideoId } from "../../types/youtubeDomainModel";
 
 export const YoutubeApiService = {
   getChannelOfMine: async () => {

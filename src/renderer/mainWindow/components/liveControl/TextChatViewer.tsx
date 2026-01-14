@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
-import { ExtendedChatItemText } from "../../../../ipcEvent";
+import { ExtendedChatItemText } from "../../../../types/liveChatItem";
 import { RangeInfo } from "./CommentViewer";
 import { TextChatItem } from "./TextChatItem";
 

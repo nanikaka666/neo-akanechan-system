@@ -1,5 +1,5 @@
 import { ipcRenderer, IpcRendererEvent } from "electron";
-import { IpcEvent } from "../ipcEvent";
+import { IpcEvent } from "../types/ipcEvent";
 
 /**
  * Wrapper object of ipcRenderer.

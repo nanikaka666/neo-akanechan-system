@@ -1,5 +1,5 @@
-import { StorageDao } from "./types";
-import { UserSettings } from "../userSettings";
+import { StorageDao } from "../../types/storage";
+import { UserSettings } from "../../types/userSettings";
 import { Credentials } from "google-auth-library";
 
 /**

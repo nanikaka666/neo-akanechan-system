@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LiveStatistics } from "../../../../ipcEvent";
+import { LiveStatistics } from "../../../../types/liveStatistics";
 
 export function SideBarInfoArea() {
   const [liveStatistics, setLiveStatistics] = useState<LiveStatistics>({

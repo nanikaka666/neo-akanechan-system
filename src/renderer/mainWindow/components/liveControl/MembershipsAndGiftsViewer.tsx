@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
-import { MembershipAndGiftItem } from "../../../../ipcEvent";
+import { MembershipAndGiftItem } from "../../../../types/liveChatItem";
 import { RangeInfo } from "./CommentViewer";
 import { NewMembershipItem } from "./NewMembershipItem";
 import { MembershipMilestoneItem } from "./MembershipMilestoneItem";
