@@ -203,7 +203,15 @@ export const Red = {
   label: "RED",
   hex: "e62117",
 } as const;
-export const Colors: Color[] = [Blue, LightBlue, YellowGreen, Yellow, Orange, Magenta, Red];
+export const Colors: Color[] = [
+  Blue,
+  LightBlue,
+  YellowGreen,
+  Yellow,
+  Orange,
+  Magenta,
+  Red,
+] as const;
 export type Color =
   | typeof Blue
   | typeof LightBlue
