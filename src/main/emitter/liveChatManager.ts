@@ -1,5 +1,4 @@
 import {
-  ExtendedGiftRedemption,
   ExtendedMembershipAndGiftItem,
   FocusedOnChatItem,
   LiveLaunchProperties,
@@ -198,41 +197,29 @@ class LiveChatManager {
 
   #onNewMembershipListener(value: LiveChatItemNewSponsor) {
     const item = convertNewMembershipItem(value);
-    const convertedItem = {
-      ...item,
-    } satisfies ExtendedMembershipAndGiftItem;
-    this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
+    this.#membershipsAndGifts = [...this.#membershipsAndGifts, item];
     this.#refreshMembershipsOnRenderer();
     console.log(item.displayMessage);
   }
 
   #onMembershipMilestoneListener(value: LiveChatItemMemberMilestoneChat) {
     const item = convertMembershipMilestoneItem(value);
-    const convertedItem = {
-      ...item,
-    } satisfies ExtendedMembershipAndGiftItem;
-    this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
+    this.#membershipsAndGifts = [...this.#membershipsAndGifts, item];
     this.#refreshMembershipsOnRenderer();
     console.log(item.displayMessage);
   }
 
   #onMembershipGiftListener(value: LiveChatItemMembershipGifting) {
     const item = convertMembershipGiftItem(value);
-    const convertedItem = {
-      ...item,
-    } satisfies ExtendedMembershipAndGiftItem;
 
-    this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
+    this.#membershipsAndGifts = [...this.#membershipsAndGifts, item];
     this.#refreshMembershipsOnRenderer();
     console.log(item.displayMessage);
   }
 
   #onGiftReceivedListener(value: LiveChatItemGiftMembershipReceived) {
     const item = convertGiftReceivedItem(value);
-    const convertedItem = {
-      ...item,
-    } satisfies ExtendedGiftRedemption;
-    this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
+    this.#membershipsAndGifts = [...this.#membershipsAndGifts, item];
     this.#refreshMembershipsOnRenderer();
     console.log(item.displayMessage);
   }

@@ -252,10 +252,6 @@ export type NewMembership = ChatCommonPart & {
   isUpgrade: boolean;
 };
 
-export type ExtendedNewMembership = NewMembership & {
-  formattedTimeString: string;
-};
-
 export type MembershipMilestone = ChatCommonPart & {
   type: "milestone";
   userComment: string;
@@ -263,18 +259,10 @@ export type MembershipMilestone = ChatCommonPart & {
   memberLevelName: string;
 };
 
-export type ExtendedMembershipMilestone = MembershipMilestone & {
-  formattedTimeString: string;
-};
-
 export type MembershipGift = ChatCommonPart & {
   type: "gift";
   giftCount: number;
   giftMemberLevelName: string;
-};
-
-export type ExtendedSponsorshipsGift = MembershipGift & {
-  formattedTimeString: string;
 };
 
 export type GiftReceived = ChatCommonPart & {
@@ -284,15 +272,11 @@ export type GiftReceived = ChatCommonPart & {
   associatedItemId: LiveChatItemId;
 };
 
-export type ExtendedGiftRedemption = GiftReceived & {
-  formattedTimeString: string;
-};
-
 export type ExtendedMembershipAndGiftItem =
-  | ExtendedNewMembership
-  | ExtendedMembershipMilestone
-  | ExtendedSponsorshipsGift
-  | ExtendedGiftRedemption;
+  | NewMembership
+  | MembershipMilestone
+  | MembershipGift
+  | GiftReceived;
 
 export type UserBannedEternalChatEvent = ChatCommonPart & {
   type: "userBannedEternal";
