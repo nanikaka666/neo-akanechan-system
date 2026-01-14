@@ -204,6 +204,13 @@ export interface Stockable {
   isStocked: boolean;
 }
 
+export interface Focusable {
+  /**
+   * `true` means this is focused by owner.
+   */
+  isFocused: boolean;
+}
+
 export type TextMessageChat = ChatCommonPart & { type: "text" };
 
 /**
@@ -211,16 +218,12 @@ export type TextMessageChat = ChatCommonPart & { type: "text" };
  */
 export type ExtendedChatItemText = TextMessageChat &
   FirstMarkable &
-  Stockable & {
+  Stockable &
+  Focusable & {
     /**
      * index which means position of whole text chat list.
      */
     indexOfWhole: number;
-
-    /**
-     * `true` means this is focused by streamer.
-     */
-    isFocused: boolean;
   };
 
 export type SuperChat = ChatCommonPart & {
@@ -230,10 +233,7 @@ export type SuperChat = ChatCommonPart & {
   tier: Color;
 };
 
-export type ExtendedChatItemSuperChat = SuperChat &
-  FirstMarkable & {
-    isFocused: boolean;
-  };
+export type ExtendedChatItemSuperChat = SuperChat & FirstMarkable & Focusable;
 
 export type SuperSticker = ChatCommonPart & {
   type: "superSticker";
@@ -245,10 +245,7 @@ export type SuperSticker = ChatCommonPart & {
   tier: Color;
 };
 
-export type ExtendedChatItemSuperSticker = SuperSticker &
-  FirstMarkable & {
-    isFocused: boolean;
-  };
+export type ExtendedChatItemSuperSticker = SuperSticker & FirstMarkable & Focusable;
 
 export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
 
