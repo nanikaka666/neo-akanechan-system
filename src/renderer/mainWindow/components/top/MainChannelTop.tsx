@@ -1,5 +1,6 @@
 import { ChannelSummaryView } from "./ChannelSummaryView";
-import { Channel, YoutubeLive } from "../../../../types/ipcEvent";
+import { YoutubeLive } from "../../../../types/ipcEvent";
+import { Channel } from "../../../../types/youtubeChannel";
 import { UserSettingsButton } from "./UserSettingsButton";
 import { LiveStartButton } from "./LiveStartButton";
 import { LiveStartWithVideoIdButton } from "./LiveStartWithVideoIdButton";

@@ -1,5 +1,4 @@
 import {
-  Channel,
   NotLiveVideo,
   VideoFinishedLive,
   VideoInLive,
@@ -9,6 +8,7 @@ import {
   YoutubeLiveInReady,
   YoutubeVideo,
 } from "../../types/ipcEvent";
+import { Channel } from "../../types/youtubeChannel";
 import { getAccessToken, revokeCredentials } from "../auth/google";
 import {
   ChannelResponse,

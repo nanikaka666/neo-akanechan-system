@@ -1,4 +1,5 @@
-import { Channel, YoutubeLive } from "./ipcEvent";
+import { YoutubeLive } from "./ipcEvent";
+import { Channel } from "./youtubeChannel";
 import { LiveLaunchProperties } from "./liveLaunchProperties";
 
 /**

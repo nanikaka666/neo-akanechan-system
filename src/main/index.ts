@@ -48,7 +48,7 @@ function main() {
     await setupReactDevtools();
     await setupAuth();
 
-    // createMainWindow();
+    createMainWindow();
 
     app.on("activate", onActivate);
   });

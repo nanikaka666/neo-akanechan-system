@@ -9,14 +9,7 @@ import {
 import { AuthPage, LiveSelectionPage, MainAppPage } from "./mainAppPage";
 import { LiveStatistics } from "./liveStatistics";
 import { LiveLaunchProperties } from "./liveLaunchProperties";
-
-export interface Channel {
-  id: ChannelId;
-  title: string;
-  subscribersCount: number;
-  ownerIconUrl: string;
-  bannerUrl?: string;
-}
+import { Channel } from "./youtubeChannel";
 
 export type YoutubeLive = YoutubeLiveInReady | YoutubeLiveInLive;
 
