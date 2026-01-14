@@ -1,4 +1,4 @@
-import { LiveLaunchProperties } from "../../../../types/ipcEvent";
+import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { QuitLiveButton } from "./QuitLiveButton";
 
 export function SideBarInStandBy({

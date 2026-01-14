@@ -1,4 +1,4 @@
-import { LiveLaunchProperties } from "../../../../types/ipcEvent";
+import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { StandByAnnouncement } from "./StandByAnnouncement";
 import { SideBarInStandBy } from "./SideBarInStandBy";
 

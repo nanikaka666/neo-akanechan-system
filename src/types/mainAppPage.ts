@@ -1,4 +1,5 @@
-import { Channel, LiveLaunchProperties, YoutubeLive } from "./ipcEvent";
+import { Channel, YoutubeLive } from "./ipcEvent";
+import { LiveLaunchProperties } from "./liveLaunchProperties";
 
 /**
  * User doesn't authorized.

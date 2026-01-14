@@ -1,4 +1,4 @@
-import { LiveLaunchProperties } from "../../types/ipcEvent";
+import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { LiveStatistics } from "../../types/liveStatistics";
 import { getLiveStatisticsManager } from "../liveStatistics";
 import { ChannelStatisticsEmitter } from "./channelStatisticsEmitter";

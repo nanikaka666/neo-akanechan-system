@@ -1,10 +1,5 @@
-import {
-  Channel,
-  LiveLaunchProperties,
-  YoutubeLive,
-  YoutubeLiveInLive,
-  YoutubeLiveInReady,
-} from "../types/ipcEvent";
+import { Channel, YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../types/ipcEvent";
+import { LiveLaunchProperties } from "../types/liveLaunchProperties";
 import { UserSettingsService } from "./userSettings";
 import { VideoId } from "./youtubeApi/model";
 import { YoutubeApiService } from "./youtubeApi/service";

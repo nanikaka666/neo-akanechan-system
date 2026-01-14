@@ -8,6 +8,7 @@ import {
 } from "./liveChatItem";
 import { AuthPage, LiveSelectionPage, MainAppPage } from "./mainAppPage";
 import { LiveStatistics } from "./liveStatistics";
+import { LiveLaunchProperties } from "./liveLaunchProperties";
 
 export interface Channel {
   id: ChannelId;
@@ -94,13 +95,6 @@ export interface NotLiveVideo {
   thumbnailUrl: string;
   likeCount?: number;
   isPublic: boolean;
-}
-
-export interface LiveLaunchProperties {
-  channel: Channel;
-  live: YoutubeLive;
-  settings: UserSettings;
-  overlayWindowTitle: string;
 }
 
 /**
