@@ -5,7 +5,7 @@ import {
   MembershipAndGiftItem,
   ExtendedSuperItem,
   FocusedOnChatItem,
-} from "../../../../ipcEvent";
+} from "../../../../types/ipcEvent";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 import { ViewerModeSelector } from "./ViewerModeSelector";

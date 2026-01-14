@@ -1,4 +1,4 @@
-import { FocusedOnChatItem } from "../../../../ipcEvent";
+import { FocusedOnChatItem } from "../../../../types/ipcEvent";
 import { UnfocusButton } from "./UnfocusButton";
 import { FocusButton } from "./FocusButton";
 

@@ -1,4 +1,4 @@
-import { FocusedOnChatItem } from "../../../../ipcEvent";
+import { FocusedOnChatItem } from "../../../../types/ipcEvent";
 import { SuperChatItem } from "./SuperChatItem";
 import { SuperStickerItem } from "./SuperStickerItem";
 import { TextChatItem } from "./TextChatItem";

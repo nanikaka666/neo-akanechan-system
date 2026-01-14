@@ -1,4 +1,4 @@
-import { Channel } from "../../../../ipcEvent";
+import { Channel } from "../../../../types/ipcEvent";
 
 export function ChannelSummaryView({ channel }: { channel: Channel }) {
   return (

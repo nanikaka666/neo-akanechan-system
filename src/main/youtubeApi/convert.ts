@@ -16,7 +16,7 @@ import {
   SuperSticker,
   TextMessageChat,
   UserBannedChatEvent,
-} from "../../ipcEvent";
+} from "../../types/ipcEvent";
 import {
   LiveChatItemCommonPart,
   LiveChatItemGiftMembershipReceived,

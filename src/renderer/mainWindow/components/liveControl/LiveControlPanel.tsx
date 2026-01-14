@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LiveLaunchProperties } from "../../../../ipcEvent";
+import { LiveLaunchProperties } from "../../../../types/ipcEvent";
 import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
 

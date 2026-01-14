@@ -1,5 +1,5 @@
 import { WebContents } from "electron";
-import { IpcEvent } from "../ipcEvent";
+import { IpcEvent } from "../types/ipcEvent";
 
 /**
  * Wrapper of webContents.send.

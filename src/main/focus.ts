@@ -1,4 +1,4 @@
-import { FocusedOnChatItem } from "../ipcEvent";
+import { FocusedOnChatItem } from "../types/ipcEvent";
 import { ChannelId, LiveChatItemId } from "./youtubeApi/model";
 
 export class FocusManager {

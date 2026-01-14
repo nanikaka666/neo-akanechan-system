@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import { LiveLaunchProperties } from "../../../../ipcEvent";
+import { LiveLaunchProperties } from "../../../../types/ipcEvent";
 import { Mode } from "./LiveControlPanel";
 import { CommentViewer } from "./CommentViewer";
 

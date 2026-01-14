@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ExtendedChatItemText } from "../../../../ipcEvent";
+import { ExtendedChatItemText } from "../../../../types/ipcEvent";
 
 export function StockButton({ item }: { item: ExtendedChatItemText }) {
   const [disabled, setDisabled] = useState(false);

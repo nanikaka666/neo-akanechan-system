@@ -1,4 +1,4 @@
-import { ChatAuthor } from "../../../../ipcEvent";
+import { ChatAuthor } from "../../../../types/ipcEvent";
 
 export function Author({ author }: { author: ChatAuthor }) {
   return (

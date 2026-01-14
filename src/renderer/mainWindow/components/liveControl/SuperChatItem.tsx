@@ -1,4 +1,4 @@
-import { ExtendedChatItemSuperChat } from "../../../../ipcEvent";
+import { ExtendedChatItemSuperChat } from "../../../../types/ipcEvent";
 import { Author } from "./Author";
 import { FocusForm } from "./FocusForm";
 

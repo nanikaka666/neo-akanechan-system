@@ -8,7 +8,7 @@ import {
   YoutubeLiveInLive,
   YoutubeLiveInReady,
   YoutubeVideo,
-} from "../../ipcEvent";
+} from "../../types/ipcEvent";
 import { getAccessToken, revokeCredentials } from "../auth/google";
 import {
   ChannelResponse,

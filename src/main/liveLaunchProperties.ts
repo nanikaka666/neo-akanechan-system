@@ -4,7 +4,7 @@ import {
   YoutubeLive,
   YoutubeLiveInLive,
   YoutubeLiveInReady,
-} from "../ipcEvent";
+} from "../types/ipcEvent";
 import { UserSettingsService } from "./userSettings";
 import { VideoId } from "./youtubeApi/model";
 import { YoutubeApiService } from "./youtubeApi/service";

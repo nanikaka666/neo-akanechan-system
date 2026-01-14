@@ -1,4 +1,4 @@
-import { MembershipGift } from "../../../../ipcEvent";
+import { MembershipGift } from "../../../../types/ipcEvent";
 import { Author } from "./Author";
 
 export function MembershipGiftItem({ item }: { item: MembershipGift }) {

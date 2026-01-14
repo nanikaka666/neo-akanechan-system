@@ -1,4 +1,4 @@
-import { FocusedOnChatItem } from "../../../../ipcEvent";
+import { FocusedOnChatItem } from "../../../../types/ipcEvent";
 import { FocusItem } from "./FocusItem";
 
 export function FocusViewer({ focus }: { focus?: FocusedOnChatItem }) {

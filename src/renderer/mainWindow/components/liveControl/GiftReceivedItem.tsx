@@ -1,4 +1,4 @@
-import { GiftReceived } from "../../../../ipcEvent";
+import { GiftReceived } from "../../../../types/ipcEvent";
 import { Author } from "./Author";
 
 export function GiftReceivedItem({ item }: { item: GiftReceived }) {

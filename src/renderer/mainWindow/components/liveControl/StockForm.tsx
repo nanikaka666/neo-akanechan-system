@@ -1,4 +1,4 @@
-import { ExtendedChatItemText } from "../../../../ipcEvent";
+import { ExtendedChatItemText } from "../../../../types/ipcEvent";
 import { UnstockButton } from "./UnstockButton";
 import { StockButton } from "./StockButton";
 

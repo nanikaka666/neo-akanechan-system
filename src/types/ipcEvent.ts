@@ -1,11 +1,11 @@
-import { UserSettings } from "./main/userSettings";
+import { UserSettings } from "./../main/userSettings";
 import {
   ActiveLiveChatId,
   ChannelId,
   LiveChatId,
   LiveChatItemId,
   VideoId,
-} from "./main/youtubeApi/model";
+} from "./../main/youtubeApi/model";
 
 /**
  * User doesn't authorized.

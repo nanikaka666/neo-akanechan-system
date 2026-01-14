@@ -12,7 +12,7 @@ import {
   TextMessageChat,
   SuperChat,
   SuperSticker,
-} from "../../ipcEvent";
+} from "../../types/ipcEvent";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";
