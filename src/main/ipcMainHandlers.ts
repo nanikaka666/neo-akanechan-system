@@ -19,7 +19,11 @@ import {
 import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiService } from "./youtubeApi/service";
-import { buildLiveLaunchProperties } from "./liveLaunchProperties";
+import {
+  buildLiveLaunchProperties,
+  buildLiveLaunchPropertiesForDebug,
+} from "./liveLaunchProperties";
+import { VideoId } from "./youtubeApi/model";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -53,6 +57,49 @@ export function setupIpcMainHandlers() {
       liveLaunchProperties: liveLaunchProperties,
     });
     return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("startOverlayWithUserConfirmationByVideoId", async (e, inputVideoId) => {
+    if (BrowserWindow.getAllWindows().length === 2) {
+      // already overlay window opened.
+      return false;
+    }
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+
+    try {
+      const liveLaunchProperties = await buildLiveLaunchPropertiesForDebug(
+        new VideoId(inputVideoId),
+      );
+      const res = await dialog.showMessageBox(window, {
+        message: `ライブ配信を開始しますか？`,
+        type: "question",
+        buttons: ["OK", "NO"],
+        defaultId: 0,
+        detail: `${liveLaunchProperties.live.title}`,
+      });
+      if (res.response !== 0) {
+        return false;
+      }
+
+      // memo: temporary turn off
+      // createOverlayWindow(overlayWindowTitle);
+
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+        type: "liveStandBy",
+        liveLaunchProperties: liveLaunchProperties,
+      });
+      return true;
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.log(e);
+      } else {
+        console.log(new Error(`Unknown error. ${e}`));
+      }
+      return false;
+    }
   });
 
   IpcMainWrapper.handle("getUserSettings", () => {
