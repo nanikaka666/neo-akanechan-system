@@ -1,4 +1,5 @@
-import { LiveLaunchProperties, LiveStatistics } from "../../types/ipcEvent";
+import { LiveLaunchProperties } from "../../types/ipcEvent";
+import { LiveStatistics } from "../../types/liveStatistics";
 import {
   FirstMarkable,
   Focusable,
