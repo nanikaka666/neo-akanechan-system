@@ -184,6 +184,10 @@ export interface ChatCommonPart {
   author: ChatAuthor;
   publishedAt: Date;
   displayMessage: string;
+  /**
+   * HH:mm:ss style time format
+   */
+  formattedTimeString: string;
 }
 
 export type TextMessageChat = ChatCommonPart & { type: "text" };
@@ -196,11 +200,6 @@ export type ExtendedChatItemText = TextMessageChat & {
    * index which means position of whole text chat list.
    */
   indexOfWhole: number;
-
-  /**
-   * HH:mm:ss style time format
-   */
-  formattedTimeString: string;
 
   /**
    * `true` means this is first chat for author.
@@ -226,7 +225,6 @@ export type SuperChat = ChatCommonPart & {
 };
 
 export type ExtendedChatItemSuperChat = SuperChat & {
-  formattedTimeString: string;
   isFirst: boolean;
   isFocused: boolean;
 };
@@ -242,7 +240,6 @@ export type SuperSticker = ChatCommonPart & {
 };
 
 export type ExtendedChatItemSuperSticker = SuperSticker & {
-  formattedTimeString: string;
   isFirst: boolean;
   isFocused: boolean;
 };
