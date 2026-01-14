@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { ChannelSummaryView } from "./ChannelSummaryView";
 import { Channel, YoutubeLive } from "../../../../ipcEvent";
 import { UserSettingsButton } from "./UserSettingsButton";
+import { LiveStartButton } from "./LiveStartButton";
 
 export function MainChannelTop({ channel, lives }: { channel: Channel; lives: YoutubeLive[] }) {
-  const [isConfirming, setIsConfirming] = useState(false);
-
   return (
     <div>
       <ChannelSummaryView channel={channel} />
@@ -17,18 +15,7 @@ export function MainChannelTop({ channel, lives }: { channel: Channel; lives: Yo
             <p>{live.title}</p>
             <p>{live.isPublic ? "public" : "private"}</p>
             <p>
-              <button
-                onClick={async (e) => {
-                  e.preventDefault();
-                  setIsConfirming((_) => true);
-
-                  await window.ipcApi.requestOpenOverlay(channel, live);
-                  setIsConfirming((_) => false);
-                }}
-                disabled={isConfirming}
-              >
-                Live Start
-              </button>
+              <LiveStartButton channel={channel} live={live} />
             </p>
           </div>
         );
