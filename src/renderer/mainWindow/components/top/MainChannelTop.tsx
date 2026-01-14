@@ -2,6 +2,7 @@ import { ChannelSummaryView } from "./ChannelSummaryView";
 import { Channel, YoutubeLive } from "../../../../ipcEvent";
 import { UserSettingsButton } from "./UserSettingsButton";
 import { LiveStartButton } from "./LiveStartButton";
+import { LiveStartWithVideoIdButton } from "./LiveStartWithVideoIdButton";
 
 export function MainChannelTop({ channel, lives }: { channel: Channel; lives: YoutubeLive[] }) {
   return (
@@ -20,6 +21,7 @@ export function MainChannelTop({ channel, lives }: { channel: Channel; lives: Yo
           </div>
         );
       })}
+      <LiveStartWithVideoIdButton />
     </div>
   );
 }
