@@ -21,8 +21,8 @@ export function TextChatViewer({
     range.endIndex < textChats.length
       ? {
           time: {
-            start: textChats[range.startIndex].formatedTime,
-            end: textChats[range.endIndex].formatedTime,
+            start: textChats[range.startIndex].formattedTimeString,
+            end: textChats[range.endIndex].formattedTimeString,
           },
           indexOfWhole: {
             start: textChats[range.startIndex].indexOfWhole,

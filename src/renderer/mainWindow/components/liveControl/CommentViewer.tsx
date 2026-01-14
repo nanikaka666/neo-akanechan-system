@@ -2,7 +2,7 @@ import { CSSProperties, useEffect, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
 import {
   ExtendedChatItemText,
-  ExtendedMembershipAndGiftItem,
+  MembershipAndGiftItem,
   ExtendedSuperItem,
   FocusedOnChatItem,
 } from "../../../../ipcEvent";
@@ -45,9 +45,7 @@ export function CommentViewer() {
 
   const [superChatAndStickers, setSuperChatAndStickers] = useState<ExtendedSuperItem[]>([]);
 
-  const [membershipsAndGifts, setMembershipsAndGifts] = useState<ExtendedMembershipAndGiftItem[]>(
-    [],
-  );
+  const [membershipsAndGifts, setMembershipsAndGifts] = useState<MembershipAndGiftItem[]>([]);
 
   const [stocks, setStocks] = useState<ExtendedChatItemText[]>([]);
 

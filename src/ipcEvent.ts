@@ -184,6 +184,31 @@ export interface ChatCommonPart {
   author: ChatAuthor;
   publishedAt: Date;
   displayMessage: string;
+  /**
+   * HH:mm:ss style time format
+   */
+  formattedTimeString: string;
+}
+
+export interface FirstMarkable {
+  /**
+   * `true` means this is first chat for its author.
+   */
+  isFirst: boolean;
+}
+
+export interface Stockable {
+  /**
+   * `true` means this is stocked by owner.
+   */
+  isStocked: boolean;
+}
+
+export interface Focusable {
+  /**
+   * `true` means this is focused by owner.
+   */
+  isFocused: boolean;
 }
 
 export type TextMessageChat = ChatCommonPart & { type: "text" };
@@ -191,32 +216,15 @@ export type TextMessageChat = ChatCommonPart & { type: "text" };
 /**
  * Append some data.
  */
-export type ExtendedChatItemText = TextMessageChat & {
-  /**
-   * index which means position of whole text chat list.
-   */
-  indexOfWhole: number;
-
-  /**
-   * HH:mm:ss style time format
-   */
-  formatedTime: string;
-
-  /**
-   * `true` means this is first chat for author.
-   */
-  isFirst: boolean;
-
-  /**
-   * `true` means this is stocked by streamer.
-   */
-  isStocked: boolean;
-
-  /**
-   * `true` means this is focused by streamer.
-   */
-  isFocused: boolean;
-};
+export type ExtendedChatItemText = TextMessageChat &
+  FirstMarkable &
+  Stockable &
+  Focusable & {
+    /**
+     * index which means position of whole text chat list.
+     */
+    indexOfWhole: number;
+  };
 
 export type SuperChat = ChatCommonPart & {
   type: "superChat";
@@ -225,11 +233,7 @@ export type SuperChat = ChatCommonPart & {
   tier: Color;
 };
 
-export type ExtendedChatItemSuperChat = SuperChat & {
-  formatedTime: string;
-  isFirst: boolean;
-  isFocused: boolean;
-};
+export type ExtendedChatItemSuperChat = SuperChat & FirstMarkable & Focusable;
 
 export type SuperSticker = ChatCommonPart & {
   type: "superSticker";
@@ -241,11 +245,7 @@ export type SuperSticker = ChatCommonPart & {
   tier: Color;
 };
 
-export type ExtendedChatItemSuperSticker = SuperSticker & {
-  formatedTime: string;
-  isFirst: boolean;
-  isFocused: boolean;
-};
+export type ExtendedChatItemSuperSticker = SuperSticker & FirstMarkable & Focusable;
 
 export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
 
@@ -255,10 +255,6 @@ export type NewMembership = ChatCommonPart & {
   isUpgrade: boolean;
 };
 
-export type ExtendedNewMembership = NewMembership & {
-  formatedTime: string;
-};
-
 export type MembershipMilestone = ChatCommonPart & {
   type: "milestone";
   userComment: string;
@@ -266,18 +262,10 @@ export type MembershipMilestone = ChatCommonPart & {
   memberLevelName: string;
 };
 
-export type ExtendedMembershipMilestone = MembershipMilestone & {
-  formatedTime: string;
-};
-
 export type MembershipGift = ChatCommonPart & {
   type: "gift";
   giftCount: number;
   giftMemberLevelName: string;
-};
-
-export type ExtendedSponsorshipsGift = MembershipGift & {
-  formatedTime: string;
 };
 
 export type GiftReceived = ChatCommonPart & {
@@ -287,15 +275,11 @@ export type GiftReceived = ChatCommonPart & {
   associatedItemId: LiveChatItemId;
 };
 
-export type ExtendedGiftRedemption = GiftReceived & {
-  formatedTime: string;
-};
-
-export type ExtendedMembershipAndGiftItem =
-  | ExtendedNewMembership
-  | ExtendedMembershipMilestone
-  | ExtendedSponsorshipsGift
-  | ExtendedGiftRedemption;
+export type MembershipAndGiftItem =
+  | NewMembership
+  | MembershipMilestone
+  | MembershipGift
+  | GiftReceived;
 
 export type UserBannedEternalChatEvent = ChatCommonPart & {
   type: "userBannedEternal";
@@ -449,7 +433,7 @@ export interface IpcEvent {
   /**
    * Notify all memberships and gifts item to renderer.
    */
-  tellMembershipsAndGifts: (membershipsAndGifts: ExtendedMembershipAndGiftItem[]) => void;
+  tellMembershipsAndGifts: (membershipsAndGifts: MembershipAndGiftItem[]) => void;
 
   /**
    * Add chat item to stock list.
