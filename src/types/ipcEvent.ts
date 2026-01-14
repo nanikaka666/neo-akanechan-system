@@ -1,5 +1,10 @@
 import { UserSettings } from "./userSettings";
-import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "./../main/youtubeApi/model";
+import {
+  ActiveLiveChatId,
+  ChannelId,
+  LiveChatId,
+  VideoId,
+} from "../main/youtubeApi/youtubeDomainModel";
 import {
   Chats,
   ExtendedChatItemText,

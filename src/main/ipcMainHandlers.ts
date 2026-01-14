@@ -23,7 +23,7 @@ import {
   buildLiveLaunchProperties,
   buildLiveLaunchPropertiesForDebug,
 } from "./liveLaunchProperties";
-import { VideoId } from "./youtubeApi/model";
+import { VideoId } from "./youtubeApi/youtubeDomainModel";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {

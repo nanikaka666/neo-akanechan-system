@@ -29,7 +29,7 @@ import {
   LiveChatItemTextMessage,
   LiveChatItemUserBanned,
 } from "../emitter/liveChatEmitter";
-import { ChannelId, LiveChatItemId } from "./model";
+import { ChannelId, LiveChatItemId } from "./youtubeDomainModel";
 
 function to2Digit(value: string) {
   return value.length === 1 ? "0" + value : value;

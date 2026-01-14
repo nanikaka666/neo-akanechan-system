@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
-import { VideoId } from "../youtubeApi/model";
+import { VideoId } from "../youtubeApi/youtubeDomainModel";
 import { YoutubeApiService } from "../youtubeApi/service";
 import { YoutubeVideo } from "../../types/ipcEvent";
 

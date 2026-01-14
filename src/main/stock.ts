@@ -1,5 +1,5 @@
 import { NonMarkedExtendedChatItemText } from "../types/liveChatItem";
-import { ChannelId, LiveChatItemId } from "./youtubeApi/model";
+import { ChannelId, LiveChatItemId } from "./youtubeApi/youtubeDomainModel";
 
 export class StockManager {
   #stocks: NonMarkedExtendedChatItemText[];

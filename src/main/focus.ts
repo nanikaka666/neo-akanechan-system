@@ -1,5 +1,5 @@
 import { FocusedOnChatItem } from "../types/liveChatItem";
-import { ChannelId, LiveChatItemId } from "./youtubeApi/model";
+import { ChannelId, LiveChatItemId } from "./youtubeApi/youtubeDomainModel";
 
 export class FocusManager {
   #focusedItem: FocusedOnChatItem | undefined;

@@ -1,4 +1,4 @@
-import { ChannelId, LiveChatItemId } from "../main/youtubeApi/model";
+import { ChannelId, LiveChatItemId } from "../main/youtubeApi/youtubeDomainModel";
 
 /**
  * `isStocked` is unknown (always false more correctly) when live chat receiving.

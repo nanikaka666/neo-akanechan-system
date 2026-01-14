@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
-import { ActiveLiveChatId, LiveChatId } from "../youtubeApi/model";
+import { ActiveLiveChatId, LiveChatId } from "../youtubeApi/youtubeDomainModel";
 import { V3DataLiveChatMessageServiceClient } from "../grpc/generated/proto/stream_list_grpc_pb";
 import { credentials, Metadata, ServerErrorResponse } from "@grpc/grpc-js";
 import {

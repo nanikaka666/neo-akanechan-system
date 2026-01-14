@@ -16,7 +16,7 @@ import {
   VideoYoutubeApiResponse,
   YoutubeApiClient,
 } from "./client";
-import { ChannelId, VideoId } from "./model";
+import { ChannelId, VideoId } from "./youtubeDomainModel";
 
 export const YoutubeApiService = {
   getChannelOfMine: async () => {
