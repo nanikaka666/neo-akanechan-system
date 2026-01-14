@@ -153,10 +153,10 @@ class LiveChatManager {
   #onMessageDeletedListener(value: LiveChatItemMessageDeleted) {
     const item = convertMessageDeletedItem(value);
     // update textChatCount
-    const matchSize = this.#textChats.filter((item) => item.id.id === item.id.id).length;
+    const matchSize = this.#textChats.filter((chat) => chat.id.id === item.id.id).length;
     this.#textChatCount -= matchSize;
 
-    this.#textChats = this.#textChats.filter((item) => item.id.id !== item.id.id);
+    this.#textChats = this.#textChats.filter((chat) => chat.id.id !== item.id.id);
     console.log(`remove item: ${item.id.id}`);
 
     // if removed chat is stocked one, remove it.
