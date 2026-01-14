@@ -2,7 +2,7 @@ import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
 import { VideoId } from "../../types/youtubeDomainModel";
 import { YoutubeApiService } from "../youtubeApi/service";
-import { YoutubeVideo } from "../../types/ipcEvent";
+import { YoutubeVideo } from "../../types/youtubeVideo";
 
 export class VideoStatisticsEmitter extends (EventEmitter as new () => TypedEmitter<VideoStatisticsEvent>) {
   readonly #videoId: VideoId;
