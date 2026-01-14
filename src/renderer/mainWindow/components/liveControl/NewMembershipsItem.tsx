@@ -6,6 +6,7 @@ export function NewMembershipsItem({ item }: { item: NewMembership }) {
     <div style={{ backgroundColor: "green" }}>
       <Author author={item.author} />
       <div>{item.displayMessage}</div>
+      <div>{item.memberLevelName}</div>
     </div>
   );
 }

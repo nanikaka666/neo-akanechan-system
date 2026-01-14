@@ -7,6 +7,9 @@ export function MilestoneMembershipsItem({ item }: { item: MembershipMilestone }
       <Author author={item.author} />
       <div>{item.displayMessage}</div>
       <div>{item.userComment}</div>
+      <div>
+        {item.memberLevelName} : {item.memberMonth}
+      </div>
     </div>
   );
 }

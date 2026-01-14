@@ -5,8 +5,8 @@ export function GiftItem({ item }: { item: MembershipGift }) {
   return (
     <div style={{ backgroundColor: "pink" }}>
       <Author author={item.author} />
-      {item.displayMessage}
-      Gift Num: {item.giftCount}
+      <p>{item.displayMessage}</p>
+      <p>Gift Num: {item.giftCount}</p>
     </div>
   );
 }
