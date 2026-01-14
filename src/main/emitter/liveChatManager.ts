@@ -8,6 +8,10 @@ import {
   NonMarkedExtendedChatItemText,
   Stockable,
   Focusable,
+  FirstMarkable,
+  TextMessageChat,
+  SuperChat,
+  SuperSticker,
 } from "../../ipcEvent";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
@@ -85,18 +89,13 @@ class LiveChatManager {
 
   #onTextListener(value: LiveChatItemTextMessage) {
     const item = convertTextItem(value);
-    const isFirstChat = !this.#authorChannelIds.has(item.author.channelId.id);
-    if (isFirstChat) {
-      this.#authorChannelIds.add(item.author.channelId.id);
-    }
     this.#textChatCount++;
     this.#textIndexOfWhole++;
 
     const convertedItem = {
-      ...item,
+      ...this.#checkIsFirstAndMark(item),
       ...{
         indexOfWhole: this.#textIndexOfWhole,
-        isFirst: isFirstChat,
       },
     } satisfies NonMarkedExtendedChatItemText;
     this.#textChats = [...this.#textChats, convertedItem].slice(-1000); // take latest 1000 items.
@@ -106,17 +105,7 @@ class LiveChatManager {
 
   #onSuperChatListener(value: LiveChatItemSuperChat) {
     const item = convertSuperChatItem(value);
-    const isFirstChat = !this.#authorChannelIds.has(item.author.channelId.id);
-    if (isFirstChat) {
-      this.#authorChannelIds.add(item.author.channelId.id);
-    }
-
-    const convertedItem = {
-      ...item,
-      ...{
-        isFirst: isFirstChat,
-      },
-    } satisfies NonMarkedExtendedChatItemSuperChat;
+    const convertedItem = this.#checkIsFirstAndMark(item);
     this.#superChats = [...this.#superChats, convertedItem];
     this.#refreshChatsOnRenderer();
     console.log(item.displayMessage);
@@ -126,17 +115,7 @@ class LiveChatManager {
     console.log("SuperSticker comes.");
     console.log(value);
     const item = convertSuperStickerItem(value);
-    const isFirstChat = !this.#authorChannelIds.has(item.author.channelId.id);
-    if (isFirstChat) {
-      this.#authorChannelIds.add(item.author.channelId.id);
-    }
-
-    const convertedItem = {
-      ...item,
-      ...{
-        isFirst: isFirstChat,
-      },
-    } satisfies NonMarkedExtendedChatItemSuperSticker;
+    const convertedItem = this.#checkIsFirstAndMark(item);
     this.#superChats = [...this.#superChats, convertedItem];
 
     this.#refreshChatsOnRenderer();
@@ -350,6 +329,16 @@ class LiveChatManager {
 
   cleanup() {
     this.#emitter.close();
+  }
+
+  #checkIsFirstAndMark<T extends TextMessageChat | SuperChat | SuperSticker>(
+    item: T,
+  ): T & FirstMarkable {
+    const isFirstChat = !this.#authorChannelIds.has(item.author.channelId.id);
+    if (isFirstChat) {
+      this.#authorChannelIds.add(item.author.channelId.id);
+    }
+    return { ...item, isFirst: isFirstChat };
   }
 
   #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & Stockable {
