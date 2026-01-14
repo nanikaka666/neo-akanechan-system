@@ -197,22 +197,25 @@ export interface FirstMarkable {
   isFirst: boolean;
 }
 
+export interface Stockable {
+  /**
+   * `true` means this is stocked by owner.
+   */
+  isStocked: boolean;
+}
+
 export type TextMessageChat = ChatCommonPart & { type: "text" };
 
 /**
  * Append some data.
  */
 export type ExtendedChatItemText = TextMessageChat &
-  FirstMarkable & {
+  FirstMarkable &
+  Stockable & {
     /**
      * index which means position of whole text chat list.
      */
     indexOfWhole: number;
-
-    /**
-     * `true` means this is stocked by streamer.
-     */
-    isStocked: boolean;
 
     /**
      * `true` means this is focused by streamer.
