@@ -3,7 +3,7 @@ import {
   LiveChatDisplayStyle,
   LiveChatSettings,
   UserSettings,
-} from "../../../../main/userSettings";
+} from "../../../../types/userSettings";
 
 const displayStyles: LiveChatDisplayStyle[] = ["typical"];
 

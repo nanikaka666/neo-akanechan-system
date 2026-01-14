@@ -1,4 +1,4 @@
-import { UserSettings } from "./../main/userSettings";
+import { UserSettings } from "./userSettings";
 import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "./../main/youtubeApi/model";
 import {
   Chats,

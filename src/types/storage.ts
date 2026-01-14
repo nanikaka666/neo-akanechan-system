@@ -1,5 +1,5 @@
 import { Credentials } from "google-auth-library";
-import { UserSettings } from "../main/userSettings";
+import { UserSettings } from "./userSettings";
 
 /**
  * data interface which persisted in this app.

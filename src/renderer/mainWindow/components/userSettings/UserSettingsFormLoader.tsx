@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserSettings } from "../../../../main/userSettings";
+import { UserSettings } from "../../../../types/userSettings";
 import { UserSettingsForm } from "./UserSettingsForm";
 
 export function UserSettingsFormLoader({ turnOff }: { turnOff: () => void }) {
