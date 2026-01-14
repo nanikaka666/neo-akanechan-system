@@ -2,7 +2,7 @@ import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
-import { AuthPage, InLivePage, LiveSelectionPage } from "../types/ipcEvent";
+import { AuthPage, InLivePage, LiveSelectionPage } from "../types/mainAppPage";
 import {
   cleanUpLiveChatEmitter,
   getLiveChatManager,
