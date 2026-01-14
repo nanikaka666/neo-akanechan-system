@@ -190,32 +190,35 @@ export interface ChatCommonPart {
   formattedTimeString: string;
 }
 
+export interface FirstMarkable {
+  /**
+   * `true` means this is first chat for its author.
+   */
+  isFirst: boolean;
+}
+
 export type TextMessageChat = ChatCommonPart & { type: "text" };
 
 /**
  * Append some data.
  */
-export type ExtendedChatItemText = TextMessageChat & {
-  /**
-   * index which means position of whole text chat list.
-   */
-  indexOfWhole: number;
+export type ExtendedChatItemText = TextMessageChat &
+  FirstMarkable & {
+    /**
+     * index which means position of whole text chat list.
+     */
+    indexOfWhole: number;
 
-  /**
-   * `true` means this is first chat for author.
-   */
-  isFirst: boolean;
+    /**
+     * `true` means this is stocked by streamer.
+     */
+    isStocked: boolean;
 
-  /**
-   * `true` means this is stocked by streamer.
-   */
-  isStocked: boolean;
-
-  /**
-   * `true` means this is focused by streamer.
-   */
-  isFocused: boolean;
-};
+    /**
+     * `true` means this is focused by streamer.
+     */
+    isFocused: boolean;
+  };
 
 export type SuperChat = ChatCommonPart & {
   type: "superChat";
@@ -224,10 +227,10 @@ export type SuperChat = ChatCommonPart & {
   tier: Color;
 };
 
-export type ExtendedChatItemSuperChat = SuperChat & {
-  isFirst: boolean;
-  isFocused: boolean;
-};
+export type ExtendedChatItemSuperChat = SuperChat &
+  FirstMarkable & {
+    isFocused: boolean;
+  };
 
 export type SuperSticker = ChatCommonPart & {
   type: "superSticker";
@@ -239,10 +242,10 @@ export type SuperSticker = ChatCommonPart & {
   tier: Color;
 };
 
-export type ExtendedChatItemSuperSticker = SuperSticker & {
-  isFirst: boolean;
-  isFocused: boolean;
-};
+export type ExtendedChatItemSuperSticker = SuperSticker &
+  FirstMarkable & {
+    isFocused: boolean;
+  };
 
 export type ExtendedSuperItem = ExtendedChatItemSuperChat | ExtendedChatItemSuperSticker;
 
