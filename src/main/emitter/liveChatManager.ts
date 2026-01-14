@@ -1,5 +1,5 @@
 import {
-  ExtendedMembershipAndGiftItem,
+  MembershipAndGiftItem,
   FocusedOnChatItem,
   LiveLaunchProperties,
   LiveStatistics,
@@ -59,7 +59,7 @@ class LiveChatManager {
    * including SuperChat and SuperSticker
    */
   #superChats: (NonMarkedExtendedChatItemSuperChat | NonMarkedExtendedChatItemSuperSticker)[];
-  #membershipsAndGifts: ExtendedMembershipAndGiftItem[];
+  #membershipsAndGifts: MembershipAndGiftItem[];
   readonly #authorChannelIds = new Set<string>();
   readonly #webContents: WebContents;
   readonly #emitter: LiveChatEmitter;

@@ -272,7 +272,7 @@ export type GiftReceived = ChatCommonPart & {
   associatedItemId: LiveChatItemId;
 };
 
-export type ExtendedMembershipAndGiftItem =
+export type MembershipAndGiftItem =
   | NewMembership
   | MembershipMilestone
   | MembershipGift
@@ -430,7 +430,7 @@ export interface IpcEvent {
   /**
    * Notify all memberships and gifts item to renderer.
    */
-  tellMembershipsAndGifts: (membershipsAndGifts: ExtendedMembershipAndGiftItem[]) => void;
+  tellMembershipsAndGifts: (membershipsAndGifts: MembershipAndGiftItem[]) => void;
 
   /**
    * Add chat item to stock list.

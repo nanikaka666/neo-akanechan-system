@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
-import { ExtendedMembershipAndGiftItem } from "../../../../ipcEvent";
+import { MembershipAndGiftItem } from "../../../../ipcEvent";
 import { RangeInfo } from "./CommentViewer";
 import { NewMembershipsItem } from "./NewMembershipsItem";
 import { MilestoneMembershipsItem } from "./MilestoneMembershipsItem";
@@ -10,7 +10,7 @@ import { RedemptionItem } from "./RedemptionItem";
 export function MembershipsAndGiftsViewer({
   membershipsAndGifts,
 }: {
-  membershipsAndGifts: ExtendedMembershipAndGiftItem[];
+  membershipsAndGifts: MembershipAndGiftItem[];
 }) {
   const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position

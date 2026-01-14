@@ -1,7 +1,7 @@
-import { ExtendedMembershipMilestone } from "../../../../ipcEvent";
+import { MembershipMilestone } from "../../../../ipcEvent";
 import { Author } from "./Author";
 
-export function MilestoneMembershipsItem({ item }: { item: ExtendedMembershipMilestone }) {
+export function MilestoneMembershipsItem({ item }: { item: MembershipMilestone }) {
   return (
     <div style={{ backgroundColor: "skyblue" }}>
       <Author author={item.author} />
