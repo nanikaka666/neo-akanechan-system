@@ -1,4 +1,4 @@
-import { StorageDao, StorageData } from "./types";
+import { StorageDao, StorageData } from "./storage";
 import Store from "electron-store";
 
 const store = new Store<StorageData>();

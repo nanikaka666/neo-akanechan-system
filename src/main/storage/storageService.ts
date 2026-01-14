@@ -1,4 +1,4 @@
-import { StorageDao } from "./types";
+import { StorageDao } from "./storage";
 import { UserSettings } from "../userSettings";
 import { Credentials } from "google-auth-library";
 
