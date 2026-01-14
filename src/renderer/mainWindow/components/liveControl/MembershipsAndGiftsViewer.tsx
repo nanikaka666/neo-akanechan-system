@@ -2,10 +2,10 @@ import { useState, useRef } from "react";
 import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { MembershipAndGiftItem } from "../../../../ipcEvent";
 import { RangeInfo } from "./CommentViewer";
-import { NewMembershipsItem } from "./NewMembershipsItem";
-import { MilestoneMembershipsItem } from "./MilestoneMembershipsItem";
-import { GiftItem } from "./GiftItem";
-import { RedemptionItem } from "./RedemptionItem";
+import { NewMembershipItem } from "./NewMembershipItem";
+import { MembershipMilestoneItem } from "./MembershipMilestoneItem";
+import { MembershipGiftItem } from "./MembershipGiftItem";
+import { GiftReceivedItem } from "./GiftReceivedItem";
 
 export function MembershipsAndGiftsViewer({
   membershipsAndGifts,
@@ -74,13 +74,13 @@ export function MembershipsAndGiftsViewer({
         }}
         itemContent={(index, item) => {
           return item.type === "newMembership" ? (
-            <NewMembershipsItem item={item} key={item.id.id} />
+            <NewMembershipItem item={item} key={item.id.id} />
           ) : item.type === "milestone" ? (
-            <MilestoneMembershipsItem item={item} key={item.id.id} />
+            <MembershipMilestoneItem item={item} key={item.id.id} />
           ) : item.type === "gift" ? (
-            <GiftItem item={item} key={item.id.id} />
+            <MembershipGiftItem item={item} key={item.id.id} />
           ) : (
-            <RedemptionItem item={item} key={item.id.id} />
+            <GiftReceivedItem item={item} key={item.id.id} />
           );
         }}
       />

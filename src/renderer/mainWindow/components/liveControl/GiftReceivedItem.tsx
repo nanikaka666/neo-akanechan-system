@@ -1,7 +1,7 @@
 import { GiftReceived } from "../../../../ipcEvent";
 import { Author } from "./Author";
 
-export function RedemptionItem({ item }: { item: GiftReceived }) {
+export function GiftReceivedItem({ item }: { item: GiftReceived }) {
   return (
     <div style={{ backgroundColor: "purple" }}>
       <Author author={item.author} />
