@@ -24,11 +24,15 @@ export function buildLiveLaunchProperties(
   };
 }
 
-export async function buildLiveLaunchPropertiesForDebug(): Promise<LiveLaunchProperties> {
-  const videoId = new VideoId("");
+export async function buildLiveLaunchPropertiesForDebug(
+  videoId: VideoId,
+): Promise<LiveLaunchProperties> {
   const video = await YoutubeApiService.getVideo(videoId);
   if (!video || video.type === "notLive" || video.type === "finishedLive") {
     throw new Error("Invalid video Id");
+  }
+  if (video.activeLiveChatId === undefined) {
+    throw new Error("ActiveLiveChatId is undefined.");
   }
 
   const live =

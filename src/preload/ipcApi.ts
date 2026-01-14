@@ -21,6 +21,7 @@ type Listen<K extends keyof IpcEvent> = (
 export interface IpcApi {
   ipcApi: {
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
+    requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
     requestUserSettings: Invoke<"getUserSettings">;
     requestSaveUserSettings: Invoke<"saveUserSettings">;
     requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
@@ -44,6 +45,8 @@ export const IpcApi: IpcApi = {
   ipcApi: {
     requestOpenOverlay: (channel, live) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
+    requestOpenOverlayWithVideoId: (inputVideoId) =>
+      IpcRendererWrapper.invoke("startOverlayWithUserConfirmationByVideoId", inputVideoId),
     requestUserSettings: () => IpcRendererWrapper.invoke("getUserSettings"),
     requestSaveUserSettings: (userSettings) =>
       IpcRendererWrapper.invoke("saveUserSettings", userSettings),

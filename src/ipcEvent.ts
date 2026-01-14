@@ -411,6 +411,13 @@ export interface IpcEvent {
   startOverlayWithUserConfirmation: (channel: Channel, live: YoutubeLive) => boolean;
 
   /**
+   * Confirm to user that overlay feature should starts with video id.
+   *
+   * this ipc used for debug.
+   */
+  startOverlayWithUserConfirmationByVideoId: (inputVideoId: string) => boolean;
+
+  /**
    * Start emitters depend on user settings.
    */
   launchEmitters: (liveLaunchProperties: LiveLaunchProperties) => boolean;

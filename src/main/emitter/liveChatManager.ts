@@ -108,7 +108,7 @@ class LiveChatManager {
     } satisfies NonMarkedExtendedChatItemText;
     this.#textChats = [...this.#textChats, convertedItem].slice(-1000); // take latest 1000 items.
     this.#refreshChatsOnRenderer();
-    console.log(item.displayMessage);
+    // console.log(item.displayMessage);
   }
 
   #onSuperChatListener(value: LiveChatItemSuperChat) {
@@ -131,6 +131,8 @@ class LiveChatManager {
   }
 
   #onSuperStickerListener(value: LiveChatItemSuperSticker) {
+    console.log("SuperSticker comes.");
+    console.log(value);
     const item = convertSuperStickerItem(value);
     const isFirstChat = !this.#authorChannelIds.has(item.author.channelId.id);
     if (isFirstChat) {
@@ -151,12 +153,14 @@ class LiveChatManager {
   }
 
   #onMessageDeletedListener(value: LiveChatItemMessageDeleted) {
+    console.log("MessageDeleted comes.");
+    console.log(value);
     const item = convertMessageDeletedItem(value);
     // update textChatCount
-    const matchSize = this.#textChats.filter((item) => item.id.id === item.id.id).length;
+    const matchSize = this.#textChats.filter((chat) => chat.id.id === item.id.id).length;
     this.#textChatCount -= matchSize;
 
-    this.#textChats = this.#textChats.filter((item) => item.id.id !== item.id.id);
+    this.#textChats = this.#textChats.filter((chat) => chat.id.id !== item.id.id);
     console.log(`remove item: ${item.id.id}`);
 
     // if removed chat is stocked one, remove it.
