@@ -6,6 +6,8 @@ import {
   NonMarkedExtendedChatItemSuperChat,
   NonMarkedExtendedChatItemSuperSticker,
   NonMarkedExtendedChatItemText,
+  Stockable,
+  Focusable,
 } from "../../ipcEvent";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
@@ -350,7 +352,7 @@ class LiveChatManager {
     this.#emitter.close();
   }
 
-  #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & { isStocked: boolean } {
+  #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & Stockable {
     return { ...item, isStocked: this.#stockManager.isStocked(item.id) };
   }
 
@@ -359,7 +361,7 @@ class LiveChatManager {
       | NonMarkedExtendedChatItemText
       | NonMarkedExtendedChatItemSuperChat
       | NonMarkedExtendedChatItemSuperSticker,
-  >(item: T): T & { isFocused: boolean } {
+  >(item: T): T & Focusable {
     return { ...item, isFocused: this.#focusManager.isFocused(item.id) };
   }
 }
