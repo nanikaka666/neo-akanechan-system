@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "./youtubeDomainModel";
+import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "../../types/youtubeDomainModel";
 
 /**
  * Image data structure in Youtube Api Response.
