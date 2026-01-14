@@ -2,18 +2,11 @@ import {
   ExtendedGiftRedemption,
   ExtendedMembershipAndGiftItem,
   FocusedOnChatItem,
-  GiftReceived,
   LiveLaunchProperties,
   LiveStatistics,
-  MembershipGift,
-  MembershipMilestone,
-  NewMembership,
   NonMarkedExtendedChatItemSuperChat,
   NonMarkedExtendedChatItemSuperSticker,
   NonMarkedExtendedChatItemText,
-  SuperChat,
-  SuperSticker,
-  TextMessageChat,
 } from "../../ipcEvent";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
@@ -102,7 +95,6 @@ class LiveChatManager {
       ...item,
       ...{
         indexOfWhole: this.#textIndexOfWhole,
-        formattedTimeString: this.#formatDate(item),
         isFirst: isFirstChat,
       },
     } satisfies NonMarkedExtendedChatItemText;
@@ -121,7 +113,6 @@ class LiveChatManager {
     const convertedItem = {
       ...item,
       ...{
-        formattedTimeString: this.#formatDate(item),
         isFirst: isFirstChat,
       },
     } satisfies NonMarkedExtendedChatItemSuperChat;
@@ -142,7 +133,6 @@ class LiveChatManager {
     const convertedItem = {
       ...item,
       ...{
-        formattedTimeString: this.#formatDate(item),
         isFirst: isFirstChat,
       },
     } satisfies NonMarkedExtendedChatItemSuperSticker;
@@ -210,7 +200,6 @@ class LiveChatManager {
     const item = convertNewMembershipItem(value);
     const convertedItem = {
       ...item,
-      ...{ formattedTimeString: this.#formatDate(item) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();
@@ -221,7 +210,6 @@ class LiveChatManager {
     const item = convertMembershipMilestoneItem(value);
     const convertedItem = {
       ...item,
-      ...{ formattedTimeString: this.#formatDate(item) },
     } satisfies ExtendedMembershipAndGiftItem;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();
@@ -232,7 +220,6 @@ class LiveChatManager {
     const item = convertMembershipGiftItem(value);
     const convertedItem = {
       ...item,
-      formattedTimeString: this.#formatDate(item),
     } satisfies ExtendedMembershipAndGiftItem;
 
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
@@ -244,7 +231,6 @@ class LiveChatManager {
     const item = convertGiftReceivedItem(value);
     const convertedItem = {
       ...item,
-      formattedTimeString: this.#formatDate(item),
     } satisfies ExtendedGiftRedemption;
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, convertedItem];
     this.#refreshMembershipsOnRenderer();
@@ -375,29 +361,6 @@ class LiveChatManager {
 
   cleanup() {
     this.#emitter.close();
-  }
-
-  #formatDate(
-    item:
-      | TextMessageChat
-      | SuperChat
-      | SuperSticker
-      | NewMembership
-      | MembershipMilestone
-      | MembershipGift
-      | GiftReceived,
-  ) {
-    const date = item.publishedAt;
-
-    const hour = date.getHours() + "";
-    const minute = date.getMinutes() + "";
-    const second = date.getSeconds() + "";
-
-    return `${this.#to2Digit(hour)}:${this.#to2Digit(minute)}:${this.#to2Digit(second)}`;
-  }
-
-  #to2Digit(value: string) {
-    return value.length === 1 ? "0" + value : value;
   }
 
   #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & { isStocked: boolean } {
