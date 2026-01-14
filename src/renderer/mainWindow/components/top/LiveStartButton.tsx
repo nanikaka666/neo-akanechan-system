@@ -1,4 +1,4 @@
-import { YoutubeLive } from "../../../../types/ipcEvent";
+import { YoutubeLive } from "../../../../types/youtubeLive";
 import { Channel } from "../../../../types/youtubeChannel";
 import { useState } from "react";
 

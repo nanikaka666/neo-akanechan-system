@@ -1,4 +1,4 @@
-import { YoutubeLive } from "./ipcEvent";
+import { YoutubeLive } from "./youtubeLive";
 import { Channel } from "./youtubeChannel";
 import { UserSettings } from "./userSettings";
 

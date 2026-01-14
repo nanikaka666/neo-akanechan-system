@@ -1,4 +1,4 @@
-import { YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../types/ipcEvent";
+import { YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../types/youtubeLive";
 import { Channel } from "../types/youtubeChannel";
 import { LiveLaunchProperties } from "../types/liveLaunchProperties";
 import { UserSettingsService } from "./userSettings";

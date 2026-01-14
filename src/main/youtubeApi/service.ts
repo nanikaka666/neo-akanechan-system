@@ -3,11 +3,9 @@ import {
   VideoFinishedLive,
   VideoInLive,
   VideoUpcomingLive,
-  YoutubeLive,
-  YoutubeLiveInLive,
-  YoutubeLiveInReady,
   YoutubeVideo,
 } from "../../types/ipcEvent";
+import { YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../../types/youtubeLive";
 import { Channel } from "../../types/youtubeChannel";
 import { getAccessToken, revokeCredentials } from "../auth/google";
 import {

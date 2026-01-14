@@ -1,5 +1,5 @@
 import { UserSettings } from "./userSettings";
-import { ActiveLiveChatId, ChannelId, LiveChatId, VideoId } from "./youtubeDomainModel";
+import { ActiveLiveChatId, ChannelId, VideoId } from "./youtubeDomainModel";
 import {
   Chats,
   ExtendedChatItemText,
@@ -10,28 +10,7 @@ import { AuthPage, LiveSelectionPage, MainAppPage } from "./mainAppPage";
 import { LiveStatistics } from "./liveStatistics";
 import { LiveLaunchProperties } from "./liveLaunchProperties";
 import { Channel } from "./youtubeChannel";
-
-export type YoutubeLive = YoutubeLiveInReady | YoutubeLiveInLive;
-
-export interface YoutubeLiveInReady {
-  type: "inReady";
-  videoId: VideoId;
-  liveChatId: LiveChatId | ActiveLiveChatId;
-  title: string;
-  thumbnailUrl: string;
-  scheduledStartTime: Date;
-  isPublic: boolean;
-}
-
-export interface YoutubeLiveInLive {
-  type: "inLive";
-  videoId: VideoId;
-  liveChatId: LiveChatId | ActiveLiveChatId;
-  title: string;
-  thumbnailUrl: string;
-  actualStartTime: Date;
-  isPublic: boolean;
-}
+import { YoutubeLive } from "./youtubeLive";
 
 export type YoutubeVideo = VideoUpcomingLive | VideoInLive | VideoFinishedLive | NotLiveVideo;
 
