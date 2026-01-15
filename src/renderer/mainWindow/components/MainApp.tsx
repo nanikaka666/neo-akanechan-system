@@ -3,7 +3,7 @@ import { MainAppPage } from "../../../types/mainAppPage";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
 import { LiveControlPanel } from "./liveControl/LiveControlPanel";
 import { AuthFlow } from "./auth/AuthFlow";
-import { MainChannelTop } from "./liveSelection/MainChannelTop";
+import { LiveSelection } from "./liveSelection/LiveSelection";
 
 export function MainApp() {
   const [mainAppPage, setMainAppPage] = useState<MainAppPage>();
@@ -24,7 +24,7 @@ export function MainApp() {
     ) : mainAppPage.type === "liveStandBy" ? (
       <LiveControlPanelInStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveSelection" ? (
-      <MainChannelTop channel={mainAppPage.channel} lives={mainAppPage.lives} />
+      <LiveSelection channel={mainAppPage.channel} lives={mainAppPage.lives} />
     ) : (
       <AuthFlow />
     )
