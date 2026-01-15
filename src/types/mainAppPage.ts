@@ -35,16 +35,16 @@ export interface LiveStandByPage {
 }
 
 /**
- * InLivePage
+ * LiveControlPanelPage
  *
  * This app runs LiveControlPanel and overlay window.
  */
-export interface InLivePage {
-  type: "inLive";
+export interface LiveControlPanelPage {
+  type: "liveControlPanel";
   liveLaunchProperties: LiveLaunchProperties;
 }
 
 /**
  * The page status in where user is.
  */
-export type MainAppPage = AuthPage | LiveSelectionPage | LiveStandByPage | InLivePage;
+export type MainAppPage = AuthPage | LiveSelectionPage | LiveStandByPage | LiveControlPanelPage;

@@ -19,7 +19,7 @@ export function MainApp() {
   }, []);
 
   return mainAppPage ? (
-    mainAppPage.type === "inLive" ? (
+    mainAppPage.type === "liveControlPanel" ? (
       <LiveControlPanel liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveStandBy" ? (
       <LiveControlPanelInStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
