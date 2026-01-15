@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MainAppPage } from "../../../types/mainAppPage";
-import { LiveControlPanelInStandBy } from "./liveStandBy/LiveControlPanelInStandBy";
+import { LiveStandBy } from "./liveStandBy/LiveStandBy";
 import { LiveControlPanel } from "./liveControlPanel/LiveControlPanel";
 import { AuthFlow } from "./auth/AuthFlow";
 import { LiveSelection } from "./liveSelection/LiveSelection";
@@ -22,7 +22,7 @@ export function MainApp() {
     mainAppPage.type === "liveControlPanel" ? (
       <LiveControlPanel liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveStandBy" ? (
-      <LiveControlPanelInStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
+      <LiveStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveSelection" ? (
       <LiveSelection channel={mainAppPage.channel} lives={mainAppPage.lives} />
     ) : (

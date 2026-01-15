@@ -2,7 +2,7 @@ import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { StandByAnnouncement } from "./StandByAnnouncement";
 import { SideBarInStandBy } from "./SideBarInStandBy";
 
-export function LiveControlPanelInStandBy({
+export function LiveStandBy({
   liveLaunchProperties,
 }: {
   liveLaunchProperties: LiveLaunchProperties;
