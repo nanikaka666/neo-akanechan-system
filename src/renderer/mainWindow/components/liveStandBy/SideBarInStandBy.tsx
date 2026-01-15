@@ -1,5 +1,5 @@
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
-import { QuitLiveButton } from "./QuitLiveButton";
+import { QuitLiveButton } from "../liveControlPanel/QuitLiveButton";
 
 export function SideBarInStandBy({
   liveLaunchProperties,

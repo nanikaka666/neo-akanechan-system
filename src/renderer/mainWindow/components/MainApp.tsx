@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MainAppPage } from "../../../types/mainAppPage";
-import { LiveControlPanelInStandBy } from "./liveControlPanel/LiveControlPanelInStandBy";
+import { LiveControlPanelInStandBy } from "./liveStandBy/LiveControlPanelInStandBy";
 import { LiveControlPanel } from "./liveControlPanel/LiveControlPanel";
 import { AuthFlow } from "./auth/AuthFlow";
 import { LiveSelection } from "./liveSelection/LiveSelection";
