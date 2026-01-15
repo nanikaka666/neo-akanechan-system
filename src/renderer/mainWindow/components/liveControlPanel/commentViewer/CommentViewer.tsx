@@ -5,7 +5,7 @@ import {
   ExtendedSuperItem,
   FocusedOnChatItem,
   MembershipAndGiftItem,
-} from "../../../../types/liveChatItem";
+} from "../../../../../types/liveChatItem";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 import { ViewerModeSelector } from "./ViewerModeSelector";

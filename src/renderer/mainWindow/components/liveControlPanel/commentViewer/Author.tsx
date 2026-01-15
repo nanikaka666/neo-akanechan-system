@@ -1,4 +1,4 @@
-import { ChatAuthor } from "../../../../types/liveChatItem";
+import { ChatAuthor } from "../../../../../types/liveChatItem";
 
 export function Author({ author }: { author: ChatAuthor }) {
   return (

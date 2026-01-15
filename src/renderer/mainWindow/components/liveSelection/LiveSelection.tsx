@@ -5,7 +5,7 @@ import { UserSettingsButton } from "./UserSettingsButton";
 import { LiveStartButton } from "./LiveStartButton";
 import { LiveStartWithVideoIdButton } from "./LiveStartWithVideoIdButton";
 
-export function MainChannelTop({ channel, lives }: { channel: Channel; lives: YoutubeLive[] }) {
+export function LiveSelection({ channel, lives }: { channel: Channel; lives: YoutubeLive[] }) {
   return (
     <div>
       <ChannelSummaryView channel={channel} />

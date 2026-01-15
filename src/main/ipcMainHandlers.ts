@@ -2,7 +2,7 @@ import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
-import { AuthPage, InLivePage, LiveSelectionPage } from "../types/mainAppPage";
+import { AuthPage, LiveControlPanelPage, LiveSelectionPage } from "../types/mainAppPage";
 import {
   cleanUpLiveChatEmitter,
   getLiveChatManager,
@@ -163,9 +163,9 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("startLive", (e, liveLaunchProperties) => {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
-      type: "inLive",
+      type: "liveControlPanel",
       liveLaunchProperties: liveLaunchProperties,
-    } satisfies InLivePage);
+    } satisfies LiveControlPanelPage);
 
     return Promise.resolve(true);
   });
