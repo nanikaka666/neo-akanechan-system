@@ -1,4 +1,4 @@
-import { ExtendedChatItemText } from "../../../../types/liveChatItem";
+import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 import { StockForm } from "./StockForm";
 import { FocusForm } from "./FocusForm";

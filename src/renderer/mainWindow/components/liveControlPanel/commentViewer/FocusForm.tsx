@@ -1,4 +1,4 @@
-import { FocusedOnChatItem } from "../../../../types/liveChatItem";
+import { FocusedOnChatItem } from "../../../../../types/liveChatItem";
 import { UnfocusButton } from "./UnfocusButton";
 import { FocusButton } from "./FocusButton";
 

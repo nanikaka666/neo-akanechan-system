@@ -1,4 +1,4 @@
-import { GiftReceived } from "../../../../types/liveChatItem";
+import { GiftReceived } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 
 export function GiftReceivedItem({ item }: { item: GiftReceived }) {

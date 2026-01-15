@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { Mode } from "./LiveControlPanel";
-import { CommentViewer } from "./CommentViewer";
+import { CommentViewer } from "./commentViewer/CommentViewer";
 
 const displayNone: CSSProperties = { display: "none" };
 

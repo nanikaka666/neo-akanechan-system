@@ -1,4 +1,4 @@
-import { MembershipGift } from "../../../../types/liveChatItem";
+import { MembershipGift } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 
 export function MembershipGiftItem({ item }: { item: MembershipGift }) {
