@@ -3,7 +3,7 @@ import { MainAppPage } from "../../../types/mainAppPage";
 import { LiveControlPanelInStandBy } from "./liveControl/LiveControlPanelInStandBy";
 import { LiveControlPanel } from "./liveControl/LiveControlPanel";
 import { AuthFlow } from "./auth/AuthFlow";
-import { MainChannelTop } from "./top/MainChannelTop";
+import { MainChannelTop } from "./liveSelection/MainChannelTop";
 
 export function MainApp() {
   const [mainAppPage, setMainAppPage] = useState<MainAppPage>();
