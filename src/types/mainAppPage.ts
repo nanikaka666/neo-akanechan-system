@@ -3,14 +3,18 @@ import { Channel } from "./youtubeChannel";
 import { LiveLaunchProperties } from "./liveLaunchProperties";
 
 /**
- * User doesn't authorized.
+ * AuthPage
+ *
+ * User need to agree at OAuth flow to get tokens.
  */
 export interface AuthPage {
   type: "auth";
 }
 
 /**
- * Represents page which user selects a live from registered channels.
+ * LiveSelectionPage
+ *
+ * User selects a live which they has to be attached to this app.
  */
 export interface LiveSelectionPage {
   type: "liveSelection";
@@ -19,9 +23,11 @@ export interface LiveSelectionPage {
 }
 
 /**
- * Represents page which user selected a live and does preparing.
+ * LiveStandByPage
  *
- * in this status, the emitters are not started.
+ * aka this is cushion page before start LiveControlPanel.
+ * During be in this page, all emitters doesn't start data fetching.
+ * The purpose of this cushion is taking time which collaborates with OBS.
  */
 export interface LiveStandByPage {
   type: "liveStandBy";
@@ -29,7 +35,9 @@ export interface LiveStandByPage {
 }
 
 /**
- * Reperesents page which user start streaming.
+ * InLivePage
+ *
+ * This app runs LiveControlPanel and overlay window.
  */
 export interface InLivePage {
   type: "inLive";
@@ -37,6 +45,6 @@ export interface InLivePage {
 }
 
 /**
- * Represents MainApp status where user is in.
+ * The page status in where user is.
  */
 export type MainAppPage = AuthPage | LiveSelectionPage | LiveStandByPage | InLivePage;
