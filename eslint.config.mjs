@@ -25,6 +25,7 @@ export default defineConfig([
     "**/webpack.main.config.ts",
     "**/forge.config.ts",
     ".webpack/**/*.js",
+    "./src/main/grpc/generated/**/*",
   ]),
   {
     extends: [
