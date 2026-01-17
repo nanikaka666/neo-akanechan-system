@@ -23,6 +23,10 @@ export class LiveStatisticsManager {
     };
   }
 
+  get() {
+    return this.#liveStatistics;
+  }
+
   updateLiveStatistics(newData: Partial<LiveStatistics>) {
     this.#liveStatistics = { ...this.#liveStatistics, ...newData };
     // WebContentsWrapper.send(this.#webContents, "tellLiveStatistics", this.#liveStatistics);
