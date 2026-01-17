@@ -28,7 +28,7 @@ export class LiveStatisticsManager {
 
   updateLiveStatistics(newData: Partial<LiveStatistics>) {
     this.#liveStatistics = { ...this.#liveStatistics, ...newData };
-    WebContentsWrapper.send(this.#webContents, "tellLiveStatistics", this.#liveStatistics);
+    // WebContentsWrapper.send(this.#webContents, "tellLiveStatistics", this.#liveStatistics);
   }
 }
 
