@@ -1,11 +1,9 @@
 import { WebContents } from "electron";
 import { LiveStatistics } from "../types/liveStatistics";
-import { WebContentsWrapper } from "./webContentsWrapper";
 
 export class LiveStatisticsManager {
   #liveStatistics: LiveStatistics;
-  readonly #webContents: WebContents;
-  constructor(webContents: WebContents) {
+  constructor() {
     this.#liveStatistics = {
       currentLikeCount: 0,
       maxLikeCount: 0,
@@ -23,7 +21,6 @@ export class LiveStatisticsManager {
       redemptionGiftCount: 0,
       stocksCount: 0,
     };
-    this.#webContents = webContents;
   }
 
   updateLiveStatistics(newData: Partial<LiveStatistics>) {
@@ -39,7 +36,7 @@ export function cleanUpLiveStatistics() {
 }
 
 export function setupLiveStatistics(w: WebContents) {
-  liveStatisticsManager = new LiveStatisticsManager(w);
+  liveStatisticsManager = new LiveStatisticsManager();
 }
 
 export function getLiveStatisticsManager() {
