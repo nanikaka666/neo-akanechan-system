@@ -89,6 +89,9 @@ export class LiveManager {
       this.#processor.giftReceived(item),
     );
     this.#liveChatDataFetcher.on("messageDeleted", (item) => this.#processor.messageDeleted(item));
+    this.#liveChatDataFetcher.on("userBanned", (item) => this.#processor.bannedUser(item));
+
+    return this.#liveChatDataFetcher.start();
   }
 
   close() {

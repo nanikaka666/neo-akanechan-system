@@ -71,7 +71,8 @@ export class Processor {
       textChatCount: this.#dataSource.getChatDataManager().getTextChatCount(),
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncChats();
   }
 
   superChat(item: SuperChat) {
@@ -85,7 +86,8 @@ export class Processor {
         .filter((chat) => chat.type === "superChat").length,
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncChats();
   }
 
   superSticker(item: SuperSticker) {
@@ -99,7 +101,8 @@ export class Processor {
         .filter((chat) => chat.type === "superSticker").length,
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncChats();
   }
 
   newMembership(item: NewMembership) {
@@ -111,7 +114,8 @@ export class Processor {
         .filter((chat) => chat.type === "newMembership").length,
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
   membershipMilestone(item: MembershipMilestone) {
@@ -123,7 +127,8 @@ export class Processor {
         .filter((chat) => chat.type === "milestone").length,
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
   membershipGift(item: MembershipGift) {
@@ -135,7 +140,8 @@ export class Processor {
         .filter((chat) => chat.type === "gift").length,
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
   giftReceived(item: GiftReceived) {
@@ -147,7 +153,8 @@ export class Processor {
         .filter((chat) => chat.type === "giftReceived").length,
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
   messageDeleted(item: MessageDeletedChatEvent) {
@@ -160,7 +167,8 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncChats();
   }
 
   bannedUser(item: UserBannedChatEvent) {
@@ -182,6 +190,7 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    // todo: call data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncChats();
   }
 }
