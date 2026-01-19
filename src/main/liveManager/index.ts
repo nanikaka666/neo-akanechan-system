@@ -4,7 +4,7 @@ import { LiveManager } from "./liveManager";
 import { LcpDataTransfer } from "./transfer/lcpDataTransfer";
 import { Processor } from "./processor";
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
-import { ChannelStatisticsEmitter } from "../emitter/channelStatisticsEmitter";
+import { ChannelStatisticsEmitter } from "./dataFetcher/channelStatisticsEmitter";
 
 let liveManager: LiveManager | undefined;
 

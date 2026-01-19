@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
-import { ChannelId } from "../../types/youtubeDomainModel";
-import { YoutubeApiService } from "../youtubeApi/service";
+import { ChannelId } from "../../../types/youtubeDomainModel";
+import { YoutubeApiService } from "../../youtubeApi/service";
 
 export class ChannelStatisticsEmitter extends (EventEmitter as new () => TypedEmitter<ChannelStatisticsEvent>) {
   readonly #channelId: ChannelId;

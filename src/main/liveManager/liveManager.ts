@@ -1,5 +1,5 @@
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
-import { ChannelStatisticsEmitter } from "../emitter/channelStatisticsEmitter";
+import { ChannelStatisticsEmitter } from "./dataFetcher/channelStatisticsEmitter";
 import { DataSource } from "./dataSource";
 import { Processor } from "./processor";
 
