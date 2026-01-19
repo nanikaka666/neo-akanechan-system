@@ -1,4 +1,3 @@
-import { LiveStatistics } from "../../../types/liveStatistics";
 import { LiveStatisticsDataContainer } from "./liveStatistics";
 import { StockManager } from "./stock";
 
@@ -15,10 +14,4 @@ export class DataSource {
   getLiveStatisticsDataContainer() {
     return this.#liveStatisticsDataContainer;
   }
-  // getLiveStatistics() {
-  //   return this.#liveStatisticsDataContainer.get();
-  // }
-  // updateLiveStatistics(newData: Partial<LiveStatistics>) {
-  //   this.#liveStatisticsDataContainer.update(newData);
-  // }
 }
