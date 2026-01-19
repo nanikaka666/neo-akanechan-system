@@ -66,7 +66,30 @@ export class LiveManager {
     return await this.#videoDataFetcher.start();
   }
 
-  #setupLiveChatDataFetcher() {}
+  #setupLiveChatDataFetcher() {
+    this.#liveChatDataFetcher.once("start", () => {
+      console.log("LiveChatDataFetcher started.");
+    });
+    this.#liveChatDataFetcher.once("end", (reason) => {
+      console.log(`LiveChatDataFetcher finished. reason: ${reason}`);
+    });
+    this.#liveChatDataFetcher.on("error", console.log);
+
+    this.#liveChatDataFetcher.on("text", (item) => this.#processor.textChat(item));
+    this.#liveChatDataFetcher.on("superChat", (item) => this.#processor.superChat(item));
+    this.#liveChatDataFetcher.on("superSticker", (item) => this.#processor.superSticker(item));
+    this.#liveChatDataFetcher.on("newSponsor", (item) => this.#processor.newMembership(item));
+    this.#liveChatDataFetcher.on("memberMilestoneChat", (item) =>
+      this.#processor.membershipMilestone(item),
+    );
+    this.#liveChatDataFetcher.on("membershipGifting", (item) =>
+      this.#processor.membershipGift(item),
+    );
+    this.#liveChatDataFetcher.on("giftMembershipReceived", (item) =>
+      this.#processor.giftReceived(item),
+    );
+    this.#liveChatDataFetcher.on("messageDeleted", (item) => this.#processor.messageDeleted(item));
+  }
 
   close() {
     this.#channelDataFetcher.close();
