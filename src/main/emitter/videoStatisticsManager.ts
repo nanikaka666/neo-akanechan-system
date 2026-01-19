@@ -1,7 +1,7 @@
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { LiveStatistics } from "../../types/liveStatistics";
 import { getLiveStatisticsManager } from "../liveStatistics";
-import { VideoStatisticsEmitter } from "./videoStatisticsEmitter";
+import { VideoStatisticsEmitter } from "../liveManager/dataFetcher/videoStatisticsEmitter";
 
 let emitter: VideoStatisticsEmitter | undefined;
 
