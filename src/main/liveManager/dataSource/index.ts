@@ -2,14 +2,14 @@ import { LiveStatistics } from "../../../types/liveStatistics";
 import { LiveStatisticsDataContainer } from "./liveStatistics";
 
 export class DataSource {
-  readonly #liveStatisticsManager: LiveStatisticsDataContainer;
-  constructor() {
-    this.#liveStatisticsManager = new LiveStatisticsDataContainer();
+  readonly #liveStatisticsDataContainer: LiveStatisticsDataContainer;
+  constructor(liveStatisticsDataContainer: LiveStatisticsDataContainer) {
+    this.#liveStatisticsDataContainer = liveStatisticsDataContainer;
   }
   getLiveStatistics() {
-    return this.#liveStatisticsManager.get();
+    return this.#liveStatisticsDataContainer.get();
   }
   updateLiveStatistics(newData: Partial<LiveStatistics>) {
-    this.#liveStatisticsManager.updateLiveStatistics(newData);
+    this.#liveStatisticsDataContainer.updateLiveStatistics(newData);
   }
 }

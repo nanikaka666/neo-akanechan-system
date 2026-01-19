@@ -7,6 +7,7 @@ import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
 import { VideoDataFetcher } from "./dataFetcher/videoDataFetcher";
 import { LiveChatDataFetcher } from "./dataFetcher/liveChatDataFetcher";
+import { LiveStatisticsDataContainer } from "./dataSource/liveStatistics";
 
 let liveManager: LiveManager | undefined;
 
@@ -18,7 +19,8 @@ export async function setupLiveManager(
     liveManager.close();
     liveManager = undefined;
   }
-  const dataSource = new DataSource();
+  const liveStatisticsDataContainer = new LiveStatisticsDataContainer();
+  const dataSource = new DataSource(liveStatisticsDataContainer);
   const lcpDataTransfer = new LcpDataTransfer(webContents, dataSource);
   const processor = new Processor(liveLaunchProperties, dataSource, lcpDataTransfer);
   const channelDataFetcher = new ChannelDataFetcher(liveLaunchProperties.channel.id, 60 * 1000);
