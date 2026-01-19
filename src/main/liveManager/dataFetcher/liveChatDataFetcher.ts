@@ -1,15 +1,37 @@
 import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
-import { ActiveLiveChatId, LiveChatId } from "../../types/youtubeDomainModel";
-import { V3DataLiveChatMessageServiceClient } from "../grpc/generated/proto/stream_list_grpc_pb";
+import { ActiveLiveChatId, LiveChatId } from "../../../types/youtubeDomainModel";
+import { V3DataLiveChatMessageServiceClient } from "../../grpc/generated/proto/stream_list_grpc_pb";
 import { credentials, Metadata, ServerErrorResponse } from "@grpc/grpc-js";
 import {
   LiveChatMessage,
   LiveChatMessageListRequest,
   LiveChatMessageListResponse,
-} from "../grpc/generated/proto/stream_list_pb";
-import { getAccessToken } from "../auth/google";
+} from "../../grpc/generated/proto/stream_list_pb";
+import { getAccessToken } from "../../auth/google";
 import { Status } from "@grpc/grpc-js/build/src/constants";
+import {
+  GiftReceived,
+  MembershipGift,
+  MembershipMilestone,
+  MessageDeletedChatEvent,
+  NewMembership,
+  SuperChat,
+  SuperSticker,
+  TextMessageChat,
+  UserBannedChatEvent,
+} from "../../../types/liveChatItem";
+import {
+  convertGiftReceivedItem,
+  convertMembershipGiftItem,
+  convertMembershipMilestoneItem,
+  convertMessageDeletedItem,
+  convertNewMembershipItem,
+  convertSuperChatItem,
+  convertSuperStickerItem,
+  convertTextItem,
+  convertUserBannedItem,
+} from "../../youtubeApi/convert";
 
 type ItemType =
   | "invalid"
@@ -54,7 +76,7 @@ function isServerErrorResponse(e: Error): e is ServerErrorResponse {
   return "code" in e;
 }
 
-export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<LiveChatEvent>) {
+export class LiveChatDataFetcher extends (EventEmitter as new () => TypedEmitter<LiveChatEvent>) {
   readonly #liveChatId: LiveChatId | ActiveLiveChatId;
   #isActivated: boolean;
   #pageToken: string | undefined;
@@ -123,7 +145,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("text", data);
+    this.emit("text", convertTextItem(data));
   }
 
   #handleNewMembershipsEvent(item: LiveChatMessage) {
@@ -136,7 +158,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("newSponsor", data);
+    this.emit("newSponsor", convertNewMembershipItem(data));
   }
 
   #handleMessageDeletedEvent(item: LiveChatMessage) {
@@ -148,7 +170,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("messageDeleted", data);
+    this.emit("messageDeleted", convertMessageDeletedItem(data));
   }
 
   #handleUserBannedEvent(item: LiveChatMessage) {
@@ -183,7 +205,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("userBanned", data);
+    this.emit("userBanned", convertUserBannedItem(data));
   }
 
   #handleSuperChatEvent(item: LiveChatMessage) {
@@ -199,7 +221,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("superChat", data);
+    this.emit("superChat", convertSuperChatItem(data));
   }
 
   #handleSuperStickerEvent(item: LiveChatMessage) {
@@ -231,7 +253,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("superSticker", data);
+    this.emit("superSticker", convertSuperStickerItem(data));
   }
 
   #handleMemberMilestoneChatEvent(item: LiveChatMessage) {
@@ -245,7 +267,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("memberMilestoneChat", data);
+    this.emit("memberMilestoneChat", convertMembershipMilestoneItem(data));
   }
 
   #handleMembershipGiftEvent(item: LiveChatMessage) {
@@ -264,7 +286,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("membershipGifting", data);
+    this.emit("membershipGifting", convertMembershipGiftItem(data));
   }
 
   #handleMembershipGiftReceivedEvent(item: LiveChatMessage) {
@@ -287,7 +309,7 @@ export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<Liv
       },
     };
 
-    this.emit("giftMembershipReceived", data);
+    this.emit("giftMembershipReceived", convertGiftReceivedItem(data));
   }
 
   async #execute() {
@@ -426,20 +448,19 @@ export type LiveChatEvent = {
   start: () => void;
   end: (reason: string) => void;
   error: (err: Error) => void;
-  text: (item: LiveChatItemTextMessage) => void;
-  superChat: (item: LiveChatItemSuperChat) => void;
-  superSticker: (item: LiveChatItemSuperSticker) => void;
-  newSponsor: (item: LiveChatItemNewSponsor) => void;
-  memberMilestoneChat: (item: LiveChatItemMemberMilestoneChat) => void;
-  membershipGifting: (item: LiveChatItemMembershipGifting) => void;
-  giftMembershipReceived: (item: LiveChatItemGiftMembershipReceived) => void;
-  messageDeleted: (item: LiveChatItemMessageDeleted) => void;
-  userBanned: (item: LiveChatItemUserBanned) => void;
+  text: (item: TextMessageChat) => void;
+  superChat: (item: SuperChat) => void;
+  superSticker: (item: SuperSticker) => void;
+  newSponsor: (item: NewMembership) => void;
+  memberMilestoneChat: (item: MembershipMilestone) => void;
+  membershipGifting: (item: MembershipGift) => void;
+  giftMembershipReceived: (item: GiftReceived) => void;
+  messageDeleted: (item: MessageDeletedChatEvent) => void;
+  userBanned: (item: UserBannedChatEvent) => void;
 };
 
 // LiveChat types.
-// types in below represents raw response.
-// these will be converted as domain model of this app.
+// types in below represents youtube side's domain model.
 
 export interface LiveChatItemSnippet {
   authorChannelId: string;

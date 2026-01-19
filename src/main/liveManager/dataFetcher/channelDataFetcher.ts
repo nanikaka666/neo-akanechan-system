@@ -1,16 +1,16 @@
 import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
-import { ChannelId } from "../../types/youtubeDomainModel";
-import { YoutubeApiService } from "../youtubeApi/service";
+import { ChannelId } from "../../../types/youtubeDomainModel";
+import { YoutubeApiService } from "../../youtubeApi/service";
 
-export class ChannelStatisticsEmitter extends (EventEmitter as new () => TypedEmitter<ChannelStatisticsEvent>) {
+export class ChannelDataFetcher extends (EventEmitter as new () => TypedEmitter<ChannelStatisticsEvent>) {
   readonly #channelId: ChannelId;
   readonly #pollingInterval: number;
   #isActivated: boolean;
-  constructor(channelId: ChannelId) {
+  constructor(channelId: ChannelId, pollingIntervalMilliSeconds: number) {
     super();
     this.#channelId = channelId;
-    this.#pollingInterval = 60 * 1000;
+    this.#pollingInterval = pollingIntervalMilliSeconds;
     this.#isActivated = false;
   }
 

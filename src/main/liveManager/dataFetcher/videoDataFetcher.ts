@@ -1,17 +1,17 @@
 import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
-import { VideoId } from "../../types/youtubeDomainModel";
-import { YoutubeApiService } from "../youtubeApi/service";
-import { YoutubeVideo } from "../../types/youtubeVideo";
+import { VideoId } from "../../../types/youtubeDomainModel";
+import { YoutubeApiService } from "../../youtubeApi/service";
+import { YoutubeVideo } from "../../../types/youtubeVideo";
 
-export class VideoStatisticsEmitter extends (EventEmitter as new () => TypedEmitter<VideoStatisticsEvent>) {
+export class VideoDataFetcher extends (EventEmitter as new () => TypedEmitter<VideoStatisticsEvent>) {
   readonly #videoId: VideoId;
   readonly #pollingInterval: number;
   #isActivated: boolean;
-  constructor(videoId: VideoId) {
+  constructor(videoId: VideoId, pollingIntervalMilliSeconds: number) {
     super();
     this.#videoId = videoId;
-    this.#pollingInterval = 15 * 1000;
+    this.#pollingInterval = pollingIntervalMilliSeconds;
     this.#isActivated = false;
   }
 

@@ -3,20 +3,6 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, LiveControlPanelPage, LiveSelectionPage } from "../types/mainAppPage";
-import {
-  cleanUpLiveChatEmitter,
-  getLiveChatManager,
-  setupLiveChatEmitter,
-} from "./emitter/liveChatManager";
-import {
-  cleanupVideoStatisticsManager,
-  setupVideoStatisticsManager,
-} from "./emitter/videoStatisticsManager";
-import {
-  cleanupChannelStatisticsManager,
-  setupChannelStatisticsManager,
-} from "./emitter/channelStatisticsManager";
-import { cleanUpLiveStatistics, setupLiveStatistics } from "./liveStatistics";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiService } from "./youtubeApi/service";
 import {
@@ -24,6 +10,7 @@ import {
   buildLiveLaunchPropertiesForDebug,
 } from "./liveLaunchProperties";
 import { VideoId } from "../types/youtubeDomainModel";
+import { cleanupLiveManager, getLiveManager, setupLiveManager } from "./liveManager";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -121,22 +108,25 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
-    setupLiveStatistics(e.sender);
+    await setupLiveManager(e.sender, liveLaunchProperties);
+    // setupLiveStatistics(e.sender);
 
-    await Promise.all([
-      setupLiveChatEmitter(e.sender, liveLaunchProperties),
-      setupChannelStatisticsManager(liveLaunchProperties),
-      setupVideoStatisticsManager(liveLaunchProperties),
-    ]);
+    // await Promise.all([
+    //   setupLiveChatEmitter(e.sender, liveLaunchProperties),
+    //   setupChannelStatisticsManager(liveLaunchProperties),
+    //   setupVideoStatisticsManager(liveLaunchProperties),
+    // ]);
     return true;
   });
 
   IpcMainWrapper.handle("addStock", (e, item) => {
-    return Promise.resolve(getLiveChatManager().addStock(item));
+    getLiveManager().actionAddStock(item);
+    return Promise.resolve(true);
   });
 
   IpcMainWrapper.handle("removeStock", (e, item) => {
-    return Promise.resolve(getLiveChatManager().removeStock(item));
+    getLiveManager().actionRemoveStock(item);
+    return Promise.resolve(true);
   });
 
   IpcMainWrapper.handle("getInitialMainAppPage", async () => {
@@ -187,11 +177,7 @@ export function setupIpcMainHandlers() {
     }
 
     // clean up emitters
-    cleanUpLiveChatEmitter();
-    cleanupVideoStatisticsManager();
-    cleanupChannelStatisticsManager();
-
-    cleanUpLiveStatistics();
+    cleanupLiveManager();
 
     const channel = await YoutubeApiService.getChannelOfMine();
     if (!channel) {
@@ -210,7 +196,11 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("updateFocus", (e, focus) => {
-    getLiveChatManager().updateFocus(focus);
+    if (focus) {
+      getLiveManager().actionSetFocus(focus);
+    } else {
+      getLiveManager().actionUnsetFocus();
+    }
     return Promise.resolve(true);
   });
 

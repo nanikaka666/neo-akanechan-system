@@ -1,5 +1,5 @@
-import { FocusedOnChatItem } from "../types/liveChatItem";
-import { ChannelId, LiveChatItemId } from "../types/youtubeDomainModel";
+import { FocusedOnChatItem } from "../../../types/liveChatItem";
+import { ChannelId, LiveChatItemId } from "../../../types/youtubeDomainModel";
 
 export class FocusManager {
   #focusedItem: FocusedOnChatItem | undefined;
@@ -21,5 +21,17 @@ export class FocusManager {
 
   isFocusedByAuthorChannelId(channelId: ChannelId) {
     return !this.#focusedItem ? false : this.#focusedItem.author.channelId.id === channelId.id;
+  }
+
+  removeByIdIfNeeded(itemId: LiveChatItemId) {
+    if (this.#focusedItem && this.#focusedItem.id.id === itemId.id) {
+      this.#focusedItem = undefined;
+    }
+  }
+
+  removeByAuthorIdIfNeeded(channelId: ChannelId) {
+    if (this.#focusedItem && this.#focusedItem.author.channelId.id === channelId.id) {
+      this.#focusedItem = undefined;
+    }
   }
 }
