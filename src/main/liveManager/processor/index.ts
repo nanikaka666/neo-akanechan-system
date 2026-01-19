@@ -1,11 +1,9 @@
 import {
-  FirstMarkable,
   GiftReceived,
   MembershipGift,
   MembershipMilestone,
   MessageDeletedChatEvent,
   NewMembership,
-  NonMarkedExtendedChatItemText,
   SuperChat,
   SuperSticker,
   TextMessageChat,
@@ -155,7 +153,7 @@ export class Processor {
   messageDeleted(item: MessageDeletedChatEvent) {
     this.#dataSource.getChatDataManager().deleteTextIfNeeded(item);
     this.#dataSource.getStockManager().removeByIdIfNeeded(item.deletedMessageId);
-    // todo: remove from focus
+    this.#dataSource.getFocusManager().removeByIdIfNeeded(item.deletedMessageId);
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       textChatCount: this.#dataSource.getChatDataManager().getTextChatCount(),
@@ -168,7 +166,7 @@ export class Processor {
   bannedUser(item: UserBannedChatEvent) {
     this.#dataSource.getChatDataManager().bannedUser(item);
     this.#dataSource.getStockManager().removeByAuthorChannelIdIfNeeded(item.bannedUser.channelId);
-    // todo: remove from focus
+    this.#dataSource.getFocusManager().removeByAuthorIdIfNeeded(item.bannedUser.channelId);
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,

@@ -10,6 +10,7 @@ import { LiveChatDataFetcher } from "./dataFetcher/liveChatDataFetcher";
 import { LiveStatisticsDataContainer } from "./dataSource/liveStatistics";
 import { StockManager } from "./dataSource/stock";
 import { ChatDataManager } from "./dataSource/chats";
+import { FocusManager } from "./dataSource/focus";
 
 let liveManager: LiveManager | undefined;
 
@@ -22,9 +23,15 @@ export async function setupLiveManager(
     liveManager = undefined;
   }
   const liveStatisticsDataContainer = new LiveStatisticsDataContainer();
-  const stockManager = new StockManager();
   const chatDataManager = new ChatDataManager();
-  const dataSource = new DataSource(liveStatisticsDataContainer, chatDataManager, stockManager);
+  const stockManager = new StockManager();
+  const focusManager = new FocusManager();
+  const dataSource = new DataSource(
+    liveStatisticsDataContainer,
+    chatDataManager,
+    stockManager,
+    focusManager,
+  );
   const lcpDataTransfer = new LcpDataTransfer(webContents, dataSource);
   const processor = new Processor(liveLaunchProperties, dataSource, lcpDataTransfer);
   const channelDataFetcher = new ChannelDataFetcher(liveLaunchProperties.channel.id, 60 * 1000);
