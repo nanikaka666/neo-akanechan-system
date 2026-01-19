@@ -1,5 +1,5 @@
 import { LiveStatistics } from "../../../types/liveStatistics";
-import { LiveStatisticsDataContainer } from "../../liveStatistics";
+import { LiveStatisticsDataContainer } from "./liveStatistics";
 
 export class DataSource {
   readonly #liveStatisticsManager: LiveStatisticsDataContainer;

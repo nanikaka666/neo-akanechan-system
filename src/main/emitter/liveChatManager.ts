@@ -23,7 +23,7 @@ import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";
 import { FocusManager } from "../focus";
-import { getLiveStatisticsManager } from "../liveStatistics";
+import { getLiveStatisticsManager } from "../liveManager/dataSource/liveStatistics";
 import { LiveChatDataFetcher } from "../liveManager/dataFetcher/liveChatDataFetcher";
 
 class LiveChatManager {

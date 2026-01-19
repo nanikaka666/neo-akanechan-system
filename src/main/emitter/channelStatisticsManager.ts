@@ -1,6 +1,6 @@
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { LiveStatistics } from "../../types/liveStatistics";
-import { getLiveStatisticsManager } from "../liveStatistics";
+import { getLiveStatisticsManager } from "../liveManager/dataSource/liveStatistics";
 import { ChannelDataFetcher } from "../liveManager/dataFetcher/channelDataFetcher";
 
 let emitter: ChannelDataFetcher | undefined;

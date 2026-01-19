@@ -1,4 +1,4 @@
-import { LiveStatistics } from "../types/liveStatistics";
+import { LiveStatistics } from "../../../types/liveStatistics";
 
 export class LiveStatisticsDataContainer {
   #liveStatistics: LiveStatistics;
