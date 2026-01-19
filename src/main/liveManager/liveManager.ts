@@ -1,5 +1,6 @@
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
+import { LiveChatDataFetcher } from "./dataFetcher/liveChatDataFetcher";
 import { VideoDataFetcher } from "./dataFetcher/videoDataFetcher";
 import { DataSource } from "./dataSource";
 import { Processor } from "./processor";
@@ -10,21 +11,25 @@ export class LiveManager {
   readonly #processor: Processor;
   readonly #channelDataFetcher: ChannelDataFetcher;
   readonly #videoDataFetcher: VideoDataFetcher;
+  readonly #liveChatDataFetcher: LiveChatDataFetcher;
   constructor(
     liveLaunchProperties: LiveLaunchProperties,
     dataSource: DataSource,
     processor: Processor,
     channelDataFetcher: ChannelDataFetcher,
     videoDataFetcher: VideoDataFetcher,
+    liveChatDataFetcher: LiveChatDataFetcher,
   ) {
     this.#liveLaunchProperties = liveLaunchProperties;
     this.#dataSource = dataSource;
     this.#processor = processor;
     this.#channelDataFetcher = channelDataFetcher;
     this.#videoDataFetcher = videoDataFetcher;
+    this.#liveChatDataFetcher = liveChatDataFetcher;
   }
   async setup() {
     await Promise.all([this.#setupChannelDataFetcher(), this.#setupVideoDataFetcher()]);
+    this.#setupLiveChatDataFetcher();
   }
 
   async #setupChannelDataFetcher() {
@@ -61,8 +66,11 @@ export class LiveManager {
     return await this.#videoDataFetcher.start();
   }
 
+  #setupLiveChatDataFetcher() {}
+
   close() {
     this.#channelDataFetcher.close();
     this.#videoDataFetcher.close();
+    this.#liveChatDataFetcher.close();
   }
 }

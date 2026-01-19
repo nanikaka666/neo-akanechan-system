@@ -1,4 +1,3 @@
-import { WebContents } from "electron";
 import { LiveStatistics } from "../types/liveStatistics";
 
 export class LiveStatisticsManager {
@@ -34,14 +33,6 @@ export class LiveStatisticsManager {
 }
 
 let liveStatisticsManager: LiveStatisticsManager | undefined;
-
-export function cleanUpLiveStatistics() {
-  liveStatisticsManager = undefined;
-}
-
-export function setupLiveStatistics(w: WebContents) {
-  liveStatisticsManager = new LiveStatisticsManager();
-}
 
 export function getLiveStatisticsManager() {
   if (!liveStatisticsManager) {
