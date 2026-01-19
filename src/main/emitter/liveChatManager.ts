@@ -4,7 +4,12 @@ import {
   FirstMarkable,
   Focusable,
   FocusedOnChatItem,
+  GiftReceived,
   MembershipAndGiftItem,
+  MembershipGift,
+  MembershipMilestone,
+  MessageDeletedChatEvent,
+  NewMembership,
   NonMarkedExtendedChatItemSuperChat,
   NonMarkedExtendedChatItemSuperSticker,
   NonMarkedExtendedChatItemText,
@@ -12,35 +17,14 @@ import {
   SuperChat,
   SuperSticker,
   TextMessageChat,
+  UserBannedChatEvent,
 } from "../../types/liveChatItem";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";
 import { FocusManager } from "../focus";
 import { getLiveStatisticsManager } from "../liveStatistics";
-import {
-  LiveChatEmitter,
-  LiveChatItemGiftMembershipReceived,
-  LiveChatItemMemberMilestoneChat,
-  LiveChatItemMembershipGifting,
-  LiveChatItemMessageDeleted,
-  LiveChatItemNewSponsor,
-  LiveChatItemSuperChat,
-  LiveChatItemSuperSticker,
-  LiveChatItemTextMessage,
-  LiveChatItemUserBanned,
-} from "./liveChatEmitter";
-import {
-  convertGiftReceivedItem,
-  convertMembershipGiftItem,
-  convertMembershipMilestoneItem,
-  convertMessageDeletedItem,
-  convertNewMembershipItem,
-  convertSuperChatItem,
-  convertSuperStickerItem,
-  convertTextItem,
-  convertUserBannedItem,
-} from "../youtubeApi/convert";
+import { LiveChatEmitter } from "./liveChatEmitter";
 
 class LiveChatManager {
   #textChats: NonMarkedExtendedChatItemText[];
@@ -87,8 +71,7 @@ class LiveChatManager {
     this.#focusManager = new FocusManager();
   }
 
-  #onTextListener(value: LiveChatItemTextMessage) {
-    const item = convertTextItem(value);
+  #onTextListener(item: TextMessageChat) {
     this.#textChatCount++;
     this.#textIndexOfWhole++;
 
@@ -103,18 +86,16 @@ class LiveChatManager {
     // console.log(item.displayMessage);
   }
 
-  #onSuperChatListener(value: LiveChatItemSuperChat) {
-    const item = convertSuperChatItem(value);
+  #onSuperChatListener(item: SuperChat) {
     const convertedItem = this.#checkIsFirstAndMark(item);
     this.#superChats = [...this.#superChats, convertedItem];
     this.#refreshChatsOnRenderer();
     console.log(item.displayMessage);
   }
 
-  #onSuperStickerListener(value: LiveChatItemSuperSticker) {
+  #onSuperStickerListener(item: SuperSticker) {
     console.log("SuperSticker comes.");
-    console.log(value);
-    const item = convertSuperStickerItem(value);
+    console.log(item);
     const convertedItem = this.#checkIsFirstAndMark(item);
     this.#superChats = [...this.#superChats, convertedItem];
 
@@ -122,10 +103,9 @@ class LiveChatManager {
     console.log(item.displayMessage);
   }
 
-  #onMessageDeletedListener(value: LiveChatItemMessageDeleted) {
+  #onMessageDeletedListener(item: MessageDeletedChatEvent) {
     console.log("MessageDeleted comes.");
-    console.log(value);
-    const item = convertMessageDeletedItem(value);
+    console.log(item);
     // update textChatCount
     const matchSize = this.#textChats.filter((chat) => chat.id.id === item.id.id).length;
     this.#textChatCount -= matchSize;
@@ -144,9 +124,7 @@ class LiveChatManager {
     console.log(item.displayMessage);
   }
 
-  #onUserBannedListener(value: LiveChatItemUserBanned) {
-    const bannedItem = convertUserBannedItem(value);
-
+  #onUserBannedListener(bannedItem: UserBannedChatEvent) {
     if (bannedItem.type === "userBannedTemporary") {
       return;
     }
@@ -176,30 +154,25 @@ class LiveChatManager {
     console.log(bannedItem.displayMessage);
   }
 
-  #onNewMembershipListener(value: LiveChatItemNewSponsor) {
-    const item = convertNewMembershipItem(value);
+  #onNewMembershipListener(item: NewMembership) {
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, item];
     this.#refreshMembershipsOnRenderer();
     console.log(item.displayMessage);
   }
 
-  #onMembershipMilestoneListener(value: LiveChatItemMemberMilestoneChat) {
-    const item = convertMembershipMilestoneItem(value);
+  #onMembershipMilestoneListener(item: MembershipMilestone) {
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, item];
     this.#refreshMembershipsOnRenderer();
     console.log(item.displayMessage);
   }
 
-  #onMembershipGiftListener(value: LiveChatItemMembershipGifting) {
-    const item = convertMembershipGiftItem(value);
-
+  #onMembershipGiftListener(item: MembershipGift) {
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, item];
     this.#refreshMembershipsOnRenderer();
     console.log(item.displayMessage);
   }
 
-  #onGiftReceivedListener(value: LiveChatItemGiftMembershipReceived) {
-    const item = convertGiftReceivedItem(value);
+  #onGiftReceivedListener(item: GiftReceived) {
     this.#membershipsAndGifts = [...this.#membershipsAndGifts, item];
     this.#refreshMembershipsOnRenderer();
     console.log(item.displayMessage);
