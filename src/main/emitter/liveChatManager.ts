@@ -24,7 +24,7 @@ import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";
 import { FocusManager } from "../focus";
 import { getLiveStatisticsManager } from "../liveStatistics";
-import { LiveChatDataFetcher } from "./liveChatDataFetcher";
+import { LiveChatDataFetcher } from "../liveManager/dataFetcher/liveChatDataFetcher";
 
 class LiveChatManager {
   #textChats: NonMarkedExtendedChatItemText[];

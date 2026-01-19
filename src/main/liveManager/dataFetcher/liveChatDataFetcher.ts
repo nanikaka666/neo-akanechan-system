@@ -1,14 +1,14 @@
 import { EventEmitter } from "events";
 import TypedEmitter from "typed-emitter";
-import { ActiveLiveChatId, LiveChatId } from "../../types/youtubeDomainModel";
-import { V3DataLiveChatMessageServiceClient } from "../grpc/generated/proto/stream_list_grpc_pb";
+import { ActiveLiveChatId, LiveChatId } from "../../../types/youtubeDomainModel";
+import { V3DataLiveChatMessageServiceClient } from "../../grpc/generated/proto/stream_list_grpc_pb";
 import { credentials, Metadata, ServerErrorResponse } from "@grpc/grpc-js";
 import {
   LiveChatMessage,
   LiveChatMessageListRequest,
   LiveChatMessageListResponse,
-} from "../grpc/generated/proto/stream_list_pb";
-import { getAccessToken } from "../auth/google";
+} from "../../grpc/generated/proto/stream_list_pb";
+import { getAccessToken } from "../../auth/google";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 import {
   GiftReceived,
@@ -20,7 +20,7 @@ import {
   SuperSticker,
   TextMessageChat,
   UserBannedChatEvent,
-} from "../../types/liveChatItem";
+} from "../../../types/liveChatItem";
 import {
   convertGiftReceivedItem,
   convertMembershipGiftItem,
@@ -31,7 +31,7 @@ import {
   convertSuperStickerItem,
   convertTextItem,
   convertUserBannedItem,
-} from "../youtubeApi/convert";
+} from "../../youtubeApi/convert";
 
 type ItemType =
   | "invalid"
