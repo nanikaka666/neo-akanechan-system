@@ -1,6 +1,6 @@
 import { LiveStatistics } from "../types/liveStatistics";
 
-export class LiveStatisticsManager {
+export class LiveStatisticsDataContainer {
   #liveStatistics: LiveStatistics;
   constructor() {
     this.#liveStatistics = {
@@ -28,11 +28,10 @@ export class LiveStatisticsManager {
 
   updateLiveStatistics(newData: Partial<LiveStatistics>) {
     this.#liveStatistics = { ...this.#liveStatistics, ...newData };
-    // WebContentsWrapper.send(this.#webContents, "tellLiveStatistics", this.#liveStatistics);
   }
 }
 
-let liveStatisticsManager: LiveStatisticsManager | undefined;
+let liveStatisticsManager: LiveStatisticsDataContainer | undefined;
 
 export function getLiveStatisticsManager() {
   if (!liveStatisticsManager) {

@@ -1,10 +1,10 @@
 import { LiveStatistics } from "../../../types/liveStatistics";
-import { LiveStatisticsManager } from "../../liveStatistics";
+import { LiveStatisticsDataContainer } from "../../liveStatistics";
 
 export class DataSource {
-  readonly #liveStatisticsManager: LiveStatisticsManager;
+  readonly #liveStatisticsManager: LiveStatisticsDataContainer;
   constructor() {
-    this.#liveStatisticsManager = new LiveStatisticsManager();
+    this.#liveStatisticsManager = new LiveStatisticsDataContainer();
   }
   getLiveStatistics() {
     return this.#liveStatisticsManager.get();
