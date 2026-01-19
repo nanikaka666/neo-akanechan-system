@@ -3,7 +3,6 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, LiveControlPanelPage, LiveSelectionPage } from "../types/mainAppPage";
-import { getLiveChatManager } from "./emitter/liveChatManager";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiService } from "./youtubeApi/service";
 import {
@@ -11,7 +10,7 @@ import {
   buildLiveLaunchPropertiesForDebug,
 } from "./liveLaunchProperties";
 import { VideoId } from "../types/youtubeDomainModel";
-import { cleanupLiveManager, setupLiveManager } from "./liveManager";
+import { cleanupLiveManager, getLiveManager, setupLiveManager } from "./liveManager";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -121,11 +120,13 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("addStock", (e, item) => {
-    return Promise.resolve(getLiveChatManager().addStock(item));
+    getLiveManager().actionAddStock(item);
+    return Promise.resolve(true);
   });
 
   IpcMainWrapper.handle("removeStock", (e, item) => {
-    return Promise.resolve(getLiveChatManager().removeStock(item));
+    getLiveManager().actionRemoveStock(item);
+    return Promise.resolve(true);
   });
 
   IpcMainWrapper.handle("getInitialMainAppPage", async () => {
@@ -195,7 +196,11 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("updateFocus", (e, focus) => {
-    getLiveChatManager().updateFocus(focus);
+    if (focus) {
+      getLiveManager().actionSetFocus(focus);
+    } else {
+      getLiveManager().actionUnsetFocus();
+    }
     return Promise.resolve(true);
   });
 

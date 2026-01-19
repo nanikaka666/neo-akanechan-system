@@ -1,3 +1,4 @@
+import { FocusedOnChatItem, NonMarkedExtendedChatItemText } from "../../types/liveChatItem";
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
 import { LiveChatDataFetcher } from "./dataFetcher/liveChatDataFetcher";
@@ -92,6 +93,22 @@ export class LiveManager {
     this.#liveChatDataFetcher.on("userBanned", (item) => this.#processor.bannedUser(item));
 
     return this.#liveChatDataFetcher.start();
+  }
+
+  actionAddStock(item: NonMarkedExtendedChatItemText) {
+    this.#processor.addStock(item);
+  }
+
+  actionRemoveStock(item: NonMarkedExtendedChatItemText) {
+    this.#processor.removeStock(item);
+  }
+
+  actionSetFocus(item: FocusedOnChatItem) {
+    this.#processor.setFocus(item);
+  }
+
+  actionUnsetFocus() {
+    this.#processor.unsetFocus();
   }
 
   close() {

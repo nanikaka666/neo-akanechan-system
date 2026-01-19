@@ -1,9 +1,11 @@
 import {
+  FocusedOnChatItem,
   GiftReceived,
   MembershipGift,
   MembershipMilestone,
   MessageDeletedChatEvent,
   NewMembership,
+  NonMarkedExtendedChatItemText,
   SuperChat,
   SuperSticker,
   TextMessageChat,
@@ -191,6 +193,47 @@ export class Processor {
     });
 
     this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncChats();
+  }
+
+  addStock(item: NonMarkedExtendedChatItemText) {
+    if (this.#dataSource.getStockManager().isStocked(item.id)) {
+      return;
+    }
+    this.#dataSource.getStockManager().add(item);
+
+    this.#dataSource.getLiveStatisticsDataContainer().update({
+      stocksCount: this.#dataSource.getStockManager().getStocks().length,
+    });
+
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncChats();
+  }
+
+  removeStock(item: NonMarkedExtendedChatItemText) {
+    if (!this.#dataSource.getStockManager().isStocked(item.id)) {
+      return;
+    }
+    this.#dataSource.getStockManager().remove(item);
+    this.#dataSource.getLiveStatisticsDataContainer().update({
+      stocksCount: this.#dataSource.getStockManager().getStocks().length,
+    });
+
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#lcpDataTransfer.syncChats();
+  }
+
+  setFocus(item: FocusedOnChatItem) {
+    this.#dataSource.getFocusManager().updateFocus(item);
+    this.#lcpDataTransfer.syncChats();
+  }
+
+  unsetFocus() {
+    if (this.#dataSource.getFocusManager().getFocus() === undefined) {
+      return;
+    }
+    this.#dataSource.getFocusManager().updateFocus(undefined);
+
     this.#lcpDataTransfer.syncChats();
   }
 }
