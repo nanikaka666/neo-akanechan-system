@@ -25,7 +25,7 @@ export function cleanupVideoStatisticsManager() {
 
 export async function setupVideoStatisticsManager(liveLaunchProperties: LiveLaunchProperties) {
   cleanupVideoStatisticsManager();
-  emitter = new VideoStatisticsEmitter(liveLaunchProperties.live.videoId);
+  emitter = new VideoStatisticsEmitter(liveLaunchProperties.live.videoId, 15 * 1000);
   emitter.on("start", (initValue) => {
     console.log("VideoStatisticsEmitter started.", initValue);
   });
