@@ -33,9 +33,9 @@ export class LiveManager {
       console.log("ChannelDataFetcher finished.");
     });
     this.#channelDataFetcher.on("error", console.log);
-    this.#channelDataFetcher.on("nextSubscriberCount", (nextSubscriberCount) =>
-      this.#processor.subscriberCount(nextSubscriberCount),
-    );
+    this.#channelDataFetcher.on("nextSubscriberCount", (nextSubscriberCount) => {
+      this.#processor.subscriberCount(nextSubscriberCount);
+    });
     await this.#channelDataFetcher.start();
   }
 
