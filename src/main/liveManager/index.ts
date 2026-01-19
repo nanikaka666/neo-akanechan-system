@@ -4,7 +4,7 @@ import { LiveManager } from "./liveManager";
 import { LcpDataTransfer } from "./transfer/lcpDataTransfer";
 import { Processor } from "./processor";
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
-import { ChannelStatisticsEmitter } from "./dataFetcher/channelStatisticsEmitter";
+import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
 
 let liveManager: LiveManager | undefined;
 
@@ -19,10 +19,7 @@ export async function setupLiveManager(
   const dataSource = new DataSource();
   const lcpDataTransfer = new LcpDataTransfer(webContents, dataSource);
   const processor = new Processor(liveLaunchProperties, dataSource, lcpDataTransfer);
-  const channelDataFetcher = new ChannelStatisticsEmitter(
-    liveLaunchProperties.channel.id,
-    60 * 1000,
-  );
+  const channelDataFetcher = new ChannelDataFetcher(liveLaunchProperties.channel.id, 60 * 1000);
   liveManager = new LiveManager(liveLaunchProperties, dataSource, processor, channelDataFetcher);
   await liveManager.setup();
 }

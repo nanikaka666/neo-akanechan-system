@@ -1,5 +1,5 @@
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
-import { ChannelStatisticsEmitter } from "./dataFetcher/channelStatisticsEmitter";
+import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
 import { DataSource } from "./dataSource";
 import { Processor } from "./processor";
 
@@ -7,12 +7,12 @@ export class LiveManager {
   readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #dataSource: DataSource;
   readonly #processor: Processor;
-  readonly #channelDataFetcher: ChannelStatisticsEmitter;
+  readonly #channelDataFetcher: ChannelDataFetcher;
   constructor(
     liveLaunchProperties: LiveLaunchProperties,
     dataSource: DataSource,
     processor: Processor,
-    channelDataFetcher: ChannelStatisticsEmitter,
+    channelDataFetcher: ChannelDataFetcher,
   ) {
     this.#liveLaunchProperties = liveLaunchProperties;
     this.#dataSource = dataSource;
