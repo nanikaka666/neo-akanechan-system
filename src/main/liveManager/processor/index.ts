@@ -93,6 +93,7 @@ export class Processor {
   }
 
   superSticker(item: SuperSticker) {
+    console.log("SuperSticker: ", item);
     this.#dataSource.getChatDataManager().addSuperSticker(item);
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -160,6 +161,7 @@ export class Processor {
   }
 
   messageDeleted(item: MessageDeletedChatEvent) {
+    console.log("Message Deleted Event: ", item);
     this.#dataSource.getChatDataManager().deleteTextIfNeeded(item);
     this.#dataSource.getStockManager().removeByIdIfNeeded(item.deletedMessageId);
     this.#dataSource.getFocusManager().removeByIdIfNeeded(item.deletedMessageId);
