@@ -1,12 +1,19 @@
 import { LiveLaunchProperties } from "../../../types/liveLaunchProperties";
 import { DataSource } from "../dataSource";
+import { LcpDataTransfer } from "../transfer/lcpDataTransfer";
 
 export class Processor {
   readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #dataSource: DataSource;
-  constructor(liveLaunchProperties: LiveLaunchProperties, dataSource: DataSource) {
+  readonly #lcpDataTransfer: LcpDataTransfer;
+  constructor(
+    liveLaunchProperties: LiveLaunchProperties,
+    dataSource: DataSource,
+    lcpDataTransfer: LcpDataTransfer,
+  ) {
     this.#liveLaunchProperties = liveLaunchProperties;
     this.#dataSource = dataSource;
+    this.#lcpDataTransfer = lcpDataTransfer;
   }
 
   subscriberCount(subscriberCount: number) {
@@ -18,6 +25,6 @@ export class Processor {
       currentSubscriberCount: subscriberCount,
       maxSubscriberCount: Math.max(maxSubscriberCount, subscriberCount),
     });
-    // todo: data transfer
+    this.#lcpDataTransfer.syncLiveStatistics();
   }
 }
