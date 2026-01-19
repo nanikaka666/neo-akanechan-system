@@ -28,7 +28,7 @@ import {
   LiveChatItemSuperSticker,
   LiveChatItemTextMessage,
   LiveChatItemUserBanned,
-} from "../emitter/liveChatEmitter";
+} from "../emitter/liveChatDataFetcher";
 import { ChannelId, LiveChatItemId } from "../../types/youtubeDomainModel";
 
 function to2Digit(value: string) {

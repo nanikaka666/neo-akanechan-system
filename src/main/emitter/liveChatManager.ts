@@ -24,7 +24,7 @@ import { WebContentsWrapper } from "../webContentsWrapper";
 import { StockManager } from "../stock";
 import { FocusManager } from "../focus";
 import { getLiveStatisticsManager } from "../liveStatistics";
-import { LiveChatEmitter } from "./liveChatEmitter";
+import { LiveChatDataFetcher } from "./liveChatDataFetcher";
 
 class LiveChatManager {
   #textChats: NonMarkedExtendedChatItemText[];
@@ -52,7 +52,7 @@ class LiveChatManager {
   #membershipsAndGifts: MembershipAndGiftItem[];
   readonly #authorChannelIds = new Set<string>();
   readonly #webContents: WebContents;
-  readonly #emitter: LiveChatEmitter;
+  readonly #emitter: LiveChatDataFetcher;
   // readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #stockManager: StockManager;
   readonly #focusManager: FocusManager;
@@ -65,7 +65,7 @@ class LiveChatManager {
     this.#superChats = [];
     this.#membershipsAndGifts = [];
     this.#authorChannelIds = new Set<string>();
-    this.#emitter = new LiveChatEmitter(liveLaunchProperties.live.liveChatId);
+    this.#emitter = new LiveChatDataFetcher(liveLaunchProperties.live.liveChatId);
     // this.#liveLaunchProperties = liveLaunchProperties;
     this.#stockManager = new StockManager();
     this.#focusManager = new FocusManager();

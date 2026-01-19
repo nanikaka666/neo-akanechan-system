@@ -76,7 +76,7 @@ function isServerErrorResponse(e: Error): e is ServerErrorResponse {
   return "code" in e;
 }
 
-export class LiveChatEmitter extends (EventEmitter as new () => TypedEmitter<LiveChatEvent>) {
+export class LiveChatDataFetcher extends (EventEmitter as new () => TypedEmitter<LiveChatEvent>) {
   readonly #liveChatId: LiveChatId | ActiveLiveChatId;
   #isActivated: boolean;
   #pageToken: string | undefined;
