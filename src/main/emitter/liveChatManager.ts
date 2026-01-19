@@ -249,7 +249,7 @@ class LiveChatManager {
       stocksCount: this.#stockManager.getStocks().length,
     };
 
-    getLiveStatisticsManager().updateLiveStatistics(latestStatistics);
+    getLiveStatisticsManager().update(latestStatistics);
   }
 
   #refreshMembershipsOnRenderer() {
@@ -274,7 +274,7 @@ class LiveChatManager {
         .length,
     };
 
-    getLiveStatisticsManager().updateLiveStatistics(latestStatistics);
+    getLiveStatisticsManager().update(latestStatistics);
   }
 
   setup() {

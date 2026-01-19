@@ -10,6 +10,6 @@ export class DataSource {
     return this.#liveStatisticsDataContainer.get();
   }
   updateLiveStatistics(newData: Partial<LiveStatistics>) {
-    this.#liveStatisticsDataContainer.updateLiveStatistics(newData);
+    this.#liveStatisticsDataContainer.update(newData);
   }
 }

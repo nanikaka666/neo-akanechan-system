@@ -26,7 +26,7 @@ export class LiveStatisticsDataContainer {
     return this.#liveStatistics;
   }
 
-  updateLiveStatistics(newData: Partial<LiveStatistics>) {
+  update(newData: Partial<LiveStatistics>) {
     this.#liveStatistics = { ...this.#liveStatistics, ...newData };
   }
 }

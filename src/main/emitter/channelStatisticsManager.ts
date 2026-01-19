@@ -24,7 +24,7 @@ export async function setupChannelStatisticsManager(liveLaunchProperties: LiveLa
     console.log("ChannelStatisticsEmitter started. " + initialValue);
     counts.currentSubscriberCount = initialValue;
     counts.maxSubscriberCount = initialValue;
-    getLiveStatisticsManager().updateLiveStatistics(counts);
+    getLiveStatisticsManager().update(counts);
   });
   emitter.on("end", () => {
     console.log("ChannelStatisticsEmitter finished.");
@@ -40,7 +40,7 @@ export async function setupChannelStatisticsManager(liveLaunchProperties: LiveLa
 
       // todo: Subscriber Count Raised here
     }
-    getLiveStatisticsManager().updateLiveStatistics(counts);
+    getLiveStatisticsManager().update(counts);
   });
 
   await emitter.start();

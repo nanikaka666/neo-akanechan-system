@@ -42,7 +42,7 @@ export async function setupVideoStatisticsManager(liveLaunchProperties: LiveLaun
       counts.maxLikeCount = nextLikeCount;
       // todo: check reach the goals.
     }
-    getLiveStatisticsManager().updateLiveStatistics(counts);
+    getLiveStatisticsManager().update(counts);
   });
   emitter.on("nextViewerCount", (nextViewerCount) => {
     console.log(`Next Viewer Count: ${nextViewerCount}`);
@@ -51,7 +51,7 @@ export async function setupVideoStatisticsManager(liveLaunchProperties: LiveLaun
       counts.maxLiveViewCount = nextViewerCount;
       // todo: check reach the goals.
     }
-    getLiveStatisticsManager().updateLiveStatistics(counts);
+    getLiveStatisticsManager().update(counts);
   });
   await emitter.start();
 }
