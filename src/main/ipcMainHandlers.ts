@@ -3,10 +3,7 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { BrowserWindow, dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, LiveControlPanelPage, LiveSelectionPage } from "../types/mainAppPage";
-import { cleanUpLiveChatEmitter, getLiveChatManager } from "./emitter/liveChatManager";
-import { cleanupVideoStatisticsManager } from "./emitter/videoStatisticsManager";
-import { cleanupChannelStatisticsManager } from "./emitter/channelStatisticsManager";
-import { cleanUpLiveStatistics } from "./liveStatistics";
+import { getLiveChatManager } from "./emitter/liveChatManager";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
 import { YoutubeApiService } from "./youtubeApi/service";
 import {
@@ -14,7 +11,7 @@ import {
   buildLiveLaunchPropertiesForDebug,
 } from "./liveLaunchProperties";
 import { VideoId } from "../types/youtubeDomainModel";
-import { setupLiveManager } from "./liveManager";
+import { cleanupLiveManager, setupLiveManager } from "./liveManager";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -179,11 +176,7 @@ export function setupIpcMainHandlers() {
     }
 
     // clean up emitters
-    cleanUpLiveChatEmitter();
-    cleanupVideoStatisticsManager();
-    cleanupChannelStatisticsManager();
-
-    cleanUpLiveStatistics();
+    cleanupLiveManager();
 
     const channel = await YoutubeApiService.getChannelOfMine();
     if (!channel) {

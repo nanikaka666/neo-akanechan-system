@@ -30,3 +30,11 @@ export function getLiveManager() {
   }
   return liveManager;
 }
+
+export function cleanupLiveManager() {
+  if (liveManager === undefined) {
+    return;
+  }
+  liveManager.close();
+  liveManager = undefined;
+}
