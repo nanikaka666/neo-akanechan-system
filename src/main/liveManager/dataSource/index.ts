@@ -1,15 +1,24 @@
 import { LiveStatistics } from "../../../types/liveStatistics";
 import { LiveStatisticsDataContainer } from "./liveStatistics";
+import { StockManager } from "./stock";
 
 export class DataSource {
   readonly #liveStatisticsDataContainer: LiveStatisticsDataContainer;
-  constructor(liveStatisticsDataContainer: LiveStatisticsDataContainer) {
+  readonly #stockManager: StockManager;
+  constructor(
+    liveStatisticsDataContainer: LiveStatisticsDataContainer,
+    stockManager: StockManager,
+  ) {
     this.#liveStatisticsDataContainer = liveStatisticsDataContainer;
+    this.#stockManager = stockManager;
   }
-  getLiveStatistics() {
-    return this.#liveStatisticsDataContainer.get();
+  getLiveStatisticsDataContainer() {
+    return this.#liveStatisticsDataContainer;
   }
-  updateLiveStatistics(newData: Partial<LiveStatistics>) {
-    this.#liveStatisticsDataContainer.update(newData);
-  }
+  // getLiveStatistics() {
+  //   return this.#liveStatisticsDataContainer.get();
+  // }
+  // updateLiveStatistics(newData: Partial<LiveStatistics>) {
+  //   this.#liveStatisticsDataContainer.update(newData);
+  // }
 }

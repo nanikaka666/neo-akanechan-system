@@ -13,7 +13,7 @@ export class LcpDataTransfer {
     WebContentsWrapper.send(
       this.#webContents,
       "tellLiveStatistics",
-      this.#dataSource.getLiveStatistics(),
+      this.#dataSource.getLiveStatisticsDataContainer().get(),
     );
   }
 }

@@ -17,11 +17,11 @@ export class Processor {
   }
 
   subscriberCount(nextSubscriberCount: number) {
-    const { maxSubscriberCount } = this.#dataSource.getLiveStatistics();
+    const { maxSubscriberCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
     if (maxSubscriberCount < nextSubscriberCount) {
       // todo: max subscriber count is updated.
     }
-    this.#dataSource.updateLiveStatistics({
+    this.#dataSource.getLiveStatisticsDataContainer().update({
       currentSubscriberCount: nextSubscriberCount,
       maxSubscriberCount: Math.max(maxSubscriberCount, nextSubscriberCount),
     });
@@ -29,11 +29,11 @@ export class Processor {
   }
 
   likeCount(nextLikeCount: number) {
-    const { maxLikeCount } = this.#dataSource.getLiveStatistics();
+    const { maxLikeCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
     if (maxLikeCount < nextLikeCount) {
       // todo: max like count is updated.
     }
-    this.#dataSource.updateLiveStatistics({
+    this.#dataSource.getLiveStatisticsDataContainer().update({
       currentLikeCount: nextLikeCount,
       maxLikeCount: Math.max(maxLikeCount, nextLikeCount),
     });
@@ -41,11 +41,11 @@ export class Processor {
   }
 
   viewerCount(nextViewerCount: number) {
-    const { maxLiveViewCount } = this.#dataSource.getLiveStatistics();
+    const { maxLiveViewCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
     if (maxLiveViewCount < nextViewerCount) {
       // todo: max viewer count is updated.
     }
-    this.#dataSource.updateLiveStatistics({
+    this.#dataSource.getLiveStatisticsDataContainer().update({
       currentLiveViewCount: nextViewerCount,
       maxLiveViewCount: Math.max(maxLiveViewCount, nextViewerCount),
     });
