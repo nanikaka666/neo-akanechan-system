@@ -1,7 +1,7 @@
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { LiveStatistics } from "../../types/liveStatistics";
 import { getLiveStatisticsManager } from "../liveStatistics";
-import { ChannelStatisticsEmitter } from "./channelStatisticsEmitter";
+import { ChannelStatisticsEmitter } from "../liveManager/dataFetcher/channelStatisticsEmitter";
 
 let emitter: ChannelStatisticsEmitter | undefined;
 let counts: Pick<LiveStatistics, "currentSubscriberCount" | "maxSubscriberCount">;
@@ -19,7 +19,7 @@ export function cleanupChannelStatisticsManager() {
 
 export async function setupChannelStatisticsManager(liveLaunchProperties: LiveLaunchProperties) {
   cleanupChannelStatisticsManager();
-  emitter = new ChannelStatisticsEmitter(liveLaunchProperties.channel.id);
+  emitter = new ChannelStatisticsEmitter(liveLaunchProperties.channel.id, 60 * 1000);
   emitter.on("start", (initialValue) => {
     console.log("ChannelStatisticsEmitter started. " + initialValue);
     counts.currentSubscriberCount = initialValue;

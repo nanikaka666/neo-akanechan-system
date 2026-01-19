@@ -19,7 +19,10 @@ export async function setupLiveManager(
   const dataSource = new DataSource();
   const lcpDataTransfer = new LcpDataTransfer(webContents, dataSource);
   const processor = new Processor(liveLaunchProperties, dataSource, lcpDataTransfer);
-  const channelDataFetcher = new ChannelStatisticsEmitter(liveLaunchProperties.channel.id);
+  const channelDataFetcher = new ChannelStatisticsEmitter(
+    liveLaunchProperties.channel.id,
+    60 * 1000,
+  );
   liveManager = new LiveManager(liveLaunchProperties, dataSource, processor, channelDataFetcher);
   await liveManager.setup();
 }

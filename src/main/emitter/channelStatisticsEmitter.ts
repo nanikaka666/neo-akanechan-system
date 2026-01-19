@@ -7,10 +7,10 @@ export class ChannelStatisticsEmitter extends (EventEmitter as new () => TypedEm
   readonly #channelId: ChannelId;
   readonly #pollingInterval: number;
   #isActivated: boolean;
-  constructor(channelId: ChannelId) {
+  constructor(channelId: ChannelId, pollingIntervalMilliSeconds: number) {
     super();
     this.#channelId = channelId;
-    this.#pollingInterval = 60 * 1000;
+    this.#pollingInterval = pollingIntervalMilliSeconds;
     this.#isActivated = false;
   }
 
