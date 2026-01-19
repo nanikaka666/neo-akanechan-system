@@ -21,7 +21,7 @@ import {
 } from "../../types/liveChatItem";
 import { WebContents } from "electron";
 import { WebContentsWrapper } from "../webContentsWrapper";
-import { StockManager } from "../stock";
+import { StockManager } from "../liveManager/dataSource/stock";
 import { FocusManager } from "../focus";
 import { getLiveStatisticsManager } from "../liveManager/dataSource/liveStatistics";
 import { LiveChatDataFetcher } from "../liveManager/dataFetcher/liveChatDataFetcher";
