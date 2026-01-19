@@ -1,9 +1,9 @@
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { LiveStatistics } from "../../types/liveStatistics";
 import { getLiveStatisticsManager } from "../liveStatistics";
-import { VideoStatisticsEmitter } from "../liveManager/dataFetcher/videoStatisticsEmitter";
+import { VideoDataFetcher } from "../liveManager/dataFetcher/videoDataFetcher";
 
-let emitter: VideoStatisticsEmitter | undefined;
+let emitter: VideoDataFetcher | undefined;
 
 let counts: Pick<
   LiveStatistics,
@@ -25,7 +25,7 @@ export function cleanupVideoStatisticsManager() {
 
 export async function setupVideoStatisticsManager(liveLaunchProperties: LiveLaunchProperties) {
   cleanupVideoStatisticsManager();
-  emitter = new VideoStatisticsEmitter(liveLaunchProperties.live.videoId, 15 * 1000);
+  emitter = new VideoDataFetcher(liveLaunchProperties.live.videoId, 15 * 1000);
   emitter.on("start", (initValue) => {
     console.log("VideoStatisticsEmitter started.", initValue);
   });

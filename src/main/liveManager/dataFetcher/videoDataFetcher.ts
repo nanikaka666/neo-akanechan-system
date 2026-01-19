@@ -4,7 +4,7 @@ import { VideoId } from "../../../types/youtubeDomainModel";
 import { YoutubeApiService } from "../../youtubeApi/service";
 import { YoutubeVideo } from "../../../types/youtubeVideo";
 
-export class VideoStatisticsEmitter extends (EventEmitter as new () => TypedEmitter<VideoStatisticsEvent>) {
+export class VideoDataFetcher extends (EventEmitter as new () => TypedEmitter<VideoStatisticsEvent>) {
   readonly #videoId: VideoId;
   readonly #pollingInterval: number;
   #isActivated: boolean;
