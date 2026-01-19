@@ -6,6 +6,7 @@ import { Processor } from "./processor";
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
 import { VideoDataFetcher } from "./dataFetcher/videoDataFetcher";
+import { LiveChatDataFetcher } from "./dataFetcher/liveChatDataFetcher";
 
 let liveManager: LiveManager | undefined;
 
@@ -22,12 +23,14 @@ export async function setupLiveManager(
   const processor = new Processor(liveLaunchProperties, dataSource, lcpDataTransfer);
   const channelDataFetcher = new ChannelDataFetcher(liveLaunchProperties.channel.id, 60 * 1000);
   const videoDataFetcher = new VideoDataFetcher(liveLaunchProperties.live.videoId, 15 * 1000);
+  const liveChatDataFetcher = new LiveChatDataFetcher(liveLaunchProperties.live.liveChatId);
   liveManager = new LiveManager(
     liveLaunchProperties,
     dataSource,
     processor,
     channelDataFetcher,
     videoDataFetcher,
+    liveChatDataFetcher,
   );
   await liveManager.setup();
 }
