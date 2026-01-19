@@ -16,14 +16,38 @@ export class Processor {
     this.#lcpDataTransfer = lcpDataTransfer;
   }
 
-  subscriberCount(subscriberCount: number) {
+  subscriberCount(nextSubscriberCount: number) {
     const { maxSubscriberCount } = this.#dataSource.getLiveStatistics();
-    if (maxSubscriberCount < subscriberCount) {
+    if (maxSubscriberCount < nextSubscriberCount) {
       // todo: max subscriber count is updated.
     }
     this.#dataSource.updateLiveStatistics({
-      currentSubscriberCount: subscriberCount,
-      maxSubscriberCount: Math.max(maxSubscriberCount, subscriberCount),
+      currentSubscriberCount: nextSubscriberCount,
+      maxSubscriberCount: Math.max(maxSubscriberCount, nextSubscriberCount),
+    });
+    this.#lcpDataTransfer.syncLiveStatistics();
+  }
+
+  likeCount(nextLikeCount: number) {
+    const { maxLikeCount } = this.#dataSource.getLiveStatistics();
+    if (maxLikeCount < nextLikeCount) {
+      // todo: max like count is updated.
+    }
+    this.#dataSource.updateLiveStatistics({
+      currentLikeCount: nextLikeCount,
+      maxLikeCount: Math.max(maxLikeCount, nextLikeCount),
+    });
+    this.#lcpDataTransfer.syncLiveStatistics();
+  }
+
+  viewerCount(nextViewerCount: number) {
+    const { maxLiveViewCount } = this.#dataSource.getLiveStatistics();
+    if (maxLiveViewCount < nextViewerCount) {
+      // todo: max viewer count is updated.
+    }
+    this.#dataSource.updateLiveStatistics({
+      currentLiveViewCount: nextViewerCount,
+      maxLiveViewCount: Math.max(maxLiveViewCount, nextViewerCount),
     });
     this.#lcpDataTransfer.syncLiveStatistics();
   }
