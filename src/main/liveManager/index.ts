@@ -11,6 +11,7 @@ import { LiveStatisticsDataContainer } from "./dataSource/liveStatistics";
 import { StockManager } from "./dataSource/stock";
 import { ChatDataManager } from "./dataSource/chats";
 import { FocusManager } from "./dataSource/focus";
+import { PariticipantPointManager } from "./dataSource/participantPoint";
 
 let liveManager: LiveManager | undefined;
 
@@ -26,11 +27,13 @@ export async function setupLiveManager(
   const chatDataManager = new ChatDataManager();
   const stockManager = new StockManager();
   const focusManager = new FocusManager();
+  const pointManager = new PariticipantPointManager();
   const dataSource = new DataSource(
     liveStatisticsDataContainer,
     chatDataManager,
     stockManager,
     focusManager,
+    pointManager,
   );
   const lcpDataTransfer = new LcpDataTransfer(webContents, dataSource);
   const processor = new Processor(liveLaunchProperties, dataSource, lcpDataTransfer);

@@ -1,6 +1,7 @@
 import { ChatDataManager } from "./chats";
 import { FocusManager } from "./focus";
 import { LiveStatisticsDataContainer } from "./liveStatistics";
+import { PariticipantPointManager } from "./participantPoint";
 import { StockManager } from "./stock";
 
 export class DataSource {
@@ -8,16 +9,19 @@ export class DataSource {
   readonly #chatDataManager: ChatDataManager;
   readonly #stockManager: StockManager;
   readonly #focusManager: FocusManager;
+  readonly #pointManager: PariticipantPointManager;
   constructor(
     liveStatisticsDataContainer: LiveStatisticsDataContainer,
     chatDataContainer: ChatDataManager,
     stockManager: StockManager,
     focusManager: FocusManager,
+    pointManager: PariticipantPointManager,
   ) {
     this.#liveStatisticsDataContainer = liveStatisticsDataContainer;
     this.#chatDataManager = chatDataContainer;
     this.#stockManager = stockManager;
     this.#focusManager = focusManager;
+    this.#pointManager = pointManager;
   }
   getLiveStatisticsDataContainer() {
     return this.#liveStatisticsDataContainer;
@@ -30,5 +34,8 @@ export class DataSource {
   }
   getFocusManager() {
     return this.#focusManager;
+  }
+  getParticipantManager() {
+    return this.#pointManager;
   }
 }
