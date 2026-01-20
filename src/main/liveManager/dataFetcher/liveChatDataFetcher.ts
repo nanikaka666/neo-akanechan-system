@@ -403,6 +403,9 @@ export class LiveChatDataFetcher extends (EventEmitter as new () => TypedEmitter
               // code 9 include multiple meaning, but what app should do is closing the loop whichever.
               this.emit("end", "given chat is already invalid.");
               this.#isActivated = false;
+            } else if (e.code === Status.UNAVAILABLE) {
+              // code 14 looks like including retryable case.
+              // do nothing.
             } else {
               // other error code is not shown up the document.
               // So, app doesn't know best thing how app should do.
