@@ -10,3 +10,8 @@ export interface ParticipantPointRankingData {
   rank: number;
   participantPoint: ParticipantPoint;
 }
+
+export interface PariticipantPointRankings {
+  items: ParticipantPointRankingData[];
+  updatedAt: Date;
+}
