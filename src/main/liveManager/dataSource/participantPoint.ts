@@ -25,7 +25,7 @@ export class PariticipantPointManager {
     if (!item.isFirst) {
       return false;
     }
-    return this.add(item.author, 100);
+    return this.#add(item.author, 100);
   }
 
   /**
@@ -33,7 +33,7 @@ export class PariticipantPointManager {
    *
    * @returns point is added.
    */
-  add(author: ChatAuthor, value: number) {
+  #add(author: ChatAuthor, value: number) {
     if (author.isOwner) {
       return false;
     }
