@@ -66,7 +66,11 @@ export class Processor {
   }
 
   textChat(item: TextMessageChat) {
-    this.#dataSource.getChatDataManager().addText(item);
+    const addedItem = this.#dataSource.getChatDataManager().addText(item);
+
+    if (addedItem.isFirst) {
+      this.#dataSource.getParticipantManager().add(addedItem.author, 10); // plus 10 points.
+    }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
@@ -78,7 +82,11 @@ export class Processor {
   }
 
   superChat(item: SuperChat) {
-    this.#dataSource.getChatDataManager().addSuperChat(item);
+    const addedItem = this.#dataSource.getChatDataManager().addSuperChat(item);
+
+    if (addedItem.isFirst) {
+      this.#dataSource.getParticipantManager().add(addedItem.author, 10); // plus 10 points.
+    }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
@@ -94,7 +102,10 @@ export class Processor {
 
   superSticker(item: SuperSticker) {
     console.log("SuperSticker: ", item);
-    this.#dataSource.getChatDataManager().addSuperSticker(item);
+    const addedItem = this.#dataSource.getChatDataManager().addSuperSticker(item);
+    if (addedItem.isFirst) {
+      this.#dataSource.getParticipantManager().add(addedItem.author, 10); // plus 10 points.
+    }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
