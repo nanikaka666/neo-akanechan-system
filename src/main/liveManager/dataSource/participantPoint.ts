@@ -9,8 +9,16 @@ import {
 
 export class PariticipantPointManager {
   readonly #points: Map<string, ParticipantPoint>;
+
+  /**
+   * Records the Date which is counted point adding as continuous chat point.
+   *
+   * key is author channel id.
+   */
+  readonly #continuousChatLastAdded: Map<string, Date>;
   constructor() {
     this.#points = new Map();
+    this.#continuousChatLastAdded = new Map();
   }
   get() {
     return this.#points;
@@ -19,38 +27,58 @@ export class PariticipantPointManager {
   /**
    * plus point of first chatting.
    *
-   * @returns point is added.
+   * @returns added point amount. `0` means adding point cancelled.
    */
   addByFirstChat(item: (TextMessageChat | SuperChat | SuperSticker) & FirstMarkable) {
     if (!item.isFirst) {
-      return false;
+      return 0;
     }
     return this.#add(item.author, 100);
   }
 
   /**
+   * plus point of continuous chat.
+   *
+   * @returns added point amount. `0` means adding point cancelled.
+   */
+  addByContinuousChat(item: TextMessageChat | SuperChat | SuperSticker) {
+    const lastAddedTime = this.#continuousChatLastAdded.get(item.author.channelId.id);
+    if (
+      lastAddedTime === undefined ||
+      lastAddedTime.getTime() + 30 * 1000 < item.publishedAt.getTime() // if 30 seconds passed from last point adding, then add point.
+    ) {
+      this.#continuousChatLastAdded.set(item.author.channelId.id, item.publishedAt);
+      return this.#add(item.author, 10);
+    } else {
+      return 0;
+    }
+  }
+
+  /**
    * Add point to author.
    *
-   * @returns point is added.
+   * @returns added point amount. `0` means adding point cancelled.
    */
   #add(author: ChatAuthor, value: number) {
     if (author.isOwner) {
-      return false;
+      return 0;
     }
+    // if author is membership, added amount of point raised by 20%.
+    const addedAmount = author.isMembership ? Math.round(value * 1.2) : value;
     const current = this.#points.get(author.channelId.id);
     if (current === undefined) {
       this.#points.set(author.channelId.id, {
-        point: value,
+        point: addedAmount,
         author: author,
         participatedTime: new Date(),
       });
     } else {
       this.#points.set(author.channelId.id, {
         ...current,
-        point: current.point + value,
+        point: current.point + addedAmount,
         author: author,
       });
     }
-    return true;
+    return addedAmount;
   }
 }

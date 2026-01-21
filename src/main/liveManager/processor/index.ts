@@ -68,7 +68,11 @@ export class Processor {
   textChat(item: TextMessageChat) {
     const addedItem = this.#dataSource.getChatDataManager().addText(item);
 
-    if (this.#dataSource.getParticipantManager().addByFirstChat(addedItem)) {
+    let addedAmountOfPoint = 0;
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByFirstChat(addedItem);
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByContinuousChat(addedItem);
+
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
     }
 
@@ -84,7 +88,11 @@ export class Processor {
   superChat(item: SuperChat) {
     const addedItem = this.#dataSource.getChatDataManager().addSuperChat(item);
 
-    if (this.#dataSource.getParticipantManager().addByFirstChat(addedItem)) {
+    let addedAmountOfPoint = 0;
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByFirstChat(addedItem);
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByContinuousChat(addedItem);
+
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
     }
 
@@ -104,7 +112,11 @@ export class Processor {
     console.log("SuperSticker: ", item);
     const addedItem = this.#dataSource.getChatDataManager().addSuperSticker(item);
 
-    if (this.#dataSource.getParticipantManager().addByFirstChat(addedItem)) {
+    let addedAmountOfPoint = 0;
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByFirstChat(addedItem);
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByContinuousChat(addedItem);
+
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
     }
 
