@@ -1,5 +1,11 @@
 import { ParticipantPoint } from "../../../types/participantPoint";
-import { ChatAuthor } from "../../../types/liveChatItem";
+import {
+  ChatAuthor,
+  FirstMarkable,
+  SuperChat,
+  SuperSticker,
+  TextMessageChat,
+} from "../../../types/liveChatItem";
 
 export class PariticipantPointManager {
   readonly #points: Map<string, ParticipantPoint>;
@@ -9,7 +15,28 @@ export class PariticipantPointManager {
   get() {
     return this.#points;
   }
+
+  /**
+   * plus point of first chatting.
+   *
+   * @returns point is added.
+   */
+  addByFirstChat(item: (TextMessageChat | SuperChat | SuperSticker) & FirstMarkable) {
+    if (!item.isFirst) {
+      return false;
+    }
+    return this.add(item.author, 100);
+  }
+
+  /**
+   * Add point to author.
+   *
+   * @returns point is added.
+   */
   add(author: ChatAuthor, value: number) {
+    if (author.isOwner) {
+      return false;
+    }
     const current = this.#points.get(author.channelId.id);
     if (current === undefined) {
       this.#points.set(author.channelId.id, {
@@ -24,5 +51,6 @@ export class PariticipantPointManager {
         author: author,
       });
     }
+    return true;
   }
 }
