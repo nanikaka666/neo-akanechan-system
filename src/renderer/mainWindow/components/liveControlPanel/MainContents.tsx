@@ -2,6 +2,7 @@ import { CSSProperties } from "react";
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { Mode } from "./LiveControlPanel";
 import { CommentViewer } from "./commentViewer/CommentViewer";
+import { Rankings } from "./rankings/Rankings";
 
 const displayNone: CSSProperties = { display: "none" };
 
@@ -18,7 +19,9 @@ export function MainContents({
         <CommentViewer />
       </div>
       <div style={mode !== "chanceTime" ? displayNone : undefined}>Chance Time</div>
-      <div style={mode !== "rankings" ? displayNone : undefined}>Rankings</div>
+      <div style={mode !== "rankings" ? displayNone : undefined}>
+        <Rankings />
+      </div>
       <div style={mode !== "neighborhoods" ? displayNone : undefined}>Neighborhoods</div>
     </div>
   );
