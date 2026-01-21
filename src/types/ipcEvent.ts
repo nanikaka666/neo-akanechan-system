@@ -10,6 +10,7 @@ import { LiveStatistics } from "./liveStatistics";
 import { LiveLaunchProperties } from "./liveLaunchProperties";
 import { Channel } from "./youtubeChannel";
 import { YoutubeLive } from "./youtubeLive";
+import { PariticipantPointRankings } from "./participantPoint";
 
 /**
  * Ipc channel interfaces.
@@ -114,4 +115,9 @@ export interface IpcEvent {
    * Start auth flow.
    */
   startAuthFlow: () => boolean;
+
+  /**
+   * Notify point rankings.
+   */
+  tellRankings: (rankings: PariticipantPointRankings) => void;
 }

@@ -38,6 +38,7 @@ export interface IpcApi {
     requestUpdateFocus: Invoke<"updateFocus">;
     registerChatsListener: Listen<"tellChats">;
     requestStartAuthFlow: Invoke<"startAuthFlow">;
+    registerRankingsListener: Listen<"tellRankings">;
   };
 }
 
@@ -71,5 +72,6 @@ export const IpcApi: IpcApi = {
     requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
     registerChatsListener: (callback) => IpcRendererWrapper.on("tellChats", callback),
     requestStartAuthFlow: () => IpcRendererWrapper.invoke("startAuthFlow"),
+    registerRankingsListener: (callback) => IpcRendererWrapper.on("tellRankings", callback),
   },
 };
