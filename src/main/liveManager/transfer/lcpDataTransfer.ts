@@ -8,6 +8,7 @@ import {
   NonMarkedExtendedChatItemSuperSticker,
   Focusable,
 } from "../../../types/liveChatItem";
+import { ParticipantPointRankingData, ParticipantPoint } from "../../../types/participantPoint";
 
 export class LcpDataTransfer {
   readonly #webContents: WebContents;
@@ -71,6 +72,25 @@ export class LcpDataTransfer {
     );
   }
 
+  syncRankings() {
+    const sorted = Array.from(this.#dataSource.getParticipantManager().get().values())
+      .sort(this.#rankingSortFunction)
+      .slice(0, 100); // take top 100 rankings.
+    let res: ParticipantPointRankingData[] = [];
+    res = [{ rank: 1, participantPoint: sorted[0] }];
+    for (let i = 1; i < sorted.length; i++) {
+      if (sorted[i].point === sorted[i - 1].point) {
+        res = [...res, { rank: res[i - 1].rank, participantPoint: sorted[i] }];
+      } else {
+        res = [...res, { rank: i + 1, participantPoint: sorted[i] }];
+      }
+    }
+    WebContentsWrapper.send(this.#webContents, "tellRankings", {
+      items: res,
+      updatedAt: new Date(),
+    });
+  }
+
   #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & Stockable {
     return { ...item, isStocked: this.#dataSource.getStockManager().isStocked(item.id) };
   }
@@ -82,5 +102,11 @@ export class LcpDataTransfer {
       | NonMarkedExtendedChatItemSuperSticker,
   >(item: T): T & Focusable {
     return { ...item, isFocused: this.#dataSource.getFocusManager().isFocused(item.id) };
+  }
+
+  #rankingSortFunction(a: ParticipantPoint, b: ParticipantPoint) {
+    return b.point === a.point
+      ? a.participatedTime.getTime() - b.participatedTime.getTime()
+      : b.point - a.point;
   }
 }

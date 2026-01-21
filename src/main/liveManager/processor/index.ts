@@ -70,6 +70,7 @@ export class Processor {
 
     if (addedItem.isFirst) {
       this.#dataSource.getParticipantManager().add(addedItem.author, 10); // plus 10 points.
+      this.#lcpDataTransfer.syncRankings();
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -86,6 +87,7 @@ export class Processor {
 
     if (addedItem.isFirst) {
       this.#dataSource.getParticipantManager().add(addedItem.author, 10); // plus 10 points.
+      this.#lcpDataTransfer.syncRankings();
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -105,6 +107,7 @@ export class Processor {
     const addedItem = this.#dataSource.getChatDataManager().addSuperSticker(item);
     if (addedItem.isFirst) {
       this.#dataSource.getParticipantManager().add(addedItem.author, 10); // plus 10 points.
+      this.#lcpDataTransfer.syncRankings();
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
