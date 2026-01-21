@@ -73,20 +73,19 @@ export class LcpDataTransfer {
   }
 
   syncRankings() {
-    const sorted = Array.from(this.#dataSource.getParticipantManager().get().values())
+    const items: ParticipantPointRankingData[] = Array.from(
+      this.#dataSource.getParticipantManager().get().values(),
+    )
       .sort(this.#rankingSortFunction)
-      .slice(0, 100); // take top 100 rankings.
-    let res: ParticipantPointRankingData[] = [];
-    res = [{ rank: 1, participantPoint: sorted[0] }];
-    for (let i = 1; i < sorted.length; i++) {
-      if (sorted[i].point === sorted[i - 1].point) {
-        res = [...res, { rank: res[i - 1].rank, participantPoint: sorted[i] }];
-      } else {
-        res = [...res, { rank: i + 1, participantPoint: sorted[i] }];
-      }
-    }
+      .slice(0, 100) // take top 100 rankings.
+      .map((item, idx) => {
+        return {
+          rank: idx + 1,
+          participantPoint: item,
+        };
+      });
     WebContentsWrapper.send(this.#webContents, "tellRankings", {
-      items: res,
+      items: items,
       updatedAt: new Date(),
     });
   }
