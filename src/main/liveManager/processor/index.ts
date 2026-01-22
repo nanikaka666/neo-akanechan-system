@@ -204,6 +204,13 @@ export class Processor {
     this.#dataSource.getStockManager().removeByAuthorChannelIdIfNeeded(item.bannedUser.channelId);
     this.#dataSource.getFocusManager().removeByAuthorIdIfNeeded(item.bannedUser.channelId);
 
+    if (
+      item.type === "userBannedEternal" &&
+      this.#dataSource.getParticipantManager().disqualify(item.author)
+    ) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
       textChatCount: this.#dataSource.getChatDataManager().getTextChatCount(),

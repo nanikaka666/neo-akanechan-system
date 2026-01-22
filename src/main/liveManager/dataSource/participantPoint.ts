@@ -27,11 +27,17 @@ export class PariticipantPointManager {
    */
   readonly #focusAdded: Set<string>;
 
+  /**
+   * Disqualified channel ids.
+   */
+  readonly #disqualifiedChannelIds: Set<string>;
+
   constructor() {
     this.#points = new Map();
     this.#continuousChatLastAdded = new Map();
     this.#stocksAdded = new Set();
     this.#focusAdded = new Set();
+    this.#disqualifiedChannelIds = new Set();
   }
   get() {
     return this.#points;
@@ -95,11 +101,30 @@ export class PariticipantPointManager {
   }
 
   /**
+   * Disqualify the user.
+   *
+   * disqualified users are out of point rankings.
+   *
+   * @returns whether disqualify process done. if they are already disqualified then `false`.
+   */
+  disqualify(author: ChatAuthor) {
+    if (!this.#disqualifiedChannelIds.has(author.channelId.id)) {
+      return false;
+    }
+    this.#disqualifiedChannelIds.add(author.channelId.id);
+    this.#points.delete(author.channelId.id);
+    return true;
+  }
+
+  /**
    * Add point to author.
    *
    * @returns added point amount. `0` means adding point cancelled.
    */
   #add(author: ChatAuthor, value: number) {
+    if (this.#disqualifiedChannelIds.has(author.channelId.id)) {
+      return 0;
+    }
     if (author.isOwner) {
       return 0;
     }
