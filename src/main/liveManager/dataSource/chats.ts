@@ -65,6 +65,7 @@ export class ChatDataManager {
     } satisfies NonMarkedExtendedChatItemText;
 
     this.#texts = [...this.#texts, nonMarkedItem].slice(-1000); // take latest 1000 items.
+    return nonMarkedItem;
   }
   deleteTextIfNeeded(item: MessageDeletedChatEvent) {
     const matchSize = this.#texts.filter((chat) => chat.id.id === item.id.id).length;
@@ -88,10 +89,12 @@ export class ChatDataManager {
   addSuperChat(item: SuperChat) {
     const nonMarkedItem = this.#checkIsFirstAndMark(item);
     this.#superChatAndStickers = [...this.#superChatAndStickers, nonMarkedItem];
+    return nonMarkedItem;
   }
   addSuperSticker(item: SuperSticker) {
     const nonMarkedItem = this.#checkIsFirstAndMark(item);
     this.#superChatAndStickers = [...this.#superChatAndStickers, nonMarkedItem];
+    return nonMarkedItem;
   }
 
   getAuthorChannelIds() {

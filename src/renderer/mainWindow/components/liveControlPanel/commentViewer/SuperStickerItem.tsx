@@ -1,6 +1,7 @@
 import { ExtendedChatItemSuperSticker } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 import { FocusForm } from "./FocusForm";
+import { PlusPointsButton } from "./PlusPointsButton";
 
 export function SuperStickerItem({ item }: { item: ExtendedChatItemSuperSticker }) {
   return (
@@ -12,6 +13,7 @@ export function SuperStickerItem({ item }: { item: ExtendedChatItemSuperSticker 
       {item.displayMessage}
 
       <FocusForm item={item} />
+      <PlusPointsButton item={item} />
     </div>
   );
 }

@@ -66,7 +66,15 @@ export class Processor {
   }
 
   textChat(item: TextMessageChat) {
-    this.#dataSource.getChatDataManager().addText(item);
+    const addedItem = this.#dataSource.getChatDataManager().addText(item);
+
+    let addedAmountOfPoint = 0;
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByFirstChat(addedItem);
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByContinuousChat(addedItem);
+
+    if (0 < addedAmountOfPoint) {
+      this.#lcpDataTransfer.syncRankings();
+    }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
@@ -78,7 +86,15 @@ export class Processor {
   }
 
   superChat(item: SuperChat) {
-    this.#dataSource.getChatDataManager().addSuperChat(item);
+    const addedItem = this.#dataSource.getChatDataManager().addSuperChat(item);
+
+    let addedAmountOfPoint = 0;
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByFirstChat(addedItem);
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByContinuousChat(addedItem);
+
+    if (0 < addedAmountOfPoint) {
+      this.#lcpDataTransfer.syncRankings();
+    }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
@@ -94,7 +110,15 @@ export class Processor {
 
   superSticker(item: SuperSticker) {
     console.log("SuperSticker: ", item);
-    this.#dataSource.getChatDataManager().addSuperSticker(item);
+    const addedItem = this.#dataSource.getChatDataManager().addSuperSticker(item);
+
+    let addedAmountOfPoint = 0;
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByFirstChat(addedItem);
+    addedAmountOfPoint += this.#dataSource.getParticipantManager().addByContinuousChat(addedItem);
+
+    if (0 < addedAmountOfPoint) {
+      this.#lcpDataTransfer.syncRankings();
+    }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
@@ -110,6 +134,11 @@ export class Processor {
 
   newMembership(item: NewMembership) {
     this.#dataSource.getChatDataManager().addNewMembership(item);
+
+    if (0 < this.#dataSource.getParticipantManager().addByNewMembership(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       newMembershipsCount: this.#dataSource
         .getChatDataManager()
@@ -123,6 +152,11 @@ export class Processor {
 
   membershipMilestone(item: MembershipMilestone) {
     this.#dataSource.getChatDataManager().addMembershipMilestone(item);
+
+    if (0 < this.#dataSource.getParticipantManager().addByMembershipMilestone(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       membershipMilestoneCount: this.#dataSource
         .getChatDataManager()
@@ -136,6 +170,11 @@ export class Processor {
 
   membershipGift(item: MembershipGift) {
     this.#dataSource.getChatDataManager().addMembershipGift(item);
+
+    if (0 < this.#dataSource.getParticipantManager().addByMembershipGift(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       giftCount: this.#dataSource
         .getChatDataManager()
@@ -180,6 +219,13 @@ export class Processor {
     this.#dataSource.getStockManager().removeByAuthorChannelIdIfNeeded(item.bannedUser.channelId);
     this.#dataSource.getFocusManager().removeByAuthorIdIfNeeded(item.bannedUser.channelId);
 
+    if (
+      item.type === "userBannedEternal" &&
+      this.#dataSource.getParticipantManager().disqualify(item.author)
+    ) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
       textChatCount: this.#dataSource.getChatDataManager().getTextChatCount(),
@@ -203,6 +249,10 @@ export class Processor {
       return;
     }
     this.#dataSource.getStockManager().add(item);
+
+    if (0 < this.#dataSource.getParticipantManager().addByStocked(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
@@ -228,6 +278,10 @@ export class Processor {
   setFocus(item: FocusedOnChatItem) {
     this.#dataSource.getFocusManager().updateFocus(item);
     this.#lcpDataTransfer.syncChats();
+
+    if (0 < this.#dataSource.getParticipantManager().addByFocused(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
   }
 
   unsetFocus() {
@@ -237,5 +291,11 @@ export class Processor {
     this.#dataSource.getFocusManager().updateFocus(undefined);
 
     this.#lcpDataTransfer.syncChats();
+  }
+
+  manualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
+    if (0 < this.#dataSource.getParticipantManager().addByManualPlusPoints(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
   }
 }
