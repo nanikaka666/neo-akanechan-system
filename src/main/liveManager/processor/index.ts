@@ -134,6 +134,11 @@ export class Processor {
 
   newMembership(item: NewMembership) {
     this.#dataSource.getChatDataManager().addNewMembership(item);
+
+    if (0 < this.#dataSource.getParticipantManager().addByNewMembership(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       newMembershipsCount: this.#dataSource
         .getChatDataManager()

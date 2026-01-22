@@ -2,6 +2,7 @@ import { ParticipantPoint } from "../../../types/participantPoint";
 import {
   ChatAuthor,
   FirstMarkable,
+  NewMembership,
   SuperChat,
   SuperSticker,
   TextMessageChat,
@@ -98,6 +99,16 @@ export class PariticipantPointManager {
     }
     this.#focusAdded.add(item.id.id);
     return this.#add(item.author, 300);
+  }
+
+  /**
+   *
+   * plus point of new membership.
+   *
+   * @returns added point amount. `0` means adding point cancelled.
+   */
+  addByNewMembership(item: NewMembership) {
+    return this.#add(item.author, 2000);
   }
 
   /**
