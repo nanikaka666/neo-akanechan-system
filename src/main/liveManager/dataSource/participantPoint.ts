@@ -22,10 +22,16 @@ export class PariticipantPointManager {
    */
   readonly #stocksAdded: Set<string>;
 
+  /**
+   * LiveChatItemId set which used to adding point of focus
+   */
+  readonly #focusAdded: Set<string>;
+
   constructor() {
     this.#points = new Map();
     this.#continuousChatLastAdded = new Map();
     this.#stocksAdded = new Set();
+    this.#focusAdded = new Set();
   }
   get() {
     return this.#points;
@@ -72,6 +78,20 @@ export class PariticipantPointManager {
     }
     this.#stocksAdded.add(item.id.id);
     return this.#add(item.author, 100);
+  }
+
+  /**
+   *
+   * plus point of focus.
+   *
+   * @returns added point amount. `0` means adding point cancelled.
+   */
+  addByFocused(item: TextMessageChat | SuperChat | SuperSticker) {
+    if (this.#focusAdded.has(item.id.id)) {
+      return 0;
+    }
+    this.#focusAdded.add(item.id.id);
+    return this.#add(item.author, 300);
   }
 
   /**

@@ -256,6 +256,10 @@ export class Processor {
   setFocus(item: FocusedOnChatItem) {
     this.#dataSource.getFocusManager().updateFocus(item);
     this.#lcpDataTransfer.syncChats();
+
+    if (0 < this.#dataSource.getParticipantManager().addByFocused(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
   }
 
   unsetFocus() {
