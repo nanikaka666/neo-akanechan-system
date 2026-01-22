@@ -152,6 +152,11 @@ export class Processor {
 
   membershipMilestone(item: MembershipMilestone) {
     this.#dataSource.getChatDataManager().addMembershipMilestone(item);
+
+    if (0 < this.#dataSource.getParticipantManager().addByMembershipMilestone(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       membershipMilestoneCount: this.#dataSource
         .getChatDataManager()

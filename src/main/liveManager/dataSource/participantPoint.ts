@@ -2,6 +2,7 @@ import { ParticipantPoint } from "../../../types/participantPoint";
 import {
   ChatAuthor,
   FirstMarkable,
+  MembershipMilestone,
   NewMembership,
   SuperChat,
   SuperSticker,
@@ -108,7 +109,17 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByNewMembership(item: NewMembership) {
-    return this.#add(item.author, 2000);
+    return this.#add(item.author, 1000);
+  }
+
+  /**
+   *
+   * plus point of membership milestone.
+   *
+   * @returns added point amount. `0` means adding point cancelled.
+   */
+  addByMembershipMilestone(item: MembershipMilestone) {
+    return this.#add(item.author, 1000 * Math.sqrt(item.memberMonth));
   }
 
   /**
@@ -140,7 +151,7 @@ export class PariticipantPointManager {
       return 0;
     }
     // if author is membership, added amount of point raised by 20%.
-    const addedAmount = author.isMembership ? Math.round(value * 1.2) : value;
+    const addedAmount = Math.round(author.isMembership ? value * 1.2 : value);
     const current = this.#points.get(author.channelId.id);
     if (current === undefined) {
       this.#points.set(author.channelId.id, {
