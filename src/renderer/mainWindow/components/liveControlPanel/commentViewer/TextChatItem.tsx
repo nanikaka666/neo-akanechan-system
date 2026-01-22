@@ -2,6 +2,7 @@ import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 import { StockForm } from "./StockForm";
 import { FocusForm } from "./FocusForm";
+import { PlusPointsButton } from "./PlusPointsButton";
 
 export function TextChatItem({ item }: { item: ExtendedChatItemText }) {
   return (
@@ -10,6 +11,7 @@ export function TextChatItem({ item }: { item: ExtendedChatItemText }) {
       <div>{item.displayMessage}</div>
       <StockForm item={item} />
       <FocusForm item={item} />
+      <PlusPointsButton item={item} />
     </div>
   );
 }
