@@ -170,6 +170,11 @@ export class Processor {
 
   membershipGift(item: MembershipGift) {
     this.#dataSource.getChatDataManager().addMembershipGift(item);
+
+    if (0 < this.#dataSource.getParticipantManager().addByMembershipGift(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       giftCount: this.#dataSource
         .getChatDataManager()
@@ -286,5 +291,11 @@ export class Processor {
     this.#dataSource.getFocusManager().updateFocus(undefined);
 
     this.#lcpDataTransfer.syncChats();
+  }
+
+  manualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
+    if (0 < this.#dataSource.getParticipantManager().addByManualPlusPoints(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
   }
 }

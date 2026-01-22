@@ -4,6 +4,9 @@ import {
   ExtendedChatItemText,
   FocusedOnChatItem,
   MembershipAndGiftItem,
+  SuperChat,
+  SuperSticker,
+  TextMessageChat,
 } from "./liveChatItem";
 import { AuthPage, LiveSelectionPage, MainAppPage } from "./mainAppPage";
 import { LiveStatistics } from "./liveStatistics";
@@ -120,4 +123,9 @@ export interface IpcEvent {
    * Notify point rankings.
    */
   tellRankings: (rankings: PariticipantPointRankings) => void;
+
+  /**
+   * Add points manually.
+   */
+  manualPlusPoints: (item: TextMessageChat | SuperChat | SuperSticker) => boolean;
 }

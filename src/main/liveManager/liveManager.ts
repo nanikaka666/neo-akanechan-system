@@ -1,4 +1,10 @@
-import { FocusedOnChatItem, NonMarkedExtendedChatItemText } from "../../types/liveChatItem";
+import {
+  FocusedOnChatItem,
+  NonMarkedExtendedChatItemText,
+  SuperChat,
+  SuperSticker,
+  TextMessageChat,
+} from "../../types/liveChatItem";
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
 import { LiveChatDataFetcher } from "./dataFetcher/liveChatDataFetcher";
@@ -109,6 +115,10 @@ export class LiveManager {
 
   actionUnsetFocus() {
     this.#processor.unsetFocus();
+  }
+
+  actionPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
+    this.#processor.manualPlusPoints(item);
   }
 
   close() {

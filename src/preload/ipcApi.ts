@@ -39,6 +39,7 @@ export interface IpcApi {
     registerChatsListener: Listen<"tellChats">;
     requestStartAuthFlow: Invoke<"startAuthFlow">;
     registerRankingsListener: Listen<"tellRankings">;
+    requestPlusPoints: Invoke<"manualPlusPoints">;
   };
 }
 
@@ -73,5 +74,6 @@ export const IpcApi: IpcApi = {
     registerChatsListener: (callback) => IpcRendererWrapper.on("tellChats", callback),
     requestStartAuthFlow: () => IpcRendererWrapper.invoke("startAuthFlow"),
     registerRankingsListener: (callback) => IpcRendererWrapper.on("tellRankings", callback),
+    requestPlusPoints: (item) => IpcRendererWrapper.invoke("manualPlusPoints", item),
   },
 };

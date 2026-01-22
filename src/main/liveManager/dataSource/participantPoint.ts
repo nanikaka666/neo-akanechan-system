@@ -2,6 +2,7 @@ import { ParticipantPoint } from "../../../types/participantPoint";
 import {
   ChatAuthor,
   FirstMarkable,
+  MembershipGift,
   MembershipMilestone,
   NewMembership,
   SuperChat,
@@ -120,6 +121,20 @@ export class PariticipantPointManager {
    */
   addByMembershipMilestone(item: MembershipMilestone) {
     return this.#add(item.author, 1000 * Math.sqrt(item.memberMonth));
+  }
+
+  /**
+   *
+   * plus point of membership gift.
+   *
+   * @returns added point amount. `0` means adding point cancelled.
+   */
+  addByMembershipGift(item: MembershipGift) {
+    return this.#add(item.author, 1800 * Math.sqrt(item.giftCount));
+  }
+
+  addByManualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
+    return this.#add(item.author, 10);
   }
 
   /**
