@@ -228,6 +228,10 @@ export class Processor {
     }
     this.#dataSource.getStockManager().add(item);
 
+    if (0 < this.#dataSource.getParticipantManager().addByStocked(item)) {
+      this.#lcpDataTransfer.syncRankings();
+    }
+
     this.#dataSource.getLiveStatisticsDataContainer().update({
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
