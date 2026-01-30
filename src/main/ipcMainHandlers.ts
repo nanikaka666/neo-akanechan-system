@@ -11,6 +11,7 @@ import {
 } from "./liveLaunchProperties";
 import { VideoId } from "../types/youtubeDomainModel";
 import { cleanupLiveManager, getLiveManager, setupLiveManager } from "./liveManager";
+import { createOverlayWindow } from "./overlayWindow";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -70,8 +71,7 @@ export function setupIpcMainHandlers() {
         return false;
       }
 
-      // memo: temporary turn off
-      // createOverlayWindow(overlayWindowTitle);
+      createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
       WebContentsWrapper.send(e.sender, "tellMainAppPage", {
         type: "liveStandBy",

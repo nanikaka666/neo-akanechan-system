@@ -11,8 +11,8 @@ export const createOverlayWindow = (title: string): void => {
   }
   const overlayWindow = new BrowserWindow({
     title: title,
-    height: 600,
-    width: 800,
+    height: 720,
+    width: 1080,
     webPreferences: {
       preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
       devTools: isDevMode(),
