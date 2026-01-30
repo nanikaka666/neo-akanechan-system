@@ -4,6 +4,9 @@ import { isDevMode } from "./environment";
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
+declare const OVERLAY_WEBPACK_ENTRY: string;
+declare const OVERLAY_PRELOAD_WEBPACK_ENTRY: string;
+
 /**
  * Handling Electron app Window instances.
  */
@@ -32,11 +35,43 @@ export class WindowManager {
     this.#mainWindowId = mainWindow.id;
   }
 
+  createOverlayWindow(title: string) {
+    // if overlay window exists, then do nothing.
+    if (this.#checkOverlayWindowExistence()) {
+      return;
+    }
+    // if main window does not exist, then do nothing.
+    if (!this.#checkMainWindowExistence()) {
+      return;
+    }
+    const overlayWindow = new BrowserWindow({
+      title: title,
+      height: 720,
+      width: 1080,
+      webPreferences: {
+        preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
+        devTools: isDevMode(),
+      },
+    });
+
+    overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
+
+    // mainWindow.webContents.openDevTools();
+    this.#overlayWindowId = overlayWindow.id;
+  }
+
   #checkMainWindowExistence() {
     if (this.#mainWindowId === undefined) {
       return false;
     }
     return BrowserWindow.fromId(this.#mainWindowId) !== null;
+  }
+
+  #checkOverlayWindowExistence() {
+    if (this.#overlayWindowId === undefined) {
+      return false;
+    }
+    return BrowserWindow.fromId(this.#overlayWindowId) !== null;
   }
 }
 
