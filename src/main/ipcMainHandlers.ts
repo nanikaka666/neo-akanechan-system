@@ -107,7 +107,7 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
-    await setupLiveManager(e.sender, liveLaunchProperties);
+    await setupLiveManager(liveLaunchProperties);
     return true;
   });
 

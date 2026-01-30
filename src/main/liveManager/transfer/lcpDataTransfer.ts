@@ -1,4 +1,3 @@
-import { WebContents } from "electron";
 import { DataSource } from "../dataSource";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
 import {
@@ -13,7 +12,7 @@ import { getWindowManager } from "../../../main/window";
 
 export class LcpDataTransfer {
   readonly #dataSource: DataSource;
-  constructor(w: WebContents, dataSource: DataSource) {
+  constructor(dataSource: DataSource) {
     this.#dataSource = dataSource;
   }
   syncLiveStatistics() {
