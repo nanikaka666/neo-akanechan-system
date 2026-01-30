@@ -109,13 +109,6 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
     await setupLiveManager(e.sender, liveLaunchProperties);
-    // setupLiveStatistics(e.sender);
-
-    // await Promise.all([
-    //   setupLiveChatEmitter(e.sender, liveLaunchProperties),
-    //   setupChannelStatisticsManager(liveLaunchProperties),
-    //   setupVideoStatisticsManager(liveLaunchProperties),
-    // ]);
     return true;
   });
 
