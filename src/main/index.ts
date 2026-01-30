@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app } from "electron";
 import { checkElectronSquirrelStartup } from "./checkElectronSquirrelStartup";
 import { setupApplicationMenu } from "./menu";
 import { platform } from "./environment";
@@ -28,7 +28,7 @@ const onWindowAllClosed = () => {
  * @param _habVisibleWindows
  */
 const onActivate = (_event: Electron.Event, _habVisibleWindows: boolean) => {
-  if (BrowserWindow.getAllWindows().length === 0) {
+  if (getWindowManager().isAllWindowClosed()) {
     getWindowManager().createMainWindow();
   }
 };

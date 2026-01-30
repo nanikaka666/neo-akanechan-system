@@ -15,8 +15,12 @@ export class WindowManager {
   #overlayWindowId?: number;
   constructor() {}
 
+  /**
+   * Create main window.
+   *
+   * if Main Window already exists, then do nothing.
+   */
   createMainWindow() {
-    // if Main Window already exists, then do nothing.
     if (this.#checkMainWindowExistence()) {
       return;
     }
@@ -35,6 +39,11 @@ export class WindowManager {
     this.#mainWindowId = mainWindow.id;
   }
 
+  /**
+   * Returns WebContents of main window.
+   *
+   * if main window closed then returns `undefined`.
+   */
   getMainWindowWebContents() {
     if (!this.#checkMainWindowExistence()) {
       return undefined;
@@ -65,6 +74,13 @@ export class WindowManager {
 
     // mainWindow.webContents.openDevTools();
     this.#overlayWindowId = overlayWindow.id;
+  }
+
+  /**
+   * Returns whether no window shows.
+   */
+  isAllWindowClosed() {
+    return BrowserWindow.getAllWindows().length === 0;
   }
 
   #checkMainWindowExistence() {
