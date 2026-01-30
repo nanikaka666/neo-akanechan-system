@@ -35,6 +35,13 @@ export class WindowManager {
     this.#mainWindowId = mainWindow.id;
   }
 
+  getMainWindowWebContents() {
+    if (!this.#checkMainWindowExistence()) {
+      return undefined;
+    }
+    return BrowserWindow.fromId(this.#mainWindowId!)!.webContents;
+  }
+
   createOverlayWindow(title: string) {
     // if overlay window exists, then do nothing.
     if (this.#checkOverlayWindowExistence()) {
