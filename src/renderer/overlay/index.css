@@ -17,7 +17,7 @@ body {
 .ani {
   animation: bound;
   animation-duration: 1300ms;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
   animation-timing-function: ease-in-out;
 }
 
@@ -25,7 +25,7 @@ body {
   animation:
     bound 1300ms ease-in-out,
     bound-to-right 1300ms ease-out;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
   animation-composition: accumulate;
 }
 
