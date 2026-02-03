@@ -62,11 +62,13 @@ export class WindowManager {
     }
     const overlayWindow = new BrowserWindow({
       title: title,
+      useContentSize: true,
       height: 720,
       width: 1080,
       webPreferences: {
         preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
         devTools: isDevMode(),
+        backgroundThrottling: false,
       },
     });
 
