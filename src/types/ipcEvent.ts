@@ -14,6 +14,7 @@ import { LiveLaunchProperties } from "./liveLaunchProperties";
 import { Channel } from "./youtubeChannel";
 import { YoutubeLive } from "./youtubeLive";
 import { PariticipantPointRankings } from "./participantPoint";
+import { PointInfoFromMainProcess } from "../renderer/overlay/types";
 
 /**
  * Ipc channel interfaces.
@@ -128,4 +129,9 @@ export interface IpcEvent {
    * Add points manually.
    */
   manualPlusPoints: (item: TextMessageChat | SuperChat | SuperSticker) => boolean;
+
+  /**
+   * Notify amount of got point. (For Overlay)
+   */
+  tellAmountOfPoint: (item: PointInfoFromMainProcess) => void;
 }

@@ -1,11 +1,11 @@
-import { app, BrowserWindow } from "electron";
+import { app } from "electron";
 import { checkElectronSquirrelStartup } from "./checkElectronSquirrelStartup";
-import { createMainWindow } from "./mainWindow";
 import { setupApplicationMenu } from "./menu";
 import { platform } from "./environment";
 import { setupIpcMainHandlers } from "./ipcMainHandlers";
 import { setupReactDevtools } from "./reactDevtools";
 import { setupAuth } from "./auth/google";
+import { getWindowManager, setupWindowManager } from "./window";
 
 /**
  * Quit when all windows are closed, except on macOS. There, it's common
@@ -28,8 +28,8 @@ const onWindowAllClosed = () => {
  * @param _habVisibleWindows
  */
 const onActivate = (_event: Electron.Event, _habVisibleWindows: boolean) => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createMainWindow();
+  if (getWindowManager().isAllWindowClosed()) {
+    getWindowManager().createMainWindow();
   }
 };
 
@@ -47,8 +47,9 @@ function main() {
     setupApplicationMenu();
     await setupReactDevtools();
     await setupAuth();
+    setupWindowManager();
 
-    createMainWindow();
+    getWindowManager().createMainWindow();
 
     app.on("activate", onActivate);
   });

@@ -1,4 +1,3 @@
-import { WebContents } from "electron";
 import { DataSource } from "./dataSource";
 import { LiveManager } from "./liveManager";
 import { LcpDataTransfer } from "./transfer/lcpDataTransfer";
@@ -12,13 +11,11 @@ import { StockManager } from "./dataSource/stock";
 import { ChatDataManager } from "./dataSource/chats";
 import { FocusManager } from "./dataSource/focus";
 import { PariticipantPointManager } from "./dataSource/participantPoint";
+import { OverlayDataTransfer } from "./transfer/overlayDataTransfer";
 
 let liveManager: LiveManager | undefined;
 
-export async function setupLiveManager(
-  webContents: WebContents,
-  liveLaunchProperties: LiveLaunchProperties,
-) {
+export async function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   if (liveManager !== undefined) {
     liveManager.close();
     liveManager = undefined;
@@ -35,8 +32,14 @@ export async function setupLiveManager(
     focusManager,
     pointManager,
   );
-  const lcpDataTransfer = new LcpDataTransfer(webContents, dataSource);
-  const processor = new Processor(liveLaunchProperties, dataSource, lcpDataTransfer);
+  const lcpDataTransfer = new LcpDataTransfer(dataSource);
+  const overlayDataTransfer = new OverlayDataTransfer();
+  const processor = new Processor(
+    liveLaunchProperties,
+    dataSource,
+    lcpDataTransfer,
+    overlayDataTransfer,
+  );
   const channelDataFetcher = new ChannelDataFetcher(liveLaunchProperties.channel.id, 60 * 1000);
   const videoDataFetcher = new VideoDataFetcher(liveLaunchProperties.live.videoId, 15 * 1000);
   const liveChatDataFetcher = new LiveChatDataFetcher(liveLaunchProperties.live.liveChatId);

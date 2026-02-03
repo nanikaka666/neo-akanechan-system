@@ -11,6 +11,7 @@ import {
 } from "./liveLaunchProperties";
 import { VideoId } from "../types/youtubeDomainModel";
 import { cleanupLiveManager, getLiveManager, setupLiveManager } from "./liveManager";
+import { getWindowManager } from "./window";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -35,8 +36,7 @@ export function setupIpcMainHandlers() {
 
     const liveLaunchProperties = buildLiveLaunchProperties(channel, live);
 
-    // memo: temporary turn off
-    // createOverlayWindow(overlayWindowTitle);
+    getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
@@ -70,8 +70,7 @@ export function setupIpcMainHandlers() {
         return false;
       }
 
-      // memo: temporary turn off
-      // createOverlayWindow(overlayWindowTitle);
+      getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
       WebContentsWrapper.send(e.sender, "tellMainAppPage", {
         type: "liveStandBy",
@@ -108,14 +107,7 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
-    await setupLiveManager(e.sender, liveLaunchProperties);
-    // setupLiveStatistics(e.sender);
-
-    // await Promise.all([
-    //   setupLiveChatEmitter(e.sender, liveLaunchProperties),
-    //   setupChannelStatisticsManager(liveLaunchProperties),
-    //   setupVideoStatisticsManager(liveLaunchProperties),
-    // ]);
+    await setupLiveManager(liveLaunchProperties);
     return true;
   });
 

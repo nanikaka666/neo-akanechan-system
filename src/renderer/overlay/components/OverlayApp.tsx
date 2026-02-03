@@ -1,3 +1,9 @@
+import { PoppingManager } from "./PoppingManager";
+
 export function OverlayApp() {
-  return <div>doumo</div>;
+  return (
+    <div>
+      <PoppingManager />
+    </div>
+  );
 }

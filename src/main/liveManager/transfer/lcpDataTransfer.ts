@@ -1,4 +1,3 @@
-import { WebContents } from "electron";
 import { DataSource } from "../dataSource";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
 import {
@@ -9,17 +8,16 @@ import {
   Focusable,
 } from "../../../types/liveChatItem";
 import { ParticipantPointRankingData, ParticipantPoint } from "../../../types/participantPoint";
+import { getWindowManager } from "../../../main/window";
 
 export class LcpDataTransfer {
-  readonly #webContents: WebContents;
   readonly #dataSource: DataSource;
-  constructor(webContents: WebContents, dataSource: DataSource) {
-    this.#webContents = webContents;
+  constructor(dataSource: DataSource) {
     this.#dataSource = dataSource;
   }
   syncLiveStatistics() {
     WebContentsWrapper.send(
-      this.#webContents,
+      this.#getWebContents(),
       "tellLiveStatistics",
       this.#dataSource.getLiveStatisticsDataContainer().get(),
     );
@@ -53,7 +51,7 @@ export class LcpDataTransfer {
         ? this.#markIsFocused(this.#markIsStocked(currentFocus))
         : this.#markIsFocused(currentFocus);
 
-    WebContentsWrapper.send(this.#webContents, "tellChats", {
+    WebContentsWrapper.send(this.#getWebContents(), "tellChats", {
       textChats: {
         items: markedTextChats,
         num: this.#dataSource.getChatDataManager().getTextChatCount(),
@@ -66,7 +64,7 @@ export class LcpDataTransfer {
 
   syncMembershipAndGifts() {
     WebContentsWrapper.send(
-      this.#webContents,
+      this.#getWebContents(),
       "tellMembershipsAndGifts",
       this.#dataSource.getChatDataManager().getMembershipAndGifts(),
     );
@@ -84,7 +82,7 @@ export class LcpDataTransfer {
           participantPoint: item,
         };
       });
-    WebContentsWrapper.send(this.#webContents, "tellRankings", {
+    WebContentsWrapper.send(this.#getWebContents(), "tellRankings", {
       items: items,
       updatedAt: new Date(),
     });
@@ -107,5 +105,13 @@ export class LcpDataTransfer {
     return b.point === a.point
       ? a.participatedTime.getTime() - b.participatedTime.getTime()
       : b.point - a.point;
+  }
+
+  #getWebContents() {
+    const res = getWindowManager().getMainWindowWebContents();
+    if (res === undefined) {
+      throw new Error("Data transfer failed by missing main window.");
+    }
+    return res;
   }
 }
