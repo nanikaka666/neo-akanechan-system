@@ -51,6 +51,18 @@ export class WindowManager {
     return BrowserWindow.fromId(this.#mainWindowId!)!.webContents;
   }
 
+  /**
+   * Returns WebContents of overlay window.
+   *
+   * if main window closed then returns `undefined`.
+   */
+  getOverlayWindowWebContents() {
+    if (!this.#checkOverlayWindowExistence()) {
+      return undefined;
+    }
+    return BrowserWindow.fromId(this.#overlayWindowId!)!.webContents;
+  }
+
   createOverlayWindow(title: string) {
     // if overlay window exists, then do nothing.
     if (this.#checkOverlayWindowExistence()) {
