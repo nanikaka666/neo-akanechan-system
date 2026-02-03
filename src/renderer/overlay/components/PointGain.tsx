@@ -1,20 +1,24 @@
-import { Point2D, Popping } from "./Popping";
+import { PointGet } from "../types";
+import { Popping } from "./Popping";
 
-export interface PointGainProps {
-  imgUrl: string;
-  gainPoint: number;
-  coordinate: Point2D;
-  delayMs: number;
-}
-
-export function PointGain({ imgUrl, gainPoint, coordinate, delayMs }: PointGainProps) {
+export function PointGain({ img, value, coordinate, delayMs, animationEndFunc }: PointGet) {
   return (
     <>
-      <Popping coordinate={coordinate} poppingType="straight" delayMs={delayMs}>
-        <img src={imgUrl} />
+      <Popping
+        coordinate={coordinate}
+        animationType="straight"
+        delayMs={delayMs}
+        animationEndFunc={animationEndFunc}
+      >
+        <img src={img} />
       </Popping>
-      <Popping coordinate={coordinate} poppingType="right" delayMs={delayMs}>
-        <div className="font-popping">{gainPoint}</div>
+      <Popping
+        coordinate={coordinate}
+        animationType="right"
+        delayMs={delayMs}
+        animationEndFunc={animationEndFunc}
+      >
+        <div className="font-popping">{value}</div>
       </Popping>
     </>
   );
