@@ -1,4 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Quattrocento+Sans:ital,wght@0,400;1,700&display=swap");
+
 body {
   margin: 0;
   padding: 0;
+  background-color: green;
+}
+
+.font-popping {
+  font-size: 48px;
+  font-family: "Quattrocento Sans", sans-serif;
+  font-style: italic;
+  color: white;
+  -webkit-text-stroke: black 2px;
+}
+
+.ani {
+  animation: bound;
+  animation-duration: 1300ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
+
+.yokoani {
+  animation:
+    bound 1300ms ease-in-out,
+    bound-to-right 1300ms ease-out;
+  animation-iteration-count: 1;
+  animation-composition: accumulate;
+}
+
+@keyframes bound-to-right {
+  0% {
+    transform: translateX(0px);
+  }
+  52%,
+  100% {
+    transform: translateX(180px);
+  }
+}
+
+@keyframes bound {
+  0% {
+    transform: translateY(-60px);
+    opacity: 1;
+  }
+
+  10% {
+    transform: translateY(0px);
+  }
+
+  25% {
+    transform: translateY(-60px);
+  }
+
+  34% {
+    transform: translateY(0px);
+  }
+
+  41% {
+    transform: translateY(-30px);
+  }
+
+  50% {
+    transform: translateY(0px);
+  }
+
+  89% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0px);
+    opacity: 0;
+  }
 }
