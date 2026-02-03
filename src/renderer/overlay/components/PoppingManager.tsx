@@ -2,26 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { PointGet, PointInfoFromMainProcess } from "../types";
 import { PointGain } from "./PointGain";
 
-function makeRandomData(length: number) {
-  const data: PointInfoFromMainProcess[] = new Array(length).fill(0).map(() => {
-    return {
-      img: "",
-      point: Math.round(Math.random() * 1000),
-    };
-  });
-  return data;
-}
-
 const DELAY_MS = 180;
 const CHUNK_NUM = 5;
 
 export function PoppingManager() {
-  const [buffer, setBuffer] = useState<PointInfoFromMainProcess[]>(makeRandomData(1));
+  const [buffer, setBuffer] = useState<PointInfoFromMainProcess[]>([]);
   const [items, setItems] = useState<PointGet[]>([]);
-
-  const debug = useCallback(() => {
-    setBuffer((prev) => [...prev, ...makeRandomData(11)]);
-  }, []);
 
   const reflect = useCallback(() => {
     const chunked: PointInfoFromMainProcess[][] = buffer.flatMap((_, idx, a) => {
@@ -66,13 +52,6 @@ export function PoppingManager() {
       clearInterval(intervalId);
     };
   }, [reflect]);
-
-  useEffect(() => {
-    const debugInterval = setInterval(() => debug(), 2000);
-    return () => {
-      clearInterval(debugInterval);
-    };
-  }, [debug]);
 
   return items.map((item) => {
     return <PointGain key={item.itemId} {...item} />;
