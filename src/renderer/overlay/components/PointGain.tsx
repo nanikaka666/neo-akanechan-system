@@ -10,7 +10,7 @@ export function PointGain({ img, value, coordinate, delayMs, animationEndFunc }:
         delayMs={delayMs}
         animationEndFunc={animationEndFunc}
       >
-        <img src={img} />
+        <img src={img} style={{ height: "7vh", borderRadius: "50%", overflow: "hidden" }} />
       </Popping>
       <Popping
         coordinate={coordinate}
