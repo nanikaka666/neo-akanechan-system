@@ -14,20 +14,22 @@ export interface Children {
 export interface PoppingProps {
   coordinate: Point2D;
   poppingType: PoppingType;
+  delayMs: number;
 }
 
-export function Popping(props: PoppingProps & Children) {
+export function Popping({ coordinate, poppingType, delayMs, children }: PoppingProps & Children) {
   return (
     <div
       style={{
         opacity: 0,
         position: "absolute",
-        top: `${props.coordinate.y}px`,
-        left: `${props.coordinate.x}px`,
+        top: `${coordinate.y}vh`,
+        left: `${coordinate.x}vw`,
+        animationDelay: `${delayMs}ms`,
       }}
-      className={["font-popping", props.poppingType === "straight" ? "ani" : "yokoani"].join(" ")}
+      className={[poppingType === "straight" ? "ani" : "yokoani"].join(" ")}
     >
-      {props.children}
+      {children}
     </div>
   );
 }
