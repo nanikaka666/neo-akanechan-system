@@ -53,6 +53,13 @@ export function PoppingManager() {
   }, [buffer]);
 
   useEffect(() => {
+    const remover = window.ipcApi.registerAmountOfPoint((e, item) => {
+      setBuffer((prev) => [...prev, item]);
+    });
+    return () => remover();
+  }, []);
+
+  useEffect(() => {
     const intervalId = setInterval(() => reflect(), 1000);
 
     return () => {
