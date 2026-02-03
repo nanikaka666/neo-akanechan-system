@@ -30,6 +30,7 @@ export class Processor {
     this.#liveLaunchProperties = liveLaunchProperties;
     this.#dataSource = dataSource;
     this.#lcpDataTransfer = lcpDataTransfer;
+    this.#overlayDataTransfer = overlayDataTransfer;
   }
 
   subscriberCount(nextSubscriberCount: number) {
@@ -77,6 +78,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -97,6 +99,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -121,6 +124,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -138,8 +142,11 @@ export class Processor {
   newMembership(item: NewMembership) {
     this.#dataSource.getChatDataManager().addNewMembership(item);
 
-    if (0 < this.#dataSource.getParticipantManager().addByNewMembership(item)) {
+    const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByNewMembership(item);
+
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -156,8 +163,13 @@ export class Processor {
   membershipMilestone(item: MembershipMilestone) {
     this.#dataSource.getChatDataManager().addMembershipMilestone(item);
 
-    if (0 < this.#dataSource.getParticipantManager().addByMembershipMilestone(item)) {
+    const addedAmountOfPoint = this.#dataSource
+      .getParticipantManager()
+      .addByMembershipMilestone(item);
+
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -174,8 +186,11 @@ export class Processor {
   membershipGift(item: MembershipGift) {
     this.#dataSource.getChatDataManager().addMembershipGift(item);
 
-    if (0 < this.#dataSource.getParticipantManager().addByMembershipGift(item)) {
+    const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByMembershipGift(item);
+
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -253,8 +268,11 @@ export class Processor {
     }
     this.#dataSource.getStockManager().add(item);
 
-    if (0 < this.#dataSource.getParticipantManager().addByStocked(item)) {
+    const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByStocked(item);
+
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -282,8 +300,11 @@ export class Processor {
     this.#dataSource.getFocusManager().updateFocus(item);
     this.#lcpDataTransfer.syncChats();
 
-    if (0 < this.#dataSource.getParticipantManager().addByFocused(item)) {
+    const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByFocused(item);
+
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
   }
 
@@ -297,8 +318,10 @@ export class Processor {
   }
 
   manualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
-    if (0 < this.#dataSource.getParticipantManager().addByManualPlusPoints(item)) {
+    const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByManualPlusPoints(item);
+    if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
     }
   }
 }
