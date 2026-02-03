@@ -1,25 +1,15 @@
-import { ReactElement } from "react";
+import { PoppingItemProps } from "../types";
 
-export interface Point2D {
-  x: number;
-  y: number;
-}
-
-export type PoppingType = "straight" | "right";
-
-export interface Children {
-  children: ReactElement | string;
-}
-
-export interface PoppingProps {
-  coordinate: Point2D;
-  poppingType: PoppingType;
-  delayMs: number;
-}
-
-export function Popping({ coordinate, poppingType, delayMs, children }: PoppingProps & Children) {
+export function Popping({
+  coordinate,
+  animationType,
+  delayMs,
+  animationEndFunc,
+  children,
+}: PoppingItemProps) {
   return (
     <div
+      onAnimationEnd={animationEndFunc}
       style={{
         opacity: 0,
         position: "absolute",
@@ -27,7 +17,7 @@ export function Popping({ coordinate, poppingType, delayMs, children }: PoppingP
         left: `${coordinate.x}vw`,
         animationDelay: `${delayMs}ms`,
       }}
-      className={[poppingType === "straight" ? "ani" : "yokoani"].join(" ")}
+      className={[animationType === "straight" ? "ani" : "yokoani"].join(" ")}
     >
       {children}
     </div>
