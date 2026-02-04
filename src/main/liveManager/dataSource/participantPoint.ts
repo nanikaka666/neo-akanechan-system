@@ -136,7 +136,7 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByNewMembership(item: NewMembership) {
-    return this.#add(item.author, 1000);
+    return this.#add(item.author, 1800);
   }
 
   /**
