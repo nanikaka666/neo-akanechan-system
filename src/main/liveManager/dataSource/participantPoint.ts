@@ -10,6 +10,21 @@ import {
   TextMessageChat,
 } from "../../../types/liveChatItem";
 
+/**
+ * Set of data for continuous chat point.
+ */
+interface ContinuousChatMetadata {
+  /**
+   * Last time when counted as continuous chat point.
+   */
+  lastAddedTime: Date;
+
+  /**
+   * how many times counted up.
+   */
+  countedTimes: number;
+}
+
 export class PariticipantPointManager {
   readonly #points: Map<string, ParticipantPoint>;
 
@@ -18,7 +33,7 @@ export class PariticipantPointManager {
    *
    * key is author channel id.
    */
-  readonly #continuousChatLastAdded: Map<string, Date>;
+  readonly #continuousChatMetadata: Map<string, ContinuousChatMetadata>;
 
   /**
    * LiveChatItemId set which used to adding point of stock.
@@ -37,7 +52,7 @@ export class PariticipantPointManager {
 
   constructor() {
     this.#points = new Map();
-    this.#continuousChatLastAdded = new Map();
+    this.#continuousChatMetadata = new Map();
     this.#stocksAdded = new Set();
     this.#focusAdded = new Set();
     this.#disqualifiedChannelIds = new Set();
@@ -64,13 +79,18 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByContinuousChat(item: TextMessageChat | SuperChat | SuperSticker) {
-    const lastAddedTime = this.#continuousChatLastAdded.get(item.author.channelId.id);
+    const lastAddedTime = this.#continuousChatMetadata.get(item.author.channelId.id);
     if (
       lastAddedTime === undefined ||
-      lastAddedTime.getTime() + 30 * 1000 < item.publishedAt.getTime() // if 30 seconds passed from last point adding, then add point.
+      lastAddedTime.lastAddedTime.getTime() + 30 * 1000 < item.publishedAt.getTime() // if 30 seconds passed from last point adding, then add point.
     ) {
-      this.#continuousChatLastAdded.set(item.author.channelId.id, item.publishedAt);
-      return this.#add(item.author, 10);
+      const times = lastAddedTime === undefined ? 0 : lastAddedTime.countedTimes;
+      this.#continuousChatMetadata.set(item.author.channelId.id, {
+        lastAddedTime: item.publishedAt,
+        countedTimes: times + 1,
+      });
+      const addedPoint = 10 * ((times * times) / 150 + 1);
+      return this.#add(item.author, addedPoint);
     } else {
       return 0;
     }
@@ -110,7 +130,7 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByNewMembership(item: NewMembership) {
-    return this.#add(item.author, 1000);
+    return this.#add(item.author, 1800);
   }
 
   /**
@@ -120,7 +140,8 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByMembershipMilestone(item: MembershipMilestone) {
-    return this.#add(item.author, 1000 * Math.sqrt(item.memberMonth));
+    const addedPoint = 1800 * ((item.memberMonth * item.memberMonth) / 100 + 1);
+    return this.#add(item.author, addedPoint);
   }
 
   /**
@@ -130,7 +151,8 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByMembershipGift(item: MembershipGift) {
-    return this.#add(item.author, 1800 * Math.sqrt(item.giftCount));
+    const addedPoint = 1000 * ((item.giftCount * item.giftCount) / 200 + item.giftCount + 1);
+    return this.#add(item.author, addedPoint);
   }
 
   addByManualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
