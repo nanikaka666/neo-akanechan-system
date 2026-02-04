@@ -10,6 +10,21 @@ import {
   TextMessageChat,
 } from "../../../types/liveChatItem";
 
+/**
+ * Set of data for continuous chat point.
+ */
+interface ContinuousChatMetadata {
+  /**
+   * Last time when counted as continuous chat point.
+   */
+  lastAddedTime: Date;
+
+  /**
+   * how many times counted up.
+   */
+  countedTimes: number;
+}
+
 export class PariticipantPointManager {
   readonly #points: Map<string, ParticipantPoint>;
 
@@ -18,7 +33,7 @@ export class PariticipantPointManager {
    *
    * key is author channel id.
    */
-  readonly #continuousChatLastAdded: Map<string, Date>;
+  readonly #continuousChatLastAdded: Map<string, ContinuousChatMetadata>;
 
   /**
    * LiveChatItemId set which used to adding point of stock.
@@ -67,13 +82,24 @@ export class PariticipantPointManager {
     const lastAddedTime = this.#continuousChatLastAdded.get(item.author.channelId.id);
     if (
       lastAddedTime === undefined ||
-      lastAddedTime.getTime() + 30 * 1000 < item.publishedAt.getTime() // if 30 seconds passed from last point adding, then add point.
+      lastAddedTime.lastAddedTime.getTime() + 30 * 1000 < item.publishedAt.getTime() // if 30 seconds passed from last point adding, then add point.
     ) {
-      this.#continuousChatLastAdded.set(item.author.channelId.id, item.publishedAt);
-      return this.#add(item.author, 10);
+      const times = lastAddedTime === undefined ? 0 : lastAddedTime.countedTimes;
+      this.#continuousChatLastAdded.set(item.author.channelId.id, {
+        lastAddedTime: item.publishedAt,
+        countedTimes: times + 1,
+      });
+      return this.#add(item.author, this.#calcContinuousChatPoint(times));
     } else {
       return 0;
     }
+  }
+
+  /**
+   * Calc continuous chat point.
+   */
+  #calcContinuousChatPoint(times: number) {
+    return 10 * ((times * times) / 150 + 1);
   }
 
   /**
