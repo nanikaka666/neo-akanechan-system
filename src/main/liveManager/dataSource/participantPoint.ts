@@ -89,17 +89,11 @@ export class PariticipantPointManager {
         lastAddedTime: item.publishedAt,
         countedTimes: times + 1,
       });
-      return this.#add(item.author, this.#calcContinuousChatPoint(times));
+      const addedPoint = 10 * ((times * times) / 150 + 1);
+      return this.#add(item.author, addedPoint);
     } else {
       return 0;
     }
-  }
-
-  /**
-   * Calc continuous chat point.
-   */
-  #calcContinuousChatPoint(times: number) {
-    return 10 * ((times * times) / 150 + 1);
   }
 
   /**
@@ -146,7 +140,8 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByMembershipMilestone(item: MembershipMilestone) {
-    return this.#add(item.author, 1000 * Math.sqrt(item.memberMonth));
+    const addedPoint = 1800 * ((item.memberMonth * item.memberMonth) / 100 + 1);
+    return this.#add(item.author, addedPoint);
   }
 
   /**
@@ -156,7 +151,8 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByMembershipGift(item: MembershipGift) {
-    return this.#add(item.author, 1800 * Math.sqrt(item.giftCount));
+    const addedPoint = 1000 * ((item.giftCount * item.giftCount) / 200 + item.giftCount + 1);
+    return this.#add(item.author, addedPoint);
   }
 
   addByManualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
