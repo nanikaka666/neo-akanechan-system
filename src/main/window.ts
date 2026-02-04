@@ -77,6 +77,7 @@ export class WindowManager {
       useContentSize: true,
       height: 720,
       width: 1080,
+      //   transparent: true,
       webPreferences: {
         preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
         devTools: isDevMode(),
