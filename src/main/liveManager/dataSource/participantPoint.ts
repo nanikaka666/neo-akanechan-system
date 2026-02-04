@@ -33,7 +33,7 @@ export class PariticipantPointManager {
    *
    * key is author channel id.
    */
-  readonly #continuousChatLastAdded: Map<string, ContinuousChatMetadata>;
+  readonly #continuousChatMetadata: Map<string, ContinuousChatMetadata>;
 
   /**
    * LiveChatItemId set which used to adding point of stock.
@@ -52,7 +52,7 @@ export class PariticipantPointManager {
 
   constructor() {
     this.#points = new Map();
-    this.#continuousChatLastAdded = new Map();
+    this.#continuousChatMetadata = new Map();
     this.#stocksAdded = new Set();
     this.#focusAdded = new Set();
     this.#disqualifiedChannelIds = new Set();
@@ -79,13 +79,13 @@ export class PariticipantPointManager {
    * @returns added point amount. `0` means adding point cancelled.
    */
   addByContinuousChat(item: TextMessageChat | SuperChat | SuperSticker) {
-    const lastAddedTime = this.#continuousChatLastAdded.get(item.author.channelId.id);
+    const lastAddedTime = this.#continuousChatMetadata.get(item.author.channelId.id);
     if (
       lastAddedTime === undefined ||
       lastAddedTime.lastAddedTime.getTime() + 30 * 1000 < item.publishedAt.getTime() // if 30 seconds passed from last point adding, then add point.
     ) {
       const times = lastAddedTime === undefined ? 0 : lastAddedTime.countedTimes;
-      this.#continuousChatLastAdded.set(item.author.channelId.id, {
+      this.#continuousChatMetadata.set(item.author.channelId.id, {
         lastAddedTime: item.publishedAt,
         countedTimes: times + 1,
       });
