@@ -134,4 +134,9 @@ export interface IpcEvent {
    * Notify amount of got point. (For Overlay)
    */
   tellAmountOfPoint: (item: PointInfoFromMainProcess) => void;
+
+  /**
+   * Get LiveLaunchProperties. (For Overlay)
+   */
+  getLiveLaunchProperties: () => LiveLaunchProperties;
 }

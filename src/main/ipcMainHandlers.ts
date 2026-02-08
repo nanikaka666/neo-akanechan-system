@@ -225,4 +225,8 @@ export function setupIpcMainHandlers() {
     getLiveManager().actionPlusPoints(item);
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("getLiveLaunchProperties", () => {
+    // todo
+  });
 }
