@@ -13,7 +13,7 @@ export function LiveControlPanel({
   const [mode, setMode] = useState<Mode>("commentViewer");
 
   useEffect(() => {
-    window.ipcApi.requestLaunchEmitters(liveLaunchProperties).then(console.log);
+    window.ipcApi.requestStartDataFetch(liveLaunchProperties).then(console.log);
   }, [liveLaunchProperties]);
 
   return (

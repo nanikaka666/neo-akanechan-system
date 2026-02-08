@@ -26,7 +26,7 @@ export interface IpcApi {
     requestSaveUserSettings: Invoke<"saveUserSettings">;
     requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
     registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
-    requestLaunchEmitters: Invoke<"launchEmitters">;
+    requestStartDataFetch: Invoke<"startDataFetch">;
     registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
     requestAddStock: Invoke<"addStock">;
     requestRemoveStock: Invoke<"removeStock">;
@@ -60,8 +60,8 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),
     registerUpdatedUserSettingsListener: (callback) =>
       IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
-    requestLaunchEmitters: (liveLaunchProperties) =>
-      IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
+    requestStartDataFetch: (liveLaunchProperties) =>
+      IpcRendererWrapper.invoke("startDataFetch", liveLaunchProperties),
     registerMembershipsAndGiftsListener: (callback) =>
       IpcRendererWrapper.on("tellMembershipsAndGifts", callback),
     requestAddStock: (stock) => IpcRendererWrapper.invoke("addStock", stock),

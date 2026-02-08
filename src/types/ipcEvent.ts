@@ -35,9 +35,9 @@ export interface IpcEvent {
   startOverlayWithUserConfirmationByVideoId: (inputVideoId: string) => boolean;
 
   /**
-   * Start emitters depend on user settings.
+   * Start DataFetcheres.
    */
-  launchEmitters: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+  startDataFetch: (liveLaunchProperties: LiveLaunchProperties) => boolean;
 
   /**
    * Get UserSettings.
