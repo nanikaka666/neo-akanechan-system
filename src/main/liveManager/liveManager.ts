@@ -34,9 +34,9 @@ export class LiveManager {
     this.#videoDataFetcher = videoDataFetcher;
     this.#liveChatDataFetcher = liveChatDataFetcher;
   }
-  async setup() {
-    await Promise.all([this.#setupChannelDataFetcher(), this.#setupVideoDataFetcher()]);
-    this.#setupLiveChatDataFetcher();
+  async start() {
+    await Promise.all([this.#startChannelDataFetcher(), this.#startVideoDataFetcher()]);
+    this.#startLiveChatDataFetcher();
   }
 
   getLiveLaunchProperties() {
@@ -56,7 +56,7 @@ export class LiveManager {
     }
   }
 
-  async #setupChannelDataFetcher() {
+  async #startChannelDataFetcher() {
     this.#channelDataFetcher.removeAllListeners();
     this.#channelDataFetcher.once("start", (initialValue) => {
       console.log("ChannelDataFetcher started.");
@@ -72,7 +72,7 @@ export class LiveManager {
     return await this.#channelDataFetcher.start();
   }
 
-  async #setupVideoDataFetcher() {
+  async #startVideoDataFetcher() {
     this.#videoDataFetcher.removeAllListeners();
     this.#videoDataFetcher.once("start", (initValue) => {
       console.log("VideoDataFetcher started.", initValue);
@@ -90,7 +90,7 @@ export class LiveManager {
     return await this.#videoDataFetcher.start();
   }
 
-  #setupLiveChatDataFetcher() {
+  #startLiveChatDataFetcher() {
     this.#liveChatDataFetcher.once("start", () => {
       console.log("LiveChatDataFetcher started.");
     });

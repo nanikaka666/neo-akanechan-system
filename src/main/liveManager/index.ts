@@ -51,7 +51,7 @@ export async function setupLiveManager(liveLaunchProperties: LiveLaunchPropertie
     videoDataFetcher,
     liveChatDataFetcher,
   );
-  await liveManager.setup();
+  await liveManager.start();
 }
 
 export function getLiveManager() {
