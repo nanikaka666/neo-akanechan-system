@@ -36,6 +36,7 @@ export function setupIpcMainHandlers() {
 
     const liveLaunchProperties = buildLiveLaunchProperties(channel, live);
 
+    setupLiveManager(liveLaunchProperties);
     getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
@@ -70,6 +71,7 @@ export function setupIpcMainHandlers() {
         return false;
       }
 
+      setupLiveManager(liveLaunchProperties);
       getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
       WebContentsWrapper.send(e.sender, "tellMainAppPage", {
@@ -107,7 +109,7 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("startDataFetch", async (e, liveLaunchProperties) => {
-    await setupLiveManager(liveLaunchProperties);
+    await getLiveManager().start();
     return true;
   });
 
