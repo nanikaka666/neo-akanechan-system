@@ -15,7 +15,7 @@ import { OverlayDataTransfer } from "./transfer/overlayDataTransfer";
 
 let liveManager: LiveManager | undefined;
 
-export async function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
+export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   if (liveManager !== undefined) {
     liveManager.close();
     liveManager = undefined;
@@ -51,7 +51,6 @@ export async function setupLiveManager(liveLaunchProperties: LiveLaunchPropertie
     videoDataFetcher,
     liveChatDataFetcher,
   );
-  await liveManager.start();
 }
 
 export function getLiveManager() {
