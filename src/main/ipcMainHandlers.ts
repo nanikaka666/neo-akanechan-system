@@ -108,7 +108,7 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
   });
 
-  IpcMainWrapper.handle("startDataFetch", async (e, liveLaunchProperties) => {
+  IpcMainWrapper.handle("startDataFetch", async () => {
     await getLiveManager().start();
     return true;
   });

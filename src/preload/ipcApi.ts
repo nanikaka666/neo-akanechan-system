@@ -60,8 +60,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),
     registerUpdatedUserSettingsListener: (callback) =>
       IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
-    requestStartDataFetch: (liveLaunchProperties) =>
-      IpcRendererWrapper.invoke("startDataFetch", liveLaunchProperties),
+    requestStartDataFetch: () => IpcRendererWrapper.invoke("startDataFetch"),
     registerMembershipsAndGiftsListener: (callback) =>
       IpcRendererWrapper.on("tellMembershipsAndGifts", callback),
     requestAddStock: (stock) => IpcRendererWrapper.invoke("addStock", stock),

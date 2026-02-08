@@ -37,7 +37,7 @@ export interface IpcEvent {
   /**
    * Start DataFetcheres.
    */
-  startDataFetch: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+  startDataFetch: () => boolean;
 
   /**
    * Get UserSettings.
