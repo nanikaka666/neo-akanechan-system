@@ -80,7 +80,7 @@ export interface IpcEvent {
   removeStock: (stock: ExtendedChatItemText) => boolean;
 
   /**
-   * Notify LiveStatistics to renderer.
+   * Notify LiveStatistics to renderer. (LCP & Overlay)
    */
   tellLiveStatistics: (statistics: LiveStatistics) => void;
 
