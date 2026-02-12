@@ -53,7 +53,12 @@ export const DefaultSettings: UserSettings = {
   } satisfies LiveChatSettings),
   ...({
     useSubscribersCountGoal: true,
+    subscribersCountGoalValue: 0,
     useLikeCountGoal: true,
+    likeCountGoalMaxLevel: 1,
+    likeCountGoalMaxValue: 0,
     useLiveViewCountGoal: true,
+    liveViewCountGoalMaxLevel: 1,
+    liveViewCountGoalMaxValue: 0,
   } satisfies GoalsSettings),
 };
