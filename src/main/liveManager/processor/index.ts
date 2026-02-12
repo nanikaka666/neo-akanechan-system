@@ -74,7 +74,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -95,7 +95,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -120,7 +120,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -142,7 +142,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -165,7 +165,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -186,7 +186,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -268,7 +268,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -300,7 +300,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
   }
 
@@ -317,7 +317,7 @@ export class Processor {
     const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByManualPlusPoints(item);
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
   }
 }

@@ -6,7 +6,7 @@ import { PointInfoFromMainProcess } from "../../../renderer/overlay/types";
 export class OverlayDataTransfer {
   constructor() {}
 
-  send(author: ChatAuthor, amountOfPoint: number) {
+  sendAmountOfPoint(author: ChatAuthor, amountOfPoint: number) {
     // send
     WebContentsWrapper.send(this.#getWebContents(), "tellAmountOfPoint", {
       img: author.profileImageUrl,
