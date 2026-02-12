@@ -1,7 +1,6 @@
 import { YoutubeLive, YoutubeLiveInLive, YoutubeLiveInReady } from "../types/youtubeLive";
 import { Channel } from "../types/youtubeChannel";
 import { LiveLaunchProperties } from "../types/liveLaunchProperties";
-import { UserSettingsService } from "./userSettings";
 import { VideoId } from "../types/youtubeDomainModel";
 import { YoutubeApiService } from "./youtubeApi/service";
 
@@ -15,7 +14,6 @@ export function buildLiveLaunchProperties(
   return {
     channel: channel,
     live: live,
-    settings: UserSettingsService.getUserSettings(),
     overlayWindowTitle: overlayWindowTitle,
   };
 }
@@ -61,7 +59,6 @@ export async function buildLiveLaunchPropertiesForDebug(
   return {
     channel: channel,
     live: live,
-    settings: UserSettingsService.getUserSettings(),
     overlayWindowTitle: overlayWindowTitle,
   };
 }
