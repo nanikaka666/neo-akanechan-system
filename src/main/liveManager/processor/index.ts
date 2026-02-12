@@ -38,7 +38,7 @@ export class Processor {
       currentSubscriberCount: nextSubscriberCount,
       maxSubscriberCount: Math.max(maxSubscriberCount, nextSubscriberCount),
     });
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
   }
 
   likeCount(nextLikeCount: number) {
@@ -50,7 +50,7 @@ export class Processor {
       currentLikeCount: nextLikeCount,
       maxLikeCount: Math.max(maxLikeCount, nextLikeCount),
     });
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
   }
 
   viewerCount(nextViewerCount: number) {
@@ -62,7 +62,7 @@ export class Processor {
       currentLiveViewCount: nextViewerCount,
       maxLiveViewCount: Math.max(maxLiveViewCount, nextViewerCount),
     });
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
   }
 
   textChat(item: TextMessageChat) {
@@ -82,7 +82,7 @@ export class Processor {
       textChatCount: this.#dataSource.getChatDataManager().getTextChatCount(),
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -106,7 +106,7 @@ export class Processor {
         .filter((chat) => chat.type === "superChat").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -131,7 +131,7 @@ export class Processor {
         .filter((chat) => chat.type === "superSticker").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -152,7 +152,7 @@ export class Processor {
         .filter((chat) => chat.type === "newMembership").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
@@ -175,7 +175,7 @@ export class Processor {
         .filter((chat) => chat.type === "milestone").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
@@ -196,7 +196,7 @@ export class Processor {
         .filter((chat) => chat.type === "gift").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
@@ -209,7 +209,7 @@ export class Processor {
         .filter((chat) => chat.type === "giftReceived").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
@@ -224,7 +224,7 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -254,7 +254,7 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -275,7 +275,7 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -288,7 +288,7 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -323,5 +323,13 @@ export class Processor {
 
   syncLiveSettings() {
     this.#overlayDataTransfer.syncLiveSettings();
+  }
+
+  /**
+   * Sync LiveStatistics both windows.
+   */
+  #syncLiveStatistics() {
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#overlayDataTransfer.syncLiveStatistics();
   }
 }
