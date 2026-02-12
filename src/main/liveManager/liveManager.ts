@@ -39,10 +39,6 @@ export class LiveManager {
     this.#startLiveChatDataFetcher();
   }
 
-  getLiveLaunchProperties() {
-    return this.#liveLaunchProperties;
-  }
-
   /**
    * wrap processor's method calls for error handling.
    * if error thrown, then stop all data fetchers.
