@@ -23,9 +23,9 @@ export function OverlayApp() {
       {liveSettings && (
         <CarouselManager
           items={[
-            <LikeCountIndicator key={1} gaugeLevel={1} />,
-            <ViewerCountIndicator key={2} gaugeLevel={3} />,
-            <SubscriberCountIndicator key={3} gaugeLevel={5} />,
+            <LikeCountIndicator key={1} gaugeLevel={1} goal={liveSettings.likeCountGoal} />,
+            <ViewerCountIndicator key={2} gaugeLevel={3} goal={liveSettings.viewerCountGoal} />,
+            <SubscriberCountIndicator key={3} goalValue={liveSettings.subscriberCountGoal} />,
             <Clock key={4} />,
           ]}
         />
