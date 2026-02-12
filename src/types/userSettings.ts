@@ -51,13 +51,21 @@ export interface GoalsSettings {
    */
   useSubscribersCountGoal: boolean;
 
+  subscribersCountGoalValue: number;
+
   /**
    * Turn on indicator of like count.
    */
   useLikeCountGoal: boolean;
 
+  likeCountGoalMaxLevel: 1 | 2 | 3 | 4 | 5;
+  likeCountGoalMaxValue: number;
+
   /**
    * Turn on indicator of live view count.
    */
   useLiveViewCountGoal: boolean;
+
+  liveViewCountGoalMaxLevel: 1 | 2 | 3 | 4 | 5;
+  liveViewCountGoalMaxValue: number;
 }
