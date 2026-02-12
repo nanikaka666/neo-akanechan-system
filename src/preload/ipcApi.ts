@@ -44,6 +44,7 @@ export interface IpcApi {
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
     registerLiveSettingsListener: Listen<"tellLiveSettings">;
+    requestSyncLiveSettings: Invoke<"requestSyncLiveSettings">;
   };
 }
 
@@ -82,5 +83,6 @@ export const IpcApi: IpcApi = {
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
     registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),
+    requestSyncLiveSettings: () => IpcRendererWrapper.invoke("requestSyncLiveSettings"),
   },
 };

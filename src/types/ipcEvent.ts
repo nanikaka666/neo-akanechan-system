@@ -140,4 +140,11 @@ export interface IpcEvent {
    * Notify LiveSettings. (For Overlay)
    */
   tellLiveSettings: (liveSettings: LiveSettings) => void;
+
+  /**
+   * Request to LiveManager that sync LiveSettings. (For Overlay)
+   *
+   * mainly used when overlay window created to fetch initial LiveSettings.
+   */
+  requestSyncLiveSettings: () => boolean;
 }
