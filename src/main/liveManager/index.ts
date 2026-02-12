@@ -12,6 +12,7 @@ import { ChatDataManager } from "./dataSource/chats";
 import { FocusManager } from "./dataSource/focus";
 import { PariticipantPointManager } from "./dataSource/participantPoint";
 import { OverlayDataTransfer } from "./transfer/overlayDataTransfer";
+import { LiveSettingsManager } from "./dataSource/settings";
 
 let liveManager: LiveManager | undefined;
 
@@ -25,12 +26,14 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   const stockManager = new StockManager();
   const focusManager = new FocusManager();
   const pointManager = new PariticipantPointManager();
+  const liveSettingsManager = new LiveSettingsManager();
   const dataSource = new DataSource(
     liveStatisticsDataContainer,
     chatDataManager,
     stockManager,
     focusManager,
     pointManager,
+    liveSettingsManager,
   );
   const lcpDataTransfer = new LcpDataTransfer(dataSource);
   const overlayDataTransfer = new OverlayDataTransfer();
