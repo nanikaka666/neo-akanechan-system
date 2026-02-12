@@ -320,4 +320,9 @@ export class Processor {
       this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
   }
+
+  syncLiveSettings() {
+    const liveSettings = this.#dataSource.getLiveSettingsManager().get();
+    this.#overlayDataTransfer.syncLiveSettings(liveSettings);
+  }
 }

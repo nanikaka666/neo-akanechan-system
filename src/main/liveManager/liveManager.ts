@@ -146,6 +146,10 @@ export class LiveManager {
     this.#processorGuard(() => this.#processor.manualPlusPoints(item));
   }
 
+  syncLiveSettings() {
+    this.#processor.syncLiveSettings();
+  }
+
   close() {
     this.#channelDataFetcher.close();
     this.#videoDataFetcher.close();
