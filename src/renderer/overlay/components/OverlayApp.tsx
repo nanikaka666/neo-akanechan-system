@@ -10,9 +10,11 @@ import { LiveSettings } from "../../../types/liveSettings";
 export function OverlayApp() {
   const [liveSettings, setLiveSettings] = useState<LiveSettings>();
   useEffect(() => {
-    window.ipcApi.registerLiveSettingsListener((e, liveSettings) =>
-      setLiveSettings((_) => liveSettings),
-    );
+    const remover = window.ipcApi.registerLiveSettingsListener((e, liveSettings) => {
+      setLiveSettings((_) => liveSettings);
+    });
+    window.ipcApi.requestSyncLiveSettings();
+    return () => remover();
   }, []);
 
   return (
