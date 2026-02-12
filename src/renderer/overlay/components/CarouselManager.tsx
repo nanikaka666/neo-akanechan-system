@@ -22,7 +22,13 @@ export function CarouselManager({ items }: CarouselManagerProps) {
           setPos((prev) => (prev + 1) % items.length);
         }}
       >
-        {items[pos]}
+        {items.map((item, idx) => {
+          return (
+            <div key={idx} style={idx !== pos ? { display: "none" } : {}}>
+              {item}
+            </div>
+          );
+        })}
       </div>
     </div>
   ) : null;
