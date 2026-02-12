@@ -60,7 +60,7 @@ export function OverlayApp() {
             />,
             <ViewerCountIndicator
               key={2}
-              gaugeLevel={3}
+              gaugeLevel={1}
               goal={liveSettings.viewerCountGoal}
               currentValue={liveStatistics.currentLiveViewCount}
               maxValueSoFar={liveStatistics.maxLiveViewCount}
