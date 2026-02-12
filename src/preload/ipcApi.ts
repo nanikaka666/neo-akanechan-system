@@ -43,7 +43,7 @@ export interface IpcApi {
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
-    requestLiveLaunchProperties: Invoke<"getLiveLaunchProperties">;
+    registerLiveSettingsListener: Listen<"tellLiveSettings">;
   };
 }
 
@@ -81,6 +81,6 @@ export const IpcApi: IpcApi = {
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
-    requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
+    registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),
   },
 };

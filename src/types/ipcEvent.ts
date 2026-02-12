@@ -15,6 +15,7 @@ import { Channel } from "./youtubeChannel";
 import { YoutubeLive } from "./youtubeLive";
 import { PariticipantPointRankings } from "./participantPoint";
 import { PointInfoFromMainProcess } from "../renderer/overlay/types";
+import { LiveSettings } from "./liveSettings";
 
 /**
  * Ipc channel interfaces.
@@ -136,7 +137,7 @@ export interface IpcEvent {
   tellAmountOfPoint: (item: PointInfoFromMainProcess) => void;
 
   /**
-   * Get LiveLaunchProperties. (For Overlay)
+   * Notify LiveSettings. (For Overlay)
    */
-  getLiveLaunchProperties: () => LiveLaunchProperties;
+  tellLiveSettings: (liveSettings: LiveSettings) => void;
 }
