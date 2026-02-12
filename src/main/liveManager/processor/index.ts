@@ -11,23 +11,19 @@ import {
   TextMessageChat,
   UserBannedChatEvent,
 } from "../../../types/liveChatItem";
-import { LiveLaunchProperties } from "../../../types/liveLaunchProperties";
 import { DataSource } from "../dataSource";
 import { LcpDataTransfer } from "../transfer/lcpDataTransfer";
 import { OverlayDataTransfer } from "../transfer/overlayDataTransfer";
 
 export class Processor {
-  readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #dataSource: DataSource;
   readonly #lcpDataTransfer: LcpDataTransfer;
   readonly #overlayDataTransfer: OverlayDataTransfer;
   constructor(
-    liveLaunchProperties: LiveLaunchProperties,
     dataSource: DataSource,
     lcpDataTransfer: LcpDataTransfer,
     overlayDataTransfer: OverlayDataTransfer,
   ) {
-    this.#liveLaunchProperties = liveLaunchProperties;
     this.#dataSource = dataSource;
     this.#lcpDataTransfer = lcpDataTransfer;
     this.#overlayDataTransfer = overlayDataTransfer;
