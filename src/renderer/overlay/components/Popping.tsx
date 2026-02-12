@@ -16,6 +16,7 @@ export function Popping({
         top: `${coordinate.y}vh`,
         left: `${coordinate.x}vw`,
         animationDelay: `${delayMs}ms`,
+        zIndex: 2,
       }}
       className={[animationType === "straight" ? "ani" : "yokoani"].join(" ")}
     >

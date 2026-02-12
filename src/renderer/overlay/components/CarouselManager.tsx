@@ -13,6 +13,7 @@ export function CarouselManager({ items }: CarouselManagerProps) {
         position: "absolute",
         bottom: 50,
         left: 50,
+        zIndex: 1,
       }}
     >
       <div
