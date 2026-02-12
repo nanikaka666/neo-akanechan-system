@@ -3,9 +3,14 @@ import { getWindowManager } from "../../../main/window";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
 import { PointInfoFromMainProcess } from "../../../renderer/overlay/types";
 import { LiveSettings } from "../../../types/liveSettings";
+import { LiveStatistics } from "../../../types/liveStatistics";
+import { DataSource } from "../dataSource";
 
 export class OverlayDataTransfer {
-  constructor() {}
+  readonly #dataSource: DataSource;
+  constructor(dataSource: DataSource) {
+    this.#dataSource = dataSource;
+  }
 
   sendAmountOfPoint(author: ChatAuthor, amountOfPoint: number) {
     WebContentsWrapper.send(this.#getWebContents(), "tellAmountOfPoint", {
@@ -14,8 +19,20 @@ export class OverlayDataTransfer {
     } satisfies PointInfoFromMainProcess);
   }
 
-  syncLiveSettings(liveSettings: LiveSettings) {
-    WebContentsWrapper.send(this.#getWebContents(), "tellLiveSettings", liveSettings);
+  syncLiveSettings() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellLiveSettings",
+      this.#dataSource.getLiveSettingsManager().get(),
+    );
+  }
+
+  syncLiveStatistics() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellLiveStatistics",
+      this.#dataSource.getLiveStatisticsDataContainer().get(),
+    );
   }
 
   #getWebContents() {

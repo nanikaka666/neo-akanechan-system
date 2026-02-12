@@ -322,7 +322,6 @@ export class Processor {
   }
 
   syncLiveSettings() {
-    const liveSettings = this.#dataSource.getLiveSettingsManager().get();
-    this.#overlayDataTransfer.syncLiveSettings(liveSettings);
+    this.#overlayDataTransfer.syncLiveSettings();
   }
 }

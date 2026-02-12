@@ -36,7 +36,7 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
     liveSettingsManager,
   );
   const lcpDataTransfer = new LcpDataTransfer(dataSource);
-  const overlayDataTransfer = new OverlayDataTransfer();
+  const overlayDataTransfer = new OverlayDataTransfer(dataSource);
   const processor = new Processor(dataSource, lcpDataTransfer, overlayDataTransfer);
   const channelDataFetcher = new ChannelDataFetcher(liveLaunchProperties.channel.id, 60 * 1000);
   const videoDataFetcher = new VideoDataFetcher(liveLaunchProperties.live.videoId, 15 * 1000);
