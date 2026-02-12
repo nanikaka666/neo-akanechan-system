@@ -1,5 +1,5 @@
 import { UserSettingsService } from "../../../main/userSettings";
-import { LiveSettings } from "../../../types/liveSettings";
+import { Goal, LiveSettings } from "../../../types/liveSettings";
 
 export class LiveSettingsManager {
   #settings: LiveSettings;
@@ -7,19 +7,38 @@ export class LiveSettingsManager {
     this.#settings = this.#buildSettings();
   }
   #buildSettings() {
-    // const userSettings = UserSettingsService.getUserSettings()
+    const userSettings = UserSettingsService.getUserSettings();
     return {
-      likeCountGoal: {
-        maxLevel: 1 as const,
-        goalValues: [0, 100],
-      },
-      viewerCountGoal: {
-        maxLevel: 3 as const,
-        goalValues: [0, 10, 50, 100],
-      },
-      subscriberCountGoal: 100,
+      likeCountGoal: this.#goalValuesComplement(
+        userSettings.likeCountGoalMaxValue,
+        userSettings.likeCountGoalMaxLevel,
+      ),
+      viewerCountGoal: this.#goalValuesComplement(
+        userSettings.liveViewCountGoalMaxValue,
+        userSettings.liveViewCountGoalMaxLevel,
+      ),
+      subscriberCountGoal: userSettings.subscribersCountGoalValue,
     };
   }
+
+  #goalValuesComplement(maxValue: number, maxLevel: 1 | 2 | 3 | 4 | 5): Goal {
+    const divideNum = this.#summation(maxLevel);
+    let values: number[] = [0];
+
+    for (let i = 1; i <= maxLevel; i++) {
+      values = [...values, Math.round((maxValue * this.#summation(i)) / divideNum)];
+    }
+
+    return {
+      maxLevel: maxLevel,
+      goalValues: values,
+    };
+  }
+
+  #summation(x: number) {
+    return (x * (x + 1)) / 2;
+  }
+
   update() {
     this.#settings = this.#buildSettings();
   }
