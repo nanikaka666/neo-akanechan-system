@@ -328,6 +328,7 @@ export class Processor {
   updateLiveSettings() {
     this.#dataSource.getLiveSettingsManager().update();
     this.#lcpDataTransfer.syncLiveSettings();
+    this.#overlayDataTransfer.syncLiveSettings();
   }
 
   /**
