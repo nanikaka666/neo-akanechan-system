@@ -14,7 +14,7 @@ import { LiveLaunchProperties } from "./liveLaunchProperties";
 import { Channel } from "./youtubeChannel";
 import { YoutubeLive } from "./youtubeLive";
 import { PariticipantPointRankings } from "./participantPoint";
-import { PointInfoFromMainProcess } from "../renderer/overlay/types";
+import { PointInfoFromMainProcess } from "./overlay";
 import { LiveSettings } from "./liveSettings";
 
 /**

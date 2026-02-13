@@ -1,11 +1,5 @@
 import { ReactElement } from "react";
 
-// todo: move to suitable file
-export interface PointInfoFromMainProcess {
-  img: string;
-  point: number;
-}
-
 export interface PoppingItem {
   coordinate: {
     x: number;

@@ -1,7 +1,7 @@
 import { ChatAuthor } from "../../../types/liveChatItem";
 import { getWindowManager } from "../../../main/window";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
-import { PointInfoFromMainProcess } from "../../../renderer/overlay/types";
+import { PointInfoFromMainProcess } from "../../../types/overlay";
 import { DataSource } from "../dataSource";
 
 export class OverlayDataTransfer {

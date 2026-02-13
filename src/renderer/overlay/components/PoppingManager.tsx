@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { PointGet, PointInfoFromMainProcess } from "../types";
+import { PointGet } from "../types";
+import { PointInfoFromMainProcess } from "../../../types/overlay";
 import { PointGain } from "./PointGain";
 
 const DELAY_MS = 180;
