@@ -150,6 +150,10 @@ export class LiveManager {
     this.#processor.syncLiveSettings();
   }
 
+  getLiveSettings() {
+    return this.#dataSource.getLiveSettingsManager().get();
+  }
+
   close() {
     this.#channelDataFetcher.close();
     this.#videoDataFetcher.close();
