@@ -51,6 +51,10 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   );
 }
 
+export function isExistLiveManager() {
+  return liveManager !== undefined;
+}
+
 export function getLiveManager() {
   if (liveManager === undefined) {
     throw new Error("LiveManager has not been setup.");
