@@ -1,6 +1,7 @@
 import { YoutubeLive } from "./youtubeLive";
 import { Channel } from "./youtubeChannel";
 import { LiveLaunchProperties } from "./liveLaunchProperties";
+import { LiveSettings } from "./liveSettings";
 
 /**
  * AuthPage
@@ -25,13 +26,14 @@ export interface LiveSelectionPage {
 /**
  * LiveStandByPage
  *
- * aka this is cushion page before start LiveControlPanel.
+ * aka this is cushion page before start LiveControlPanel and preference settings.
  * During be in this page, all emitters doesn't start data fetching.
- * The purpose of this cushion is taking time which collaborates with OBS.
+ * The purpose of this cushion page are taking time which collaborates with OBS and settings.
  */
 export interface LiveStandByPage {
   type: "liveStandBy";
   liveLaunchProperties: LiveLaunchProperties;
+  liveSettings: LiveSettings;
 }
 
 /**

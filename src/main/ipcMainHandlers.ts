@@ -42,6 +42,7 @@ export function setupIpcMainHandlers() {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
       liveLaunchProperties: liveLaunchProperties,
+      liveSettings: getLiveManager().getLiveSettings(),
     });
     return Promise.resolve(true);
   });
@@ -77,6 +78,7 @@ export function setupIpcMainHandlers() {
       WebContentsWrapper.send(e.sender, "tellMainAppPage", {
         type: "liveStandBy",
         liveLaunchProperties: liveLaunchProperties,
+        liveSettings: getLiveManager().getLiveSettings(),
       });
       return true;
     } catch (e: unknown) {

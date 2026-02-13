@@ -22,7 +22,10 @@ export function MainApp() {
     mainAppPage.type === "liveControlPanel" ? (
       <LiveControlPanel liveLaunchProperties={mainAppPage.liveLaunchProperties} />
     ) : mainAppPage.type === "liveStandBy" ? (
-      <LiveStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
+      <LiveStandBy
+        liveLaunchProperties={mainAppPage.liveLaunchProperties}
+        liveSettings={mainAppPage.liveSettings}
+      />
     ) : mainAppPage.type === "liveSelection" ? (
       <LiveSelection channel={mainAppPage.channel} lives={mainAppPage.lives} />
     ) : (
