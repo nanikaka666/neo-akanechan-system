@@ -4,14 +4,24 @@ import { StartLiveButton } from "./StartLiveButton";
 import { QuitLiveButton } from "../liveControlPanel/QuitLiveButton";
 import { SettingsDetails } from "./SettingsDetails";
 import { UserSettingsButton } from "../liveSelection/UserSettingsButton";
+import { useEffect, useState } from "react";
 
 export function LiveStandBy({
   liveLaunchProperties,
-  liveSettings,
+  liveSettings: initialLiveSettings,
 }: {
   liveLaunchProperties: LiveLaunchProperties;
   liveSettings: LiveSettings;
 }) {
+  const [liveSettings, setLiveSettings] = useState<LiveSettings>(initialLiveSettings);
+
+  useEffect(() => {
+    const remover = window.ipcApi.registerLiveSettingsListener((e, latestLiveSettings) => {
+      setLiveSettings((_) => latestLiveSettings);
+    });
+    return () => remover();
+  }, []);
+
   return (
     <div>
       <div>
