@@ -137,7 +137,7 @@ export interface IpcEvent {
   tellAmountOfPoint: (item: PointInfoFromMainProcess) => void;
 
   /**
-   * Notify LiveSettings. (For Overlay)
+   * Notify LiveSettings. (For both Windows)
    */
   tellLiveSettings: (liveSettings: LiveSettings) => void;
 
