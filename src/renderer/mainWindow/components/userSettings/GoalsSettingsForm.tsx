@@ -1,6 +1,7 @@
 import { GoalsSettings, UserSettings } from "../../../../types/userSettings";
 import { Dispatch, SetStateAction } from "react";
 import { GoalsValueInput } from "./GoalsValueInput";
+import { GoalsLevelInput } from "./GoalsLevelInput";
 
 export function GoalsSettingsForm({
   goalsSettings,
@@ -56,6 +57,19 @@ export function GoalsSettingsForm({
       </div>
       <div>
         <label>
+          高評価数の目標レベル数
+          <GoalsLevelInput
+            initialValue={goalsSettings.likeCountGoalMaxLevel}
+            func={(level) => {
+              setCurrentUserSettings((prev) => {
+                return { ...prev, ...{ likeCountGoalMaxLevel: level } };
+              });
+            }}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
           高評価数の最終目標値
           <GoalsValueInput
             initialValue={goalsSettings.likeCountGoalMaxValue}
@@ -80,6 +94,19 @@ export function GoalsSettingsForm({
             }}
           />
           同時接続数の目標を設定する
+        </label>
+      </div>
+      <div>
+        <label>
+          同接数の目標レベル数
+          <GoalsLevelInput
+            initialValue={goalsSettings.liveViewCountGoalMaxLevel}
+            func={(level) => {
+              setCurrentUserSettings((prev) => {
+                return { ...prev, ...{ liveViewCountGoalMaxLevel: level } };
+              });
+            }}
+          />
         </label>
       </div>
       <div>
