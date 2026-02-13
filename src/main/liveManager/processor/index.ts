@@ -325,6 +325,11 @@ export class Processor {
     this.#overlayDataTransfer.syncLiveSettings();
   }
 
+  updateLiveSettings() {
+    this.#dataSource.getLiveSettingsManager().update();
+    this.#lcpDataTransfer.syncLiveSettings();
+  }
+
   /**
    * Sync LiveStatistics both windows.
    */

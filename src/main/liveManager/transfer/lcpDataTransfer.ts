@@ -88,6 +88,14 @@ export class LcpDataTransfer {
     });
   }
 
+  syncLiveSettings() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellLiveSettings",
+      this.#dataSource.getLiveSettingsManager().get(),
+    );
+  }
+
   #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & Stockable {
     return { ...item, isStocked: this.#dataSource.getStockManager().isStocked(item.id) };
   }

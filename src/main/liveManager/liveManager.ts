@@ -150,6 +150,10 @@ export class LiveManager {
     this.#processor.syncLiveSettings();
   }
 
+  updateLiveSettings() {
+    this.#processor.updateLiveSettings();
+  }
+
   getLiveSettings() {
     return this.#dataSource.getLiveSettingsManager().get();
   }
