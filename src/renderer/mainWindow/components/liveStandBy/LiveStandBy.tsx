@@ -3,6 +3,7 @@ import { LiveSettings } from "../../../../types/liveSettings";
 import { StartLiveButton } from "./StartLiveButton";
 import { QuitLiveButton } from "../liveControlPanel/QuitLiveButton";
 import { SettingsDetails } from "./SettingsDetails";
+import { UserSettingsButton } from "../liveSelection/UserSettingsButton";
 
 export function LiveStandBy({
   liveLaunchProperties,
@@ -23,6 +24,7 @@ export function LiveStandBy({
           「{liveLaunchProperties.overlayWindowTitle}」のウィンドウをOBS上でキャプチャしてください
         </div>
       </div>
+      <UserSettingsButton />
       <SettingsDetails
         liveSettings={liveSettings}
         currentSubscriberCount={liveLaunchProperties.channel.subscribersCount}
