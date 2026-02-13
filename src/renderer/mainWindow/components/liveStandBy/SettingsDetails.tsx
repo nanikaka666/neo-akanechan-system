@@ -1,4 +1,5 @@
 import { LiveSettings } from "../../../../types/liveSettings";
+import { GoalsHavingLevels } from "./GoalsHavingLevels";
 
 export function SettingsDetails({
   liveSettings,
@@ -12,36 +13,12 @@ export function SettingsDetails({
       <div>配信設定の確認</div>
       <div>
         <div>高評価数の目標値</div>
-        <div>
-          <div>最終目標値: {liveSettings.likeCountGoal.goalValues.slice(-1)}</div>
-          <div>小目標</div>
-          <ul>
-            {liveSettings.likeCountGoal.goalValues.map((goalValue, idx) => {
-              return idx === 0 ? null : (
-                <li key={idx}>
-                  Level {idx}: {goalValue}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <GoalsHavingLevels goal={liveSettings.likeCountGoal} />
       </div>
 
       <div>
         <div>同接数の目標値</div>
-        <div>
-          <div>最終目標値: {liveSettings.viewerCountGoal.goalValues.slice(-1)}</div>
-          <div>小目標</div>
-          <ul>
-            {liveSettings.viewerCountGoal.goalValues.map((goalValue, idx) => {
-              return idx === 0 ? null : (
-                <li key={idx}>
-                  Level {idx}: {goalValue}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <GoalsHavingLevels goal={liveSettings.viewerCountGoal} />
       </div>
 
       <div>
