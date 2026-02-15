@@ -45,14 +45,17 @@ export class Processor {
     // check likeCountGoals is promoted.
     const { maxLikeCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
     const likeCountStatus = this.#dataSource.getGoalsManager().get().likeCountStatus;
-    if (likeCountStatus.type === "inProgress" && maxLikeCount < nextLikeCount) {
+    if (likeCountStatus.type === "inProgress") {
       const likeCountGoal = this.#dataSource.getLiveSettingsManager().get().likeCountGoal;
       const nextGoalValue = likeCountGoal.goalValues[likeCountStatus.currentLevel];
-      if (nextGoalValue <= nextLikeCount) {
+      if (nextGoalValue <= maxLikeCount) {
         this.#dataSource.getGoalsManager().promotionLikeCount();
-        const addedPointLists = this.#dataSource
-          .getParticipantManager()
-          .addByGoalsPromotion(likeCountStatus.currentLevel, likeCountGoal.maxLevel);
+        const addedPointLists = this.#dataSource.getParticipantManager().addByGoalsPromotion(
+          likeCountStatus.currentLevel,
+          nextGoalValue,
+          likeCountGoal.maxLevel,
+          1, // todo: replace actual hour
+        );
         if (addedPointLists.length !== 0) {
           this.#overlayDataTransfer.sendOverlayEvent({
             type: "likeCountLevelPromotion",

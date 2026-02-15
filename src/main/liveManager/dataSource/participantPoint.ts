@@ -169,10 +169,23 @@ export class PariticipantPointManager {
 
   addByGoalsPromotion(
     accomplishedLevel: GoalsLevel,
+    accomplishedValue: number,
     maximumLevel: GoalsLevel,
+    passedHour: number,
   ): PointInfoFromMainProcess[] {
     return Array.from(this.#authors.values()).map((author) => {
-      const pointAmount = (1000 * accomplishedLevel) / maximumLevel; // todo: more smarter calc
+      // formula
+      // V: value of accomplished goal
+      // level: accomplished level
+      // L: maximum of goal level
+      // N: number of participants
+      // H: passed hour from beginning (0~11)
+      //
+      // point = (V + N + 10000 * (level / L)^(1 + (H + 1) / 24))
+      const pointAmount = Math.pow(
+        accomplishedValue + this.#authors.size + (10000 * accomplishedLevel) / maximumLevel,
+        1 + (passedHour + 1) / 24,
+      );
       const addedAmount = this.#add(author, pointAmount);
       return {
         img: author.profileImageUrl,
