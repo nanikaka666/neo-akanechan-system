@@ -9,6 +9,8 @@ import {
   SuperSticker,
   TextMessageChat,
 } from "../../../types/liveChatItem";
+import { GoalsLevel } from "../../../types/goals";
+import { PointInfoFromMainProcess } from "../../../types/overlay";
 
 /**
  * Set of data for continuous chat point.
@@ -163,6 +165,20 @@ export class PariticipantPointManager {
 
   addByManualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
     return this.#add(item.author, 10);
+  }
+
+  addByGoalsPromotion(
+    accomplishedLevel: GoalsLevel,
+    maximumLevel: GoalsLevel,
+  ): PointInfoFromMainProcess[] {
+    return Array.from(this.#authors.values()).map((author) => {
+      const pointAmount = (1000 * accomplishedLevel) / maximumLevel; // todo: more smarter calc
+      const addedAmount = this.#add(author, pointAmount);
+      return {
+        img: author.profileImageUrl,
+        point: addedAmount,
+      } satisfies PointInfoFromMainProcess;
+    });
   }
 
   /**
