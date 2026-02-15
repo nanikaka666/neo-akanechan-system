@@ -50,12 +50,18 @@ export class PariticipantPointManager {
    */
   readonly #disqualifiedChannelIds: Set<string>;
 
+  /**
+   * Record author information who participated by channel id.
+   */
+  readonly #authors: Map<string, ChatAuthor>;
+
   constructor() {
     this.#points = new Map();
     this.#continuousChatMetadata = new Map();
     this.#stocksAdded = new Set();
     this.#focusAdded = new Set();
     this.#disqualifiedChannelIds = new Set();
+    this.#authors = new Map();
   }
   get() {
     return this.#points;
@@ -187,6 +193,10 @@ export class PariticipantPointManager {
     if (author.isOwner) {
       return 0;
     }
+
+    // register author info always.
+    this.#authors.set(author.channelId.id, author);
+
     // if author is membership, added amount of point raised by 20%.
     const addedAmount = Math.round(author.isMembership ? value * 1.2 : value);
     const current = this.#points.get(author.channelId.id);
