@@ -42,10 +42,27 @@ export class Processor {
   }
 
   likeCount(nextLikeCount: number) {
+    // check likeCountGoals is promoted.
     const { maxLikeCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
-    if (maxLikeCount < nextLikeCount) {
-      // todo: max like count is updated.
+    const likeCountStatus = this.#dataSource.getGoalsManager().get().likeCountStatus;
+    if (likeCountStatus.type === "inProgress" && maxLikeCount < nextLikeCount) {
+      const likeCountGoal = this.#dataSource.getLiveSettingsManager().get().likeCountGoal;
+      const nextGoalValue = likeCountGoal.goalValues[likeCountStatus.currentLevel];
+      if (nextGoalValue <= nextLikeCount) {
+        this.#dataSource.getGoalsManager().promotionLikeCount();
+        const addedPointLists = this.#dataSource
+          .getParticipantManager()
+          .addByGoalsPromotion(likeCountStatus.currentLevel, likeCountGoal.maxLevel);
+        if (addedPointLists.length !== 0) {
+          this.#overlayDataTransfer.sendOverlayEvent({
+            type: "likeCountLevelPromotion",
+            points: addedPointLists,
+          });
+        }
+      }
     }
+
+    // update LiveStatistics
     this.#dataSource.getLiveStatisticsDataContainer().update({
       currentLikeCount: nextLikeCount,
       maxLikeCount: Math.max(maxLikeCount, nextLikeCount),
