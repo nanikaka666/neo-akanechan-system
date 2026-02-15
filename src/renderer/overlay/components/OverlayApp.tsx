@@ -7,14 +7,25 @@ import { SubscriberCountIndicator } from "./SubscriberCountIndicator";
 import { useEffect } from "react";
 import { useLiveSettings } from "./hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
+import { useOverlayEvent } from "./hooks/useOverlayEvent";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
   const liveStatistics = useLiveStatistics();
+  const [overlayEvent, overlayEventResetFunc] = useOverlayEvent();
+
   useEffect(() => {
     // to rewrite default settings by latest LiveSettings
     window.ipcApi.requestSyncLiveSettings();
   }, []);
+
+  useEffect(() => {
+    console.log("useEffect with ", overlayEvent.type);
+    if (overlayEvent.type === "noEvent") {
+      return;
+    }
+    // todo: process each events
+  }, [overlayEvent, overlayEventResetFunc]);
 
   return (
     <div>
