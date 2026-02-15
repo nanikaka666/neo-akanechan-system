@@ -75,8 +75,25 @@ export class Processor {
 
   viewerCount(nextViewerCount: number) {
     const { maxLiveViewCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
-    if (maxLiveViewCount < nextViewerCount) {
-      // todo: max viewer count is updated.
+    const viewerCountStatus = this.#dataSource.getGoalsManager().get().viewerCountStatus;
+    if (viewerCountStatus.type === "inProgress") {
+      const viewerCountGoal = this.#dataSource.getLiveSettingsManager().get().viewerCountGoal;
+      const nextGoalValue = viewerCountGoal.goalValues[viewerCountStatus.currentLevel];
+      if (nextGoalValue <= maxLiveViewCount) {
+        this.#dataSource.getGoalsManager().promotionViewerCount();
+        const addedPointLists = this.#dataSource.getParticipantManager().addByGoalsPromotion(
+          viewerCountStatus.currentLevel,
+          nextGoalValue,
+          viewerCountGoal.maxLevel,
+          1, // todo: replace actual hour
+        );
+        if (addedPointLists.length !== 0) {
+          this.#overlayDataTransfer.sendOverlayEvent({
+            type: "viewerCountLevelPromotion",
+            points: addedPointLists,
+          });
+        }
+      }
     }
     this.#dataSource.getLiveStatisticsDataContainer().update({
       currentLiveViewCount: nextViewerCount,

@@ -9,7 +9,7 @@ import { useLiveSettings } from "./hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { GoalsLevel, GoalsStatus } from "../../../types/goals";
-import { OnDemandPoppingManager } from "./OnDemandPoppingManager";
+import { OnDemand, OnDemandPoppingManager } from "./OnDemandPoppingManager";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
@@ -19,13 +19,17 @@ export function OverlayApp() {
     type: "inProgress",
     currentLevel: 1,
   });
+  const [viewerCountLevel, setViewerCountLevel] = useState<GoalsStatus>({
+    type: "inProgress",
+    currentLevel: 1,
+  });
 
   useEffect(() => {
     // to rewrite default settings by latest LiveSettings
     window.ipcApi.requestSyncLiveSettings();
   }, []);
 
-  const poppingOnDemand =
+  const poppingOnDemand: OnDemand | undefined =
     overlayEvent.type === "likeCountLevelPromotion"
       ? {
           buffer: overlayEvent.points,
@@ -47,7 +51,28 @@ export function OverlayApp() {
             }
           },
         }
-      : undefined;
+      : overlayEvent.type === "viewerCountLevelPromotion"
+        ? {
+            buffer: overlayEvent.points,
+            funcOnLastAnimationEnded: () => {
+              overlayEventResetFunc();
+              if (viewerCountLevel.type === "inProgress") {
+                if (viewerCountLevel.currentLevel === liveSettings.viewerCountGoal.maxLevel) {
+                  setViewerCountLevel(() => {
+                    return { type: "accomplished" };
+                  });
+                } else {
+                  setViewerCountLevel(() => {
+                    return {
+                      type: "inProgress",
+                      currentLevel: (viewerCountLevel.currentLevel + 1) as GoalsLevel,
+                    };
+                  });
+                }
+              }
+            },
+          }
+        : undefined;
 
   return (
     <div>
@@ -68,7 +93,11 @@ export function OverlayApp() {
           />,
           <ViewerCountIndicator
             key={2}
-            gaugeLevel={1}
+            gaugeLevel={
+              viewerCountLevel.type === "accomplished"
+                ? liveSettings.viewerCountGoal.maxLevel
+                : viewerCountLevel.currentLevel
+            }
             goal={liveSettings.viewerCountGoal}
             currentValue={liveStatistics.currentLiveViewCount}
             maxValueSoFar={liveStatistics.maxLiveViewCount}
