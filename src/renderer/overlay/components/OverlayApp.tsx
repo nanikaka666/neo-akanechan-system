@@ -30,7 +30,6 @@ export function OverlayApp() {
       ? {
           buffer: overlayEvent.points,
           funcOnLastAnimationEnded: () => {
-            console.log("Do funcOnLastAnimationEnded");
             overlayEventResetFunc();
             if (likeCountLevel.type === "inProgress") {
               if (likeCountLevel.currentLevel === liveSettings.likeCountGoal.maxLevel) {
