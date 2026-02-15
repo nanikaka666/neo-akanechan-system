@@ -181,9 +181,9 @@ export class PariticipantPointManager {
       // N: number of participants
       // H: passed hour from beginning (0~11)
       //
-      // point = (V + N + 10000 * (level / L)^(1 + (H + 1) / 24))
+      // point = (V + N + 1000 * (level / L)^(1 + (H + 1) / 24))
       const pointAmount = Math.pow(
-        accomplishedValue + this.#authors.size + (10000 * accomplishedLevel) / maximumLevel,
+        accomplishedValue + this.#authors.size + (1000 * accomplishedLevel) / maximumLevel,
         1 + (passedHour + 1) / 24,
       );
       const addedAmount = this.#add(author, pointAmount);
@@ -200,7 +200,7 @@ export class PariticipantPointManager {
       if (currentPointAmount === undefined) {
         throw new Error("Author who not having ParticipantPoint detected.");
       }
-      const getPointAmount = currentPointAmount.point * 9; // this means pointx10
+      const getPointAmount = currentPointAmount.point * 2; // this means point x 3
       const addedPointAmount = this.#add(author, getPointAmount);
       return {
         img: author.profileImageUrl,
