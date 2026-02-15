@@ -56,12 +56,10 @@ export class Processor {
           likeCountGoal.maxLevel,
           1, // todo: replace actual hour
         );
-        if (addedPointLists.length !== 0) {
-          this.#overlayDataTransfer.sendOverlayEvent({
-            type: "likeCountLevelPromotion",
-            points: addedPointLists,
-          });
-        }
+        this.#overlayDataTransfer.sendOverlayEvent({
+          type: "likeCountLevelPromotion",
+          points: addedPointLists,
+        });
       }
     }
 
@@ -87,12 +85,10 @@ export class Processor {
           viewerCountGoal.maxLevel,
           1, // todo: replace actual hour
         );
-        if (addedPointLists.length !== 0) {
-          this.#overlayDataTransfer.sendOverlayEvent({
-            type: "viewerCountLevelPromotion",
-            points: addedPointLists,
-          });
-        }
+        this.#overlayDataTransfer.sendOverlayEvent({
+          type: "viewerCountLevelPromotion",
+          points: addedPointLists,
+        });
       }
     }
     this.#dataSource.getLiveStatisticsDataContainer().update({
