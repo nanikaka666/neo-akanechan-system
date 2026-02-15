@@ -1,7 +1,7 @@
 import { ChatAuthor } from "../../../types/liveChatItem";
 import { getWindowManager } from "../../../main/window";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
-import { PointInfoFromMainProcess } from "../../../types/overlay";
+import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "../../../types/overlay";
 import { DataSource } from "../dataSource";
 
 export class OverlayDataTransfer {
@@ -31,6 +31,10 @@ export class OverlayDataTransfer {
       "tellLiveStatistics",
       this.#dataSource.getLiveStatisticsDataContainer().get(),
     );
+  }
+
+  sendOverlayEvent(event: Exclude<OverlayEvent, NoEvent>) {
+    WebContentsWrapper.send(this.#getWebContents(), "tellOverlayEvent", event);
   }
 
   #getWebContents() {
