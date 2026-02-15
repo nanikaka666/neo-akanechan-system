@@ -41,6 +41,7 @@ export class Processor {
           type: "subscriberCountGoalAchivement",
           points: list,
         });
+        this.#lcpDataTransfer.syncRankings();
       }
     }
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -69,6 +70,7 @@ export class Processor {
           type: "likeCountLevelPromotion",
           points: addedPointLists,
         });
+        this.#lcpDataTransfer.syncRankings();
       }
     }
 
@@ -98,6 +100,7 @@ export class Processor {
           type: "viewerCountLevelPromotion",
           points: addedPointLists,
         });
+        this.#lcpDataTransfer.syncRankings();
       }
     }
     this.#dataSource.getLiveStatisticsDataContainer().update({
