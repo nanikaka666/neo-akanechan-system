@@ -2,9 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PointInfoFromMainProcess } from "../../../types/overlay";
 import { PointGet } from "../types";
 import { PointGain } from "./PointGain";
-
-const DELAY_MS = 180;
-const CHUNK_NUM = 5;
+import { POPPING_ANIMATION_DELAY_MS_UNIT, POPPING_ITEM_CHUNK_NUM } from "../constants";
 
 export interface OnDemand {
   buffer: PointInfoFromMainProcess[];
@@ -22,7 +20,9 @@ export function OnDemandPoppingManager({ onDemand }: OnDemandPoppingManagerProps
   const reflect = useCallback(() => {
     const chunked = (list: PointInfoFromMainProcess[]): PointInfoFromMainProcess[][] => {
       return list.flatMap((_, idx, a) => {
-        return idx % CHUNK_NUM === 0 ? [a.slice(idx, idx + CHUNK_NUM)] : [];
+        return idx % POPPING_ITEM_CHUNK_NUM === 0
+          ? [a.slice(idx, idx + POPPING_ITEM_CHUNK_NUM)]
+          : [];
       });
     };
     const pickBaseCoordinate = () => {
@@ -41,10 +41,12 @@ export function OnDemandPoppingManager({ onDemand }: OnDemandPoppingManagerProps
             x: baseCoordinate.x,
             y: baseCoordinate.y - 8 * j,
           },
-          delayMs: CHUNK_NUM * i * DELAY_MS + DELAY_MS * j,
+          delayMs:
+            POPPING_ITEM_CHUNK_NUM * i * POPPING_ANIMATION_DELAY_MS_UNIT +
+            POPPING_ANIMATION_DELAY_MS_UNIT * j,
           animationEndFunc: () => {
             setItems((prev) => prev.filter((val) => val.itemId !== itemId));
-            if (onDemand.buffer.length - 1 === i * CHUNK_NUM + j) {
+            if (onDemand.buffer.length - 1 === i * POPPING_ITEM_CHUNK_NUM + j) {
               onDemand.funcOnLastAnimationEnded();
             }
           },

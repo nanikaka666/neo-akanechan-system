@@ -2,9 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PointGet } from "../types";
 import { PointInfoFromMainProcess } from "../../../types/overlay";
 import { PointGain } from "./PointGain";
-
-const DELAY_MS = 180;
-const CHUNK_NUM = 5;
+import { POPPING_ANIMATION_DELAY_MS_UNIT, POPPING_ITEM_CHUNK_NUM } from "../constants";
 
 export function PoppingManager() {
   const [buffer, setBuffer] = useState<PointInfoFromMainProcess[]>([]);
@@ -13,7 +11,9 @@ export function PoppingManager() {
   const reflect = useCallback(() => {
     const chunked = (list: PointInfoFromMainProcess[]): PointInfoFromMainProcess[][] => {
       return list.flatMap((_, idx, a) => {
-        return idx % CHUNK_NUM === 0 ? [a.slice(idx, idx + CHUNK_NUM)] : [];
+        return idx % POPPING_ITEM_CHUNK_NUM === 0
+          ? [a.slice(idx, idx + POPPING_ITEM_CHUNK_NUM)]
+          : [];
       });
     };
     const pickBaseCoordinate = () => {
@@ -23,7 +23,7 @@ export function PoppingManager() {
       };
     };
     const res: PointGet[] = chunked(buffer).flatMap((values, i) => {
-      const delayOffset = DELAY_MS * CHUNK_NUM * i;
+      const delayOffset = POPPING_ANIMATION_DELAY_MS_UNIT * POPPING_ITEM_CHUNK_NUM * i;
       const baseCoordinate = pickBaseCoordinate();
       return values.map((value, j) => {
         const itemId = crypto.randomUUID();
@@ -33,7 +33,7 @@ export function PoppingManager() {
             x: baseCoordinate.x,
             y: baseCoordinate.y - 8 * j,
           },
-          delayMs: delayOffset + DELAY_MS * j,
+          delayMs: delayOffset + POPPING_ANIMATION_DELAY_MS_UNIT * j,
           animationEndFunc: () => setItems((prev) => prev.filter((val) => val.itemId !== itemId)),
           img: value.img,
           value: value.point,
