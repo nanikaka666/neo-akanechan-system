@@ -11,15 +11,20 @@ export function PoppingManager() {
   const [items, setItems] = useState<PointGet[]>([]);
 
   const reflect = useCallback(() => {
-    const chunked: PointInfoFromMainProcess[][] = buffer.flatMap((_, idx, a) => {
-      return idx % CHUNK_NUM === 0 ? [a.slice(idx, idx + CHUNK_NUM)] : [];
-    });
-    const res: PointGet[] = chunked.flatMap((values, i) => {
-      const delayOffset = DELAY_MS * CHUNK_NUM * i;
-      const baseCoordinate = {
+    const chunked = (list: PointInfoFromMainProcess[]): PointInfoFromMainProcess[][] => {
+      return list.flatMap((_, idx, a) => {
+        return idx % CHUNK_NUM === 0 ? [a.slice(idx, idx + CHUNK_NUM)] : [];
+      });
+    };
+    const pickBaseCoordinate = () => {
+      return {
         x: Math.round(Math.random() * 75), // 0 ~ 75
         y: Math.round(Math.random() * 57 + 35), // 35 ~ 92
       };
+    };
+    const res: PointGet[] = chunked(buffer).flatMap((values, i) => {
+      const delayOffset = DELAY_MS * CHUNK_NUM * i;
+      const baseCoordinate = pickBaseCoordinate();
       return values.map((value, j) => {
         const itemId = crypto.randomUUID();
         return {
