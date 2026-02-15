@@ -14,7 +14,7 @@ import { LiveLaunchProperties } from "./liveLaunchProperties";
 import { Channel } from "./youtubeChannel";
 import { YoutubeLive } from "./youtubeLive";
 import { PariticipantPointRankings } from "./participantPoint";
-import { PointInfoFromMainProcess } from "./overlay";
+import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "./overlay";
 import { LiveSettings } from "./liveSettings";
 
 /**
@@ -147,4 +147,9 @@ export interface IpcEvent {
    * mainly used when overlay window created to fetch initial LiveSettings.
    */
   requestSyncLiveSettings: () => boolean;
+
+  /**
+   * Notify OverlayEvent (NoEvent is not included). (For Overlay)
+   */
+  tellOverlayEvent: (event: Exclude<OverlayEvent, NoEvent>) => void;
 }
