@@ -194,6 +194,21 @@ export class PariticipantPointManager {
     });
   }
 
+  addBySubscriberGoalAccomplished(): PointInfoFromMainProcess[] {
+    return Array.from(this.#authors.values()).map((author) => {
+      const currentPointAmount = this.#points.get(author.channelId.id);
+      if (currentPointAmount === undefined) {
+        throw new Error("Author who not having ParticipantPoint detected.");
+      }
+      const getPointAmount = currentPointAmount.point * 9; // this means pointx10
+      const addedPointAmount = this.#add(author, getPointAmount);
+      return {
+        img: author.profileImageUrl,
+        point: addedPointAmount,
+      };
+    });
+  }
+
   /**
    * Disqualify the user.
    *
