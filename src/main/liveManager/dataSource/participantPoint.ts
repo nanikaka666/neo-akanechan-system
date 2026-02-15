@@ -178,6 +178,7 @@ export class PariticipantPointManager {
     }
     this.#disqualifiedChannelIds.add(author.channelId.id);
     this.#points.delete(author.channelId.id);
+    this.#authors.delete(author.channelId.id);
     return true;
   }
 
