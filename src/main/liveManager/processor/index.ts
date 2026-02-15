@@ -31,8 +31,17 @@ export class Processor {
 
   subscriberCount(nextSubscriberCount: number) {
     const { maxSubscriberCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
-    if (maxSubscriberCount < nextSubscriberCount) {
-      // todo: max subscriber count is updated.
+    const { isSubscriberCountGoalAccomplished } = this.#dataSource.getGoalsManager().get();
+    if (!isSubscriberCountGoalAccomplished) {
+      const { subscriberCountGoal } = this.#dataSource.getLiveSettingsManager().get();
+      if (subscriberCountGoal <= maxSubscriberCount) {
+        this.#dataSource.getGoalsManager().accomplishSubscriberCountGoal();
+        const list = this.#dataSource.getParticipantManager().addBySubscriberGoalAccomplished();
+        this.#overlayDataTransfer.sendOverlayEvent({
+          type: "subscriberCountGoalAchivement",
+          points: list,
+        });
+      }
     }
     this.#dataSource.getLiveStatisticsDataContainer().update({
       currentSubscriberCount: nextSubscriberCount,

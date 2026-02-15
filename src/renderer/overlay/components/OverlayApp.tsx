@@ -23,6 +23,7 @@ export function OverlayApp() {
     type: "inProgress",
     currentLevel: 1,
   });
+  const [isSubscriberCountGoalAccomplished, setIsSubscriberCountGoalAccomplished] = useState(false);
 
   useEffect(() => {
     // to rewrite default settings by latest LiveSettings
@@ -63,6 +64,10 @@ export function OverlayApp() {
     }
   }, [viewerCountLevel, liveSettings]);
 
+  const subscriberCountPromotion = useCallback(() => {
+    setIsSubscriberCountGoalAccomplished((_) => true);
+  }, []);
+
   // handle the case which list is empty when promotion
   // it is not fired last popping animation event, because popping item is nothing.
   // to cause promotion process, handle it here.
@@ -78,6 +83,14 @@ export function OverlayApp() {
     setTimeout(() => {
       overlayEventResetFunc();
       viewerCountPromotion();
+    }, 5 * 1000);
+  } else if (
+    overlayEvent.type === "subscriberCountGoalAchivement" &&
+    overlayEvent.points.length === 0
+  ) {
+    setTimeout(() => {
+      overlayEventResetFunc();
+      subscriberCountPromotion();
     }, 5 * 1000);
   }
 
@@ -98,7 +111,15 @@ export function OverlayApp() {
               viewerCountPromotion();
             },
           }
-        : undefined;
+        : overlayEvent.type === "subscriberCountGoalAchivement"
+          ? {
+              buffer: overlayEvent.points,
+              funcOnLastAnimationEnded: () => {
+                overlayEventResetFunc();
+                subscriberCountPromotion();
+              },
+            }
+          : undefined;
 
   return (
     <div>
