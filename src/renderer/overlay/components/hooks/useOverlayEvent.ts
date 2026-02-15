@@ -23,7 +23,10 @@ export function useOverlayEvent() {
   }, [overlayEvent, eventQueue]);
 
   useEffect(() => {
-    // todo: register Overlay event listener
+    const remover = window.ipcApi.registerOverlayEvent((e, overlayEvent) => {
+      setEventQueue((prev) => [...prev, overlayEvent]);
+    });
+    return () => remover();
   }, []);
 
   return [overlayEvent, () => setOverlayEvent((_) => noEvent)] as const;
