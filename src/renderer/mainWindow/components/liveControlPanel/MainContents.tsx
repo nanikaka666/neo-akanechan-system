@@ -22,7 +22,7 @@ export function MainContents({
       <div style={mode !== "rankings" ? displayNone : undefined}>
         <Rankings />
       </div>
-      <div style={mode !== "neighborhoods" ? displayNone : undefined}>Neighborhoods</div>
+      <div style={mode !== "goals" ? displayNone : undefined}>Goals</div>
     </div>
   );
 }

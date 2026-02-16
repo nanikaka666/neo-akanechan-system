@@ -3,7 +3,7 @@ import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
 
-export type Mode = "commentViewer" | "chanceTime" | "rankings" | "neighborhoods";
+export type Mode = "commentViewer" | "chanceTime" | "rankings" | "goals";
 
 export function LiveControlPanel({
   liveLaunchProperties,

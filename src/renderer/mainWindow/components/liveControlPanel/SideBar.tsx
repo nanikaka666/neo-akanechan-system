@@ -39,10 +39,10 @@ export function SideBar({
         Participant Point Rankings
       </div>
       <div
-        onClick={() => setMode((_) => "neighborhoods")}
-        style={mode === "neighborhoods" ? selectedStyle : undefined}
+        onClick={() => setMode((_) => "goals")}
+        style={mode === "goals" ? selectedStyle : undefined}
       >
-        Neighborhoods
+        Goals
       </div>
       <SideBarInfoArea />
       <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
