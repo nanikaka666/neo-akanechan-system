@@ -113,6 +113,13 @@ export class Processor {
     this.#syncLiveStatistics();
   }
 
+  actualStartTime(actualStartTime: Date) {
+    this.#dataSource.getLiveStatisticsDataContainer().update({
+      actualStartTime: actualStartTime,
+    });
+    this.#syncLiveStatistics();
+  }
+
   textChat(item: TextMessageChat) {
     const addedItem = this.#dataSource.getChatDataManager().addText(item);
 
