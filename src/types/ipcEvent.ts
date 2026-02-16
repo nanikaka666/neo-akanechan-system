@@ -16,6 +16,7 @@ import { YoutubeLive } from "./youtubeLive";
 import { PariticipantPointRankings } from "./participantPoint";
 import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "./overlay";
 import { LiveSettings } from "./liveSettings";
+import { AllGoalsStatus } from "./goals";
 
 /**
  * Ipc channel interfaces.
@@ -152,4 +153,9 @@ export interface IpcEvent {
    * Notify OverlayEvent (NoEvent is not included). (For Overlay)
    */
   tellOverlayEvent: (event: Exclude<OverlayEvent, NoEvent>) => void;
+
+  /**
+   * Notify AllGoalStatus.
+   */
+  tellAllGoalStatus: (status: AllGoalsStatus) => void;
 }

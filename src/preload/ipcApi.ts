@@ -20,6 +20,7 @@ type Listen<K extends keyof IpcEvent> = (
  */
 export interface IpcApi {
   ipcApi: {
+    // for LCP
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
     requestUserSettings: Invoke<"getUserSettings">;
@@ -40,6 +41,7 @@ export interface IpcApi {
     requestStartAuthFlow: Invoke<"startAuthFlow">;
     registerRankingsListener: Listen<"tellRankings">;
     requestPlusPoints: Invoke<"manualPlusPoints">;
+    registerAllGoalStatus: Listen<"tellAllGoalStatus">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
@@ -53,6 +55,7 @@ export interface IpcApi {
 
 export const IpcApi: IpcApi = {
   ipcApi: {
+    // for LCP
     requestOpenOverlay: (channel, live) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
     requestOpenOverlayWithVideoId: (inputVideoId) =>
@@ -82,6 +85,7 @@ export const IpcApi: IpcApi = {
     requestStartAuthFlow: () => IpcRendererWrapper.invoke("startAuthFlow"),
     registerRankingsListener: (callback) => IpcRendererWrapper.on("tellRankings", callback),
     requestPlusPoints: (item) => IpcRendererWrapper.invoke("manualPlusPoints", item),
+    registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
