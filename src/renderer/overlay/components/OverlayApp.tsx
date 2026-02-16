@@ -157,8 +157,16 @@ export function OverlayApp() {
       />
     );
     const clock = <Clock key={"clock"} />;
-    return [likeCount, viewerCount, subscriberCount, clock];
-  }, [liveSettings, liveStatistics, likeCountLevel, viewerCountLevel]);
+    if (overlayEvent.type === "noEvent") {
+      return [likeCount, viewerCount, subscriberCount, clock];
+    } else if (overlayEvent.type === "likeCountLevelPromotion") {
+      return [likeCount];
+    } else if (overlayEvent.type === "viewerCountLevelPromotion") {
+      return [viewerCount];
+    } else {
+      return [subscriberCount];
+    }
+  }, [liveSettings, liveStatistics, likeCountLevel, viewerCountLevel, overlayEvent]);
 
   return (
     <div>
