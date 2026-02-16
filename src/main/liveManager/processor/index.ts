@@ -62,12 +62,14 @@ export class Processor {
       if (nextGoalValue <= maxLikeCount) {
         this.#dataSource.getGoalsManager().promotionLikeCount();
         this.#lcpDataTransfer.syncAllGoalStatus();
-        const addedPointLists = this.#dataSource.getParticipantManager().addByGoalsPromotion(
-          likeCountStatus.currentLevel,
-          nextGoalValue,
-          likeCountGoal.maxLevel,
-          1, // todo: replace actual hour
-        );
+        const addedPointLists = this.#dataSource
+          .getParticipantManager()
+          .addByGoalsPromotion(
+            likeCountStatus.currentLevel,
+            nextGoalValue,
+            likeCountGoal.maxLevel,
+            this.#calcPassedHour(),
+          );
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "likeCountLevelPromotion",
           points: addedPointLists,
@@ -93,12 +95,14 @@ export class Processor {
       if (nextGoalValue <= maxLiveViewCount) {
         this.#dataSource.getGoalsManager().promotionViewerCount();
         this.#lcpDataTransfer.syncAllGoalStatus();
-        const addedPointLists = this.#dataSource.getParticipantManager().addByGoalsPromotion(
-          viewerCountStatus.currentLevel,
-          nextGoalValue,
-          viewerCountGoal.maxLevel,
-          1, // todo: replace actual hour
-        );
+        const addedPointLists = this.#dataSource
+          .getParticipantManager()
+          .addByGoalsPromotion(
+            viewerCountStatus.currentLevel,
+            nextGoalValue,
+            viewerCountGoal.maxLevel,
+            this.#calcPassedHour(),
+          );
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "viewerCountLevelPromotion",
           points: addedPointLists,
@@ -392,5 +396,16 @@ export class Processor {
   #syncLiveStatistics() {
     this.#lcpDataTransfer.syncLiveStatistics();
     this.#overlayDataTransfer.syncLiveStatistics();
+  }
+
+  #calcPassedHour() {
+    const maybeActualStartTime = this.#dataSource
+      .getLiveStatisticsDataContainer()
+      .get().actualStartTime;
+    if (maybeActualStartTime === undefined) {
+      return 0;
+    }
+    const diffSeconds = (new Date().getTime() - maybeActualStartTime.getTime()) / 1000;
+    return Math.floor(diffSeconds / 3600);
   }
 }
