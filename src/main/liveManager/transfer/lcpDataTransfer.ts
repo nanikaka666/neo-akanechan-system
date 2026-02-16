@@ -96,6 +96,14 @@ export class LcpDataTransfer {
     );
   }
 
+  syncAllGoalStatus() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellAllGoalStatus",
+      this.#dataSource.getGoalsManager().get(),
+    );
+  }
+
   #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & Stockable {
     return { ...item, isStocked: this.#dataSource.getStockManager().isStocked(item.id) };
   }
