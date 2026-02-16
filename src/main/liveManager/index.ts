@@ -12,10 +12,12 @@ import { ChatDataManager } from "./dataSource/chats";
 import { FocusManager } from "./dataSource/focus";
 import { PariticipantPointManager } from "./dataSource/participantPoint";
 import { OverlayDataTransfer } from "./transfer/overlayDataTransfer";
+import { LiveSettingsManager } from "./dataSource/settings";
+import { GoalsManager } from "./dataSource/goals";
 
 let liveManager: LiveManager | undefined;
 
-export async function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
+export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   if (liveManager !== undefined) {
     liveManager.close();
     liveManager = undefined;
@@ -25,21 +27,20 @@ export async function setupLiveManager(liveLaunchProperties: LiveLaunchPropertie
   const stockManager = new StockManager();
   const focusManager = new FocusManager();
   const pointManager = new PariticipantPointManager();
+  const liveSettingsManager = new LiveSettingsManager();
+  const goalsManager = new GoalsManager();
   const dataSource = new DataSource(
     liveStatisticsDataContainer,
     chatDataManager,
     stockManager,
     focusManager,
     pointManager,
+    liveSettingsManager,
+    goalsManager,
   );
   const lcpDataTransfer = new LcpDataTransfer(dataSource);
-  const overlayDataTransfer = new OverlayDataTransfer();
-  const processor = new Processor(
-    liveLaunchProperties,
-    dataSource,
-    lcpDataTransfer,
-    overlayDataTransfer,
-  );
+  const overlayDataTransfer = new OverlayDataTransfer(dataSource);
+  const processor = new Processor(dataSource, lcpDataTransfer, overlayDataTransfer);
   const channelDataFetcher = new ChannelDataFetcher(liveLaunchProperties.channel.id, 60 * 1000);
   const videoDataFetcher = new VideoDataFetcher(liveLaunchProperties.live.videoId, 15 * 1000);
   const liveChatDataFetcher = new LiveChatDataFetcher(liveLaunchProperties.live.liveChatId);
@@ -51,7 +52,10 @@ export async function setupLiveManager(liveLaunchProperties: LiveLaunchPropertie
     videoDataFetcher,
     liveChatDataFetcher,
   );
-  await liveManager.setup();
+}
+
+export function isExistLiveManager() {
+  return liveManager !== undefined;
 }
 
 export function getLiveManager() {

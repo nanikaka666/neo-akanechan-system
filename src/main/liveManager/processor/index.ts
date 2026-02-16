@@ -11,23 +11,19 @@ import {
   TextMessageChat,
   UserBannedChatEvent,
 } from "../../../types/liveChatItem";
-import { LiveLaunchProperties } from "../../../types/liveLaunchProperties";
 import { DataSource } from "../dataSource";
 import { LcpDataTransfer } from "../transfer/lcpDataTransfer";
 import { OverlayDataTransfer } from "../transfer/overlayDataTransfer";
 
 export class Processor {
-  readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #dataSource: DataSource;
   readonly #lcpDataTransfer: LcpDataTransfer;
   readonly #overlayDataTransfer: OverlayDataTransfer;
   constructor(
-    liveLaunchProperties: LiveLaunchProperties,
     dataSource: DataSource,
     lcpDataTransfer: LcpDataTransfer,
     overlayDataTransfer: OverlayDataTransfer,
   ) {
-    this.#liveLaunchProperties = liveLaunchProperties;
     this.#dataSource = dataSource;
     this.#lcpDataTransfer = lcpDataTransfer;
     this.#overlayDataTransfer = overlayDataTransfer;
@@ -35,38 +31,86 @@ export class Processor {
 
   subscriberCount(nextSubscriberCount: number) {
     const { maxSubscriberCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
-    if (maxSubscriberCount < nextSubscriberCount) {
-      // todo: max subscriber count is updated.
+    const { isSubscriberCountGoalAccomplished } = this.#dataSource.getGoalsManager().get();
+    if (!isSubscriberCountGoalAccomplished) {
+      const { subscriberCountGoal } = this.#dataSource.getLiveSettingsManager().get();
+      if (subscriberCountGoal <= maxSubscriberCount) {
+        this.#dataSource.getGoalsManager().accomplishSubscriberCountGoal();
+        this.#lcpDataTransfer.syncAllGoalStatus();
+        const list = this.#dataSource.getParticipantManager().addBySubscriberGoalAccomplished();
+        this.#overlayDataTransfer.sendOverlayEvent({
+          type: "subscriberCountGoalAchivement",
+          points: list,
+        });
+        this.#lcpDataTransfer.syncRankings();
+      }
     }
     this.#dataSource.getLiveStatisticsDataContainer().update({
       currentSubscriberCount: nextSubscriberCount,
       maxSubscriberCount: Math.max(maxSubscriberCount, nextSubscriberCount),
     });
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
   }
 
   likeCount(nextLikeCount: number) {
+    // check likeCountGoals is promoted.
     const { maxLikeCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
-    if (maxLikeCount < nextLikeCount) {
-      // todo: max like count is updated.
+    const likeCountStatus = this.#dataSource.getGoalsManager().get().likeCountStatus;
+    if (likeCountStatus.type === "inProgress") {
+      const likeCountGoal = this.#dataSource.getLiveSettingsManager().get().likeCountGoal;
+      const nextGoalValue = likeCountGoal.goalValues[likeCountStatus.currentLevel];
+      if (nextGoalValue <= maxLikeCount) {
+        this.#dataSource.getGoalsManager().promotionLikeCount();
+        this.#lcpDataTransfer.syncAllGoalStatus();
+        const addedPointLists = this.#dataSource.getParticipantManager().addByGoalsPromotion(
+          likeCountStatus.currentLevel,
+          nextGoalValue,
+          likeCountGoal.maxLevel,
+          1, // todo: replace actual hour
+        );
+        this.#overlayDataTransfer.sendOverlayEvent({
+          type: "likeCountLevelPromotion",
+          points: addedPointLists,
+        });
+        this.#lcpDataTransfer.syncRankings();
+      }
     }
+
+    // update LiveStatistics
     this.#dataSource.getLiveStatisticsDataContainer().update({
       currentLikeCount: nextLikeCount,
       maxLikeCount: Math.max(maxLikeCount, nextLikeCount),
     });
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
   }
 
   viewerCount(nextViewerCount: number) {
     const { maxLiveViewCount } = this.#dataSource.getLiveStatisticsDataContainer().get();
-    if (maxLiveViewCount < nextViewerCount) {
-      // todo: max viewer count is updated.
+    const viewerCountStatus = this.#dataSource.getGoalsManager().get().viewerCountStatus;
+    if (viewerCountStatus.type === "inProgress") {
+      const viewerCountGoal = this.#dataSource.getLiveSettingsManager().get().viewerCountGoal;
+      const nextGoalValue = viewerCountGoal.goalValues[viewerCountStatus.currentLevel];
+      if (nextGoalValue <= maxLiveViewCount) {
+        this.#dataSource.getGoalsManager().promotionViewerCount();
+        this.#lcpDataTransfer.syncAllGoalStatus();
+        const addedPointLists = this.#dataSource.getParticipantManager().addByGoalsPromotion(
+          viewerCountStatus.currentLevel,
+          nextGoalValue,
+          viewerCountGoal.maxLevel,
+          1, // todo: replace actual hour
+        );
+        this.#overlayDataTransfer.sendOverlayEvent({
+          type: "viewerCountLevelPromotion",
+          points: addedPointLists,
+        });
+        this.#lcpDataTransfer.syncRankings();
+      }
     }
     this.#dataSource.getLiveStatisticsDataContainer().update({
       currentLiveViewCount: nextViewerCount,
       maxLiveViewCount: Math.max(maxLiveViewCount, nextViewerCount),
     });
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
   }
 
   textChat(item: TextMessageChat) {
@@ -78,7 +122,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -86,7 +130,7 @@ export class Processor {
       textChatCount: this.#dataSource.getChatDataManager().getTextChatCount(),
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -99,7 +143,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -110,7 +154,7 @@ export class Processor {
         .filter((chat) => chat.type === "superChat").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -124,7 +168,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -135,7 +179,7 @@ export class Processor {
         .filter((chat) => chat.type === "superSticker").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -146,7 +190,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -156,7 +200,7 @@ export class Processor {
         .filter((chat) => chat.type === "newMembership").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
@@ -169,7 +213,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -179,7 +223,7 @@ export class Processor {
         .filter((chat) => chat.type === "milestone").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
@@ -190,7 +234,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
@@ -200,7 +244,7 @@ export class Processor {
         .filter((chat) => chat.type === "gift").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
@@ -213,7 +257,7 @@ export class Processor {
         .filter((chat) => chat.type === "giftReceived").length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
   }
 
@@ -228,7 +272,7 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -258,7 +302,7 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -272,14 +316,14 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -292,7 +336,7 @@ export class Processor {
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
 
-    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
   }
 
@@ -304,7 +348,7 @@ export class Processor {
 
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
   }
 
@@ -321,7 +365,25 @@ export class Processor {
     const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByManualPlusPoints(item);
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.send(item.author, addedAmountOfPoint);
+      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
+  }
+
+  syncLiveSettings() {
+    this.#overlayDataTransfer.syncLiveSettings();
+  }
+
+  updateLiveSettings() {
+    this.#dataSource.getLiveSettingsManager().update();
+    this.#lcpDataTransfer.syncLiveSettings();
+    this.#overlayDataTransfer.syncLiveSettings();
+  }
+
+  /**
+   * Sync LiveStatistics both windows.
+   */
+  #syncLiveStatistics() {
+    this.#lcpDataTransfer.syncLiveStatistics();
+    this.#overlayDataTransfer.syncLiveStatistics();
   }
 }

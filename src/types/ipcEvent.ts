@@ -14,7 +14,9 @@ import { LiveLaunchProperties } from "./liveLaunchProperties";
 import { Channel } from "./youtubeChannel";
 import { YoutubeLive } from "./youtubeLive";
 import { PariticipantPointRankings } from "./participantPoint";
-import { PointInfoFromMainProcess } from "../renderer/overlay/types";
+import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "./overlay";
+import { LiveSettings } from "./liveSettings";
+import { AllGoalsStatus } from "./goals";
 
 /**
  * Ipc channel interfaces.
@@ -35,9 +37,9 @@ export interface IpcEvent {
   startOverlayWithUserConfirmationByVideoId: (inputVideoId: string) => boolean;
 
   /**
-   * Start emitters depend on user settings.
+   * Start DataFetcheres.
    */
-  launchEmitters: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+  startDataFetch: () => boolean;
 
   /**
    * Get UserSettings.
@@ -79,7 +81,7 @@ export interface IpcEvent {
   removeStock: (stock: ExtendedChatItemText) => boolean;
 
   /**
-   * Notify LiveStatistics to renderer.
+   * Notify LiveStatistics to renderer. (LCP & Overlay)
    */
   tellLiveStatistics: (statistics: LiveStatistics) => void;
 
@@ -134,4 +136,26 @@ export interface IpcEvent {
    * Notify amount of got point. (For Overlay)
    */
   tellAmountOfPoint: (item: PointInfoFromMainProcess) => void;
+
+  /**
+   * Notify LiveSettings. (For both Windows)
+   */
+  tellLiveSettings: (liveSettings: LiveSettings) => void;
+
+  /**
+   * Request to LiveManager that sync LiveSettings. (For Overlay)
+   *
+   * mainly used when overlay window created to fetch initial LiveSettings.
+   */
+  requestSyncLiveSettings: () => boolean;
+
+  /**
+   * Notify OverlayEvent (NoEvent is not included). (For Overlay)
+   */
+  tellOverlayEvent: (event: Exclude<OverlayEvent, NoEvent>) => void;
+
+  /**
+   * Notify AllGoalStatus.
+   */
+  tellAllGoalStatus: (status: AllGoalsStatus) => void;
 }

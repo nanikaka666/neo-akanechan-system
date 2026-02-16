@@ -20,13 +20,14 @@ type Listen<K extends keyof IpcEvent> = (
  */
 export interface IpcApi {
   ipcApi: {
+    // for LCP
     requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
     requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
     requestUserSettings: Invoke<"getUserSettings">;
     requestSaveUserSettings: Invoke<"saveUserSettings">;
     requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
     registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
-    requestLaunchEmitters: Invoke<"launchEmitters">;
+    requestStartDataFetch: Invoke<"startDataFetch">;
     registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
     requestAddStock: Invoke<"addStock">;
     requestRemoveStock: Invoke<"removeStock">;
@@ -40,14 +41,21 @@ export interface IpcApi {
     requestStartAuthFlow: Invoke<"startAuthFlow">;
     registerRankingsListener: Listen<"tellRankings">;
     requestPlusPoints: Invoke<"manualPlusPoints">;
+    registerAllGoalStatus: Listen<"tellAllGoalStatus">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
+    requestSyncLiveSettings: Invoke<"requestSyncLiveSettings">;
+    registerOverlayEvent: Listen<"tellOverlayEvent">;
+
+    // for Both Windows.
+    registerLiveSettingsListener: Listen<"tellLiveSettings">;
   };
 }
 
 export const IpcApi: IpcApi = {
   ipcApi: {
+    // for LCP
     requestOpenOverlay: (channel, live) =>
       IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
     requestOpenOverlayWithVideoId: (inputVideoId) =>
@@ -59,8 +67,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),
     registerUpdatedUserSettingsListener: (callback) =>
       IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
-    requestLaunchEmitters: (liveLaunchProperties) =>
-      IpcRendererWrapper.invoke("launchEmitters", liveLaunchProperties),
+    requestStartDataFetch: () => IpcRendererWrapper.invoke("startDataFetch"),
     registerMembershipsAndGiftsListener: (callback) =>
       IpcRendererWrapper.on("tellMembershipsAndGifts", callback),
     requestAddStock: (stock) => IpcRendererWrapper.invoke("addStock", stock),
@@ -78,6 +85,14 @@ export const IpcApi: IpcApi = {
     requestStartAuthFlow: () => IpcRendererWrapper.invoke("startAuthFlow"),
     registerRankingsListener: (callback) => IpcRendererWrapper.on("tellRankings", callback),
     requestPlusPoints: (item) => IpcRendererWrapper.invoke("manualPlusPoints", item),
+    registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
+
+    // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
+    requestSyncLiveSettings: () => IpcRendererWrapper.invoke("requestSyncLiveSettings"),
+    registerOverlayEvent: (callback) => IpcRendererWrapper.on("tellOverlayEvent", callback),
+
+    // For both
+    registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),
   },
 };

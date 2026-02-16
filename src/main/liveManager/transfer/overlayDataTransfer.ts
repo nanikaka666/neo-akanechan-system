@@ -1,17 +1,40 @@
 import { ChatAuthor } from "../../../types/liveChatItem";
 import { getWindowManager } from "../../../main/window";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
-import { PointInfoFromMainProcess } from "../../../renderer/overlay/types";
+import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "../../../types/overlay";
+import { DataSource } from "../dataSource";
 
 export class OverlayDataTransfer {
-  constructor() {}
+  readonly #dataSource: DataSource;
+  constructor(dataSource: DataSource) {
+    this.#dataSource = dataSource;
+  }
 
-  send(author: ChatAuthor, amountOfPoint: number) {
-    // send
+  sendAmountOfPoint(author: ChatAuthor, amountOfPoint: number) {
     WebContentsWrapper.send(this.#getWebContents(), "tellAmountOfPoint", {
       img: author.profileImageUrl,
       point: amountOfPoint,
     } satisfies PointInfoFromMainProcess);
+  }
+
+  syncLiveSettings() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellLiveSettings",
+      this.#dataSource.getLiveSettingsManager().get(),
+    );
+  }
+
+  syncLiveStatistics() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellLiveStatistics",
+      this.#dataSource.getLiveStatisticsDataContainer().get(),
+    );
+  }
+
+  sendOverlayEvent(event: Exclude<OverlayEvent, NoEvent>) {
+    WebContentsWrapper.send(this.#getWebContents(), "tellOverlayEvent", event);
   }
 
   #getWebContents() {

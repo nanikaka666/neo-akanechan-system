@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import { PointGet } from "../types";
 import { PointInfoFromMainProcess } from "../../../types/overlay";
+import { PointGet } from "../types";
 import { PointGain } from "./PointGain";
 import { POPPING_ANIMATION_DELAY_MS_UNIT, POPPING_ITEM_CHUNK_NUM } from "../constants";
 
-export function PoppingManager() {
-  const [buffer, setBuffer] = useState<PointInfoFromMainProcess[]>([]);
+export interface OnDemand {
+  buffer: PointInfoFromMainProcess[];
+  funcOnLastAnimationEnded: () => void;
+}
+
+export interface OnDemandPoppingManagerProps {
+  onDemand: OnDemand;
+}
+
+export function OnDemandPoppingManager({ onDemand }: OnDemandPoppingManagerProps) {
+  const [buffer, setBuffer] = useState<PointInfoFromMainProcess[]>(onDemand.buffer);
   const [items, setItems] = useState<PointGet[]>([]);
 
   const reflect = useCallback(() => {
@@ -23,7 +32,6 @@ export function PoppingManager() {
       };
     };
     const res: PointGet[] = chunked(buffer).flatMap((values, i) => {
-      const delayOffset = POPPING_ANIMATION_DELAY_MS_UNIT * POPPING_ITEM_CHUNK_NUM * i;
       const baseCoordinate = pickBaseCoordinate();
       return values.map((value, j) => {
         const itemId = crypto.randomUUID();
@@ -33,30 +41,26 @@ export function PoppingManager() {
             x: baseCoordinate.x,
             y: baseCoordinate.y - 8 * j,
           },
-          delayMs: delayOffset + POPPING_ANIMATION_DELAY_MS_UNIT * j,
-          animationEndFunc: () => setItems((prev) => prev.filter((val) => val.itemId !== itemId)),
+          delayMs:
+            POPPING_ITEM_CHUNK_NUM * i * POPPING_ANIMATION_DELAY_MS_UNIT +
+            POPPING_ANIMATION_DELAY_MS_UNIT * j,
+          animationEndFunc: () => {
+            setItems((prev) => prev.filter((val) => val.itemId !== itemId));
+            if (onDemand.buffer.length - 1 === i * POPPING_ITEM_CHUNK_NUM + j) {
+              onDemand.funcOnLastAnimationEnded();
+            }
+          },
           img: value.img,
           value: value.point,
         } satisfies PointGet;
       });
     });
-    setBuffer((_) => []);
     setItems((prev) => [...prev, ...res]);
-  }, [buffer]);
+    setBuffer((_) => []);
+  }, [onDemand, buffer]);
 
   useEffect(() => {
-    const remover = window.ipcApi.registerAmountOfPoint((e, item) => {
-      setBuffer((prev) => [...prev, item]);
-    });
-    return () => remover();
-  }, []);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => reflect(), 1000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
+    setTimeout(() => reflect(), 0);
   }, [reflect]);
 
   return items.map((item) => {

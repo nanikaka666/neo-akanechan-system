@@ -10,7 +10,12 @@ import {
   buildLiveLaunchPropertiesForDebug,
 } from "./liveLaunchProperties";
 import { VideoId } from "../types/youtubeDomainModel";
-import { cleanupLiveManager, getLiveManager, setupLiveManager } from "./liveManager";
+import {
+  cleanupLiveManager,
+  getLiveManager,
+  isExistLiveManager,
+  setupLiveManager,
+} from "./liveManager";
 import { getWindowManager } from "./window";
 
 export function setupIpcMainHandlers() {
@@ -36,11 +41,13 @@ export function setupIpcMainHandlers() {
 
     const liveLaunchProperties = buildLiveLaunchProperties(channel, live);
 
+    setupLiveManager(liveLaunchProperties);
     getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
       liveLaunchProperties: liveLaunchProperties,
+      liveSettings: getLiveManager().getLiveSettings(),
     });
     return Promise.resolve(true);
   });
@@ -70,11 +77,13 @@ export function setupIpcMainHandlers() {
         return false;
       }
 
+      setupLiveManager(liveLaunchProperties);
       getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
       WebContentsWrapper.send(e.sender, "tellMainAppPage", {
         type: "liveStandBy",
         liveLaunchProperties: liveLaunchProperties,
+        liveSettings: getLiveManager().getLiveSettings(),
       });
       return true;
     } catch (e: unknown) {
@@ -95,6 +104,12 @@ export function setupIpcMainHandlers() {
     try {
       UserSettingsService.setUserSettings(userSettings);
       WebContentsWrapper.send(e.sender, "tellUpdatedUserSettings", userSettings);
+
+      // if LiveManager is up (it means user is in LiveStandBy page) then notify it to LiveManager.
+      if (isExistLiveManager()) {
+        getLiveManager().updateLiveSettings();
+      }
+
       return Promise.resolve(true);
     } catch (e: unknown) {
       console.log(e);
@@ -106,8 +121,8 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(!UserSettingsService.isEqual(settingsA, settingsB));
   });
 
-  IpcMainWrapper.handle("launchEmitters", async (e, liveLaunchProperties) => {
-    await setupLiveManager(liveLaunchProperties);
+  IpcMainWrapper.handle("startDataFetch", async () => {
+    await getLiveManager().start();
     return true;
   });
 
@@ -147,6 +162,7 @@ export function setupIpcMainHandlers() {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveControlPanel",
       liveLaunchProperties: liveLaunchProperties,
+      liveSettings: getLiveManager().getLiveSettings(),
     } satisfies LiveControlPanelPage);
 
     return Promise.resolve(true);
@@ -223,6 +239,11 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("manualPlusPoints", (e, item) => {
     getLiveManager().actionPlusPoints(item);
+    return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("requestSyncLiveSettings", () => {
+    getLiveManager().syncLiveSettings();
     return Promise.resolve(true);
   });
 }

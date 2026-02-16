@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Quattrocento+Sans:ital,wght@0,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;800;900&family=Quattrocento+Sans:ital,wght@0,400;1,700&display=swap");
 
 body {
   margin: 0;
@@ -74,5 +74,59 @@ body {
   100% {
     transform: translateY(0vh);
     opacity: 0;
+  }
+}
+
+.font-m-plus-rounded {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.indicator-label {
+  color: white;
+  /* -webkit-text-stroke: 0.5px black; */
+  font-size: 3vh;
+  /* background-color: rgb(0, 0, 0, 0.3); */
+}
+
+.carousel-animation {
+  animation: carousel-item;
+  animation-duration: 10000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;
+}
+
+@keyframes carousel-item {
+  0% {
+    transform: translateX(5vw);
+    opacity: 0;
+  }
+  3%,
+  97% {
+    transform: translateX(0vw);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-5vw);
+    opacity: 0;
+  }
+}
+
+.carousel-only-one-animation {
+  animation: carousel-only-one-item;
+  animation-duration: 10000ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+}
+
+@keyframes carousel-only-one-item {
+  0% {
+    transform: translateX(5vw);
+    opacity: 0;
+  }
+  3% {
+    transform: translateX(0vw);
+    opacity: 1;
   }
 }

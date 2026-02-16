@@ -1,16 +1,46 @@
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
-import { StandByAnnouncement } from "./StandByAnnouncement";
-import { SideBarInStandBy } from "./SideBarInStandBy";
+import { LiveSettings } from "../../../../types/liveSettings";
+import { StartLiveButton } from "./StartLiveButton";
+import { QuitLiveButton } from "../liveControlPanel/QuitLiveButton";
+import { SettingsDetails } from "./SettingsDetails";
+import { UserSettingsButton } from "../liveSelection/UserSettingsButton";
+import { useEffect, useState } from "react";
 
 export function LiveStandBy({
   liveLaunchProperties,
+  liveSettings: initialLiveSettings,
 }: {
   liveLaunchProperties: LiveLaunchProperties;
+  liveSettings: LiveSettings;
 }) {
+  const [liveSettings, setLiveSettings] = useState<LiveSettings>(initialLiveSettings);
+
+  useEffect(() => {
+    const remover = window.ipcApi.registerLiveSettingsListener((e, latestLiveSettings) => {
+      setLiveSettings((_) => latestLiveSettings);
+    });
+    return () => remover();
+  }, []);
+
   return (
-    <>
-      <SideBarInStandBy liveLaunchProperties={liveLaunchProperties} />
-      <StandByAnnouncement liveLaunchProperties={liveLaunchProperties} />
-    </>
+    <div>
+      <div>
+        <img src={liveLaunchProperties.live.thumbnailUrl} />
+        {liveLaunchProperties.live.title}
+      </div>
+      <div>
+        <div>配信スタンバイ中</div>
+        <div>
+          「{liveLaunchProperties.overlayWindowTitle}」のウィンドウをOBS上でキャプチャしてください
+        </div>
+      </div>
+      <UserSettingsButton />
+      <SettingsDetails
+        liveSettings={liveSettings}
+        currentSubscriberCount={liveLaunchProperties.channel.subscribersCount}
+      />
+      <StartLiveButton liveLaunchProperties={liveLaunchProperties} />
+      <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
+    </div>
   );
 }

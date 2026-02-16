@@ -9,6 +9,8 @@ import {
   SuperSticker,
   TextMessageChat,
 } from "../../../types/liveChatItem";
+import { GoalsLevel } from "../../../types/goals";
+import { PointInfoFromMainProcess } from "../../../types/overlay";
 
 /**
  * Set of data for continuous chat point.
@@ -50,12 +52,18 @@ export class PariticipantPointManager {
    */
   readonly #disqualifiedChannelIds: Set<string>;
 
+  /**
+   * Record author information who participated by channel id.
+   */
+  readonly #authors: Map<string, ChatAuthor>;
+
   constructor() {
     this.#points = new Map();
     this.#continuousChatMetadata = new Map();
     this.#stocksAdded = new Set();
     this.#focusAdded = new Set();
     this.#disqualifiedChannelIds = new Set();
+    this.#authors = new Map();
   }
   get() {
     return this.#points;
@@ -159,6 +167,48 @@ export class PariticipantPointManager {
     return this.#add(item.author, 10);
   }
 
+  addByGoalsPromotion(
+    accomplishedLevel: GoalsLevel,
+    accomplishedValue: number,
+    maximumLevel: GoalsLevel,
+    passedHour: number,
+  ): PointInfoFromMainProcess[] {
+    return Array.from(this.#authors.values()).map((author) => {
+      // formula
+      // V: value of accomplished goal
+      // level: accomplished level
+      // L: maximum of goal level
+      // N: number of participants
+      // H: passed hour from beginning (0~11)
+      //
+      // point = (V + N + 1000 * (level / L)^(1 + (H + 1) / 24))
+      const pointAmount = Math.pow(
+        accomplishedValue + this.#authors.size + (1000 * accomplishedLevel) / maximumLevel,
+        1 + (passedHour + 1) / 24,
+      );
+      const addedAmount = this.#add(author, pointAmount);
+      return {
+        img: author.profileImageUrl,
+        point: addedAmount,
+      } satisfies PointInfoFromMainProcess;
+    });
+  }
+
+  addBySubscriberGoalAccomplished(): PointInfoFromMainProcess[] {
+    return Array.from(this.#authors.values()).map((author) => {
+      const currentPointAmount = this.#points.get(author.channelId.id);
+      if (currentPointAmount === undefined) {
+        throw new Error("Author who not having ParticipantPoint detected.");
+      }
+      const getPointAmount = currentPointAmount.point * 2; // this means point x 3
+      const addedPointAmount = this.#add(author, getPointAmount);
+      return {
+        img: author.profileImageUrl,
+        point: addedPointAmount,
+      };
+    });
+  }
+
   /**
    * Disqualify the user.
    *
@@ -172,6 +222,7 @@ export class PariticipantPointManager {
     }
     this.#disqualifiedChannelIds.add(author.channelId.id);
     this.#points.delete(author.channelId.id);
+    this.#authors.delete(author.channelId.id);
     return true;
   }
 
@@ -187,6 +238,10 @@ export class PariticipantPointManager {
     if (author.isOwner) {
       return 0;
     }
+
+    // register author info always.
+    this.#authors.set(author.channelId.id, author);
+
     // if author is membership, added amount of point raised by 20%.
     const addedAmount = Math.round(author.isMembership ? value * 1.2 : value);
     const current = this.#points.get(author.channelId.id);

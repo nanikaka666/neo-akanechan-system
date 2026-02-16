@@ -20,11 +20,11 @@ export function MainApp() {
 
   return mainAppPage ? (
     mainAppPage.type === "liveControlPanel" ? (
-      <LiveControlPanel liveLaunchProperties={mainAppPage.liveLaunchProperties} />
+      <LiveControlPanel {...mainAppPage} />
     ) : mainAppPage.type === "liveStandBy" ? (
-      <LiveStandBy liveLaunchProperties={mainAppPage.liveLaunchProperties} />
+      <LiveStandBy {...mainAppPage} />
     ) : mainAppPage.type === "liveSelection" ? (
-      <LiveSelection channel={mainAppPage.channel} lives={mainAppPage.lives} />
+      <LiveSelection {...mainAppPage} />
     ) : (
       <AuthFlow />
     )
