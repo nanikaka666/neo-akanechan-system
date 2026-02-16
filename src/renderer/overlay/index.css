@@ -112,3 +112,22 @@ body {
     opacity: 0;
   }
 }
+
+.carousel-only-one-animation {
+  opacity: 1;
+  animation: carousel-only-one-item;
+  animation-duration: 10000ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+}
+
+@keyframes carousel-only-one-item {
+  0% {
+    transform: translateX(5vw);
+    opacity: 0;
+  }
+  3% {
+    transform: translateX(0vw);
+    opacity: 1;
+  }
+}
