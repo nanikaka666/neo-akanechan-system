@@ -83,6 +83,9 @@ export class LiveManager {
     this.#videoDataFetcher.on("nextViewerCount", (nextViewerCount) => {
       this.#processorGuard(() => this.#processor.viewerCount(nextViewerCount));
     });
+    this.#videoDataFetcher.once("actualStartTime", (actualStartTime) => {
+      this.#processorGuard(() => this.#processor.actualStartTime(actualStartTime));
+    });
     return await this.#videoDataFetcher.start();
   }
 

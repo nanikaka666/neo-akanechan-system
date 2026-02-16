@@ -17,4 +17,5 @@ export interface LiveStatistics {
   giftCount: number;
   redemptionGiftCount: number;
   stocksCount: number;
+  actualStartTime?: Date;
 }

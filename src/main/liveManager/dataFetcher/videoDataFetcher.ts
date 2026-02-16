@@ -26,8 +26,11 @@ export class VideoDataFetcher extends (EventEmitter as new () => TypedEmitter<Vi
         if (res.likeCount !== undefined) {
           this.emit("nextLikeCount", res.likeCount);
         }
-        if (res.type === "inLive" && res.concurrentViewers !== undefined) {
-          this.emit("nextViewerCount", res.concurrentViewers);
+        if (res.type === "inLive") {
+          this.emit("actualStartTime", res.actualStartTime);
+          if (res.concurrentViewers !== undefined) {
+            this.emit("nextViewerCount", res.concurrentViewers);
+          }
         }
       }
     } catch (e: unknown) {
@@ -71,6 +74,7 @@ export class VideoDataFetcher extends (EventEmitter as new () => TypedEmitter<Vi
 export type VideoStatisticsEvent = {
   nextLikeCount: (nextLikeCount: number) => void;
   nextViewerCount: (nextViewerCount: number) => void;
+  actualStartTime: (actualStartTime: Date) => void;
   start: (initValue: YoutubeVideo) => void;
   end: () => void;
   error: (err: Error) => void;
