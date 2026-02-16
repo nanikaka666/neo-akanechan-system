@@ -114,7 +114,6 @@ body {
 }
 
 .carousel-only-one-animation {
-  opacity: 1;
   animation: carousel-only-one-item;
   animation-duration: 10000ms;
   animation-iteration-count: 1;
