@@ -24,6 +24,10 @@ export function SideBarInfoArea() {
       <div>ギフト回数: {liveStatistics.giftCount}</div>
       <div>ギフト受取数: {liveStatistics.redemptionGiftCount}</div>
       <div>ストック数: {liveStatistics.stocksCount}</div>
+      <div>
+        配信開始時間:{" "}
+        {liveStatistics.actualStartTime ? liveStatistics.actualStartTime.toLocaleString() : "---"}
+      </div>
     </div>
   );
 }
