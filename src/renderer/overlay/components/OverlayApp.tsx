@@ -121,43 +121,50 @@ export function OverlayApp() {
             }
           : undefined;
 
+  const makeCarouselItems = useCallback(() => {
+    const likeCount = (
+      <LikeCountIndicator
+        key={"likeCount"}
+        gaugeLevel={
+          likeCountLevel.type === "accomplished"
+            ? liveSettings.likeCountGoal.maxLevel
+            : likeCountLevel.currentLevel
+        }
+        goal={liveSettings.likeCountGoal}
+        currentValue={liveStatistics.currentLikeCount}
+        maxValueSoFar={liveStatistics.maxLikeCount}
+      />
+    );
+    const viewerCount = (
+      <ViewerCountIndicator
+        key={"viewerCount"}
+        gaugeLevel={
+          viewerCountLevel.type === "accomplished"
+            ? liveSettings.viewerCountGoal.maxLevel
+            : viewerCountLevel.currentLevel
+        }
+        goal={liveSettings.viewerCountGoal}
+        currentValue={liveStatistics.currentLiveViewCount}
+        maxValueSoFar={liveStatistics.maxLiveViewCount}
+      />
+    );
+    const subscriberCount = (
+      <SubscriberCountIndicator
+        key={"subscriberCount"}
+        goalValue={liveSettings.subscriberCountGoal}
+        currentValue={liveStatistics.currentSubscriberCount}
+        maxValueSoFar={liveStatistics.maxSubscriberCount}
+      />
+    );
+    const clock = <Clock key={"clock"} />;
+    return [likeCount, viewerCount, subscriberCount, clock];
+  }, [liveSettings, liveStatistics, likeCountLevel, viewerCountLevel]);
+
   return (
     <div>
       <PoppingManager />
       {poppingOnDemand && <OnDemandPoppingManager onDemand={poppingOnDemand} />}
-      <CarouselManager
-        items={[
-          <LikeCountIndicator
-            key={1}
-            gaugeLevel={
-              likeCountLevel.type === "accomplished"
-                ? liveSettings.likeCountGoal.maxLevel
-                : likeCountLevel.currentLevel
-            }
-            goal={liveSettings.likeCountGoal}
-            currentValue={liveStatistics.currentLikeCount}
-            maxValueSoFar={liveStatistics.maxLikeCount}
-          />,
-          <ViewerCountIndicator
-            key={2}
-            gaugeLevel={
-              viewerCountLevel.type === "accomplished"
-                ? liveSettings.viewerCountGoal.maxLevel
-                : viewerCountLevel.currentLevel
-            }
-            goal={liveSettings.viewerCountGoal}
-            currentValue={liveStatistics.currentLiveViewCount}
-            maxValueSoFar={liveStatistics.maxLiveViewCount}
-          />,
-          <SubscriberCountIndicator
-            key={3}
-            goalValue={liveSettings.subscriberCountGoal}
-            currentValue={liveStatistics.currentSubscriberCount}
-            maxValueSoFar={liveStatistics.maxSubscriberCount}
-          />,
-          <Clock key={4} />,
-        ]}
-      />
+      <CarouselManager items={makeCarouselItems()} />
     </div>
   );
 }
