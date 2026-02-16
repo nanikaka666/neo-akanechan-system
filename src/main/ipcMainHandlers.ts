@@ -162,6 +162,7 @@ export function setupIpcMainHandlers() {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveControlPanel",
       liveLaunchProperties: liveLaunchProperties,
+      liveSettings: getLiveManager().getLiveSettings(),
     } satisfies LiveControlPanelPage);
 
     return Promise.resolve(true);

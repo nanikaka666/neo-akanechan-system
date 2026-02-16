@@ -44,6 +44,7 @@ export interface LiveStandByPage {
 export interface LiveControlPanelPage {
   type: "liveControlPanel";
   liveLaunchProperties: LiveLaunchProperties;
+  liveSettings: LiveSettings;
 }
 
 /**
