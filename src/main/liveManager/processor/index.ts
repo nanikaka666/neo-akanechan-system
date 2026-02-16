@@ -36,6 +36,7 @@ export class Processor {
       const { subscriberCountGoal } = this.#dataSource.getLiveSettingsManager().get();
       if (subscriberCountGoal <= maxSubscriberCount) {
         this.#dataSource.getGoalsManager().accomplishSubscriberCountGoal();
+        this.#lcpDataTransfer.syncAllGoalStatus();
         const list = this.#dataSource.getParticipantManager().addBySubscriberGoalAccomplished();
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "subscriberCountGoalAchivement",
@@ -60,6 +61,7 @@ export class Processor {
       const nextGoalValue = likeCountGoal.goalValues[likeCountStatus.currentLevel];
       if (nextGoalValue <= maxLikeCount) {
         this.#dataSource.getGoalsManager().promotionLikeCount();
+        this.#lcpDataTransfer.syncAllGoalStatus();
         const addedPointLists = this.#dataSource.getParticipantManager().addByGoalsPromotion(
           likeCountStatus.currentLevel,
           nextGoalValue,
@@ -90,6 +92,7 @@ export class Processor {
       const nextGoalValue = viewerCountGoal.goalValues[viewerCountStatus.currentLevel];
       if (nextGoalValue <= maxLiveViewCount) {
         this.#dataSource.getGoalsManager().promotionViewerCount();
+        this.#lcpDataTransfer.syncAllGoalStatus();
         const addedPointLists = this.#dataSource.getParticipantManager().addByGoalsPromotion(
           viewerCountStatus.currentLevel,
           nextGoalValue,
