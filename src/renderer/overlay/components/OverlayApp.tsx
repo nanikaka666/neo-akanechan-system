@@ -10,6 +10,7 @@ import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { GoalsLevel, GoalsStatus } from "../../../types/goals";
 import { OnDemand, OnDemandPoppingManager } from "./OnDemandPoppingManager";
+import { AppLogManager } from "./AppLogManager";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
@@ -173,6 +174,7 @@ export function OverlayApp() {
       <PoppingManager />
       {poppingOnDemand && <OnDemandPoppingManager onDemand={poppingOnDemand} />}
       <CarouselManager items={makeCarouselItems()} />
+      <AppLogManager />
     </div>
   );
 }
