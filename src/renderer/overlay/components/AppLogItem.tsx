@@ -6,5 +6,9 @@ export type AppLogItemProps = {
 } & Children;
 
 export function AppLogItem({ animamtionEndFunc, children }: AppLogItemProps) {
-  return <li onAnimationEnd={animamtionEndFunc}>{children}</li>;
+  return (
+    <li className="app-log-item app-log-item-animation" onAnimationEnd={animamtionEndFunc}>
+      {children}
+    </li>
+  );
 }
