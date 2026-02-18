@@ -8,15 +8,40 @@ export function AppLogManager() {
 
   const buildChildren = (appLog: AppLog) => {
     if (appLog.type === "likeCountGoalPromotion") {
-      return <div>like promotion</div>;
+      return (
+        <div>
+          高評価数の小目標({appLog.goalValue}
+          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+        </div>
+      );
     } else if (appLog.type === "likeCountGoalAccomplished") {
-      return <div>like accomplished</div>;
+      return (
+        <div>
+          高評価数の目標({appLog.goalValue}
+          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+        </div>
+      );
     } else if (appLog.type === "viewerCountGoalPromotion") {
-      return <div>viewer promotion</div>;
+      return (
+        <div>
+          同接数の小目標({appLog.goalValue}
+          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+        </div>
+      );
     } else if (appLog.type === "viewerCountGoalAccomplished") {
-      return <div>viewer accomplished</div>;
+      return (
+        <div>
+          同接数の目標({appLog.goalValue}
+          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+        </div>
+      );
     } else if (appLog.type === "subscriberCountGoalAccomplished") {
-      return <div>subscriber accomplished</div>;
+      return (
+        <div>
+          チャンネル登録者数の目標({appLog.goalValue}
+          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+        </div>
+      );
     } else {
       throw new CaseDropError(appLog);
     }
@@ -35,7 +60,16 @@ export function AppLogManager() {
   }, [buffer]);
 
   return (
-    <ul>
+    <ul
+      style={{
+        display: "flex",
+        flexDirection: "column-reverse",
+        listStyle: "none",
+        margin: 0,
+        padding: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.25)",
+      }}
+    >
       {convert().map((item) => {
         return (
           <AppLogItem key={item.itemId} {...item}>
