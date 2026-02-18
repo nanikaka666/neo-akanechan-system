@@ -133,7 +133,7 @@ body {
 
 .app-log-item {
   opacity: 0;
-  font-size: 13px;
+  font-size: 1.5vw;
   font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans";
   color: white;
 }
@@ -141,7 +141,7 @@ body {
 .app-log-item-animation {
   animation: app-log-item;
   animation-duration: 5000ms;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
   animation-timing-function: ease-out;
 }
 
