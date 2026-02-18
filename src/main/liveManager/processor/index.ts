@@ -1,3 +1,4 @@
+import { AppLog } from "../../../types/appLog";
 import {
   FocusedOnChatItem,
   GiftReceived,
@@ -41,6 +42,11 @@ export class Processor {
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "subscriberCountGoalAchivement",
           points: list,
+          appLog: {
+            type: "subscriberCountGoalAccomplished",
+            logId: crypto.randomUUID(),
+            goalValue: subscriberCountGoal,
+          },
         });
         this.#lcpDataTransfer.syncRankings();
       }
@@ -70,11 +76,25 @@ export class Processor {
             likeCountGoal.maxLevel,
             this.#calcPassedHour(),
           );
+        this.#lcpDataTransfer.syncRankings();
+        const appLog: AppLog =
+          likeCountStatus.currentLevel === likeCountGoal.maxLevel
+            ? {
+                type: "likeCountGoalAccomplished",
+                logId: crypto.randomUUID(),
+                goalValue: nextGoalValue,
+              }
+            : {
+                type: "likeCountGoalPromotion",
+                logId: crypto.randomUUID(),
+                goalValue: nextGoalValue,
+                level: likeCountStatus.currentLevel,
+              };
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "likeCountLevelPromotion",
           points: addedPointLists,
+          appLog: appLog,
         });
-        this.#lcpDataTransfer.syncRankings();
       }
     }
 
@@ -103,11 +123,25 @@ export class Processor {
             viewerCountGoal.maxLevel,
             this.#calcPassedHour(),
           );
+        this.#lcpDataTransfer.syncRankings();
+        const appLog: AppLog =
+          viewerCountStatus.currentLevel === viewerCountGoal.maxLevel
+            ? {
+                type: "viewerCountGoalAccomplished",
+                logId: crypto.randomUUID(),
+                goalValue: nextGoalValue,
+              }
+            : {
+                type: "viewerCountGoalPromotion",
+                logId: crypto.randomUUID(),
+                goalValue: nextGoalValue,
+                level: viewerCountStatus.currentLevel,
+              };
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "viewerCountLevelPromotion",
           points: addedPointLists,
+          appLog: appLog,
         });
-        this.#lcpDataTransfer.syncRankings();
       }
     }
     this.#dataSource.getLiveStatisticsDataContainer().update({

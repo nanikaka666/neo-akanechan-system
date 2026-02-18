@@ -130,3 +130,28 @@ body {
     opacity: 1;
   }
 }
+
+.app-log-item {
+  font-size: 1.5vw;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans";
+  color: white;
+}
+
+.app-log-item-animation {
+  animation: app-log-item;
+  animation-duration: 5000ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+}
+
+@keyframes app-log-item {
+  0% {
+    transform: translateX(5vw);
+    opacity: 0;
+  }
+  5%,
+  100% {
+    transform: translateX(0vw);
+    opacity: 1;
+  }
+}

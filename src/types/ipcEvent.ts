@@ -17,6 +17,7 @@ import { PariticipantPointRankings } from "./participantPoint";
 import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "./overlay";
 import { LiveSettings } from "./liveSettings";
 import { AllGoalsStatus } from "./goals";
+import { AppLog } from "./appLog";
 
 /**
  * Ipc channel interfaces.
