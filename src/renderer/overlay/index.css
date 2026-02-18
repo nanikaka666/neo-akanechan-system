@@ -132,7 +132,6 @@ body {
 }
 
 .app-log-item {
-  opacity: 0;
   font-size: 1.5vw;
   font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans";
   color: white;
@@ -151,11 +150,8 @@ body {
     opacity: 0;
   }
   5%,
-  95% {
+  100% {
     transform: translateX(0vw);
     opacity: 1;
-  }
-  100% {
-    opacity: 0;
   }
 }
