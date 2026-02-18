@@ -159,9 +159,4 @@ export interface IpcEvent {
    * Notify AllGoalStatus.
    */
   tellAllGoalStatus: (status: AllGoalsStatus) => void;
-
-  /**
-   * Notify AppLog. (For Overlay)
-   */
-  tellAppLog: (appLog: AppLog) => void;
 }
