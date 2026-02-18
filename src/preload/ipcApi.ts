@@ -47,6 +47,7 @@ export interface IpcApi {
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
     requestSyncLiveSettings: Invoke<"requestSyncLiveSettings">;
     registerOverlayEvent: Listen<"tellOverlayEvent">;
+    registerAppLog: Listen<"tellAppLog">;
 
     // for Both Windows.
     registerLiveSettingsListener: Listen<"tellLiveSettings">;
@@ -91,6 +92,7 @@ export const IpcApi: IpcApi = {
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
     requestSyncLiveSettings: () => IpcRendererWrapper.invoke("requestSyncLiveSettings"),
     registerOverlayEvent: (callback) => IpcRendererWrapper.on("tellOverlayEvent", callback),
+    registerAppLog: (callback) => IpcRendererWrapper.on("tellAppLog", callback),
 
     // For both
     registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),

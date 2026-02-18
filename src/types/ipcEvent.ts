@@ -17,6 +17,7 @@ import { PariticipantPointRankings } from "./participantPoint";
 import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "./overlay";
 import { LiveSettings } from "./liveSettings";
 import { AllGoalsStatus } from "./goals";
+import { AppLog } from "./appLog";
 
 /**
  * Ipc channel interfaces.
@@ -158,4 +159,9 @@ export interface IpcEvent {
    * Notify AllGoalStatus.
    */
   tellAllGoalStatus: (status: AllGoalsStatus) => void;
+
+  /**
+   * Notify AppLog. (For Overlay)
+   */
+  tellAppLog: (appLog: AppLog) => void;
 }
