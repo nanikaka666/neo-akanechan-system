@@ -174,7 +174,7 @@ export function OverlayApp() {
       <PoppingManager />
       {poppingOnDemand && <OnDemandPoppingManager onDemand={poppingOnDemand} />}
       <CarouselManager items={makeCarouselItems()} />
-      <AppLogManager />
+      <AppLogManager overlayEvent={overlayEvent} />
     </div>
   );
 }

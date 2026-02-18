@@ -1,11 +1,8 @@
-import { useCallback, useState } from "react";
 import { AppLog } from "../../../types/appLog";
-import { AppLogItem, AppLogItemProps } from "./AppLogItem";
 import { CaseDropError } from "../constants";
+import { OverlayEvent } from "../../../types/overlay";
 
-export function AppLogManager() {
-  const [buffer, setBuffer] = useState<AppLog[]>([]);
-
+export function AppLogManager({ overlayEvent }: { overlayEvent: OverlayEvent }) {
   const buildChildren = (appLog: AppLog) => {
     if (appLog.type === "likeCountGoalPromotion") {
       return (
@@ -47,36 +44,27 @@ export function AppLogManager() {
     }
   };
 
-  const convert = useCallback(() => {
-    return buffer.map((appLog) => {
-      return {
-        itemId: appLog.logId,
-        animamtionEndFunc: () => {
-          setBuffer((prev) => prev.filter((value) => value.logId !== appLog.logId));
-        },
-        children: buildChildren(appLog),
-      } satisfies AppLogItemProps;
-    });
-  }, [buffer]);
+  const item =
+    overlayEvent.type === "noEvent"
+      ? undefined
+      : {
+          key: overlayEvent.appLog.logId,
+          children: buildChildren(overlayEvent.appLog),
+        };
 
   return (
-    <ul
+    <div
       style={{
-        display: "flex",
-        flexDirection: "column-reverse",
-        listStyle: "none",
         margin: 0,
         padding: 0,
         backgroundColor: "rgba(0, 0, 0, 0.25)",
       }}
     >
-      {convert().map((item) => {
-        return (
-          <AppLogItem key={item.itemId} {...item}>
-            {item.children}
-          </AppLogItem>
-        );
-      })}
-    </ul>
+      {item && (
+        <div className="app-log-item app-log-item-animation" key={item.key}>
+          {item.children}
+        </div>
+      )}
+    </div>
   );
 }
