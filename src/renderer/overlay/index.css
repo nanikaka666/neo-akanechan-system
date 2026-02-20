@@ -158,11 +158,10 @@ body {
 
 .chat-log {
   position: absolute;
-  right: 0;
+  right: 0.1vw;
   top: 5vh;
-  border: 2px solid black;
   width: 18vw;
-  height: 40vh;
+  height: 55vh;
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -173,19 +172,26 @@ body {
   bottom: 0;
   display: flex;
   flex-direction: column;
-  row-gap: 2px;
+  row-gap: 0.5vh;
 }
 
 .chat-log-item {
   word-break: break-all;
   font-size: 1.3vw;
   background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 0.5vw;
   color: white;
-  padding: 5px;
+  padding: 0.8vw;
+  width: 18vw;
 
   animation: chat-log-item-animation;
   animation-duration: 400ms;
   animation-iteration-count: 1;
+}
+
+.chat-log-item img {
+  width: 1.3vw;
+  border-radius: 50%;
 }
 
 @keyframes chat-log-item-animation {
