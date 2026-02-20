@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatLog } from "../../../types/chatLog";
 
 export function ChatLogManager() {
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
+
+  useEffect(() => {
+    const remover = window.ipcApi.registerChatLogListener((_, chatLog) => {
+      setChatLogs((prev) => [...prev, chatLog].slice(-20));
+    });
+    return () => remover();
+  }, []);
 
   return (
     <div className="chat-log">
