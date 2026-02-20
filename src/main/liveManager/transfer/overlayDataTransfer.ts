@@ -3,6 +3,7 @@ import { getWindowManager } from "../../../main/window";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
 import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "../../../types/overlay";
 import { DataSource } from "../dataSource";
+import { ChatLogData } from "../../../types/chatLog";
 
 export class OverlayDataTransfer {
   readonly #dataSource: DataSource;
@@ -35,6 +36,11 @@ export class OverlayDataTransfer {
 
   sendOverlayEvent(event: Exclude<OverlayEvent, NoEvent>) {
     WebContentsWrapper.send(this.#getWebContents(), "tellOverlayEvent", event);
+  }
+
+  sendChatLog(data: ChatLogData) {
+    // todo: check existence of a vote
+    WebContentsWrapper.send(this.#getWebContents(), "tellChatLog", { data });
   }
 
   #getWebContents() {
