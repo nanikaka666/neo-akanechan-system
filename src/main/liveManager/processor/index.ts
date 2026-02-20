@@ -177,6 +177,7 @@ export class Processor {
 
     this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
+    this.#overlayDataTransfer.sendChatLog(item);
   }
 
   superChat(item: SuperChat) {
@@ -201,6 +202,7 @@ export class Processor {
 
     this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
+    this.#overlayDataTransfer.sendChatLog(item);
   }
 
   superSticker(item: SuperSticker) {
@@ -226,6 +228,7 @@ export class Processor {
 
     this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncChats();
+    this.#overlayDataTransfer.sendChatLog(item);
   }
 
   newMembership(item: NewMembership) {
@@ -247,6 +250,7 @@ export class Processor {
 
     this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
+    this.#overlayDataTransfer.sendChatLog(item);
   }
 
   membershipMilestone(item: MembershipMilestone) {
@@ -270,6 +274,7 @@ export class Processor {
 
     this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
+    this.#overlayDataTransfer.sendChatLog(item);
   }
 
   membershipGift(item: MembershipGift) {
@@ -291,6 +296,7 @@ export class Processor {
 
     this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
+    this.#overlayDataTransfer.sendChatLog(item);
   }
 
   giftReceived(item: GiftReceived) {
@@ -304,6 +310,7 @@ export class Processor {
 
     this.#syncLiveStatistics();
     this.#lcpDataTransfer.syncMembershipAndGifts();
+    this.#overlayDataTransfer.sendChatLog(item);
   }
 
   messageDeleted(item: MessageDeletedChatEvent) {
