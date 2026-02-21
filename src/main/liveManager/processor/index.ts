@@ -393,23 +393,21 @@ export class Processor {
   }
 
   setFocus(item: FocusedOnChatItem) {
+    this.#addPointFocus();
+
     this.#dataSource.getFocusManager().updateFocus(item);
     this.#lcpDataTransfer.syncChats();
-
-    const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByFocused(item);
-
-    if (0 < addedAmountOfPoint) {
-      this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
-    }
 
     this.#overlayDataTransfer.syncFocusView();
   }
 
   unsetFocus() {
-    if (this.#dataSource.getFocusManager().getFocus() === undefined) {
+    const focusStatus = this.#dataSource.getFocusManager().getFocusStatus();
+    if (focusStatus.type === "unfocused") {
       return;
     }
+    this.#addPointFocus();
+
     this.#dataSource.getFocusManager().updateFocus(undefined);
 
     this.#lcpDataTransfer.syncChats();
@@ -451,5 +449,20 @@ export class Processor {
     }
     const diffSeconds = (new Date().getTime() - maybeActualStartTime.getTime()) / 1000;
     return Math.floor(diffSeconds / 3600);
+  }
+
+  #addPointFocus() {
+    const focusStatus = this.#dataSource.getFocusManager().getFocusStatus();
+    if (focusStatus.type === "unfocused") {
+      return;
+    }
+    const addedAmountOfPoint = this.#dataSource
+      .getParticipantManager()
+      .addByFocused(focusStatus.item, focusStatus.focusedAt);
+
+    if (0 < addedAmountOfPoint) {
+      this.#lcpDataTransfer.syncRankings();
+      this.#overlayDataTransfer.sendAmountOfPoint(focusStatus.item.author, addedAmountOfPoint);
+    }
   }
 }

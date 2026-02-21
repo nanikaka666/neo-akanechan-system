@@ -1,18 +1,51 @@
 import { FocusedOnChatItem } from "../../../types/liveChatItem";
 import { ChannelId, LiveChatItemId } from "../../../types/youtubeDomainModel";
 
+export type FocusStatus = FocusedStatus | UnfocusedStatus;
+
+export interface FocusedStatus {
+  type: "focused";
+  item: FocusedOnChatItem;
+  focusedAt: Date;
+}
+
+export interface UnfocusedStatus {
+  type: "unfocused";
+}
+
 export class FocusManager {
   #focusedItem: FocusedOnChatItem | undefined;
+  #focusedAt?: Date;
   constructor() {
     this.#focusedItem = undefined;
   }
 
-  getFocus() {
-    return this.#focusedItem;
+  getFocusStatus(): FocusStatus {
+    if (this.#focusedItem === undefined) {
+      return { type: "unfocused" };
+    } else {
+      if (this.#focusedAt === undefined) {
+        throw new Error("focusedAt is undefined.");
+      }
+      return {
+        type: "focused",
+        item: this.#focusedItem,
+        focusedAt: this.#focusedAt,
+      };
+    }
+  }
+
+  getFocusedAt() {
+    return this.#focusedAt;
   }
 
   updateFocus(item?: FocusedOnChatItem) {
     this.#focusedItem = item;
+    if (item === undefined) {
+      this.#focusedAt = undefined;
+    } else {
+      this.#focusedAt = new Date();
+    }
   }
 
   isFocused(itemId: LiveChatItemId) {

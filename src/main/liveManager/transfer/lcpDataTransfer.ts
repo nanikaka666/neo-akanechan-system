@@ -44,12 +44,13 @@ export class LcpDataTransfer {
       .map((item) => this.#markIsFocused(item));
 
     // Focus
-    const currentFocus = this.#dataSource.getFocusManager().getFocus();
-    const markedFocus = !currentFocus
-      ? undefined
-      : currentFocus.type === "text"
-        ? this.#markIsFocused(this.#markIsStocked(currentFocus))
-        : this.#markIsFocused(currentFocus);
+    const focusStatus = this.#dataSource.getFocusManager().getFocusStatus();
+    const markedFocus =
+      focusStatus.type === "unfocused"
+        ? undefined
+        : focusStatus.item.type === "text"
+          ? this.#markIsFocused(this.#markIsStocked(focusStatus.item))
+          : this.#markIsFocused(focusStatus.item);
 
     WebContentsWrapper.send(this.#getWebContents(), "tellChats", {
       textChats: {

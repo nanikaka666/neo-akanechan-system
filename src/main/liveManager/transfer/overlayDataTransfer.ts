@@ -44,10 +44,11 @@ export class OverlayDataTransfer {
   }
 
   syncFocusView() {
+    const focusStatus = this.#dataSource.getFocusManager().getFocusStatus();
     WebContentsWrapper.send(
       this.#getWebContents(),
       "tellFocusViewItem",
-      this.#dataSource.getFocusManager().getFocus(),
+      focusStatus.type === "unfocused" ? undefined : focusStatus.item,
     );
   }
 
