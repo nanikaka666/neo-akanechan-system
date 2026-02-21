@@ -211,14 +211,14 @@ body {
   left: 50vw;
   transform: translateX(-50%);
   bottom: 3vh;
-  border: 2px solid black;
-  border-radius: 10px;
-  padding: 1vw;
-  background-color: rgba(0, 0, 0, 0.8);
   z-index: 2;
 }
 
 .focus-view {
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 1vw;
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   font-size: 2vw;
   word-break: break-all;
