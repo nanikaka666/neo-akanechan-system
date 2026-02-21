@@ -48,6 +48,7 @@ export interface IpcApi {
     requestSyncLiveSettings: Invoke<"requestSyncLiveSettings">;
     registerOverlayEvent: Listen<"tellOverlayEvent">;
     registerChatLogListener: Listen<"tellChatLog">;
+    registerFocusItemListener: Listen<"tellFocusViewItem">;
 
     // for Both Windows.
     registerLiveSettingsListener: Listen<"tellLiveSettings">;
@@ -93,6 +94,7 @@ export const IpcApi: IpcApi = {
     requestSyncLiveSettings: () => IpcRendererWrapper.invoke("requestSyncLiveSettings"),
     registerOverlayEvent: (callback) => IpcRendererWrapper.on("tellOverlayEvent", callback),
     registerChatLogListener: (callback) => IpcRendererWrapper.on("tellChatLog", callback),
+    registerFocusItemListener: (callback) => IpcRendererWrapper.on("tellFocusViewItem", callback),
 
     // For both
     registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),
