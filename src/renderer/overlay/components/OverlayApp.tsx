@@ -12,6 +12,7 @@ import { GoalsLevel, GoalsStatus } from "../../../types/goals";
 import { OnDemand, OnDemandPoppingManager } from "./OnDemandPoppingManager";
 import { AppLogManager } from "./AppLogManager";
 import { ChatLogManager } from "./ChatLogManager";
+import { FocusView } from "./FocusView";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
@@ -177,6 +178,7 @@ export function OverlayApp() {
       <CarouselManager items={makeCarouselItems()} />
       <AppLogManager overlayEvent={overlayEvent} />
       <ChatLogManager />
+      <FocusView />
     </div>
   );
 }
