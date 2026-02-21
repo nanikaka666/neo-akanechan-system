@@ -43,6 +43,14 @@ export class OverlayDataTransfer {
     WebContentsWrapper.send(this.#getWebContents(), "tellChatLog", { data });
   }
 
+  syncFocusView() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellFocusViewItem",
+      this.#dataSource.getFocusManager().getFocus(),
+    );
+  }
+
   #getWebContents() {
     const res = getWindowManager().getOverlayWindowWebContents();
     if (res === undefined) {

@@ -402,6 +402,8 @@ export class Processor {
       this.#lcpDataTransfer.syncRankings();
       this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
+
+    this.#overlayDataTransfer.syncFocusView();
   }
 
   unsetFocus() {
@@ -411,6 +413,7 @@ export class Processor {
     this.#dataSource.getFocusManager().updateFocus(undefined);
 
     this.#lcpDataTransfer.syncChats();
+    this.#overlayDataTransfer.syncFocusView();
   }
 
   manualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
