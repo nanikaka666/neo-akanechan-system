@@ -18,6 +18,7 @@ import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "./overlay";
 import { LiveSettings } from "./liveSettings";
 import { AllGoalsStatus } from "./goals";
 import { ChatLog } from "./chatLog";
+import { FocusViewItem } from "./focusView";
 
 /**
  * Ipc channel interfaces.
@@ -164,4 +165,9 @@ export interface IpcEvent {
    * Notify ChatLog. (For Overlay)
    */
   tellChatLog: (chatLog: ChatLog) => void;
+
+  /**
+   * Notify FocusViewItem. (For Overlay)
+   */
+  tellFocusViewItem: (item: FocusViewItem | undefined) => void;
 }

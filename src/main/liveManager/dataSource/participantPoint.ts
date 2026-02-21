@@ -11,6 +11,7 @@ import {
 } from "../../../types/liveChatItem";
 import { GoalsLevel } from "../../../types/goals";
 import { PointInfoFromMainProcess } from "../../../types/overlay";
+import { FocusViewItem } from "../../../types/focusView";
 
 /**
  * Set of data for continuous chat point.
@@ -43,11 +44,6 @@ export class PariticipantPointManager {
   readonly #stocksAdded: Set<string>;
 
   /**
-   * LiveChatItemId set which used to adding point of focus
-   */
-  readonly #focusAdded: Set<string>;
-
-  /**
    * Disqualified channel ids.
    */
   readonly #disqualifiedChannelIds: Set<string>;
@@ -61,7 +57,6 @@ export class PariticipantPointManager {
     this.#points = new Map();
     this.#continuousChatMetadata = new Map();
     this.#stocksAdded = new Set();
-    this.#focusAdded = new Set();
     this.#disqualifiedChannelIds = new Set();
     this.#authors = new Map();
   }
@@ -118,17 +113,13 @@ export class PariticipantPointManager {
   }
 
   /**
-   *
    * plus point of focus.
    *
    * @returns added point amount. `0` means adding point cancelled.
    */
-  addByFocused(item: TextMessageChat | SuperChat | SuperSticker) {
-    if (this.#focusAdded.has(item.id.id)) {
-      return 0;
-    }
-    this.#focusAdded.add(item.id.id);
-    return this.#add(item.author, 300);
+  addByFocused(item: FocusViewItem, focusedAt: Date) {
+    const focusedDuration = new Date().getTime() / 1000 - focusedAt.getTime() / 1000;
+    return this.#add(item.author, 3000 + Math.pow(focusedDuration, 1.3));
   }
 
   /**
