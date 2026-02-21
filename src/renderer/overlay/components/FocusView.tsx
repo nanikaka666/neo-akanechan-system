@@ -5,12 +5,14 @@ export function FocusView() {
 
   return (
     focusItem && (
-      <div className="focus-view">
-        <div>
-          <img src={focusItem.author.profileImageUrl} />
-          <span>{focusItem.author.name}</span>
+      <div className="focus-view-container">
+        <div className="focus-view" key={focusItem.id.id}>
+          <div>
+            <img src={focusItem.author.profileImageUrl} />
+            <span>{focusItem.author.name}</span>
+          </div>
+          <div>{focusItem.displayMessage}</div>
         </div>
-        <div>{focusItem.displayMessage}</div>
       </div>
     )
   );
