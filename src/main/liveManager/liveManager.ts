@@ -1,3 +1,4 @@
+import { PariticipantPointRankings } from "src/types/participantPoint";
 import {
   FocusedOnChatItem,
   NonMarkedExtendedChatItemText,
@@ -147,6 +148,14 @@ export class LiveManager {
 
   actionPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
     this.#processorGuard(() => this.#processor.manualPlusPoints(item));
+  }
+
+  actionShowRanking(ranking: PariticipantPointRankings) {
+    this.#processorGuard(() => this.#processor.showRanking(ranking));
+  }
+
+  actionHideRanking() {
+    this.#processorGuard(() => this.#processor.hideRanking());
   }
 
   syncLiveSettings() {
