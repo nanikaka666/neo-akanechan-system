@@ -175,4 +175,9 @@ export interface IpcEvent {
    * Notify to show rankings. (For Overlay)
    */
   tellRankingView: (ranking: PariticipantPointRankings | undefined) => void;
+
+  /**
+   * Request to LiveManager to show ranking dialogs on overlay.
+   */
+  showRanking: (ranking: PariticipantPointRankings) => boolean;
 }
