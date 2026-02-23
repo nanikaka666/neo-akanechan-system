@@ -1,3 +1,4 @@
+import { PariticipantPointRankings } from "../../../types/participantPoint";
 import { AppLog } from "../../../types/appLog";
 import {
   FocusedOnChatItem,
@@ -420,6 +421,18 @@ export class Processor {
       this.#lcpDataTransfer.syncRankings();
       this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
+  }
+
+  showRanking(ranking: PariticipantPointRankings) {
+    this.#dataSource.getShowRankingManager().updateRanking(ranking);
+    this.#overlayDataTransfer.syncRanking();
+    this.#lcpDataTransfer.syncIsShownRanking();
+  }
+
+  hideRanking() {
+    this.#dataSource.getShowRankingManager().hideRanking();
+    this.#overlayDataTransfer.syncRanking();
+    this.#lcpDataTransfer.syncIsShownRanking();
   }
 
   syncLiveSettings() {

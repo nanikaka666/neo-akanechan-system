@@ -105,6 +105,14 @@ export class LcpDataTransfer {
     );
   }
 
+  syncIsShownRanking() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellIsShownRanking",
+      this.#dataSource.getShowRankingManager().isShown(),
+    );
+  }
+
   #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & Stockable {
     return { ...item, isStocked: this.#dataSource.getStockManager().isStocked(item.id) };
   }

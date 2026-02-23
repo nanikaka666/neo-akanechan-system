@@ -52,6 +52,14 @@ export class OverlayDataTransfer {
     );
   }
 
+  syncRanking() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellRankingView",
+      this.#dataSource.getShowRankingManager().get(),
+    );
+  }
+
   #getWebContents() {
     const res = getWindowManager().getOverlayWindowWebContents();
     if (res === undefined) {

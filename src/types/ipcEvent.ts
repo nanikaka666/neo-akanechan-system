@@ -170,4 +170,24 @@ export interface IpcEvent {
    * Notify FocusViewItem. (For Overlay)
    */
   tellFocusViewItem: (item: FocusViewItem | undefined) => void;
+
+  /**
+   * Notify to show rankings. (For Overlay)
+   */
+  tellRankingView: (ranking: PariticipantPointRankings | undefined) => void;
+
+  /**
+   * Request to LiveManager to show ranking dialogs on overlay.
+   */
+  showRanking: (ranking: PariticipantPointRankings) => boolean;
+
+  /**
+   * Notify flag whether a ranking is shown or not.
+   */
+  tellIsShownRanking: (isShown: boolean) => void;
+
+  /**
+   * Request to LiveManager to hide ranking dialogs on overlay.
+   */
+  hideRanking: () => boolean;
 }

@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { PariticipantPointRankings } from "../../../../../types/participantPoint";
+import { useIsShownRanking } from "../../hooks/useIsShownRanking";
 
 export function Rankings() {
   const [rankings, setRankings] = useState<PariticipantPointRankings>();
+  const [showButtonDisabled, setShowButtonDisabled] = useState(false);
+  const isShown = useIsShownRanking();
+
   useEffect(() => {
     const remover = window.ipcApi.registerRankingsListener((e, rankings) => {
       setRankings((_) => rankings);
+      setShowButtonDisabled((_) => false);
     });
     return () => remover();
   }, []);
@@ -14,6 +19,28 @@ export function Rankings() {
       <span style={{ position: "absolute", top: 0, right: 0 }}>
         更新日時: {rankings.updatedAt.toLocaleString()}
       </span>
+      <div>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setShowButtonDisabled((_) => true);
+            window.ipcApi.requestShowRanking(rankings);
+          }}
+          disabled={showButtonDisabled}
+        >
+          ランキングを配信画面に映す
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setShowButtonDisabled((_) => false);
+            window.ipcApi.requestHideRanking();
+          }}
+          disabled={!isShown}
+        >
+          配信画面のランキング表示をやめる
+        </button>
+      </div>
       {rankings.items.map((item, idx) => {
         return (
           <div key={idx}>

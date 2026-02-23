@@ -42,6 +42,9 @@ export interface IpcApi {
     registerRankingsListener: Listen<"tellRankings">;
     requestPlusPoints: Invoke<"manualPlusPoints">;
     registerAllGoalStatus: Listen<"tellAllGoalStatus">;
+    requestShowRanking: Invoke<"showRanking">;
+    registerIsShownRankingListener: Listen<"tellIsShownRanking">;
+    requestHideRanking: Invoke<"hideRanking">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
@@ -49,6 +52,7 @@ export interface IpcApi {
     registerOverlayEvent: Listen<"tellOverlayEvent">;
     registerChatLogListener: Listen<"tellChatLog">;
     registerFocusItemListener: Listen<"tellFocusViewItem">;
+    registerRankingViewListener: Listen<"tellRankingView">;
 
     // for Both Windows.
     registerLiveSettingsListener: Listen<"tellLiveSettings">;
@@ -88,6 +92,10 @@ export const IpcApi: IpcApi = {
     registerRankingsListener: (callback) => IpcRendererWrapper.on("tellRankings", callback),
     requestPlusPoints: (item) => IpcRendererWrapper.invoke("manualPlusPoints", item),
     registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
+    requestShowRanking: (ranking) => IpcRendererWrapper.invoke("showRanking", ranking),
+    registerIsShownRankingListener: (callback) =>
+      IpcRendererWrapper.on("tellIsShownRanking", callback),
+    requestHideRanking: () => IpcRendererWrapper.invoke("hideRanking"),
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
@@ -95,6 +103,7 @@ export const IpcApi: IpcApi = {
     registerOverlayEvent: (callback) => IpcRendererWrapper.on("tellOverlayEvent", callback),
     registerChatLogListener: (callback) => IpcRendererWrapper.on("tellChatLog", callback),
     registerFocusItemListener: (callback) => IpcRendererWrapper.on("tellFocusViewItem", callback),
+    registerRankingViewListener: (callback) => IpcRendererWrapper.on("tellRankingView", callback),
 
     // For both
     registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),
