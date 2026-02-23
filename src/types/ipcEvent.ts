@@ -180,4 +180,9 @@ export interface IpcEvent {
    * Request to LiveManager to show ranking dialogs on overlay.
    */
   showRanking: (ranking: PariticipantPointRankings) => boolean;
+
+  /**
+   * Notify flag whether a ranking is shown or not.
+   */
+  tellIsShownRanking: (isShown: boolean) => void;
 }

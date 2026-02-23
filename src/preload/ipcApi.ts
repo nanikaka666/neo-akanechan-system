@@ -43,6 +43,7 @@ export interface IpcApi {
     requestPlusPoints: Invoke<"manualPlusPoints">;
     registerAllGoalStatus: Listen<"tellAllGoalStatus">;
     requestShowRanking: Invoke<"showRanking">;
+    registerIsShownRankingListener: Listen<"tellIsShownRanking">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
@@ -91,6 +92,8 @@ export const IpcApi: IpcApi = {
     requestPlusPoints: (item) => IpcRendererWrapper.invoke("manualPlusPoints", item),
     registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
     requestShowRanking: (ranking) => IpcRendererWrapper.invoke("showRanking", ranking),
+    registerIsShownRankingListener: (callback) =>
+      IpcRendererWrapper.on("tellIsShownRanking", callback),
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
