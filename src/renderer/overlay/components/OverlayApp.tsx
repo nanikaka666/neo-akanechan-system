@@ -13,6 +13,7 @@ import { OnDemand, OnDemandPoppingManager } from "./OnDemandPoppingManager";
 import { AppLogManager } from "./AppLogManager";
 import { ChatLogManager } from "./ChatLogManager";
 import { FocusView } from "./FocusView";
+import { RankingView } from "./RankingView";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
@@ -179,6 +180,7 @@ export function OverlayApp() {
       <AppLogManager overlayEvent={overlayEvent} />
       <ChatLogManager />
       <FocusView />
+      <RankingView />
     </div>
   );
 }
