@@ -4,6 +4,7 @@ import { WebContentsWrapper } from "../../../main/webContentsWrapper";
 import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "../../../types/overlay";
 import { DataSource } from "../dataSource";
 import { ChatLogData } from "../../../types/chatLog";
+import { PariticipantPointRankings } from "src/types/participantPoint";
 
 export class OverlayDataTransfer {
   readonly #dataSource: DataSource;
@@ -50,6 +51,14 @@ export class OverlayDataTransfer {
       "tellFocusViewItem",
       focusStatus.type === "unfocused" ? undefined : focusStatus.item,
     );
+  }
+
+  syncRanking(ranking: PariticipantPointRankings) {
+    WebContentsWrapper.send(this.#getWebContents(), "tellRankingView", ranking);
+  }
+
+  syncRankingHide() {
+    WebContentsWrapper.send(this.#getWebContents(), "tellRankingView", undefined);
   }
 
   #getWebContents() {
