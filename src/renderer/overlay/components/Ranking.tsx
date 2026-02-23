@@ -9,12 +9,12 @@ export interface RankingProps {
 
 export function Ranking({ first, second, third, updatedAt }: RankingProps) {
   return (
-    <div className="ranking-view-container">
+    <div className="ranking-view-container" key={updatedAt.getTime()}>
       <div className="date">{updatedAt.toLocaleString()} 時点</div>
       <div className="ranking-view">
         <div>Ranking</div>
-        <div>
-          <div>
+        <div className="list">
+          <div className="item">
             <div>1st</div>
             <div className="author">
               <img src={first.participantPoint.author.profileImageUrl} />
@@ -23,7 +23,7 @@ export function Ranking({ first, second, third, updatedAt }: RankingProps) {
             <div>{first.participantPoint.point}</div>
           </div>
           {second && (
-            <div>
+            <div className="item">
               <div>2nd</div>
               <div className="author">
                 <img src={second.participantPoint.author.profileImageUrl} />
@@ -33,7 +33,7 @@ export function Ranking({ first, second, third, updatedAt }: RankingProps) {
             </div>
           )}
           {third && (
-            <div>
+            <div className="item">
               <div>3rd</div>
               <div className="author">
                 <img src={third.participantPoint.author.profileImageUrl} />

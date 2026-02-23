@@ -22,7 +22,7 @@ export function RankingView() {
           third={ranking.items[2]}
           updatedAt={ranking.updatedAt}
         />
-        <RankingOthers list={ranking.items.slice(3)} />
+        <RankingOthers list={ranking.items.slice(3)} updatedAt={ranking.updatedAt} />
       </>
     )
   );

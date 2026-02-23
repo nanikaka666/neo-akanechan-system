@@ -2,12 +2,13 @@ import { ParticipantPointRankingData } from "../../../types/participantPoint";
 
 export interface RankingOthersProps {
   list: ParticipantPointRankingData[];
+  updatedAt: Date;
 }
 
-export function RankingOthers({ list }: RankingOthersProps) {
+export function RankingOthers({ list, updatedAt }: RankingOthersProps) {
   return (
     list.length > 0 && (
-      <div className="ranking-others-container">
+      <div className="ranking-others-container" key={updatedAt.getTime()}>
         <ul className="ranking-others-list">
           {list.map((item) => {
             return (
