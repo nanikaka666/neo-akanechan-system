@@ -246,4 +246,9 @@ export function setupIpcMainHandlers() {
     getLiveManager().syncLiveSettings();
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("showRanking", (_, ranking) => {
+    getLiveManager().actionShowRanking(ranking);
+    return Promise.resolve(true);
+  });
 }
