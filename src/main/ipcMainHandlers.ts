@@ -251,4 +251,9 @@ export function setupIpcMainHandlers() {
     getLiveManager().actionShowRanking(ranking);
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("hideRanking", () => {
+    getLiveManager().actionHideRanking();
+    return Promise.resolve(true);
+  });
 }
