@@ -4,7 +4,7 @@ import { WebContentsWrapper } from "../../../main/webContentsWrapper";
 import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "../../../types/overlay";
 import { DataSource } from "../dataSource";
 import { ChatLogData } from "../../../types/chatLog";
-import { PariticipantPointRankings } from "src/types/participantPoint";
+import { PariticipantPointRankings } from "../../../types/participantPoint";
 
 export class OverlayDataTransfer {
   readonly #dataSource: DataSource;
