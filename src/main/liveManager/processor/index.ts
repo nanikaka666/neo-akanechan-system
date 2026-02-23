@@ -426,11 +426,13 @@ export class Processor {
   showRanking(ranking: PariticipantPointRankings) {
     this.#dataSource.getShowRankingManager().updateRanking(ranking);
     this.#overlayDataTransfer.syncRanking();
+    this.#lcpDataTransfer.syncIsShownRanking();
   }
 
   hideRanking() {
     this.#dataSource.getShowRankingManager().hideRanking();
     this.#overlayDataTransfer.syncRanking();
+    this.#lcpDataTransfer.syncIsShownRanking();
   }
 
   syncLiveSettings() {
