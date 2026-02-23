@@ -170,4 +170,9 @@ export interface IpcEvent {
    * Notify FocusViewItem. (For Overlay)
    */
   tellFocusViewItem: (item: FocusViewItem | undefined) => void;
+
+  /**
+   * Notify to show rankings. (For Overlay)
+   */
+  tellRankingView: (ranking: PariticipantPointRankings | undefined) => void;
 }
