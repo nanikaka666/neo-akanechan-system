@@ -14,6 +14,7 @@ import { PariticipantPointManager } from "./dataSource/participantPoint";
 import { OverlayDataTransfer } from "./transfer/overlayDataTransfer";
 import { LiveSettingsManager } from "./dataSource/settings";
 import { GoalsManager } from "./dataSource/goals";
+import { ShowRankingManager } from "./dataSource/showRanking";
 
 let liveManager: LiveManager | undefined;
 
@@ -29,6 +30,7 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   const pointManager = new PariticipantPointManager();
   const liveSettingsManager = new LiveSettingsManager();
   const goalsManager = new GoalsManager();
+  const showRankingManager = new ShowRankingManager();
   const dataSource = new DataSource(
     liveStatisticsDataContainer,
     chatDataManager,
@@ -37,6 +39,7 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
     pointManager,
     liveSettingsManager,
     goalsManager,
+    showRankingManager,
   );
   const lcpDataTransfer = new LcpDataTransfer(dataSource);
   const overlayDataTransfer = new OverlayDataTransfer(dataSource);
