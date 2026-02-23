@@ -158,9 +158,9 @@ body {
 
 .chat-log {
   position: absolute;
-  right: 0.1vw;
+  right: 0.5vw;
   top: 5vh;
-  width: 18vw;
+  width: 19.6vw;
   height: 55vh;
   overflow: hidden;
   margin: 0;
@@ -221,7 +221,9 @@ body {
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   font-size: 2vw;
+  word-wrap: break-word;
   word-break: break-all;
+  overflow: hidden;
   animation: focus-view-animation;
   animation-duration: 500ms;
   animation-iteration-count: 1;
