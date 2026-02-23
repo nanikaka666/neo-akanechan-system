@@ -185,4 +185,9 @@ export interface IpcEvent {
    * Notify flag whether a ranking is shown or not.
    */
   tellIsShownRanking: (isShown: boolean) => void;
+
+  /**
+   * Request to LiveManager to hide ranking dialogs on overlay.
+   */
+  hideRanking: () => boolean;
 }
