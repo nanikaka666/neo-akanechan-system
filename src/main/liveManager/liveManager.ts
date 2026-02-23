@@ -1,4 +1,4 @@
-import { PariticipantPointRankings } from "src/types/participantPoint";
+import { PariticipantPointRankings } from "../..//types/participantPoint";
 import {
   FocusedOnChatItem,
   NonMarkedExtendedChatItemText,
