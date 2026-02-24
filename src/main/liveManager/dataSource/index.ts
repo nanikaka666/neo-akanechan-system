@@ -1,4 +1,5 @@
 import { ChatDataManager } from "./chats";
+import { CompetitionManager } from "./competition";
 import { FocusManager } from "./focus";
 import { GoalsManager } from "./goals";
 import { LiveStatisticsDataContainer } from "./liveStatistics";
@@ -16,6 +17,7 @@ export class DataSource {
   readonly #liveSettingsManager: LiveSettingsManager;
   readonly #goalsManager: GoalsManager;
   readonly #showRankingManager: ShowRankingManager;
+  readonly #competitionManager: CompetitionManager;
   constructor(
     liveStatisticsDataContainer: LiveStatisticsDataContainer,
     chatDataContainer: ChatDataManager,
@@ -25,6 +27,7 @@ export class DataSource {
     liveSettingsManager: LiveSettingsManager,
     goalsManager: GoalsManager,
     showRankingManager: ShowRankingManager,
+    competitionManager: CompetitionManager,
   ) {
     this.#liveStatisticsDataContainer = liveStatisticsDataContainer;
     this.#chatDataManager = chatDataContainer;
@@ -34,6 +37,7 @@ export class DataSource {
     this.#liveSettingsManager = liveSettingsManager;
     this.#goalsManager = goalsManager;
     this.#showRankingManager = showRankingManager;
+    this.#competitionManager = competitionManager;
   }
   getLiveStatisticsDataContainer() {
     return this.#liveStatisticsDataContainer;
@@ -58,5 +62,8 @@ export class DataSource {
   }
   getShowRankingManager() {
     return this.#showRankingManager;
+  }
+  getCompetitionManager() {
+    return this.#competitionManager;
   }
 }
