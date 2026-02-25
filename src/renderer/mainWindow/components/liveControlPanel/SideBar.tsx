@@ -27,10 +27,10 @@ export function SideBar({
         Comment Viewer
       </div>
       <div
-        onClick={() => setMode((_) => "chanceTime")}
-        style={mode === "chanceTime" ? selectedStyle : undefined}
+        onClick={() => setMode((_) => "competition")}
+        style={mode === "competition" ? selectedStyle : undefined}
       >
-        Chance Time
+        Competition
       </div>
       <div
         onClick={() => setMode((_) => "rankings")}
