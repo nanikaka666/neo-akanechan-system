@@ -261,4 +261,9 @@ export function setupIpcMainHandlers() {
     getLiveManager().actionOpenCompetition(question, options, acceptTimeMinutes);
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("abortCompetition", () => {
+    getLiveManager().actionAbortCompetition();
+    return Promise.resolve(true);
+  });
 }
