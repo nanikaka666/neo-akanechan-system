@@ -435,6 +435,12 @@ export class Processor {
     this.#lcpDataTransfer.syncIsShownRanking();
   }
 
+  openCompetition(question: string, options: string[], acceptTimeMinutes: number) {
+    this.#dataSource
+      .getCompetitionManager()
+      .openCompetition(question, options, acceptTimeMinutes, () => {});
+  }
+
   syncLiveSettings() {
     this.#overlayDataTransfer.syncLiveSettings();
   }

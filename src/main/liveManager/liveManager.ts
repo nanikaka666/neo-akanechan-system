@@ -158,6 +158,12 @@ export class LiveManager {
     this.#processorGuard(() => this.#processor.hideRanking());
   }
 
+  actionOpenCompetition(question: string, options: string[], acceptTimeMinutes: number) {
+    this.#processorGuard(() =>
+      this.#processor.openCompetition(question, options, acceptTimeMinutes),
+    );
+  }
+
   syncLiveSettings() {
     this.#processor.syncLiveSettings();
   }
