@@ -164,6 +164,10 @@ export class LiveManager {
     );
   }
 
+  actionAbortCompetition() {
+    this.#processorGuard(() => this.#processor.abortCompetition());
+  }
+
   syncLiveSettings() {
     this.#processor.syncLiveSettings();
   }

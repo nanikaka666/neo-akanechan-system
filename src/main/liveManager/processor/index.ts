@@ -445,6 +445,11 @@ export class Processor {
     this.#lcpDataTransfer.syncCompetitionStatus();
   }
 
+  abortCompetition() {
+    this.#dataSource.getCompetitionManager().close();
+    this.#lcpDataTransfer.syncCompetitionStatus();
+  }
+
   syncLiveSettings() {
     this.#overlayDataTransfer.syncLiveSettings();
   }
