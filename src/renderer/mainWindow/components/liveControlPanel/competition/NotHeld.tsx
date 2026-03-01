@@ -9,9 +9,9 @@ export function NotHeld() {
   const optionNumValues: OptionNum[] = [2, 3, 4, 5, 6, 7, 8];
   const [optionStrings, setOptionStrings] = useState<string[]>(["", "", "", "", "", "", "", ""]);
   const optionLabels = Array.from("abcdefgh") as OptionLabel[];
-  const [betAcceptMinutes, setBetAcceptMinutes] = useState<number>(5);
+  const [betAcceptMinutes, setBetAcceptMinutes] = useState<number>(1);
 
-  const betAcceptMinutesValues = [5, 10, 15, 20, 30, 40, 50, 60, 90, 120, 150, 180];
+  const betAcceptMinutesValues = [1, 5, 10, 15, 20, 30, 40, 50, 60, 90, 120, 150, 180];
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
