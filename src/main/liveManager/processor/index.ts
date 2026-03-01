@@ -438,7 +438,11 @@ export class Processor {
   openCompetition(question: string, options: string[], acceptTimeMinutes: number) {
     this.#dataSource
       .getCompetitionManager()
-      .openCompetition(question, options, acceptTimeMinutes, () => {});
+      .openCompetition(question, options, acceptTimeMinutes, () => {
+        this.#lcpDataTransfer.syncCompetitionStatus();
+      });
+
+    this.#lcpDataTransfer.syncCompetitionStatus();
   }
 
   syncLiveSettings() {
