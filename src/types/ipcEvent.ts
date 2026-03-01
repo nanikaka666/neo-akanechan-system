@@ -19,6 +19,7 @@ import { LiveSettings } from "./liveSettings";
 import { AllGoalsStatus } from "./goals";
 import { ChatLog } from "./chatLog";
 import { FocusViewItem } from "./focusView";
+import { CompetitionStatus } from "./competition";
 
 /**
  * Ipc channel interfaces.
@@ -195,4 +196,9 @@ export interface IpcEvent {
    * Request to LiveManager to open a new competition.
    */
   openCompetition: (question: string, options: string[], acceptTimeMinutes: number) => boolean;
+
+  /**
+   * Notify latest CompetitionStatus.
+   */
+  tellCompetitionStatus: (status: CompetitionStatus) => void;
 }
