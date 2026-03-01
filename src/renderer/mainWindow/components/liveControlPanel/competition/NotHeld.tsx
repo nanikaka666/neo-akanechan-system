@@ -109,6 +109,17 @@ export function NotHeld() {
         onClick={(e) => {
           e.preventDefault();
           setButtonDisabled((_) => true);
+          window.ipcApi
+            .requestOpenCompetition(
+              question,
+              optionStrings.slice(0, selectedOptionNum),
+              betAcceptMinutes,
+            )
+            .then((_) => {
+              setButtonDisabled((_) => false);
+              setQuestion((_) => "");
+              setOptionStrings((_) => ["", "", "", "", "", "", "", ""]);
+            });
         }}
       >
         コンペを開始する
