@@ -47,6 +47,7 @@ export interface IpcApi {
     requestHideRanking: Invoke<"hideRanking">;
     requestOpenCompetition: Invoke<"openCompetition">;
     registerCompetitionStatusListener: Listen<"tellCompetitionStatus">;
+    requestAbortCompetition: Invoke<"abortCompetition">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
@@ -102,6 +103,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.invoke("openCompetition", question, options, acceptTimeMinutes),
     registerCompetitionStatusListener: (callback) =>
       IpcRendererWrapper.on("tellCompetitionStatus", callback),
+    requestAbortCompetition: () => IpcRendererWrapper.invoke("abortCompetition"),
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),

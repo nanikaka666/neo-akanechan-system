@@ -201,4 +201,9 @@ export interface IpcEvent {
    * Notify latest CompetitionStatus.
    */
   tellCompetitionStatus: (status: CompetitionStatus) => void;
+
+  /**
+   * Request to LiveManager to abort the competition.
+   */
+  abortCompetition: () => void;
 }
