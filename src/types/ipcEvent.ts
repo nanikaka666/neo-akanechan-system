@@ -205,5 +205,5 @@ export interface IpcEvent {
   /**
    * Request to LiveManager to abort the competition.
    */
-  abortCompetition: () => void;
+  abortCompetition: () => boolean;
 }
