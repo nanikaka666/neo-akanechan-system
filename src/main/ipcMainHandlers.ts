@@ -256,4 +256,9 @@ export function setupIpcMainHandlers() {
     getLiveManager().actionHideRanking();
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("openCompetition", (_, question, options, acceptTimeMinutes) => {
+    getLiveManager().actionOpenCompetition(question, options, acceptTimeMinutes);
+    return Promise.resolve(true);
+  });
 }
