@@ -94,8 +94,13 @@ export class CompetitionManager {
     return true;
   }
 
-  bet(author: ChatAuthor, betTo: OptionLabel, stake: number) {
-    if (this.#status.type !== "held") {
+  bet(author: ChatAuthor, betTo: OptionLabel, stake: number, publishedAt: Date) {
+    if (this.#status.type === "notHeld") {
+      return;
+    }
+    // there is valid case that betting is accepted when CompetitionStatus is EntryClosed.
+    // rely on comparing times.
+    if (publishedAt.getTime() > this.#status.settings.scheduledClosedAt.getTime()) {
       return;
     }
     if (author.isOwner) {
