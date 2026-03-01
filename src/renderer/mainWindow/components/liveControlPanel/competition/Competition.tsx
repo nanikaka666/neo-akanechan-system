@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NotHeld } from "./NotHeld";
 import { CompetitionStatus } from "../../../../../types/competition";
+import { Held } from "./Held";
 
 export function Competition() {
   const [status, setStatus] = useState<CompetitionStatus>({ type: "notHeld" });
@@ -14,7 +15,7 @@ export function Competition() {
   return status.type === "notHeld" ? (
     <NotHeld />
   ) : status.type === "held" ? (
-    <div>Held</div>
+    <Held status={status} />
   ) : (
     <div>Entry Closed</div>
   );
