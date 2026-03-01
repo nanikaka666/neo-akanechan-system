@@ -190,4 +190,9 @@ export interface IpcEvent {
    * Request to LiveManager to hide ranking dialogs on overlay.
    */
   hideRanking: () => boolean;
+
+  /**
+   * Request to LiveManager to open a new competition.
+   */
+  openCompetition: (question: string, options: string[], acceptTimeMinutes: number) => boolean;
 }

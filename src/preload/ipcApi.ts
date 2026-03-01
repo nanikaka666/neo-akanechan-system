@@ -45,6 +45,7 @@ export interface IpcApi {
     requestShowRanking: Invoke<"showRanking">;
     registerIsShownRankingListener: Listen<"tellIsShownRanking">;
     requestHideRanking: Invoke<"hideRanking">;
+    requestOpenCompetition: Invoke<"openCompetition">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
@@ -96,6 +97,8 @@ export const IpcApi: IpcApi = {
     registerIsShownRankingListener: (callback) =>
       IpcRendererWrapper.on("tellIsShownRanking", callback),
     requestHideRanking: () => IpcRendererWrapper.invoke("hideRanking"),
+    requestOpenCompetition: (question, options, acceptTimeMinutes) =>
+      IpcRendererWrapper.invoke("openCompetition", question, options, acceptTimeMinutes),
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
