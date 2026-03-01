@@ -1,11 +1,21 @@
 import { ChatAuthor } from "../../../types/liveChatItem";
-import { Bet, CompetitionStatus, HeldCompetition, OptionLabel } from "../../../types/competition";
+import {
+  Bet,
+  CompetitionStatisticsUnit,
+  CompetitionStatus,
+  HeldCompetition,
+  OptionLabel,
+} from "../../../types/competition";
 
 export class CompetitionManager {
   #status: CompetitionStatus;
   #timeout?: NodeJS.Timeout;
+  #betAuthorChannelIds: Set<string>;
+  #bets: Bet[];
   constructor() {
     this.#status = { type: "notHeld" };
+    this.#betAuthorChannelIds = new Set();
+    this.#bets = [];
   }
 
   get() {
@@ -30,6 +40,10 @@ export class CompetitionManager {
     if (willCloseInMinutes < 1 || 180 < willCloseInMinutes) {
       throw new Error("competition must be closed in 1 ~ 180 minutes.");
     }
+
+    this.#betAuthorChannelIds.clear();
+    this.#bets = [];
+
     const competitionId = crypto.randomUUID();
     const currentTime = new Date();
     const diff = this.#calcDiffMillis(currentTime, willCloseInMinutes);
@@ -40,18 +54,12 @@ export class CompetitionManager {
       }
     }, diff);
     const settingsOptionsMap = new Map<OptionLabel, string>();
-    const statisticsOptionsMap = new Map<
-      OptionLabel,
-      {
-        totalBetCount: number;
-        totalStakes: number;
-      }
-    >();
+    const optionStatistics = new Map<OptionLabel, CompetitionStatisticsUnit>();
     options.forEach((option, idx) => {
       const label = this.#getOptionLabel(idx as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7);
       settingsOptionsMap.set(label, option);
-      statisticsOptionsMap.set(label, {
-        totalBetCount: 0,
+      optionStatistics.set(label, {
+        betCount: 0,
         totalStakes: 0,
       });
     });
@@ -64,8 +72,13 @@ export class CompetitionManager {
         options: settingsOptionsMap,
         scheduledClosedAt: scheduledCloseAt,
       },
-      betAuthorChannelIds: new Set(),
-      bets: [],
+      statistics: {
+        all: {
+          betCount: 0,
+          totalStakes: 0,
+        },
+        options: optionStatistics,
+      },
     });
   }
 
@@ -85,23 +98,39 @@ export class CompetitionManager {
     if (this.#status.type !== "held") {
       return;
     }
+    if (author.isOwner) {
+      return;
+    }
     if (!this.#status.settings.options.has(betTo)) {
       throw new Error(`${betTo} is invalid option.`);
     }
-    if (this.#status.betAuthorChannelIds.has(author.channelId.id)) {
+    if (this.#betAuthorChannelIds.has(author.channelId.id)) {
       return;
     }
     if (stake < 1) {
       return;
     }
     const betData: Bet = {
-      entryId: this.#status.betAuthorChannelIds.size + 1,
+      entryId: this.#betAuthorChannelIds.size + 1,
       author: author,
       stake: stake,
       betTo: betTo,
     };
-    this.#status.bets = [...this.#status.bets, betData];
-    this.#status.betAuthorChannelIds.add(author.channelId.id);
+    this.#bets = [...this.#bets, betData];
+    this.#betAuthorChannelIds.add(author.channelId.id);
+
+    // update statistics
+    this.#status.statistics.all.betCount++;
+    this.#status.statistics.all.totalStakes += stake;
+
+    const optionStatistics = this.#status.statistics.options.get(betTo);
+    if (optionStatistics === undefined) {
+      throw new Error(`Competition Statistics doesn't have a key ${betTo}`);
+    }
+    this.#status.statistics.options.set(betTo, {
+      betCount: optionStatistics.betCount + 1,
+      totalStakes: optionStatistics.totalStakes + stake,
+    });
   }
 
   close() {
@@ -110,6 +139,8 @@ export class CompetitionManager {
       clearTimeout(this.#timeout);
       this.#timeout = undefined;
     }
+    this.#betAuthorChannelIds.clear();
+    this.#bets = [];
   }
 
   /**

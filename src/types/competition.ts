@@ -23,26 +23,23 @@ export interface NotHeldCompetition {
 export interface HeldCompetition {
   type: "held";
   settings: CompetitionSettings;
-  betAuthorChannelIds: Set<string>;
-  bets: Bet[];
+  statistics: CompetitionStatistics;
 }
 
 export interface EntryClosedCompetition {
   type: "entryClosed";
   settings: CompetitionSettings;
-  bets: Bet[];
+  statistics: CompetitionStatistics;
 }
 
 export type CompetitionStatus = NotHeldCompetition | HeldCompetition | EntryClosedCompetition;
 
-export interface CompetitionStatistics {
-  totalBetCount: number;
+export interface CompetitionStatisticsUnit {
+  betCount: number;
   totalStakes: number;
-  options: Map<
-    OptionLabel,
-    {
-      totalBetCount: number;
-      totalStakes: number;
-    }
-  >;
+}
+
+export interface CompetitionStatistics {
+  all: CompetitionStatisticsUnit;
+  options: Map<OptionLabel, CompetitionStatisticsUnit>;
 }
