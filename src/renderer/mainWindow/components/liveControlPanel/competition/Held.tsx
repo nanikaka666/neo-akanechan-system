@@ -1,4 +1,5 @@
 import { HeldCompetition, OptionLabel } from "../../../../../types/competition";
+import { AbortButton } from "./AbortButton";
 
 export interface HeldProps {
   status: HeldCompetition;
@@ -35,6 +36,7 @@ export function Held({ status }: HeldProps) {
           })}
         </ul>
       </div>
+      <AbortButton />
     </div>
   );
 }
