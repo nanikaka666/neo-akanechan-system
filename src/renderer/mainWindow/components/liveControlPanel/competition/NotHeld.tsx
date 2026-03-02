@@ -19,10 +19,11 @@ export function NotHeld() {
     if (question === "") {
       return false;
     }
-    if (optionStrings.slice(0, selectedOptionNum).filter((option) => option === "").length > 0) {
+    const optionStringSet = new Set(optionStrings.slice(0, selectedOptionNum));
+    if (optionStringSet.has("")) {
       return false;
     }
-    return true;
+    return optionStringSet.size === selectedOptionNum;
   }, [question, selectedOptionNum, optionStrings]);
 
   return (
