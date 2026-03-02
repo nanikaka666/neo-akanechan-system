@@ -22,6 +22,10 @@ export class CompetitionManager {
     return this.#status;
   }
 
+  getBets() {
+    return this.#bets;
+  }
+
   openCompetition(
     question: string,
     options: string[],
