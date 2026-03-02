@@ -1,3 +1,4 @@
+import { OptionLabel } from "../../types/competition";
 import { PariticipantPointRankings } from "../..//types/participantPoint";
 import {
   FocusedOnChatItem,
@@ -166,6 +167,10 @@ export class LiveManager {
 
   actionAbortCompetition() {
     this.#processorGuard(() => this.#processor.abortCompetition());
+  }
+
+  actionAnswerDecision(answer: OptionLabel) {
+    this.#processorGuard(() => this.#processor.answerDecision(answer));
   }
 
   syncLiveSettings() {
