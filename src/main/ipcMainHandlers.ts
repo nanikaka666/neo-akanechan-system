@@ -266,4 +266,9 @@ export function setupIpcMainHandlers() {
     getLiveManager().actionAbortCompetition();
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("answerDecision", (_, answer) => {
+    getLiveManager().actionAnswerDecision(answer);
+    return Promise.resolve(true);
+  });
 }
