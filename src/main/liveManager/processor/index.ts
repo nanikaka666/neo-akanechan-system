@@ -490,6 +490,11 @@ export class Processor {
     this.#lcpDataTransfer.syncCompetitionStatus();
   }
 
+  manuallyEntryClose() {
+    this.#dataSource.getCompetitionManager().manuallyEntryClose();
+    this.#lcpDataTransfer.syncCompetitionStatus();
+  }
+
   syncLiveSettings() {
     this.#overlayDataTransfer.syncLiveSettings();
   }
