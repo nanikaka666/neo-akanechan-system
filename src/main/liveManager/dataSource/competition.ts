@@ -95,7 +95,7 @@ export class CompetitionManager {
   }
 
   bet(author: ChatAuthor, betTo: OptionLabel, stake: number, publishedAt: Date) {
-    if (this.#status.type === "notHeld") {
+    if (this.#status.type === "notHeld" || this.#status.type === "answerDecided") {
       return;
     }
     // there is valid case that betting is accepted when CompetitionStatus is EntryClosed.
@@ -136,6 +136,16 @@ export class CompetitionManager {
       betCount: optionStatistics.betCount + 1,
       totalStakes: optionStatistics.totalStakes + stake,
     });
+  }
+
+  answerDecision(answer: OptionLabel) {
+    if (this.#status.type !== "entryClosed") {
+      throw new Error("Cannot decide the answer of competition without entry closing.");
+    }
+    if (!this.#status.settings.options.has(answer)) {
+      throw new Error(`The answer ${answer} doesn't be selected as answer.`);
+    }
+    this.#status = { type: "answerDecided" };
   }
 
   close() {
