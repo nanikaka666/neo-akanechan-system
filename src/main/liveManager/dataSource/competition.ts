@@ -86,7 +86,7 @@ export class CompetitionManager {
     });
   }
 
-  manuallyCloseBetting() {
+  manuallyEntryClose() {
     if (this.#status.type !== "held") {
       return false;
     }
