@@ -298,4 +298,22 @@ export function setupIpcMainHandlers() {
     getLiveManager().actionAnswerDecision(answer);
     return true;
   });
+
+  IpcMainWrapper.handle("manuallyEntryClose", async () => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `コンペの参加を締め切ります`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
+    getLiveManager().actionManuallyEntryClose();
+    return true;
+  });
 }
