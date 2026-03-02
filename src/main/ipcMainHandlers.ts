@@ -262,13 +262,40 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("abortCompetition", () => {
+  IpcMainWrapper.handle("abortCompetition", async (e) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `本当にコンペを終了しますか？`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
     getLiveManager().actionAbortCompetition();
-    return Promise.resolve(true);
+    return true;
   });
 
-  IpcMainWrapper.handle("answerDecision", (_, answer) => {
+  IpcMainWrapper.handle("answerDecision", async (e, answer, optionStr) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `本当にコンペを終了しますか？`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+      detail: `コンペの正解を「${answer}: ${optionStr}」にします`,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
     getLiveManager().actionAnswerDecision(answer);
-    return Promise.resolve(true);
+    return true;
   });
 }

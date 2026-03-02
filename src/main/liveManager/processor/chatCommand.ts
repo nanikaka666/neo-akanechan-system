@@ -3,6 +3,13 @@ import { ChatCommand } from "../../../types/chatCommand";
 import { TextMessageChat } from "../../../types/liveChatItem";
 
 export function parseChatCommand(text: TextMessageChat): ChatCommand | undefined {
+  if (Math.random() * 100 < 100) {
+    return {
+      type: "joinCompetition",
+      betTo: "abcdefgh".charAt(Math.round(Math.random() * 7)) as OptionLabel,
+    };
+  }
+
   const maybeCommand = text.displayMessage.split(" ")[0].toLowerCase();
   if (!maybeCommand.startsWith("/")) {
     return undefined;

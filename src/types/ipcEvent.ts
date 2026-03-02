@@ -210,5 +210,5 @@ export interface IpcEvent {
   /**
    * Request to LiveManager to decide the answer of competition.
    */
-  answerDecision: (answer: OptionLabel) => boolean;
+  answerDecision: (answer: OptionLabel, optionStr: string) => boolean;
 }

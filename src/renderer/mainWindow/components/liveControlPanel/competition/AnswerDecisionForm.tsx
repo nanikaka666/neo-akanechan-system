@@ -30,7 +30,7 @@ export function AnswerDecisionForm({ options }: AnswerDecisionFormProps) {
         onClick={(e) => {
           e.preventDefault();
           setDisabled((_) => true);
-          window.ipcApi.requestAnswerDecision(answer).then(() => {
+          window.ipcApi.requestAnswerDecision(answer, options.get(answer)!).then(() => {
             setDisabled((_) => false);
           });
         }}
