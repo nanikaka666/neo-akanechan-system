@@ -32,7 +32,15 @@ export interface EntryClosedCompetition {
   statistics: CompetitionStatistics;
 }
 
-export type CompetitionStatus = NotHeldCompetition | HeldCompetition | EntryClosedCompetition;
+export interface AnswerDecidedCompetition {
+  type: "answerDecided";
+}
+
+export type CompetitionStatus =
+  | NotHeldCompetition
+  | HeldCompetition
+  | EntryClosedCompetition
+  | AnswerDecidedCompetition;
 
 export interface CompetitionStatisticsUnit {
   betCount: number;
