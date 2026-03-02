@@ -286,11 +286,11 @@ export function setupIpcMainHandlers() {
       return false;
     }
     const res = await dialog.showMessageBox(window, {
-      message: `本当にコンペを終了しますか？`,
+      message: `コンペの正解を確定します`,
       type: "question",
       buttons: ["OK", "NO"],
       defaultId: 0,
-      detail: `コンペの正解を「${answer}: ${optionStr}」にします`,
+      detail: `${answer}: ${optionStr}`,
     });
     if (res.response !== 0) {
       return false;
