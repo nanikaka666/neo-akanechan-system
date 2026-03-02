@@ -16,6 +16,7 @@ import {
 import { DataSource } from "../dataSource";
 import { LcpDataTransfer } from "../transfer/lcpDataTransfer";
 import { OverlayDataTransfer } from "../transfer/overlayDataTransfer";
+import { OptionLabel } from "../../../types/competition";
 
 export class Processor {
   readonly #dataSource: DataSource;
@@ -446,6 +447,39 @@ export class Processor {
   }
 
   abortCompetition() {
+    this.#dataSource.getCompetitionManager().close();
+    this.#lcpDataTransfer.syncCompetitionStatus();
+  }
+
+  answerDecision(answer: OptionLabel) {
+    const status = this.#dataSource.getCompetitionManager().get();
+    if (status.type !== "entryClosed") {
+      return;
+    }
+
+    const allBets = this.#dataSource.getCompetitionManager().getBets();
+    this.#dataSource.getCompetitionManager().answerDecision(answer);
+    this.#lcpDataTransfer.syncCompetitionStatus();
+
+    const optionStats = status.statistics.options.get(answer);
+    if (optionStats === undefined) {
+      throw new Error(`Competition statistics not found by key: ${answer}`);
+    }
+
+    // all users joined to competition pay the stake.
+    this.#dataSource.getParticipantManager().subtractByCompetitionStake(allBets);
+
+    // winners got points.
+    const list = this.#dataSource.getParticipantManager().addByCompetition(
+      allBets.filter((bet) => bet.betTo === answer),
+      status.statistics.all,
+      optionStats,
+    );
+
+    this.#lcpDataTransfer.syncRankings();
+
+    // todo: consider overlay data transfer
+
     this.#dataSource.getCompetitionManager().close();
     this.#lcpDataTransfer.syncCompetitionStatus();
   }
