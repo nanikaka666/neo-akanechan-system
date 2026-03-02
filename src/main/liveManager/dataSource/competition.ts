@@ -94,7 +94,11 @@ export class CompetitionManager {
       clearTimeout(this.#timeout);
       this.#timeout = undefined;
     }
-    this.#status = { ...this.#status, type: "entryClosed" };
+    this.#status = {
+      ...this.#status,
+      type: "entryClosed",
+      settings: { ...this.#status.settings, scheduledClosedAt: new Date() },
+    };
     return true;
   }
 
