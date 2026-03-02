@@ -17,6 +17,8 @@ import { DataSource } from "../dataSource";
 import { LcpDataTransfer } from "../transfer/lcpDataTransfer";
 import { OverlayDataTransfer } from "../transfer/overlayDataTransfer";
 import { OptionLabel } from "../../../types/competition";
+import { parseChatCommand } from "./chatCommand";
+import { JoinCompetitionCommand } from "../../../types/chatCommand";
 
 export class Processor {
   readonly #dataSource: DataSource;
@@ -171,6 +173,10 @@ export class Processor {
       this.#lcpDataTransfer.syncRankings();
       this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
     }
+
+    // call deal command after adding point.
+    // to avoid betting with 0 points.
+    this.#dealChatCommand(item);
 
     this.#dataSource.getLiveStatisticsDataContainer().update({
       chatUUCount: this.#dataSource.getChatDataManager().getAuthorChannelIds().size,
@@ -525,6 +531,45 @@ export class Processor {
     if (0 < addedAmountOfPoint) {
       this.#lcpDataTransfer.syncRankings();
       this.#overlayDataTransfer.sendAmountOfPoint(focusStatus.item.author, addedAmountOfPoint);
+    }
+  }
+
+  #dealChatCommand(text: TextMessageChat) {
+    const maybeCommand = parseChatCommand(text);
+    if (maybeCommand === undefined) {
+      return;
+    }
+
+    if (maybeCommand.type === "joinCompetition") {
+      this.#dealJoinCompetitionCommand(maybeCommand, text);
+    }
+  }
+
+  #dealJoinCompetitionCommand(command: JoinCompetitionCommand, text: TextMessageChat) {
+    const status = this.#dataSource.getCompetitionManager().get();
+    if (status.type === "notHeld" || status.type === "answerDecided") {
+      return;
+    }
+
+    // check betTo validity.
+    if (!status.settings.options.has(command.betTo)) {
+      return;
+    }
+
+    const participantPoint = this.#dataSource
+      .getParticipantManager()
+      .get()
+      .get(text.author.channelId.id);
+
+    if (participantPoint) {
+      // if user has less than 100 points then it is dealt as 100 points.
+      const stake = Math.max(100, participantPoint.point);
+
+      this.#dataSource
+        .getCompetitionManager()
+        .bet(text.author, command.betTo, stake, text.publishedAt);
+
+      this.#lcpDataTransfer.syncCompetitionStatus();
     }
   }
 }
