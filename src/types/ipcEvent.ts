@@ -211,4 +211,9 @@ export interface IpcEvent {
    * Request to LiveManager to decide the answer of competition.
    */
   answerDecision: (answer: OptionLabel, optionStr: string) => boolean;
+
+  /**
+   * Request to LiveManager to close bet action.
+   */
+  manuallyEntryClose: () => boolean;
 }
