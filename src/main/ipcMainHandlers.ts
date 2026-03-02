@@ -299,7 +299,7 @@ export function setupIpcMainHandlers() {
     return true;
   });
 
-  IpcMainWrapper.handle("manuallyEntryClose", async () => {
+  IpcMainWrapper.handle("manuallyEntryClose", async (e) => {
     const window = BrowserWindow.fromWebContents(e.sender);
     if (window === null) {
       return false;
