@@ -19,7 +19,7 @@ import { LiveSettings } from "./liveSettings";
 import { AllGoalsStatus } from "./goals";
 import { ChatLog } from "./chatLog";
 import { FocusViewItem } from "./focusView";
-import { CompetitionStatus } from "./competition";
+import { CompetitionStatus, OptionLabel } from "./competition";
 
 /**
  * Ipc channel interfaces.
@@ -206,4 +206,9 @@ export interface IpcEvent {
    * Request to LiveManager to abort the competition.
    */
   abortCompetition: () => boolean;
+
+  /**
+   * Request to LiveManager to decide the answer of competition.
+   */
+  answerDecision: (answer: OptionLabel) => boolean;
 }

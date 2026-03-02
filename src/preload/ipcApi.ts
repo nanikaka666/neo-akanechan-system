@@ -48,6 +48,7 @@ export interface IpcApi {
     requestOpenCompetition: Invoke<"openCompetition">;
     registerCompetitionStatusListener: Listen<"tellCompetitionStatus">;
     requestAbortCompetition: Invoke<"abortCompetition">;
+    requestAnswerDecision: Invoke<"answerDecision">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
@@ -104,6 +105,7 @@ export const IpcApi: IpcApi = {
     registerCompetitionStatusListener: (callback) =>
       IpcRendererWrapper.on("tellCompetitionStatus", callback),
     requestAbortCompetition: () => IpcRendererWrapper.invoke("abortCompetition"),
+    requestAnswerDecision: (answer) => IpcRendererWrapper.invoke("answerDecision", answer),
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
