@@ -24,7 +24,7 @@ export function BetStatusView({ status }: BetStatusViewProps) {
               </div>
               <div>
                 <div>
-                  Bet人数: {statistics.betCount} ({percentage}%)
+                  Bet人数: {statistics.betCount} ({percentage.toFixed(2)}%)
                 </div>
               </div>
             </li>
