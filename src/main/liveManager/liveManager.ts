@@ -173,6 +173,10 @@ export class LiveManager {
     this.#processorGuard(() => this.#processor.answerDecision(answer));
   }
 
+  actionManuallyEntryClose() {
+    this.#processorGuard(() => this.#processor.manuallyEntryClose());
+  }
+
   syncLiveSettings() {
     this.#processor.syncLiveSettings();
   }
