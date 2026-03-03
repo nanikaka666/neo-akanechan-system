@@ -60,6 +60,14 @@ export class OverlayDataTransfer {
     );
   }
 
+  syncCompetitionStatus() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellCompetitionStatus",
+      this.#dataSource.getCompetitionManager().get(),
+    );
+  }
+
   #getWebContents() {
     const res = getWindowManager().getOverlayWindowWebContents();
     if (res === undefined) {
