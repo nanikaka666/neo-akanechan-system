@@ -198,7 +198,7 @@ export interface IpcEvent {
   openCompetition: (question: string, options: string[], acceptTimeMinutes: number) => boolean;
 
   /**
-   * Notify latest CompetitionStatus.
+   * Notify latest CompetitionStatus. (For Both)
    */
   tellCompetitionStatus: (status: CompetitionStatus) => void;
 

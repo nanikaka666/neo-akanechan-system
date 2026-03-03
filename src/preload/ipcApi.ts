@@ -103,8 +103,6 @@ export const IpcApi: IpcApi = {
     requestHideRanking: () => IpcRendererWrapper.invoke("hideRanking"),
     requestOpenCompetition: (question, options, acceptTimeMinutes) =>
       IpcRendererWrapper.invoke("openCompetition", question, options, acceptTimeMinutes),
-    registerCompetitionStatusListener: (callback) =>
-      IpcRendererWrapper.on("tellCompetitionStatus", callback),
     requestAbortCompetition: () => IpcRendererWrapper.invoke("abortCompetition"),
     requestAnswerDecision: (answer, optionStr) =>
       IpcRendererWrapper.invoke("answerDecision", answer, optionStr),
@@ -120,5 +118,7 @@ export const IpcApi: IpcApi = {
 
     // For both
     registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),
+    registerCompetitionStatusListener: (callback) =>
+      IpcRendererWrapper.on("tellCompetitionStatus", callback),
   },
 };
