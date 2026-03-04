@@ -446,15 +446,15 @@ export class Processor {
     this.#dataSource
       .getCompetitionManager()
       .openCompetition(question, options, acceptTimeMinutes, () => {
-        this.#lcpDataTransfer.syncCompetitionStatus();
+        this.#syncCompetitionStatus();
       });
 
-    this.#lcpDataTransfer.syncCompetitionStatus();
+    this.#syncCompetitionStatus();
   }
 
   abortCompetition() {
     this.#dataSource.getCompetitionManager().close();
-    this.#lcpDataTransfer.syncCompetitionStatus();
+    this.#syncCompetitionStatus();
   }
 
   answerDecision(answer: OptionLabel) {
@@ -465,7 +465,7 @@ export class Processor {
 
     const allBets = this.#dataSource.getCompetitionManager().getBets();
     this.#dataSource.getCompetitionManager().answerDecision(answer);
-    this.#lcpDataTransfer.syncCompetitionStatus();
+    this.#syncCompetitionStatus();
 
     const optionStats = status.statistics.options.get(answer);
     if (optionStats === undefined) {
@@ -487,12 +487,12 @@ export class Processor {
     // todo: consider overlay data transfer
 
     this.#dataSource.getCompetitionManager().close();
-    this.#lcpDataTransfer.syncCompetitionStatus();
+    this.#syncCompetitionStatus();
   }
 
   manuallyEntryClose() {
     this.#dataSource.getCompetitionManager().manuallyEntryClose();
-    this.#lcpDataTransfer.syncCompetitionStatus();
+    this.#syncCompetitionStatus();
   }
 
   syncLiveSettings() {
@@ -511,6 +511,11 @@ export class Processor {
   #syncLiveStatistics() {
     this.#lcpDataTransfer.syncLiveStatistics();
     this.#overlayDataTransfer.syncLiveStatistics();
+  }
+
+  #syncCompetitionStatus() {
+    this.#lcpDataTransfer.syncCompetitionStatus();
+    this.#overlayDataTransfer.syncCompetitionStatus();
   }
 
   #calcPassedHour() {
@@ -574,7 +579,7 @@ export class Processor {
         .getCompetitionManager()
         .bet(text.author, command.betTo, stake, text.publishedAt);
 
-      this.#lcpDataTransfer.syncCompetitionStatus();
+      this.#syncCompetitionStatus();
     }
   }
 }
