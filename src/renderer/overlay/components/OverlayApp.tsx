@@ -97,6 +97,10 @@ export function OverlayApp() {
       overlayEventResetFunc();
       subscriberCountPromotion();
     }, 5 * 1000);
+  } else if (overlayEvent.type === "competitionPayout" && overlayEvent.points.length === 0) {
+    setTimeout(() => {
+      overlayEventResetFunc();
+    }, 5 * 1000);
   }
 
   const poppingOnDemand: OnDemand | undefined =
@@ -124,7 +128,14 @@ export function OverlayApp() {
                 subscriberCountPromotion();
               },
             }
-          : undefined;
+          : overlayEvent.type === "competitionPayout"
+            ? {
+                buffer: overlayEvent.points,
+                funcOnLastAnimationEnded: () => {
+                  overlayEventResetFunc();
+                },
+              }
+            : undefined;
 
   const makeCarouselItems = useCallback(() => {
     const likeCount = (
