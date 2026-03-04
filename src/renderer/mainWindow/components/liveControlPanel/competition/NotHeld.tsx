@@ -31,7 +31,7 @@ export function NotHeld() {
       <label>
         問題
         <input
-          maxLength={100}
+          maxLength={50}
           type="text"
           value={question}
           onChange={(e) => {
