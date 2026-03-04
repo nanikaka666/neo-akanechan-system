@@ -39,6 +39,14 @@ export function AppLogManager({ overlayEvent }: { overlayEvent: OverlayEvent }) 
           )を達成しました。参加者に達成ボーナスポイントが付与されます。
         </div>
       );
+    } else if (appLog.type === "competitionPayout") {
+      return (
+        <div>
+          コンペの結果が({appLog.answer.toLocaleUpperCase()}: {appLog.optionStr}
+          )に決定しました。
+          {appLog.betCount > 0 ? `正解した${appLog.betCount}名に勝利ポイントが付与されます。` : ""}
+        </div>
+      );
     } else {
       throw new CaseDropError(appLog);
     }

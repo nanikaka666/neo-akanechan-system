@@ -1,3 +1,4 @@
+import { OptionLabel } from "../../types/competition";
 import { PariticipantPointRankings } from "../..//types/participantPoint";
 import {
   FocusedOnChatItem,
@@ -156,6 +157,24 @@ export class LiveManager {
 
   actionHideRanking() {
     this.#processorGuard(() => this.#processor.hideRanking());
+  }
+
+  actionOpenCompetition(question: string, options: string[], acceptTimeMinutes: number) {
+    this.#processorGuard(() =>
+      this.#processor.openCompetition(question, options, acceptTimeMinutes),
+    );
+  }
+
+  actionAbortCompetition() {
+    this.#processorGuard(() => this.#processor.abortCompetition());
+  }
+
+  actionAnswerDecision(answer: OptionLabel) {
+    this.#processorGuard(() => this.#processor.answerDecision(answer));
+  }
+
+  actionManuallyEntryClose() {
+    this.#processorGuard(() => this.#processor.manuallyEntryClose());
   }
 
   syncLiveSettings() {

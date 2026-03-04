@@ -256,4 +256,64 @@ export function setupIpcMainHandlers() {
     getLiveManager().actionHideRanking();
     return Promise.resolve(true);
   });
+
+  IpcMainWrapper.handle("openCompetition", (_, question, options, acceptTimeMinutes) => {
+    getLiveManager().actionOpenCompetition(question, options, acceptTimeMinutes);
+    return Promise.resolve(true);
+  });
+
+  IpcMainWrapper.handle("abortCompetition", async (e) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `本当にコンペを終了しますか？`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
+    getLiveManager().actionAbortCompetition();
+    return true;
+  });
+
+  IpcMainWrapper.handle("answerDecision", async (e, answer, optionStr) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `コンペの正解を確定します`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+      detail: `${answer}: ${optionStr}`,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
+    getLiveManager().actionAnswerDecision(answer);
+    return true;
+  });
+
+  IpcMainWrapper.handle("manuallyEntryClose", async (e) => {
+    const window = BrowserWindow.fromWebContents(e.sender);
+    if (window === null) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(window, {
+      message: `コンペの参加を締め切ります`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
+    getLiveManager().actionManuallyEntryClose();
+    return true;
+  });
 }

@@ -4,7 +4,7 @@ import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
 import { LiveSettings } from "../../../../types/liveSettings";
 
-export type Mode = "commentViewer" | "chanceTime" | "rankings" | "goals";
+export type Mode = "commentViewer" | "competition" | "rankings" | "goals";
 
 export interface LiveControlPanelProps {
   liveLaunchProperties: LiveLaunchProperties;

@@ -113,6 +113,14 @@ export class LcpDataTransfer {
     );
   }
 
+  syncCompetitionStatus() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellCompetitionStatus",
+      this.#dataSource.getCompetitionManager().get(),
+    );
+  }
+
   #markIsStocked<T extends NonMarkedExtendedChatItemText>(item: T): T & Stockable {
     return { ...item, isStocked: this.#dataSource.getStockManager().isStocked(item.id) };
   }

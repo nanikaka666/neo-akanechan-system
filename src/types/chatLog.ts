@@ -1,3 +1,4 @@
+import { OptionLabel } from "./competition";
 import {
   GiftReceived,
   MembershipGift,
@@ -19,5 +20,5 @@ export type ChatLogData =
 
 export interface ChatLog {
   data: ChatLogData;
-  votedTo?: string;
+  votedTo?: OptionLabel;
 }

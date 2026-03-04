@@ -15,6 +15,7 @@ import { OverlayDataTransfer } from "./transfer/overlayDataTransfer";
 import { LiveSettingsManager } from "./dataSource/settings";
 import { GoalsManager } from "./dataSource/goals";
 import { ShowRankingManager } from "./dataSource/showRanking";
+import { CompetitionManager } from "./dataSource/competition";
 
 let liveManager: LiveManager | undefined;
 
@@ -31,6 +32,7 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   const liveSettingsManager = new LiveSettingsManager();
   const goalsManager = new GoalsManager();
   const showRankingManager = new ShowRankingManager();
+  const competitionManager = new CompetitionManager();
   const dataSource = new DataSource(
     liveStatisticsDataContainer,
     chatDataManager,
@@ -40,6 +42,7 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
     liveSettingsManager,
     goalsManager,
     showRankingManager,
+    competitionManager,
   );
   const lcpDataTransfer = new LcpDataTransfer(dataSource);
   const overlayDataTransfer = new OverlayDataTransfer(dataSource);

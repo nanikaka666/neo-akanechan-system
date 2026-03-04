@@ -19,6 +19,7 @@ import { LiveSettings } from "./liveSettings";
 import { AllGoalsStatus } from "./goals";
 import { ChatLog } from "./chatLog";
 import { FocusViewItem } from "./focusView";
+import { CompetitionStatus, OptionLabel } from "./competition";
 
 /**
  * Ipc channel interfaces.
@@ -190,4 +191,29 @@ export interface IpcEvent {
    * Request to LiveManager to hide ranking dialogs on overlay.
    */
   hideRanking: () => boolean;
+
+  /**
+   * Request to LiveManager to open a new competition.
+   */
+  openCompetition: (question: string, options: string[], acceptTimeMinutes: number) => boolean;
+
+  /**
+   * Notify latest CompetitionStatus. (For Both)
+   */
+  tellCompetitionStatus: (status: CompetitionStatus) => void;
+
+  /**
+   * Request to LiveManager to abort the competition.
+   */
+  abortCompetition: () => boolean;
+
+  /**
+   * Request to LiveManager to decide the answer of competition.
+   */
+  answerDecision: (answer: OptionLabel, optionStr: string) => boolean;
+
+  /**
+   * Request to LiveManager to close bet action.
+   */
+  manuallyEntryClose: () => boolean;
 }

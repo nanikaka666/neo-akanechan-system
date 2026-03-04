@@ -39,8 +39,14 @@ export class OverlayDataTransfer {
   }
 
   sendChatLog(data: ChatLogData) {
-    // todo: check existence of a vote
-    WebContentsWrapper.send(this.#getWebContents(), "tellChatLog", { data });
+    const bet = this.#dataSource
+      .getCompetitionManager()
+      .getBets()
+      .filter((bet) => bet.author.channelId.id === data.author.channelId.id);
+    WebContentsWrapper.send(this.#getWebContents(), "tellChatLog", {
+      data,
+      votedTo: bet.length === 1 ? bet[0].betTo : undefined,
+    });
   }
 
   syncFocusView() {
@@ -57,6 +63,14 @@ export class OverlayDataTransfer {
       this.#getWebContents(),
       "tellRankingView",
       this.#dataSource.getShowRankingManager().get(),
+    );
+  }
+
+  syncCompetitionStatus() {
+    WebContentsWrapper.send(
+      this.#getWebContents(),
+      "tellCompetitionStatus",
+      this.#dataSource.getCompetitionManager().get(),
     );
   }
 

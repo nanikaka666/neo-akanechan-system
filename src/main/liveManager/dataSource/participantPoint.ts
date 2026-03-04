@@ -12,6 +12,7 @@ import {
 import { GoalsLevel } from "../../../types/goals";
 import { PointInfoFromMainProcess } from "../../../types/overlay";
 import { FocusViewItem } from "../../../types/focusView";
+import { Bet, CompetitionStatisticsUnit } from "../../../types/competition";
 
 /**
  * Set of data for continuous chat point.
@@ -200,6 +201,36 @@ export class PariticipantPointManager {
     });
   }
 
+  addByCompetition(
+    winners: Bet[],
+    allStats: CompetitionStatisticsUnit,
+    correctOptionStats: CompetitionStatisticsUnit,
+  ): PointInfoFromMainProcess[] {
+    if (correctOptionStats.betCount === 0 || correctOptionStats.totalStakes === 0) {
+      return [];
+    }
+    return winners.map((winner) => {
+      const shareRate = winner.stake / correctOptionStats.totalStakes;
+      const addedPoint = this.#add(
+        winner.author,
+        Math.pow(
+          allStats.totalStakes * shareRate,
+          1 + (allStats.betCount - winner.entryId + 1) / (5 * allStats.betCount),
+        ),
+      );
+      return {
+        img: winner.author.profileImageUrl,
+        point: addedPoint,
+      };
+    });
+  }
+
+  subtractByCompetitionStake(bets: Bet[]) {
+    bets.forEach((bet) => {
+      this.#subtract(bet.author, bet.stake);
+    });
+  }
+
   /**
    * Disqualify the user.
    *
@@ -250,5 +281,23 @@ export class PariticipantPointManager {
       });
     }
     return addedAmount;
+  }
+
+  #subtract(author: ChatAuthor, value: number) {
+    if (author.isOwner) {
+      return;
+    }
+    if (value < 1) {
+      return;
+    }
+    const current = this.#points.get(author.channelId.id);
+    if (current === undefined) {
+      return;
+    }
+    this.#points.set(author.channelId.id, {
+      ...current,
+      point: Math.max(0, current.point - value),
+      author: author,
+    });
   }
 }

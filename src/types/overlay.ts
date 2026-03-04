@@ -1,4 +1,5 @@
 import {
+  CompetitionPayoutLog,
   LikeCountGoalAccomplishedLog,
   LikeCountGoalPromotionLog,
   SubscriberCountGoalAccomplishedLog,
@@ -15,7 +16,8 @@ export type OverlayEvent =
   | NoEvent
   | LikeCountLevelPromotionEvent
   | ViewerCountLevelPromotionEvent
-  | SubscriberCountGoalAchivementEvent;
+  | SubscriberCountGoalAchivementEvent
+  | CompetitionPayoutEvent;
 
 export interface NoEvent {
   type: "noEvent";
@@ -37,4 +39,10 @@ export interface SubscriberCountGoalAchivementEvent {
   type: "subscriberCountGoalAchivement";
   points: PointInfoFromMainProcess[];
   appLog: SubscriberCountGoalAccomplishedLog;
+}
+
+export interface CompetitionPayoutEvent {
+  type: "competitionPayout";
+  points: PointInfoFromMainProcess[];
+  appLog: CompetitionPayoutLog;
 }

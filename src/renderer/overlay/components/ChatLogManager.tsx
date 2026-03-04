@@ -20,7 +20,7 @@ export function ChatLogManager() {
               <div>
                 <img src={chatLog.data.author.profileImageUrl} />
                 <span>{chatLog.data.author.name}</span>
-                {chatLog.votedTo && <span>{chatLog.votedTo}</span>}
+                {chatLog.votedTo && <span>「{chatLog.votedTo.toUpperCase()}」</span>}
               </div>
               <div>{chatLog.data.displayMessage}</div>
             </div>

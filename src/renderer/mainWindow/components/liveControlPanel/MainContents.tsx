@@ -5,6 +5,7 @@ import { CommentViewer } from "./commentViewer/CommentViewer";
 import { Rankings } from "./rankings/Rankings";
 import { Goals } from "./goals/Goals";
 import { LiveSettings } from "../../../../types/liveSettings";
+import { Competition } from "./competition/Competition";
 
 const displayNone: CSSProperties = { display: "none" };
 
@@ -20,7 +21,9 @@ export function MainContents({ liveLaunchProperties, liveSettings, mode }: MainC
       <div style={mode !== "commentViewer" ? displayNone : undefined}>
         <CommentViewer />
       </div>
-      <div style={mode !== "chanceTime" ? displayNone : undefined}>Chance Time</div>
+      <div style={mode !== "competition" ? displayNone : undefined}>
+        <Competition />
+      </div>
       <div style={mode !== "rankings" ? displayNone : undefined}>
         <Rankings />
       </div>
