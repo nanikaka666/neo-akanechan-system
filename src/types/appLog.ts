@@ -1,3 +1,4 @@
+import { OptionLabel } from "./competition";
 import { GoalsLevel } from "./goals";
 
 export type AppLog =
@@ -5,7 +6,8 @@ export type AppLog =
   | LikeCountGoalAccomplishedLog
   | ViewerCountGoalPromotionLog
   | ViewerCountGoalAccomplishedLog
-  | SubscriberCountGoalAccomplishedLog;
+  | SubscriberCountGoalAccomplishedLog
+  | CompetitionPayoutLog;
 
 export interface LikeCountGoalPromotionLog {
   type: "likeCountGoalPromotion";
@@ -37,4 +39,12 @@ export interface SubscriberCountGoalAccomplishedLog {
   type: "subscriberCountGoalAccomplished";
   logId: string;
   goalValue: number;
+}
+
+export interface CompetitionPayoutLog {
+  type: "competitionPayout";
+  logId: string;
+  answer: OptionLabel;
+  optionStr: string;
+  betCount: number;
 }
