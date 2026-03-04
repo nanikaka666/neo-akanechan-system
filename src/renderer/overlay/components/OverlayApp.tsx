@@ -14,6 +14,7 @@ import { AppLogManager } from "./AppLogManager";
 import { ChatLogManager } from "./ChatLogManager";
 import { FocusView } from "./FocusView";
 import { RankingView } from "./RankingView";
+import { CompetitionView } from "./CompetitionView";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
@@ -181,6 +182,7 @@ export function OverlayApp() {
       <ChatLogManager />
       <FocusView />
       <RankingView />
+      <CompetitionView />
     </div>
   );
 }
