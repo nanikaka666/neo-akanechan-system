@@ -484,7 +484,17 @@ export class Processor {
 
     this.#lcpDataTransfer.syncRankings();
 
-    // todo: consider overlay data transfer
+    this.#overlayDataTransfer.sendOverlayEvent({
+      type: "competitionPayout",
+      points: list,
+      appLog: {
+        type: "competitionPayout",
+        logId: status.settings.competitionId,
+        answer: answer,
+        optionStr: status.settings.options.get(answer)!,
+        betCount: optionStats.betCount,
+      },
+    });
 
     this.#dataSource.getCompetitionManager().close();
     this.#syncCompetitionStatus();
