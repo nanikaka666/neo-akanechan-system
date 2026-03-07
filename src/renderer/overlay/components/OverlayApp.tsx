@@ -172,9 +172,8 @@ export function OverlayApp() {
         maxValueSoFar={liveStatistics.maxSubscriberCount}
       />
     );
-    const clock = <Clock key={"clock"} />;
     if (overlayEvent.type === "noEvent") {
-      return [likeCount, viewerCount, subscriberCount, clock];
+      return [likeCount, viewerCount, subscriberCount];
     } else if (overlayEvent.type === "likeCountLevelPromotion") {
       return [likeCount];
     } else if (overlayEvent.type === "viewerCountLevelPromotion") {
@@ -194,6 +193,7 @@ export function OverlayApp() {
       <FocusView />
       <RankingView />
       <CompetitionView />
+      <Clock />
     </div>
   );
 }
