@@ -7,18 +7,19 @@ export function Popping({
   animationEndFunc,
   children,
 }: PoppingItemProps) {
+  const animationTypeClassName =
+    animationType === "straight" ? "bound-to-straight" : "bound-to-right";
+
   return (
     <div
       onAnimationEnd={animationEndFunc}
       style={{
-        opacity: 0,
         position: "absolute",
         top: `${coordinate.y}vh`,
         left: `${coordinate.x}vw`,
         animationDelay: `${delayMs}ms`,
-        zIndex: 3,
       }}
-      className={[animationType === "straight" ? "ani" : "yokoani"].join(" ")}
+      className={["popping", animationTypeClassName].join(" ")}
     >
       {children}
     </div>

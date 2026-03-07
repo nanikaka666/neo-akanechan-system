@@ -18,7 +18,7 @@ export function PoppingManager() {
     };
     const pickBaseCoordinate = () => {
       return {
-        x: Math.round(Math.random() * 75), // 0 ~ 75
+        x: Math.round(Math.random() * 62 + 3), // 3 ~ 65
         y: Math.round(Math.random() * 57 + 35), // 35 ~ 92
       };
     };
@@ -59,7 +59,11 @@ export function PoppingManager() {
     };
   }, [reflect]);
 
-  return items.map((item) => {
-    return <PointGain key={item.itemId} {...item} />;
-  });
+  return (
+    <div className="popping-container">
+      {items.map((item) => {
+        return <PointGain key={item.itemId} {...item} />;
+      })}
+    </div>
+  );
 }

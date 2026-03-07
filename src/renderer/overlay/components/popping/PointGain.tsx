@@ -10,7 +10,7 @@ export function PointGain({ img, value, coordinate, delayMs, animationEndFunc }:
         delayMs={delayMs}
         animationEndFunc={animationEndFunc}
       >
-        <img src={img} style={{ height: "7vh", borderRadius: "50%", overflow: "hidden" }} />
+        <img src={img} className="author-icon" />
       </Popping>
       <Popping
         coordinate={coordinate}
@@ -18,7 +18,7 @@ export function PointGain({ img, value, coordinate, delayMs, animationEndFunc }:
         delayMs={delayMs}
         animationEndFunc={animationEndFunc}
       >
-        <div className="font-popping">{value}</div>
+        <div className="point-value font-quattrocento">{value}</div>
       </Popping>
     </>
   );
