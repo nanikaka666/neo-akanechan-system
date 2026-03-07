@@ -1,3 +1,6 @@
+import { SuperChatItem } from "../chatLog/SuperChatItem";
+import { SuperStickerItem } from "../chatLog/SuperStickerItem";
+import { TextItem } from "../chatLog/TextItem";
 import { useFocusItem } from "../hooks/useFocusItem";
 
 export function FocusView() {
@@ -7,11 +10,13 @@ export function FocusView() {
     focusItem && (
       <div className="focus-view-container">
         <div className="focus-view" key={focusItem.id.id}>
-          <div>
-            <img src={focusItem.author.profileImageUrl} />
-            <span>{focusItem.author.name}</span>
-          </div>
-          <div>{focusItem.displayMessage}</div>
+          {focusItem.type === "text" ? (
+            <TextItem item={focusItem} />
+          ) : focusItem.type === "superChat" ? (
+            <SuperChatItem item={focusItem} />
+          ) : (
+            <SuperStickerItem item={focusItem} />
+          )}
         </div>
       </div>
     )
