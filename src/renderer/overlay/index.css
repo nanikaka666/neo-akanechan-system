@@ -1,4 +1,6 @@
+@import "./css/fonts.css";
 @import "./css/app.css";
+@import "./css/clock.css";
 
 .font-popping {
   font-family: "Quattrocento Sans", sans-serif;
