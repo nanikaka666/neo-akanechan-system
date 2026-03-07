@@ -2,6 +2,7 @@
 @import "./css/app.css";
 @import "./css/clock.css";
 @import "./css/chatLog.css";
+@import "./css/focus.css";
 
 .font-popping {
   font-family: "Quattrocento Sans", sans-serif;
@@ -149,46 +150,6 @@
   100% {
     transform: translateX(0vw);
     opacity: 1;
-  }
-}
-
-.focus-view-container {
-  position: absolute;
-  left: 50vw;
-  transform: translateX(-50%);
-  bottom: 3vh;
-  z-index: 2;
-}
-
-.focus-view {
-  border: 2px solid black;
-  border-radius: 10px;
-  padding: 1vw;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  font-size: 2vw;
-  word-wrap: break-word;
-  word-break: break-all;
-  overflow: hidden;
-  animation: focus-view-animation;
-  animation-duration: 500ms;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-out;
-}
-
-.focus-view img {
-  border-radius: 50%;
-  width: 2.6vw;
-}
-
-@keyframes focus-view-animation {
-  0% {
-    opacity: 0;
-    transform: translateX(5vw);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
   }
 }
 

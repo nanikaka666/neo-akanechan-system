@@ -1,0 +1,36 @@
+.focus-view-container {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 100vw;
+  bottom: 3vh;
+  z-index: 2;
+}
+
+.focus-view {
+  .chat-log-item {
+    padding: 2vh 2vw;
+    width: 60vw;
+    border-radius: 1vw;
+    .author {
+      img {
+        width: 3.9vw;
+        height: 3.9vw;
+      }
+      .name {
+        width: auto;
+        font-size: 2vw;
+      }
+    }
+    .message {
+      margin-top: 0.5vh;
+      font-size: 1.8vw;
+    }
+  }
+
+  .amount {
+    font-size: 2vw;
+  }
+}
