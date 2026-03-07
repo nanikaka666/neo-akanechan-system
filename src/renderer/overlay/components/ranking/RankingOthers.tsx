@@ -1,4 +1,4 @@
-import { ParticipantPointRankingData } from "../../../types/participantPoint";
+import { ParticipantPointRankingData } from "../../../../types/participantPoint";
 
 export interface RankingOthersProps {
   list: ParticipantPointRankingData[];

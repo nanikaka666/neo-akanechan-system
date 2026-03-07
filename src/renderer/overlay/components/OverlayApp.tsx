@@ -10,7 +10,7 @@ import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { GoalsLevel, GoalsStatus } from "../../../types/goals";
 import { ChatLogManager } from "./chatLog/ChatLogManager";
 import { FocusView } from "./FocusView";
-import { RankingView } from "./RankingView";
+import { RankingView } from "./ranking/RankingView";
 import { AppLogManager } from "./appLog/AppLogManager";
 import { CompetitionView } from "./competition/CompetitionView";
 import { OnDemand, OnDemandPoppingManager } from "./popping/OnDemandPoppingManager";

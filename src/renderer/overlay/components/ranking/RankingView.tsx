@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Ranking } from "./Ranking";
 import { RankingOthers } from "./RankingOthers";
-import { PariticipantPointRankings } from "../../../types/participantPoint";
+import { PariticipantPointRankings } from "../../../../types/participantPoint";
 
 export function RankingView() {
   const [ranking, setRanking] = useState<PariticipantPointRankings | undefined>();
