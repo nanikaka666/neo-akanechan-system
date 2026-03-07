@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChatLog } from "../../../types/chatLog";
+import { ChatLog } from "../../../../types/chatLog";
 
 export function ChatLogManager() {
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
