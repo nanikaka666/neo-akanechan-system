@@ -1,5 +1,5 @@
 import { CarouselManager } from "./carousel/CarouselManager";
-import { Clock } from "./Clock";
+import { Clock } from "./clock/Clock";
 import { LikeCountIndicator } from "./indicator/LikeCountIndicator";
 import { ViewerCountIndicator } from "./indicator/ViewerCountIndicator";
 import { SubscriberCountIndicator } from "./indicator/SubscriberCountIndicator";
