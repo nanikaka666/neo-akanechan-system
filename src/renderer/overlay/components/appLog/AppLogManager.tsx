@@ -1,6 +1,6 @@
-import { AppLog } from "../../../types/appLog";
-import { CaseDropError } from "../constants";
-import { OverlayEvent } from "../../../types/overlay";
+import { AppLog } from "../../../../types/appLog";
+import { OverlayEvent } from "../../../../types/overlay";
+import { CaseDropError } from "../../constants";
 
 export function AppLogManager({ overlayEvent }: { overlayEvent: OverlayEvent }) {
   const buildChildren = (appLog: AppLog) => {
