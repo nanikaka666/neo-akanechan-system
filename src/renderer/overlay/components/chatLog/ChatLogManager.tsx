@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChatLog } from "../../../../types/chatLog";
+import { ChatLogItem } from "./ChatLogItem";
 
 export function ChatLogManager() {
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
@@ -12,20 +13,11 @@ export function ChatLogManager() {
   }, []);
 
   return (
-    <div className="chat-log">
-      <div className="chat-log-container">
-        {chatLogs.map((chatLog) => {
-          return (
-            <div className="chat-log-item" key={chatLog.data.id.id}>
-              <div>
-                <img src={chatLog.data.author.profileImageUrl} />
-                <span>{chatLog.data.author.name}</span>
-                {chatLog.votedTo && <span>「{chatLog.votedTo.toUpperCase()}」</span>}
-              </div>
-              <div>{chatLog.data.displayMessage}</div>
-            </div>
-          );
-        })}
+    <div className="chat-log-container">
+      <div className="chat-log">
+        {chatLogs.map((item) => (
+          <ChatLogItem key={item.data.id.id} item={item} />
+        ))}
       </div>
     </div>
   );
