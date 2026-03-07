@@ -1,6 +1,5 @@
 import { CarouselManager } from "./carousel/CarouselManager";
 import { Clock } from "./Clock";
-import { PoppingManager } from "./PoppingManager";
 import { LikeCountIndicator } from "./LikeCountIndicator";
 import { ViewerCountIndicator } from "./ViewerCountIndicator";
 import { SubscriberCountIndicator } from "./SubscriberCountIndicator";
@@ -9,12 +8,13 @@ import { useLiveSettings } from "./hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { GoalsLevel, GoalsStatus } from "../../../types/goals";
-import { OnDemand, OnDemandPoppingManager } from "./OnDemandPoppingManager";
 import { ChatLogManager } from "./chatLog/ChatLogManager";
 import { FocusView } from "./FocusView";
 import { RankingView } from "./RankingView";
 import { AppLogManager } from "./appLog/AppLogManager";
 import { CompetitionView } from "./competition/CompetitionView";
+import { OnDemand, OnDemandPoppingManager } from "./popping/OnDemandPoppingManager";
+import { PoppingManager } from "./popping/PoppingManager";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();

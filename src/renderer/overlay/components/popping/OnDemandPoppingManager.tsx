@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { PointInfoFromMainProcess } from "../../../types/overlay";
-import { PointGet } from "../types";
+import { PointInfoFromMainProcess } from "../../../../types/overlay";
+import { POPPING_ITEM_CHUNK_NUM, POPPING_ANIMATION_DELAY_MS_UNIT } from "../../constants";
+import { PointGet } from "../../types";
 import { PointGain } from "./PointGain";
-import { POPPING_ANIMATION_DELAY_MS_UNIT, POPPING_ITEM_CHUNK_NUM } from "../constants";
 
 export interface OnDemand {
   buffer: PointInfoFromMainProcess[];

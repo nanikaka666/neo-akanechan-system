@@ -1,4 +1,4 @@
-import { PoppingItemProps } from "../types";
+import { PoppingItemProps } from "../../types";
 
 export function Popping({
   coordinate,

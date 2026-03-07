@@ -1,4 +1,4 @@
-import { PointGet } from "../types";
+import { PointGet } from "../../types";
 import { Popping } from "./Popping";
 
 export function PointGain({ img, value, coordinate, delayMs, animationEndFunc }: PointGet) {
