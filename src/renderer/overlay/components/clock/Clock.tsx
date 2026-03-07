@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCurrentTime } from "../../../hooks/useCurrentTime";
 
 export function Clock() {
-  const [now, setNow] = useState(new Date());
-  useEffect(() => {
-    const intervalId = setInterval(() => setNow((_) => new Date()), 1000);
-    return () => clearInterval(intervalId);
-  }, []);
+  const now = useCurrentTime();
   return <div style={{ fontSize: "4vh", color: "white" }}>{now.toLocaleTimeString()}</div>;
 }
