@@ -5,3 +5,14 @@
   font-weight: 500;
   font-style: normal;
 }
+
+.font-m-plus-rounded {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.font-quattrocento {
+  font-family: "Quattrocento Sans", sans-serif;
+  font-style: italic;
+}
