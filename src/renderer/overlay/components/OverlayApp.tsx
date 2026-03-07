@@ -1,4 +1,4 @@
-import { CarouselManager } from "./CarouselManager";
+import { CarouselManager } from "./carousel/CarouselManager";
 import { Clock } from "./Clock";
 import { PoppingManager } from "./PoppingManager";
 import { LikeCountIndicator } from "./LikeCountIndicator";
