@@ -1,6 +1,6 @@
+import { useCompetitionStatus } from "../hooks/useCompetitionStatus";
 import { EntryClosedView } from "./EntryClosedView";
 import { HeldView } from "./HeldView";
-import { useCompetitionStatus } from "./hooks/useCompetitionStatus";
 
 export function CompetitionView() {
   const status = useCompetitionStatus();

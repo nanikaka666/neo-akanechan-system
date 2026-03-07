@@ -13,8 +13,8 @@ import { OnDemand, OnDemandPoppingManager } from "./OnDemandPoppingManager";
 import { ChatLogManager } from "./chatLog/ChatLogManager";
 import { FocusView } from "./FocusView";
 import { RankingView } from "./RankingView";
-import { CompetitionView } from "./CompetitionView";
 import { AppLogManager } from "./appLog/AppLogManager";
+import { CompetitionView } from "./competition/CompetitionView";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();

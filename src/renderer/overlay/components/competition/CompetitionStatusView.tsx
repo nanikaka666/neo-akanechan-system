@@ -1,4 +1,4 @@
-import { EntryClosedCompetition, HeldCompetition } from "../../../types/competition";
+import { EntryClosedCompetition, HeldCompetition } from "../../../../types/competition";
 
 interface CompetitionStatusViewProps {
   status: HeldCompetition | EntryClosedCompetition;

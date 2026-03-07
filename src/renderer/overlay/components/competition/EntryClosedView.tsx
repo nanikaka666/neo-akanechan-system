@@ -1,4 +1,4 @@
-import { EntryClosedCompetition } from "../../../types/competition";
+import { EntryClosedCompetition } from "../../../../types/competition";
 import { CompetitionStatusView } from "./CompetitionStatusView";
 
 interface EntryClosedViewProps {

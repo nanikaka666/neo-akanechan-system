@@ -1,4 +1,4 @@
-import { HeldCompetition } from "../../../types/competition";
+import { HeldCompetition } from "../../../../types/competition";
 
 import { CompetitionStatusView } from "./CompetitionStatusView";
 
