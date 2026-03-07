@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
-import { useWindowSize } from "./hooks/useWindowSize";
-import { useIndicatorColor } from "./hooks/useIndicatorColor";
+import { useIndicatorColor } from "../hooks/useIndicatorColor";
+import { useWindowSize } from "../hooks/useWindowSize";
 
 export type GaugeLevel = 1 | 2 | 3 | 4 | 5;
 

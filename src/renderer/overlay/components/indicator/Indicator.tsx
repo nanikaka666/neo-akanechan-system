@@ -1,4 +1,4 @@
-import { Gauge, GaugeProps } from "./Gauge";
+import { GaugeProps, Gauge } from "./Gauge";
 
 export type IndicatorProps = {
   label: string;

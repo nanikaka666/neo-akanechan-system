@@ -1,8 +1,8 @@
 import { CarouselManager } from "./carousel/CarouselManager";
 import { Clock } from "./Clock";
-import { LikeCountIndicator } from "./LikeCountIndicator";
-import { ViewerCountIndicator } from "./ViewerCountIndicator";
-import { SubscriberCountIndicator } from "./SubscriberCountIndicator";
+import { LikeCountIndicator } from "./indicator/LikeCountIndicator";
+import { ViewerCountIndicator } from "./indicator/ViewerCountIndicator";
+import { SubscriberCountIndicator } from "./indicator/SubscriberCountIndicator";
 import { useCallback, useEffect, useState } from "react";
 import { useLiveSettings } from "./hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";

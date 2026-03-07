@@ -1,23 +1,23 @@
-import { Goal } from "../../../types/liveSettings";
+import { Goal } from "../../../../types/liveSettings";
 import { GaugeLevel } from "./Gauge";
 import { Indicator } from "./Indicator";
 
-export interface LikeCountIndicatorProps {
+export interface ViewerCountIndicatorProps {
   gaugeLevel: GaugeLevel;
   goal: Goal;
   currentValue: number;
   maxValueSoFar: number;
 }
 
-export function LikeCountIndicator({
+export function ViewerCountIndicator({
   gaugeLevel,
   goal,
   currentValue,
   maxValueSoFar,
-}: LikeCountIndicatorProps) {
+}: ViewerCountIndicatorProps) {
   return (
     <Indicator
-      label="高評価数"
+      label="同接数"
       gaugeLevel={gaugeLevel}
       currentValue={currentValue}
       value={maxValueSoFar}
