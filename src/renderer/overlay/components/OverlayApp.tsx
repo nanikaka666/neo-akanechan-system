@@ -10,11 +10,11 @@ import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { GoalsLevel, GoalsStatus } from "../../../types/goals";
 import { OnDemand, OnDemandPoppingManager } from "./OnDemandPoppingManager";
-import { AppLogManager } from "./AppLogManager";
 import { ChatLogManager } from "./ChatLogManager";
 import { FocusView } from "./FocusView";
 import { RankingView } from "./RankingView";
 import { CompetitionView } from "./CompetitionView";
+import { AppLogManager } from "./appLog/AppLogManager";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
