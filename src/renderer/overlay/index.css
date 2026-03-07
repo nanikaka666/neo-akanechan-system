@@ -1,6 +1,7 @@
 @import "./css/fonts.css";
 @import "./css/app.css";
 @import "./css/clock.css";
+@import "./css/chatLog.css";
 
 .font-popping {
   font-family: "Quattrocento Sans", sans-serif;
@@ -148,56 +149,6 @@
   100% {
     transform: translateX(0vw);
     opacity: 1;
-  }
-}
-
-.chat-log {
-  position: absolute;
-  right: 0.5vw;
-  top: 5vh;
-  width: 19.6vw;
-  height: 55vh;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-.chat-log-container {
-  position: absolute;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5vh;
-}
-
-.chat-log-item {
-  word-break: break-all;
-  font-size: 1.3vw;
-  background-color: rgba(0, 0, 0, 0.25);
-  border-radius: 0.5vw;
-  color: white;
-  padding: 0.8vw;
-  width: 18vw;
-
-  animation: chat-log-item-animation;
-  animation-duration: 400ms;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-out;
-}
-
-.chat-log-item img {
-  width: 1.3vw;
-  border-radius: 50%;
-}
-
-@keyframes chat-log-item-animation {
-  0% {
-    opacity: 0;
-    transform: translateX(5vw);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
   }
 }
 
