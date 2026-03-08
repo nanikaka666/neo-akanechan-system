@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useLiveSettings } from "./hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
-import { GoalsLevel, GoalsStatus } from "../../../types/goals";
 import { ChatLogManager } from "./chatLog/ChatLogManager";
 import { RankingView } from "./ranking/RankingView";
 import { AppLogManager } from "./appLog/AppLogManager";
@@ -16,6 +15,7 @@ import { OnDemand, OnDemandPoppingManager } from "./popping/OnDemandPoppingManag
 import { PoppingManager } from "./popping/PoppingManager";
 import { FocusView } from "./focus/FocusView";
 import { useLikeCountGoalStatus } from "./hooks/useLikeCountGoalStatus";
+import { useViewerCountGoalStatus } from "./hooks/useViewerCountGoalStatus";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
@@ -23,34 +23,14 @@ export function OverlayApp() {
   const [overlayEvent, overlayEventResetFunc] = useOverlayEvent();
 
   const [likeCountGoalStatus, likeCountPromotionFunc] = useLikeCountGoalStatus();
+  const [viewerCountGoalStatus, viewerCountPromotionFunc] = useViewerCountGoalStatus();
 
-  const [viewerCountLevel, setViewerCountLevel] = useState<GoalsStatus>({
-    type: "inProgress",
-    currentLevel: 1,
-  });
   const [isSubscriberCountGoalAccomplished, setIsSubscriberCountGoalAccomplished] = useState(false);
 
   useEffect(() => {
     // to rewrite default settings by latest LiveSettings
     window.ipcApi.requestSyncLiveSettings();
   }, []);
-
-  const viewerCountPromotion = useCallback(() => {
-    if (viewerCountLevel.type === "inProgress") {
-      if (viewerCountLevel.currentLevel === liveSettings.viewerCountGoal.maxLevel) {
-        setViewerCountLevel(() => {
-          return { type: "accomplished" };
-        });
-      } else {
-        setViewerCountLevel(() => {
-          return {
-            type: "inProgress",
-            currentLevel: (viewerCountLevel.currentLevel + 1) as GoalsLevel,
-          };
-        });
-      }
-    }
-  }, [viewerCountLevel, liveSettings]);
 
   const subscriberCountPromotion = useCallback(() => {
     setIsSubscriberCountGoalAccomplished((_) => true);
@@ -70,7 +50,7 @@ export function OverlayApp() {
   ) {
     setTimeout(() => {
       overlayEventResetFunc();
-      viewerCountPromotion();
+      viewerCountPromotionFunc();
     }, 5 * 1000);
   } else if (
     overlayEvent.type === "subscriberCountGoalAchivement" &&
@@ -92,7 +72,6 @@ export function OverlayApp() {
           buffer: overlayEvent.points,
           funcOnLastAnimationEnded: () => {
             overlayEventResetFunc();
-            console.log("Ondemand func?");
             likeCountPromotionFunc();
           },
         }
@@ -101,7 +80,7 @@ export function OverlayApp() {
             buffer: overlayEvent.points,
             funcOnLastAnimationEnded: () => {
               overlayEventResetFunc();
-              viewerCountPromotion();
+              viewerCountPromotionFunc();
             },
           }
         : overlayEvent.type === "subscriberCountGoalAchivement"
@@ -139,9 +118,9 @@ export function OverlayApp() {
       <ViewerCountIndicator
         key={"viewerCount"}
         gaugeLevel={
-          viewerCountLevel.type === "accomplished"
+          viewerCountGoalStatus.type === "accomplished"
             ? liveSettings.viewerCountGoal.maxLevel
-            : viewerCountLevel.currentLevel
+            : viewerCountGoalStatus.currentLevel
         }
         goal={liveSettings.viewerCountGoal}
         currentValue={liveStatistics.currentLiveViewCount}
@@ -165,7 +144,7 @@ export function OverlayApp() {
     } else {
       return [subscriberCount];
     }
-  }, [liveSettings, liveStatistics, likeCountGoalStatus, viewerCountLevel, overlayEvent]);
+  }, [liveSettings, liveStatistics, likeCountGoalStatus, viewerCountGoalStatus, overlayEvent]);
 
   return (
     <div>
