@@ -15,15 +15,15 @@ import { CompetitionView } from "./competition/CompetitionView";
 import { OnDemand, OnDemandPoppingManager } from "./popping/OnDemandPoppingManager";
 import { PoppingManager } from "./popping/PoppingManager";
 import { FocusView } from "./focus/FocusView";
+import { useLikeCountGoalStatus } from "./hooks/useLikeCountGoalStatus";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
   const liveStatistics = useLiveStatistics();
   const [overlayEvent, overlayEventResetFunc] = useOverlayEvent();
-  const [likeCountLevel, setLikeCountLevel] = useState<GoalsStatus>({
-    type: "inProgress",
-    currentLevel: 1,
-  });
+
+  const [likeCountGoalStatus, likeCountPromotionFunc] = useLikeCountGoalStatus();
+
   const [viewerCountLevel, setViewerCountLevel] = useState<GoalsStatus>({
     type: "inProgress",
     currentLevel: 1,
@@ -34,23 +34,6 @@ export function OverlayApp() {
     // to rewrite default settings by latest LiveSettings
     window.ipcApi.requestSyncLiveSettings();
   }, []);
-
-  const likeCountPromotion = useCallback(() => {
-    if (likeCountLevel.type === "inProgress") {
-      if (likeCountLevel.currentLevel === liveSettings.likeCountGoal.maxLevel) {
-        setLikeCountLevel(() => {
-          return { type: "accomplished" };
-        });
-      } else {
-        setLikeCountLevel(() => {
-          return {
-            type: "inProgress",
-            currentLevel: (likeCountLevel.currentLevel + 1) as GoalsLevel,
-          };
-        });
-      }
-    }
-  }, [likeCountLevel, liveSettings]);
 
   const viewerCountPromotion = useCallback(() => {
     if (viewerCountLevel.type === "inProgress") {
@@ -79,7 +62,7 @@ export function OverlayApp() {
   if (overlayEvent.type === "likeCountLevelPromotion" && overlayEvent.points.length === 0) {
     setTimeout(() => {
       overlayEventResetFunc();
-      likeCountPromotion();
+      likeCountPromotionFunc();
     }, 5 * 1000);
   } else if (
     overlayEvent.type === "viewerCountLevelPromotion" &&
@@ -109,7 +92,8 @@ export function OverlayApp() {
           buffer: overlayEvent.points,
           funcOnLastAnimationEnded: () => {
             overlayEventResetFunc();
-            likeCountPromotion();
+            console.log("Ondemand func?");
+            likeCountPromotionFunc();
           },
         }
       : overlayEvent.type === "viewerCountLevelPromotion"
@@ -142,9 +126,9 @@ export function OverlayApp() {
       <LikeCountIndicator
         key={"likeCount"}
         gaugeLevel={
-          likeCountLevel.type === "accomplished"
+          likeCountGoalStatus.type === "accomplished"
             ? liveSettings.likeCountGoal.maxLevel
-            : likeCountLevel.currentLevel
+            : likeCountGoalStatus.currentLevel
         }
         goal={liveSettings.likeCountGoal}
         currentValue={liveStatistics.currentLikeCount}
@@ -181,7 +165,7 @@ export function OverlayApp() {
     } else {
       return [subscriberCount];
     }
-  }, [liveSettings, liveStatistics, likeCountLevel, viewerCountLevel, overlayEvent]);
+  }, [liveSettings, liveStatistics, likeCountGoalStatus, viewerCountLevel, overlayEvent]);
 
   return (
     <div>
