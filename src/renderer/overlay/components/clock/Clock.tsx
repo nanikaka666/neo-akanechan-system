@@ -12,7 +12,7 @@ export function Clock() {
   const minute = fill2Digits(now.getMinutes());
   const second = fill2Digits(now.getSeconds());
 
-  const month = now.getMonth();
+  const month = now.getMonth() + 1;
   const day = now.getDate();
   const dayOfWeek = DayOfWeek[now.getDay()];
 
