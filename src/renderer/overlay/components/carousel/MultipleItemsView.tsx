@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useState } from "react";
+import { ReactElement, useState } from "react";
 
 interface MultipleItemsViewProps {
   items: ReactElement[];
@@ -6,17 +6,6 @@ interface MultipleItemsViewProps {
 
 export function MultipleItemsView({ items }: MultipleItemsViewProps) {
   const [pos, setPos] = useState(0);
-
-  const selectedPos = useCallback(() => {
-    if (items.length === 0) {
-      return 0;
-    }
-    if (items.length <= pos) {
-      return 0;
-    } else {
-      return pos;
-    }
-  }, [items, pos]);
 
   return (
     <div
@@ -27,7 +16,7 @@ export function MultipleItemsView({ items }: MultipleItemsViewProps) {
     >
       {items.map((item, idx) => {
         return (
-          <div key={item.key} style={idx === selectedPos() ? {} : { display: "none" }}>
+          <div key={item.key} style={idx === pos % items.length ? {} : { display: "none" }}>
             {item}
           </div>
         );
