@@ -16,14 +16,8 @@ export function useLikeCountGoalStatus() {
     setLikeCountGoalStatus(() => {
       if (likeCountGoalStatus.type === "inProgress") {
         if (likeCountGoalStatus.currentLevel === liveSettings.likeCountGoal.maxLevel) {
-          console.log("Like count Accomplished!");
           return { type: "accomplished" };
         } else {
-          console.log(
-            "Like count promotion!",
-            likeCountGoalStatus.currentLevel,
-            likeCountGoalStatus.currentLevel + 1,
-          );
           return {
             ...likeCountGoalStatus,
             currentLevel: (likeCountGoalStatus.currentLevel + 1) as GoalsLevel,
