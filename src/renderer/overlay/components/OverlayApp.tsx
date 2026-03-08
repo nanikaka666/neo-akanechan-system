@@ -16,6 +16,7 @@ import { PoppingManager } from "./popping/PoppingManager";
 import { FocusView } from "./focus/FocusView";
 import { useLikeCountGoalStatus } from "./hooks/useLikeCountGoalStatus";
 import { useViewerCountGoalStatus } from "./hooks/useViewerCountGoalStatus";
+import { useIsSubscriberCountGoalAccomplished } from "./hooks/useIsSubscriberCountGoalAccomplished";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
@@ -25,15 +26,12 @@ export function OverlayApp() {
   const [likeCountGoalStatus, likeCountPromotionFunc] = useLikeCountGoalStatus();
   const [viewerCountGoalStatus, viewerCountPromotionFunc] = useViewerCountGoalStatus();
 
-  const [isSubscriberCountGoalAccomplished, setIsSubscriberCountGoalAccomplished] = useState(false);
+  const [isSubscriberCountGoalAccomplished, subscriberCountGoalAccomplishFunc] =
+    useIsSubscriberCountGoalAccomplished();
 
   useEffect(() => {
     // to rewrite default settings by latest LiveSettings
     window.ipcApi.requestSyncLiveSettings();
-  }, []);
-
-  const subscriberCountPromotion = useCallback(() => {
-    setIsSubscriberCountGoalAccomplished((_) => true);
   }, []);
 
   // handle the case which list is empty when promotion
@@ -58,7 +56,7 @@ export function OverlayApp() {
   ) {
     setTimeout(() => {
       overlayEventResetFunc();
-      subscriberCountPromotion();
+      subscriberCountGoalAccomplishFunc();
     }, 5 * 1000);
   } else if (overlayEvent.type === "competitionPayout" && overlayEvent.points.length === 0) {
     setTimeout(() => {
@@ -88,7 +86,7 @@ export function OverlayApp() {
               buffer: overlayEvent.points,
               funcOnLastAnimationEnded: () => {
                 overlayEventResetFunc();
-                subscriberCountPromotion();
+                subscriberCountGoalAccomplishFunc();
               },
             }
           : overlayEvent.type === "competitionPayout"
