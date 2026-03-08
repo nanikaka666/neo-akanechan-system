@@ -9,7 +9,7 @@ interface TextItemProps {
 
 export function TextItem({ item, votedTo }: TextItemProps) {
   return (
-    <div className="chat-log-item">
+    <div className="chat-log-item text">
       <Author author={item.author} votedTo={votedTo} />
       <div className="message">{item.displayMessage}</div>
     </div>

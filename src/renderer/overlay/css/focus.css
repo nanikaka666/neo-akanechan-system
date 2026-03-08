@@ -3,17 +3,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-end;
   width: 100vw;
-  bottom: 3vh;
+  bottom: 1vh;
   z-index: 2;
 }
 
 .focus-view {
   .chat-log-item {
     padding: 2vh 2vw;
-    width: 60vw;
+    width: 41vw;
     border-radius: 1vw;
+    margin-right: 0.3vw;
     .author {
       img {
         width: 3.9vw;
@@ -22,12 +23,18 @@
       .name {
         width: auto;
         font-size: 2vw;
+        margin-left: 2vw;
       }
     }
     .message {
       margin-top: 0.5vh;
       font-size: 1.8vw;
     }
+  }
+
+  .text {
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 2px solid white;
   }
 
   .amount {
