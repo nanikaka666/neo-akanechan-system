@@ -19,14 +19,7 @@ export function CarouselManager({ items }: CarouselManagerProps) {
   }, [items, pos]);
 
   return items.length === 0 ? null : (
-    <div
-      style={{
-        position: "absolute",
-        bottom: 50,
-        left: 50,
-        zIndex: 1,
-      }}
-    >
+    <div className="carousel-container">
       {items.length === 1 ? (
         <div className="carousel-only-one-animation font-m-plus-rounded">{items[0]}</div>
       ) : (
