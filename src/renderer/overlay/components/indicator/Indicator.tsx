@@ -1,4 +1,5 @@
 import { GaugeProps, Gauge } from "./Gauge";
+import { IndicatorDescription } from "./IndicatorDescription";
 
 type IndicatorProps = {
   label: string;
@@ -10,16 +11,11 @@ export function Indicator({ label, currentValue, ...props }: IndicatorProps) {
   return (
     <div className={`indicator ${levelClassName}`}>
       <Gauge {...props} />
-      <div className="description">
-        <div className="info font-m-plus-rounded">
-          <div>{label}</div>
-          <div className="value">{currentValue}</div>
-        </div>
-        <div className="next font-m-plus-rounded">
-          <div>次の目標</div>
-          <div>{props.range.max}</div>
-        </div>
-      </div>
+      <IndicatorDescription
+        label={label}
+        currentValue={currentValue}
+        nextGoalValue={props.range.max}
+      />
     </div>
   );
 }

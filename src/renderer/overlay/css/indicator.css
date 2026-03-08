@@ -2,16 +2,16 @@
   padding: 1vh 1.5vw;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 1vw;
-  color: white;
+}
 
-  .description {
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.75);
-    border-radius: 1vw;
-    padding: 1vh 1vw;
-    width: 21vw;
-  }
+.indicator-description {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 1vw;
+  padding: 1vh 1vw;
+  width: 21vw;
+  color: white;
 
   .info {
     display: flex;
