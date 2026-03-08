@@ -1,30 +1,25 @@
 import { GaugeProps, Gauge } from "./Gauge";
 
-export type IndicatorProps = {
+type IndicatorProps = {
   label: string;
   currentValue: number;
 } & GaugeProps;
 
-export function Indicator({ label, ...props }: IndicatorProps) {
+export function Indicator({ label, currentValue, ...props }: IndicatorProps) {
+  const levelClassName = `level-${props.gaugeLevel}`;
   return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "flex-end",
-          backgroundColor: "rgb(0, 0, 0, 0.2)",
-          padding: 10,
-          width: "fit-content",
-        }}
-      >
-        <div className="font-m-plus-rounded indicator-label">{label}</div>
-        <div className="font-m-plus-rounded indicator-label">{props.currentValue}</div>
-        <div className="font-m-plus-rounded indicator-label">
-          ({props.value}/{props.range.max})
+    <div className={`indicator ${levelClassName}`}>
+      <Gauge {...props} />
+      <div className="description">
+        <div className="info font-m-plus-rounded">
+          <div>{label}</div>
+          <div className="value">{currentValue}</div>
+        </div>
+        <div className="next font-m-plus-rounded">
+          <div>次の目標</div>
+          <div>{props.range.max}</div>
         </div>
       </div>
-      <Gauge {...props} />
     </div>
   );
 }

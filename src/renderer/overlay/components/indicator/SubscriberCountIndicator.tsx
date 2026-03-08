@@ -13,7 +13,7 @@ export function SubscriberCountIndicator({
 }: SubscriberCountIndicatorProps) {
   return (
     <Indicator
-      label="チャンネル登録者数"
+      label="CH登録者数"
       gaugeLevel={5}
       currentValue={currentValue}
       value={maxValueSoFar}

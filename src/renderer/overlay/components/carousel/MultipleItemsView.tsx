@@ -9,7 +9,7 @@ export function MultipleItemsView({ items }: MultipleItemsViewProps) {
 
   return (
     <div
-      className="multiple carousel-animation font-m-plus-rounded"
+      className="multiple carousel-animation"
       onAnimationIteration={() => {
         setPos((prev) => (prev + 1) % items.length);
       }}

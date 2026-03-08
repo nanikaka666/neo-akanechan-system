@@ -1,7 +1,7 @@
 .carousel-container {
   position: absolute;
-  bottom: 50px;
-  left: 50px;
+  bottom: 0.5vh;
+  left: 0.5vw;
   z-index: 1;
 }
 

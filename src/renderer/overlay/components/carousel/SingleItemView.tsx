@@ -5,5 +5,5 @@ interface SingleItemViewProps {
 }
 
 export function SingleItemView({ item }: SingleItemViewProps) {
-  return <div className="carousel-only-one-animation font-m-plus-rounded">{item}</div>;
+  return <div className="carousel-only-one-animation">{item}</div>;
 }
