@@ -1,6 +1,6 @@
 import { ReactElement, useCallback, useState } from "react";
 
-export interface CarouselManagerProps {
+interface CarouselManagerProps {
   items: ReactElement[];
 }
 
