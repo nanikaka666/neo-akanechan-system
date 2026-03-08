@@ -12,6 +12,12 @@
   animation-timing-function: ease-out;
 }
 
+.multiple {
+  .not-selected {
+    display: none;
+  }
+}
+
 @keyframes carousel-item {
   0% {
     transform: translateX(5vw);
