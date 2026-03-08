@@ -3,7 +3,7 @@ import { Clock } from "./clock/Clock";
 import { LikeCountIndicator } from "./indicator/LikeCountIndicator";
 import { ViewerCountIndicator } from "./indicator/ViewerCountIndicator";
 import { SubscriberCountIndicator } from "./indicator/SubscriberCountIndicator";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useLiveSettings } from "./hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
@@ -110,6 +110,7 @@ export function OverlayApp() {
         goal={liveSettings.likeCountGoal}
         currentValue={liveStatistics.currentLikeCount}
         maxValueSoFar={liveStatistics.maxLikeCount}
+        isAccomplished={likeCountGoalStatus.type === "accomplished"}
       />
     );
     const viewerCount = (
@@ -123,6 +124,7 @@ export function OverlayApp() {
         goal={liveSettings.viewerCountGoal}
         currentValue={liveStatistics.currentLiveViewCount}
         maxValueSoFar={liveStatistics.maxLiveViewCount}
+        isAccomplished={viewerCountGoalStatus.type === "accomplished"}
       />
     );
     const subscriberCount = (
@@ -131,6 +133,7 @@ export function OverlayApp() {
         goalValue={liveSettings.subscriberCountGoal}
         currentValue={liveStatistics.currentSubscriberCount}
         maxValueSoFar={liveStatistics.maxSubscriberCount}
+        isAccomplished={isSubscriberCountGoalAccomplished}
       />
     );
     if (overlayEvent.type === "noEvent") {
@@ -142,7 +145,14 @@ export function OverlayApp() {
     } else {
       return [subscriberCount];
     }
-  }, [liveSettings, liveStatistics, likeCountGoalStatus, viewerCountGoalStatus, overlayEvent]);
+  }, [
+    liveSettings,
+    liveStatistics,
+    likeCountGoalStatus,
+    viewerCountGoalStatus,
+    isSubscriberCountGoalAccomplished,
+    overlayEvent,
+  ]);
 
   return (
     <div>
