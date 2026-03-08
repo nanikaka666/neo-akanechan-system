@@ -1,4 +1,5 @@
 import { ReactElement, useCallback, useState } from "react";
+import { SingleItemView } from "./SingleItemView";
 
 interface CarouselManagerProps {
   items: ReactElement[];
@@ -21,7 +22,7 @@ export function CarouselManager({ items }: CarouselManagerProps) {
   return items.length === 0 ? null : (
     <div className="carousel-container">
       {items.length === 1 ? (
-        <div className="carousel-only-one-animation font-m-plus-rounded">{items[0]}</div>
+        <SingleItemView item={items[0]} />
       ) : (
         <div
           className="carousel-animation font-m-plus-rounded"
