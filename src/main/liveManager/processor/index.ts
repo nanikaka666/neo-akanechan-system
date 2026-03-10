@@ -1,5 +1,5 @@
 import { PariticipantPointRankings } from "../../../types/participantPoint";
-import { AppLog } from "../../../types/appLog";
+import { Announcement } from "../../../types/announcement";
 import {
   FocusedOnChatItem,
   GiftReceived,
@@ -81,7 +81,7 @@ export class Processor {
             this.#calcPassedHour(),
           );
         this.#lcpDataTransfer.syncRankings();
-        const appLog: AppLog =
+        const appLog: Announcement =
           likeCountStatus.currentLevel === likeCountGoal.maxLevel
             ? {
                 type: "likeCountGoalAccomplished",
@@ -128,7 +128,7 @@ export class Processor {
             this.#calcPassedHour(),
           );
         this.#lcpDataTransfer.syncRankings();
-        const appLog: AppLog =
+        const appLog: Announcement =
           viewerCountStatus.currentLevel === viewerCountGoal.maxLevel
             ? {
                 type: "viewerCountGoalAccomplished",

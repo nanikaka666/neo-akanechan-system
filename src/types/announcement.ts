@@ -1,7 +1,7 @@
 import { OptionLabel } from "./competition";
 import { GoalsLevel } from "./goals";
 
-export type AppLog =
+export type Announcement =
   | LikeCountGoalPromotionLog
   | LikeCountGoalAccomplishedLog
   | ViewerCountGoalPromotionLog

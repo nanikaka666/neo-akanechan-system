@@ -5,7 +5,7 @@ import {
   SubscriberCountGoalAccomplishedLog,
   ViewerCountGoalAccomplishedLog,
   ViewerCountGoalPromotionLog,
-} from "./appLog";
+} from "./announcement";
 
 export interface PointInfoFromMainProcess {
   img: string;

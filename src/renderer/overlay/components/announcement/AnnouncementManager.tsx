@@ -1,9 +1,9 @@
-import { AppLog } from "../../../../types/appLog";
+import { Announcement } from "../../../../types/announcement";
 import { OverlayEvent } from "../../../../types/overlay";
 import { CaseDropError } from "../../constants";
 
 export function AnnouncementManager({ overlayEvent }: { overlayEvent: OverlayEvent }) {
-  const buildChildren = (appLog: AppLog) => {
+  const buildChildren = (appLog: Announcement) => {
     if (appLog.type === "likeCountGoalPromotion") {
       return (
         <div>
