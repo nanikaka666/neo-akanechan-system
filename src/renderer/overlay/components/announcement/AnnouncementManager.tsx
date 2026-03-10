@@ -58,8 +58,8 @@ export function AnnouncementManager({ overlayEvent }: { overlayEvent: OverlayEve
     overlayEvent.type === "noEvent"
       ? undefined
       : {
-          key: overlayEvent.appLog.logId,
-          children: buildChildren(overlayEvent.appLog),
+          key: overlayEvent.announcement.logId,
+          children: buildChildren(overlayEvent.announcement),
         };
 
   return (

@@ -46,7 +46,7 @@ export class Processor {
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "subscriberCountGoalAchivement",
           points: list,
-          appLog: {
+          announcement: {
             type: "subscriberCountGoalAccomplished",
             logId: crypto.randomUUID(),
             goalValue: subscriberCountGoal,
@@ -97,7 +97,7 @@ export class Processor {
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "likeCountLevelPromotion",
           points: addedPointLists,
-          appLog: appLog,
+          announcement: appLog,
         });
       }
     }
@@ -144,7 +144,7 @@ export class Processor {
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "viewerCountLevelPromotion",
           points: addedPointLists,
-          appLog: appLog,
+          announcement: appLog,
         });
       }
     }
@@ -487,7 +487,7 @@ export class Processor {
     this.#overlayDataTransfer.sendOverlayEvent({
       type: "competitionPayout",
       points: list,
-      appLog: {
+      announcement: {
         type: "competitionPayout",
         logId: status.settings.competitionId,
         answer: answer,
