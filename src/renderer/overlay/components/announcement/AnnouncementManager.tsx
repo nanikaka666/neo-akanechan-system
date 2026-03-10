@@ -3,52 +3,54 @@ import { OverlayEvent } from "../../../../types/overlay";
 import { CaseDropError } from "../../constants";
 
 export function AnnouncementManager({ overlayEvent }: { overlayEvent: OverlayEvent }) {
-  const buildChildren = (appLog: Announcement) => {
-    if (appLog.type === "likeCountGoalPromotion") {
+  const buildChildren = (announcement: Announcement) => {
+    if (announcement.type === "likeCountGoalPromotion") {
       return (
         <div>
-          高評価数の小目標({appLog.goalValue}
+          高評価数の小目標({announcement.goalValue}
           )を達成しました。参加者に達成ボーナスポイントが付与されます。
         </div>
       );
-    } else if (appLog.type === "likeCountGoalAccomplished") {
+    } else if (announcement.type === "likeCountGoalAccomplished") {
       return (
         <div>
-          高評価数の目標({appLog.goalValue}
+          高評価数の目標({announcement.goalValue}
           )を達成しました。参加者に達成ボーナスポイントが付与されます。
         </div>
       );
-    } else if (appLog.type === "viewerCountGoalPromotion") {
+    } else if (announcement.type === "viewerCountGoalPromotion") {
       return (
         <div>
-          同接数の小目標({appLog.goalValue}
+          同接数の小目標({announcement.goalValue}
           )を達成しました。参加者に達成ボーナスポイントが付与されます。
         </div>
       );
-    } else if (appLog.type === "viewerCountGoalAccomplished") {
+    } else if (announcement.type === "viewerCountGoalAccomplished") {
       return (
         <div>
-          同接数の目標({appLog.goalValue}
+          同接数の目標({announcement.goalValue}
           )を達成しました。参加者に達成ボーナスポイントが付与されます。
         </div>
       );
-    } else if (appLog.type === "subscriberCountGoalAccomplished") {
+    } else if (announcement.type === "subscriberCountGoalAccomplished") {
       return (
         <div>
-          チャンネル登録者数の目標({appLog.goalValue}
+          チャンネル登録者数の目標({announcement.goalValue}
           )を達成しました。参加者に達成ボーナスポイントが付与されます。
         </div>
       );
-    } else if (appLog.type === "competitionPayout") {
+    } else if (announcement.type === "competitionPayout") {
       return (
         <div>
-          コンペの結果が({appLog.answer.toLocaleUpperCase()}: {appLog.optionStr}
+          コンペの結果が({announcement.answer.toLocaleUpperCase()}: {announcement.optionStr}
           )に決定しました。
-          {appLog.betCount > 0 ? `正解した${appLog.betCount}名に勝利ポイントが付与されます。` : ""}
+          {announcement.betCount > 0
+            ? `正解した${announcement.betCount}名に勝利ポイントが付与されます。`
+            : ""}
         </div>
       );
     } else {
-      throw new CaseDropError(appLog);
+      throw new CaseDropError(announcement);
     }
   };
 
