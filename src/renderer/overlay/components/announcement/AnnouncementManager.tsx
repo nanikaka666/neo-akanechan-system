@@ -63,15 +63,9 @@ export function AnnouncementManager({ overlayEvent }: { overlayEvent: OverlayEve
         };
 
   return (
-    <div
-      style={{
-        margin: 0,
-        padding: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.25)",
-      }}
-    >
+    <div className="announcement-container">
       {item && (
-        <div className="app-log-item app-log-item-animation" key={item.key}>
+        <div className="announcement announcement-animation" key={item.key}>
           {item.children}
         </div>
       )}

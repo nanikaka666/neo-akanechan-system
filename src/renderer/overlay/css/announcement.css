@@ -1,0 +1,30 @@
+.announcement-container {
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.announcement {
+  font-size: 1.5vw;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans";
+  color: white;
+}
+
+.announcement-animation {
+  animation: announcement;
+  animation-duration: 5000ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+}
+
+@keyframes announcement {
+  0% {
+    transform: translateX(5vw);
+    opacity: 0;
+  }
+  5%,
+  100% {
+    transform: translateX(0vw);
+    opacity: 1;
+  }
+}
