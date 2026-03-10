@@ -1,20 +1,35 @@
 .announcement-container {
-  margin: 0;
-  padding: 0;
-  background-color: rgba(0, 0, 0, 0.25);
-}
+  position: absolute;
+  width: 100vw;
+  margin: 1vh 0 0 0;
+  padding: 0.5vh 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.7);
 
-.announcement {
-  font-size: 1.5vw;
-  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans";
-  color: white;
-}
+  .announcement {
+    font-size: 2.7vh;
+    color: white;
+    text-align: center;
 
-.announcement-animation {
-  animation: announcement;
-  animation-duration: 5000ms;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-out;
+    .object-sentence {
+      font-size: 3vh;
+      color: #91fd91;
+      margin: 0 0.5vw;
+    }
+
+    .bonus-sentence {
+      font-size: 3vh;
+      color: #ffff91;
+      margin: 0 0.5vw;
+    }
+  }
+
+  .announcement-animation {
+    animation: announcement;
+    animation-duration: 5000ms;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+  }
 }
 
 @keyframes announcement {

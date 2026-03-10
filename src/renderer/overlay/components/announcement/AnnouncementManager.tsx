@@ -7,46 +7,70 @@ export function AnnouncementManager({ overlayEvent }: { overlayEvent: OverlayEve
     if (announcement.type === "likeCountGoalPromotion") {
       return (
         <div>
-          高評価数の小目標({announcement.goalValue}
-          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+          <span className="object-sentence font-noto-bold">高評価数</span>の小目標(
+          {announcement.goalValue}
+          )を達成しました。参加者に
+          <span className="bonus-sentence font-noto-bold">達成ボーナスポイント</span>
+          が付与されます。
         </div>
       );
     } else if (announcement.type === "likeCountGoalAccomplished") {
       return (
         <div>
-          高評価数の目標({announcement.goalValue}
-          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+          <span className="object-sentence font-noto-bold">高評価数</span>の目標(
+          {announcement.goalValue}
+          )を達成しました。参加者に
+          <span className="bonus-sentence font-noto-bold">達成ボーナスポイント</span>
+          が付与されます。
         </div>
       );
     } else if (announcement.type === "viewerCountGoalPromotion") {
       return (
         <div>
-          同接数の小目標({announcement.goalValue}
-          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+          <span className="object-sentence font-noto-bold">同接数</span>の小目標(
+          {announcement.goalValue}
+          )を達成しました。参加者に
+          <span className="bonus-sentence font-noto-bold">達成ボーナスポイント</span>
+          が付与されます。
         </div>
       );
     } else if (announcement.type === "viewerCountGoalAccomplished") {
       return (
         <div>
-          同接数の目標({announcement.goalValue}
-          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+          <span className="object-sentence font-noto-bold">同接数</span>の目標(
+          {announcement.goalValue}
+          )を達成しました。参加者に
+          <span className="bonus-sentence font-noto-bold">達成ボーナスポイント</span>
+          が付与されます。
         </div>
       );
     } else if (announcement.type === "subscriberCountGoalAccomplished") {
       return (
         <div>
-          チャンネル登録者数の目標({announcement.goalValue}
-          )を達成しました。参加者に達成ボーナスポイントが付与されます。
+          <span className="object-sentence font-noto-bold">チャンネル登録数</span>の目標(
+          {announcement.goalValue}
+          )を達成しました。参加者に
+          <span className="bonus-sentence font-noto-bold">達成ボーナスポイント</span>
+          が付与されます。
         </div>
       );
     } else if (announcement.type === "competitionPayout") {
       return (
         <div>
-          コンペの結果が({announcement.answer.toLocaleUpperCase()}: {announcement.optionStr}
-          )に決定しました。
-          {announcement.betCount > 0
-            ? `正解した${announcement.betCount}名に勝利ポイントが付与されます。`
-            : ""}
+          正解は
+          <span className="object-sentence font-noto-bold">
+            {announcement.answer.toLocaleUpperCase()}: {announcement.optionStr}
+          </span>
+          でした。
+          {announcement.betCount > 0 ? (
+            <span>
+              正解者<span className="font-noto-bold">({announcement.betCount}名)</span>に
+              <span className="bonus-sentence font-noto-bold">勝利ボーナスポイント</span>
+              が分配されます。
+            </span>
+          ) : (
+            ""
+          )}
         </div>
       );
     } else {
@@ -62,13 +86,11 @@ export function AnnouncementManager({ overlayEvent }: { overlayEvent: OverlayEve
           children: buildChildren(overlayEvent.announcement),
         };
 
-  return (
+  return item ? (
     <div className="announcement-container">
-      {item && (
-        <div className="announcement announcement-animation" key={item.key}>
-          {item.children}
-        </div>
-      )}
+      <div className="announcement announcement-animation font-noto" key={item.key}>
+        {item.children}
+      </div>
     </div>
-  );
+  ) : null;
 }

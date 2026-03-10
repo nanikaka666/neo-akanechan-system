@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;800;900&family=Oswald:wght@500&family=Quattrocento+Sans:ital,wght@0,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;800;900&family=Noto+Serif+JP:wght@200..900&family=Oswald:wght@500&family=Quattrocento+Sans:ital,wght@0,400;1,700&display=swap");
 
 .font-oswald {
   font-family: "Oswald", sans-serif;
@@ -15,4 +15,18 @@
 .font-quattrocento {
   font-family: "Quattrocento Sans", sans-serif;
   font-style: italic;
+}
+
+.font-noto {
+  font-family: "Noto Serif JP", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.font-noto-bold {
+  font-family: "Noto Serif JP", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: bold;
 }
