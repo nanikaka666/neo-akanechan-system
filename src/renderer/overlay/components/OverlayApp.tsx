@@ -9,7 +9,7 @@ import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { ChatLogManager } from "./chatLog/ChatLogManager";
 import { RankingView } from "./ranking/RankingView";
-import { AppLogManager } from "./appLog/AppLogManager";
+import { AnnouncementManager } from "./announcement/AnnouncementManager";
 import { CompetitionView } from "./competition/CompetitionView";
 import { OnDemand, OnDemandPoppingManager } from "./popping/OnDemandPoppingManager";
 import { PoppingManager } from "./popping/PoppingManager";
@@ -159,7 +159,7 @@ export function OverlayApp() {
       <PoppingManager />
       {poppingOnDemand && <OnDemandPoppingManager onDemand={poppingOnDemand} />}
       <CarouselManager items={makeCarouselItems()} />
-      <AppLogManager overlayEvent={overlayEvent} />
+      <AnnouncementManager overlayEvent={overlayEvent} />
       <ChatLogManager />
       <FocusView />
       <RankingView />
