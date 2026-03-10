@@ -8,7 +8,7 @@ import { useLiveSettings } from "./hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { ChatLogManager } from "./chatLog/ChatLogManager";
-import { RankingView } from "./ranking/RankingView";
+import { Ranking } from "./ranking/Ranking";
 import { AnnouncementManager } from "./announcement/AnnouncementManager";
 import { CompetitionView } from "./competition/CompetitionView";
 import { OnDemand, OnDemandPoppingManager } from "./popping/OnDemandPoppingManager";
@@ -162,7 +162,7 @@ export function OverlayApp() {
       <AnnouncementManager overlayEvent={overlayEvent} />
       <ChatLogManager />
       <FocusView />
-      <RankingView />
+      <Ranking />
       <CompetitionView />
       <Clock />
     </div>

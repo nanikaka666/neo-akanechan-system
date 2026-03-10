@@ -8,21 +8,23 @@ export interface RankingOthersProps {
 export function RankingOthers({ list, updatedAt }: RankingOthersProps) {
   return (
     list.length > 0 && (
-      <div className="ranking-others-container" key={updatedAt.getTime()}>
-        <ul className="ranking-others-list">
-          {list.map((item) => {
-            return (
-              <li key={item.rank}>
-                <div>#{item.rank}</div>
-                <div>
-                  <img src={item.participantPoint.author.profileImageUrl} />
-                  <span>{item.participantPoint.author.name}</span>
-                </div>
-                <div>{item.participantPoint.point}</div>
-              </li>
-            );
-          })}
-        </ul>
+      <div className="ranking-others-container">
+        <div className="ranking-others font-noto-bold" key={updatedAt.getTime()}>
+          <ul className="list">
+            {list.map((item) => {
+              return (
+                <li className="row" key={item.rank}>
+                  <div className="rank font-noto-bold">#{item.rank}</div>
+                  <div className="author">
+                    <img src={item.participantPoint.author.profileImageUrl} />
+                    <div className="name">{item.participantPoint.author.name}</div>
+                  </div>
+                  <div className="point">{item.participantPoint.point}</div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     )
   );
