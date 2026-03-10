@@ -1,5 +1,6 @@
 .chat-log-container {
   position: absolute;
+  z-index: 0;
   right: 0.3vw;
   top: 1vh;
   width: 21vw;

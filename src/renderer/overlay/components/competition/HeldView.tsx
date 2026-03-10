@@ -8,15 +8,9 @@ interface HeldViewProps {
 
 export function HeldView({ status }: HeldViewProps) {
   return (
-    <div>
+    <div className="held">
+      <div className="title">コンペティション参加受付中</div>
       <CompetitionStatusView status={status} />
-
-      <div>
-        正解だと思う選択肢を選び、チャット欄にスラッシュ(/)をつけて書き込んでください。例:
-        選択肢AにBetするなら「/A」or「/a」です。
-      </div>
-
-      <div>参加締切: {status.settings.scheduledClosedAt.toLocaleString().split(" ")[1]}</div>
     </div>
   );
 }

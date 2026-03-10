@@ -7,9 +7,8 @@ interface EntryClosedViewProps {
 
 export function EntryClosedView({ status }: EntryClosedViewProps) {
   return (
-    <div>
+    <div className="entry-closed">
       <CompetitionStatusView status={status} />
-      <div>参加を締め切りました。</div>
     </div>
   );
 }
