@@ -1,0 +1,50 @@
+import { OptionLabel } from "./competition";
+import { GoalsLevel } from "./goals";
+
+export type Announcement =
+  | LikeCountGoalPromotionLog
+  | LikeCountGoalAccomplishedLog
+  | ViewerCountGoalPromotionLog
+  | ViewerCountGoalAccomplishedLog
+  | SubscriberCountGoalAccomplishedLog
+  | CompetitionPayoutLog;
+
+export interface LikeCountGoalPromotionLog {
+  type: "likeCountGoalPromotion";
+  logId: string;
+  level: GoalsLevel;
+  goalValue: number;
+}
+
+export interface LikeCountGoalAccomplishedLog {
+  type: "likeCountGoalAccomplished";
+  logId: string;
+  goalValue: number;
+}
+
+export interface ViewerCountGoalPromotionLog {
+  type: "viewerCountGoalPromotion";
+  logId: string;
+  level: GoalsLevel;
+  goalValue: number;
+}
+
+export interface ViewerCountGoalAccomplishedLog {
+  type: "viewerCountGoalAccomplished";
+  logId: string;
+  goalValue: number;
+}
+
+export interface SubscriberCountGoalAccomplishedLog {
+  type: "subscriberCountGoalAccomplished";
+  logId: string;
+  goalValue: number;
+}
+
+export interface CompetitionPayoutLog {
+  type: "competitionPayout";
+  logId: string;
+  answer: OptionLabel;
+  optionStr: string;
+  betCount: number;
+}

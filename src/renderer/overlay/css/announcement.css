@@ -1,0 +1,45 @@
+.announcement-container {
+  position: absolute;
+  width: 100vw;
+  margin: 1vh 0 0 0;
+  padding: 0.5vh 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  .announcement {
+    font-size: 2.7vh;
+    color: white;
+    text-align: center;
+
+    .object-sentence {
+      font-size: 3vh;
+      color: #91fd91;
+      margin: 0 0.5vw;
+    }
+
+    .bonus-sentence {
+      font-size: 3vh;
+      color: #ffff91;
+      margin: 0 0.5vw;
+    }
+  }
+
+  .announcement-animation {
+    animation: announcement;
+    animation-duration: 5000ms;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+  }
+}
+
+@keyframes announcement {
+  0% {
+    transform: translateX(5vw);
+    opacity: 0;
+  }
+  5%,
+  100% {
+    transform: translateX(0vw);
+    opacity: 1;
+  }
+}

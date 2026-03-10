@@ -1,0 +1,300 @@
+.chat-log-container {
+  position: absolute;
+  z-index: 0;
+  right: 0.3vw;
+  top: 1vh;
+  width: 21vw;
+  height: 55vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.chat-log {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 0.5vh;
+}
+
+.chat-log-item {
+  word-break: break-all;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 0.5vw;
+  padding: 1vh 1vw;
+  width: 18vw;
+
+  animation: chat-log-item-animation;
+  animation-duration: 400ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+
+  .author {
+    display: flex;
+    flex-direction: row;
+    img {
+      display: inline-block;
+      width: 1.3vw;
+      height: 1.3vw;
+      border-radius: 50%;
+      margin: auto 0;
+    }
+
+    .name {
+      font-size: 1vw;
+      text-align: left;
+      margin: auto 0 auto 0.5vw;
+      color: #cfc7c7;
+      width: 13vw;
+    }
+
+    .member {
+      color: #53e753;
+    }
+
+    .voted-to {
+      margin-left: 0.5vw;
+      margin: auto 0 auto 0.5vw;
+      color: #3f463c;
+      font-weight: bold;
+      background-color: #38d6dc;
+      padding-left: 0.5vw;
+      padding-right: 0.5vw;
+      border-radius: 50%;
+    }
+  }
+
+  .message {
+    color: white;
+    font-size: 1.1vw;
+    margin-top: 0.5vh;
+  }
+}
+
+.super {
+  .amount {
+    font-weight: bold;
+    margin-top: 0.5vh;
+    color: white;
+    text-align: center;
+  }
+  .message {
+    font-size: 1.2vw;
+  }
+}
+
+.tier-1 {
+  background-color: #1e88e5;
+  .author {
+    .name {
+      font-size: 1.05vw;
+      color: #87ffa0;
+    }
+  }
+  .amount {
+    font-size: 1.5vw;
+    color: #57ff57;
+  }
+  .message {
+    font-size: 1.3vw;
+  }
+}
+.tier-2 {
+  background-color: #00e5ff;
+  .author {
+    .name {
+      font-size: 1.1vw;
+      color: #232320;
+    }
+  }
+  .amount {
+    font-size: 1.6vw;
+    color: #0d285a;
+  }
+  .message {
+    font-size: 1.3vw;
+    color: black;
+  }
+}
+.tier-3 {
+  background-color: #1de9b6;
+  .author {
+    .name {
+      font-size: 1.15vw;
+      color: #232320;
+    }
+  }
+  .amount {
+    font-size: 1.7vw;
+    color: black;
+  }
+  .message {
+    font-size: 1.3vw;
+    color: black;
+  }
+}
+.tier-4 {
+  background-color: #ffca28;
+  .author {
+    .name {
+      font-size: 1.2vw;
+      color: #232320;
+    }
+  }
+  .amount {
+    font-size: 1.8vw;
+    color: black;
+  }
+  .message {
+    font-size: 1.3vw;
+    color: black;
+  }
+}
+.tier-5 {
+  background-color: #f57c00;
+  .author {
+    .name {
+      font-size: 1.25vw;
+      color: #ffff00;
+    }
+  }
+  .amount {
+    font-size: 1.9vw;
+    color: #eeffe0;
+  }
+  .message {
+    font-size: 1.3vw;
+    color: white;
+  }
+}
+.tier-6 {
+  background-color: #e91e63;
+  .author {
+    .name {
+      font-size: 1.3vw;
+      color: #ffff00;
+    }
+  }
+  .amount {
+    font-size: 2vw;
+    color: #eeffe0;
+  }
+  .message {
+    font-size: 1.3vw;
+    color: white;
+  }
+}
+.tier-7 {
+  background-color: #e62117;
+  .author {
+    .name {
+      font-size: 1.35vw;
+      color: #ffff00;
+    }
+  }
+  .amount {
+    font-size: 2.1vw;
+    color: #eeffe0;
+  }
+  .message {
+    font-size: 1.3vw;
+    color: white;
+  }
+}
+
+.new-membership {
+  background-color: #58bd5cbf;
+  .author {
+    .name {
+      font-size: 1.2vw;
+      font-weight: bold;
+      color: white;
+    }
+  }
+  .membership-level-name {
+    font-weight: bold;
+    color: #81fffd;
+  }
+  .message {
+    color: #f6eded;
+  }
+}
+
+.membership-milestone {
+  background-color: #09311abf;
+  .author {
+    .name {
+      font-size: 1.2vw;
+      font-weight: bold;
+      color: white;
+    }
+  }
+  .milestone-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #81fffd;
+  }
+  .sub-message {
+    margin-top: 0.5vh;
+    font-size: 1vw;
+    color: #e4eeee;
+  }
+}
+
+.gift {
+  background-color: #e291fcbf;
+  .author {
+    .name {
+      font-size: 1.2vw;
+      font-weight: bold;
+      color: white;
+    }
+  }
+  .gift-info {
+    margin-top: 0.5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-weight: bold;
+    .membership-level-name {
+      color: #fffe00;
+    }
+    .gift-count {
+      font-size: 1.3vw;
+      margin-left: 1vw;
+      color: white;
+    }
+  }
+  .message {
+    color: #f6f0f0;
+  }
+}
+
+.gift-received {
+  background-color: #800684;
+  .author {
+    .name {
+      color: white;
+    }
+  }
+  .membership-level-name {
+    margin-top: 0.5vh;
+    color: #fffe00;
+  }
+}
+
+@keyframes chat-log-item-animation {
+  0% {
+    opacity: 0;
+    transform: translateX(5vw);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

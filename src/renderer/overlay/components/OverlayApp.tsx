@@ -1,76 +1,37 @@
-import { CarouselManager } from "./CarouselManager";
-import { Clock } from "./Clock";
-import { PoppingManager } from "./PoppingManager";
-import { LikeCountIndicator } from "./LikeCountIndicator";
-import { ViewerCountIndicator } from "./ViewerCountIndicator";
-import { SubscriberCountIndicator } from "./SubscriberCountIndicator";
-import { useCallback, useEffect, useState } from "react";
+import { CarouselManager } from "./carousel/CarouselManager";
+import { Clock } from "./clock/Clock";
+import { LikeCountIndicator } from "./indicator/LikeCountIndicator";
+import { ViewerCountIndicator } from "./indicator/ViewerCountIndicator";
+import { SubscriberCountIndicator } from "./indicator/SubscriberCountIndicator";
+import { useCallback, useEffect } from "react";
 import { useLiveSettings } from "./hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
-import { GoalsLevel, GoalsStatus } from "../../../types/goals";
-import { OnDemand, OnDemandPoppingManager } from "./OnDemandPoppingManager";
-import { AppLogManager } from "./AppLogManager";
-import { ChatLogManager } from "./ChatLogManager";
-import { FocusView } from "./FocusView";
-import { RankingView } from "./RankingView";
-import { CompetitionView } from "./CompetitionView";
+import { ChatLogManager } from "./chatLog/ChatLogManager";
+import { Ranking } from "./ranking/Ranking";
+import { AnnouncementManager } from "./announcement/AnnouncementManager";
+import { CompetitionView } from "./competition/CompetitionView";
+import { OnDemand, OnDemandPoppingManager } from "./popping/OnDemandPoppingManager";
+import { PoppingManager } from "./popping/PoppingManager";
+import { FocusView } from "./focus/FocusView";
+import { useLikeCountGoalStatus } from "./hooks/useLikeCountGoalStatus";
+import { useViewerCountGoalStatus } from "./hooks/useViewerCountGoalStatus";
+import { useIsSubscriberCountGoalAccomplished } from "./hooks/useIsSubscriberCountGoalAccomplished";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();
   const liveStatistics = useLiveStatistics();
   const [overlayEvent, overlayEventResetFunc] = useOverlayEvent();
-  const [likeCountLevel, setLikeCountLevel] = useState<GoalsStatus>({
-    type: "inProgress",
-    currentLevel: 1,
-  });
-  const [viewerCountLevel, setViewerCountLevel] = useState<GoalsStatus>({
-    type: "inProgress",
-    currentLevel: 1,
-  });
-  const [isSubscriberCountGoalAccomplished, setIsSubscriberCountGoalAccomplished] = useState(false);
+
+  const [likeCountGoalStatus, likeCountPromotionFunc] = useLikeCountGoalStatus();
+  const [viewerCountGoalStatus, viewerCountPromotionFunc] = useViewerCountGoalStatus();
+
+  const [isSubscriberCountGoalAccomplished, subscriberCountGoalAccomplishFunc] =
+    useIsSubscriberCountGoalAccomplished();
 
   useEffect(() => {
     // to rewrite default settings by latest LiveSettings
     window.ipcApi.requestSyncLiveSettings();
-  }, []);
-
-  const likeCountPromotion = useCallback(() => {
-    if (likeCountLevel.type === "inProgress") {
-      if (likeCountLevel.currentLevel === liveSettings.likeCountGoal.maxLevel) {
-        setLikeCountLevel(() => {
-          return { type: "accomplished" };
-        });
-      } else {
-        setLikeCountLevel(() => {
-          return {
-            type: "inProgress",
-            currentLevel: (likeCountLevel.currentLevel + 1) as GoalsLevel,
-          };
-        });
-      }
-    }
-  }, [likeCountLevel, liveSettings]);
-
-  const viewerCountPromotion = useCallback(() => {
-    if (viewerCountLevel.type === "inProgress") {
-      if (viewerCountLevel.currentLevel === liveSettings.viewerCountGoal.maxLevel) {
-        setViewerCountLevel(() => {
-          return { type: "accomplished" };
-        });
-      } else {
-        setViewerCountLevel(() => {
-          return {
-            type: "inProgress",
-            currentLevel: (viewerCountLevel.currentLevel + 1) as GoalsLevel,
-          };
-        });
-      }
-    }
-  }, [viewerCountLevel, liveSettings]);
-
-  const subscriberCountPromotion = useCallback(() => {
-    setIsSubscriberCountGoalAccomplished((_) => true);
   }, []);
 
   // handle the case which list is empty when promotion
@@ -79,7 +40,7 @@ export function OverlayApp() {
   if (overlayEvent.type === "likeCountLevelPromotion" && overlayEvent.points.length === 0) {
     setTimeout(() => {
       overlayEventResetFunc();
-      likeCountPromotion();
+      likeCountPromotionFunc();
     }, 5 * 1000);
   } else if (
     overlayEvent.type === "viewerCountLevelPromotion" &&
@@ -87,7 +48,7 @@ export function OverlayApp() {
   ) {
     setTimeout(() => {
       overlayEventResetFunc();
-      viewerCountPromotion();
+      viewerCountPromotionFunc();
     }, 5 * 1000);
   } else if (
     overlayEvent.type === "subscriberCountGoalAchivement" &&
@@ -95,7 +56,7 @@ export function OverlayApp() {
   ) {
     setTimeout(() => {
       overlayEventResetFunc();
-      subscriberCountPromotion();
+      subscriberCountGoalAccomplishFunc();
     }, 5 * 1000);
   } else if (overlayEvent.type === "competitionPayout" && overlayEvent.points.length === 0) {
     setTimeout(() => {
@@ -109,7 +70,7 @@ export function OverlayApp() {
           buffer: overlayEvent.points,
           funcOnLastAnimationEnded: () => {
             overlayEventResetFunc();
-            likeCountPromotion();
+            likeCountPromotionFunc();
           },
         }
       : overlayEvent.type === "viewerCountLevelPromotion"
@@ -117,7 +78,7 @@ export function OverlayApp() {
             buffer: overlayEvent.points,
             funcOnLastAnimationEnded: () => {
               overlayEventResetFunc();
-              viewerCountPromotion();
+              viewerCountPromotionFunc();
             },
           }
         : overlayEvent.type === "subscriberCountGoalAchivement"
@@ -125,7 +86,7 @@ export function OverlayApp() {
               buffer: overlayEvent.points,
               funcOnLastAnimationEnded: () => {
                 overlayEventResetFunc();
-                subscriberCountPromotion();
+                subscriberCountGoalAccomplishFunc();
               },
             }
           : overlayEvent.type === "competitionPayout"
@@ -142,26 +103,28 @@ export function OverlayApp() {
       <LikeCountIndicator
         key={"likeCount"}
         gaugeLevel={
-          likeCountLevel.type === "accomplished"
+          likeCountGoalStatus.type === "accomplished"
             ? liveSettings.likeCountGoal.maxLevel
-            : likeCountLevel.currentLevel
+            : likeCountGoalStatus.currentLevel
         }
         goal={liveSettings.likeCountGoal}
         currentValue={liveStatistics.currentLikeCount}
         maxValueSoFar={liveStatistics.maxLikeCount}
+        isAccomplished={likeCountGoalStatus.type === "accomplished"}
       />
     );
     const viewerCount = (
       <ViewerCountIndicator
         key={"viewerCount"}
         gaugeLevel={
-          viewerCountLevel.type === "accomplished"
+          viewerCountGoalStatus.type === "accomplished"
             ? liveSettings.viewerCountGoal.maxLevel
-            : viewerCountLevel.currentLevel
+            : viewerCountGoalStatus.currentLevel
         }
         goal={liveSettings.viewerCountGoal}
         currentValue={liveStatistics.currentLiveViewCount}
         maxValueSoFar={liveStatistics.maxLiveViewCount}
+        isAccomplished={viewerCountGoalStatus.type === "accomplished"}
       />
     );
     const subscriberCount = (
@@ -170,11 +133,11 @@ export function OverlayApp() {
         goalValue={liveSettings.subscriberCountGoal}
         currentValue={liveStatistics.currentSubscriberCount}
         maxValueSoFar={liveStatistics.maxSubscriberCount}
+        isAccomplished={isSubscriberCountGoalAccomplished}
       />
     );
-    const clock = <Clock key={"clock"} />;
     if (overlayEvent.type === "noEvent") {
-      return [likeCount, viewerCount, subscriberCount, clock];
+      return [likeCount, viewerCount, subscriberCount];
     } else if (overlayEvent.type === "likeCountLevelPromotion") {
       return [likeCount];
     } else if (overlayEvent.type === "viewerCountLevelPromotion") {
@@ -182,18 +145,26 @@ export function OverlayApp() {
     } else {
       return [subscriberCount];
     }
-  }, [liveSettings, liveStatistics, likeCountLevel, viewerCountLevel, overlayEvent]);
+  }, [
+    liveSettings,
+    liveStatistics,
+    likeCountGoalStatus,
+    viewerCountGoalStatus,
+    isSubscriberCountGoalAccomplished,
+    overlayEvent,
+  ]);
 
   return (
     <div>
       <PoppingManager />
       {poppingOnDemand && <OnDemandPoppingManager onDemand={poppingOnDemand} />}
       <CarouselManager items={makeCarouselItems()} />
-      <AppLogManager overlayEvent={overlayEvent} />
+      <AnnouncementManager overlayEvent={overlayEvent} />
       <ChatLogManager />
       <FocusView />
-      <RankingView />
+      <Ranking />
       <CompetitionView />
+      <Clock />
     </div>
   );
 }

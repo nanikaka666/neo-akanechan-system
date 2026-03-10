@@ -1,0 +1,54 @@
+.indicator {
+  padding: 1vh 1.5vw;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 1vw;
+}
+
+.indicator-description {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 1vw;
+  padding: 1vh 1vw;
+  width: 21vw;
+  color: white;
+
+  .info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 2.7vh;
+    .value {
+      font-size: 3.5vh;
+    }
+  }
+
+  .next {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 2.2vh;
+  }
+}
+
+.level-1 {
+  width: 23vw;
+}
+
+.level-2 {
+  width: 29.5vw;
+}
+
+.level-3 {
+  width: 36.5vw;
+}
+
+.level-4 {
+  width: 43.5vw;
+}
+
+.level-5 {
+  width: 50.5vw;
+}

@@ -1,0 +1,39 @@
+.clock-container {
+  position: absolute;
+  top: 0;
+  right: 0.3vw;
+}
+
+.clock {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1vh 1vw;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.day {
+  font-size: 2vh;
+  color: white;
+}
+
+.time {
+  font-size: 3vh;
+  color: white;
+  text-align: center;
+
+  p {
+    margin: 0;
+    display: inline-block;
+  }
+
+  .number {
+    width: 1.8vw;
+  }
+
+  .separator {
+    width: 0.5vw;
+  }
+}

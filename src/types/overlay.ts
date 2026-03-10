@@ -5,7 +5,7 @@ import {
   SubscriberCountGoalAccomplishedLog,
   ViewerCountGoalAccomplishedLog,
   ViewerCountGoalPromotionLog,
-} from "./appLog";
+} from "./announcement";
 
 export interface PointInfoFromMainProcess {
   img: string;
@@ -26,23 +26,23 @@ export interface NoEvent {
 export interface LikeCountLevelPromotionEvent {
   type: "likeCountLevelPromotion";
   points: PointInfoFromMainProcess[];
-  appLog: LikeCountGoalPromotionLog | LikeCountGoalAccomplishedLog;
+  announcement: LikeCountGoalPromotionLog | LikeCountGoalAccomplishedLog;
 }
 
 export interface ViewerCountLevelPromotionEvent {
   type: "viewerCountLevelPromotion";
   points: PointInfoFromMainProcess[];
-  appLog: ViewerCountGoalPromotionLog | ViewerCountGoalAccomplishedLog;
+  announcement: ViewerCountGoalPromotionLog | ViewerCountGoalAccomplishedLog;
 }
 
 export interface SubscriberCountGoalAchivementEvent {
   type: "subscriberCountGoalAchivement";
   points: PointInfoFromMainProcess[];
-  appLog: SubscriberCountGoalAccomplishedLog;
+  announcement: SubscriberCountGoalAccomplishedLog;
 }
 
 export interface CompetitionPayoutEvent {
   type: "competitionPayout";
   points: PointInfoFromMainProcess[];
-  appLog: CompetitionPayoutLog;
+  announcement: CompetitionPayoutLog;
 }

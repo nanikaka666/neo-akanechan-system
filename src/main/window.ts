@@ -76,8 +76,9 @@ export class WindowManager {
       title: title,
       useContentSize: true,
       height: 720,
-      width: 1080,
-      //   transparent: true,
+      width: 1280,
+      // transparent: true,
+      // titleBarStyle: "hidden",
       webPreferences: {
         preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
         devTools: isDevMode(),

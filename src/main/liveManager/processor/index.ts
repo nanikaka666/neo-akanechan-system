@@ -1,5 +1,5 @@
 import { PariticipantPointRankings } from "../../../types/participantPoint";
-import { AppLog } from "../../../types/appLog";
+import { Announcement } from "../../../types/announcement";
 import {
   FocusedOnChatItem,
   GiftReceived,
@@ -46,7 +46,7 @@ export class Processor {
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "subscriberCountGoalAchivement",
           points: list,
-          appLog: {
+          announcement: {
             type: "subscriberCountGoalAccomplished",
             logId: crypto.randomUUID(),
             goalValue: subscriberCountGoal,
@@ -81,7 +81,7 @@ export class Processor {
             this.#calcPassedHour(),
           );
         this.#lcpDataTransfer.syncRankings();
-        const appLog: AppLog =
+        const appLog: Announcement =
           likeCountStatus.currentLevel === likeCountGoal.maxLevel
             ? {
                 type: "likeCountGoalAccomplished",
@@ -97,7 +97,7 @@ export class Processor {
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "likeCountLevelPromotion",
           points: addedPointLists,
-          appLog: appLog,
+          announcement: appLog,
         });
       }
     }
@@ -128,7 +128,7 @@ export class Processor {
             this.#calcPassedHour(),
           );
         this.#lcpDataTransfer.syncRankings();
-        const appLog: AppLog =
+        const appLog: Announcement =
           viewerCountStatus.currentLevel === viewerCountGoal.maxLevel
             ? {
                 type: "viewerCountGoalAccomplished",
@@ -144,7 +144,7 @@ export class Processor {
         this.#overlayDataTransfer.sendOverlayEvent({
           type: "viewerCountLevelPromotion",
           points: addedPointLists,
-          appLog: appLog,
+          announcement: appLog,
         });
       }
     }
@@ -487,7 +487,7 @@ export class Processor {
     this.#overlayDataTransfer.sendOverlayEvent({
       type: "competitionPayout",
       points: list,
-      appLog: {
+      announcement: {
         type: "competitionPayout",
         logId: status.settings.competitionId,
         answer: answer,

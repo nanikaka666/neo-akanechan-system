@@ -1,0 +1,125 @@
+.competition-view-container {
+  position: absolute;
+  right: 0.3vw;
+  bottom: 0.5vh;
+
+  margin: 0;
+  padding: 0;
+
+  z-index: 2;
+}
+
+.competition-view {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5vw;
+  align-items: end;
+
+  .held,
+  .entry-closed {
+    font-size: 2.3vh;
+    color: white;
+    padding: 2vh 2vw;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 1vw;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 2vh;
+    .title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 2.8vh;
+    }
+  }
+
+  .competition-status {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2vh;
+
+    .header {
+      font-weight: bold;
+      font-size: 2.5vh;
+      width: 7vw;
+    }
+
+    .question {
+      display: flex;
+      flex-direction: row;
+      column-gap: 2vw;
+      align-items: flex-start;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: row;
+      row-gap: 2vw;
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        .odd-row {
+          color: #b4b4b4;
+        }
+
+        .even-row {
+          color: white;
+        }
+
+        li {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          width: 33vw;
+          column-gap: 3vw;
+
+          .option-label {
+            display: flex;
+            flex-direction: row;
+            column-gap: 1vw;
+          }
+        }
+      }
+    }
+  }
+}
+
+.how-to-join-container {
+  .how-to-join {
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 1vw;
+    color: white;
+    width: 24vw;
+    padding: 2vh 2vw;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2vh;
+
+    .join-method {
+      font-size: 2.1vh;
+      display: flex;
+      flex-direction: column;
+      row-gap: 1vh;
+
+      .header {
+        font-weight: bold;
+      }
+
+      .example {
+        font-weight: bold;
+        color: yellow;
+      }
+    }
+
+    .close-time {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+}
