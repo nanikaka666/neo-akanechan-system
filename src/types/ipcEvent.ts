@@ -208,4 +208,9 @@ export interface IpcEvent {
    * Request to LiveManager to close bet action.
    */
   manuallyEntryClose: () => boolean;
+
+  /**
+   * Request to LiveManager to get LiveLaunchProperties.
+   */
+  getLiveLaunchProperties: () => LiveLaunchProperties;
 }
