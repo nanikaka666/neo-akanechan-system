@@ -311,4 +311,8 @@ export function setupIpcMainHandlers() {
     getLiveManager().actionManuallyEntryClose();
     return true;
   });
+
+  IpcMainWrapper.handle("getLiveLaunchProperties", () => {
+    return Promise.resolve(getLiveManager().getLiveLaunchProperties());
+  });
 }
