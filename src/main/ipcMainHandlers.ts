@@ -19,16 +19,16 @@ import {
 import { getWindowManager } from "./window";
 
 export function setupIpcMainHandlers() {
-  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
+  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (_, channel, live) => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
       return Promise.resolve(false);
     }
-    const window = BrowserWindow.fromWebContents(e.sender);
-    if (window === null) {
+    const mainWindow = getWindowManager().getMainWindow();
+    if (mainWindow === undefined) {
       return Promise.resolve(false);
     }
-    const res = await dialog.showMessageBox(window, {
+    const res = await dialog.showMessageBox(mainWindow, {
       message: `ライブ配信を開始しますか？`,
       type: "question",
       buttons: ["OK", "NO"],
@@ -44,19 +44,19 @@ export function setupIpcMainHandlers() {
     setupLiveManager(liveLaunchProperties);
     getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
-    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+    WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
       type: "liveStandBy",
     });
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("startOverlayWithUserConfirmationByVideoId", async (e, inputVideoId) => {
+  IpcMainWrapper.handle("startOverlayWithUserConfirmationByVideoId", async (_, inputVideoId) => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
       return false;
     }
-    const window = BrowserWindow.fromWebContents(e.sender);
-    if (window === null) {
+    const mainWindow = getWindowManager().getMainWindow();
+    if (mainWindow === undefined) {
       return false;
     }
 
@@ -64,7 +64,7 @@ export function setupIpcMainHandlers() {
       const liveLaunchProperties = await buildLiveLaunchPropertiesForDebug(
         new VideoId(inputVideoId),
       );
-      const res = await dialog.showMessageBox(window, {
+      const res = await dialog.showMessageBox(mainWindow, {
         message: `ライブ配信を開始しますか？`,
         type: "question",
         buttons: ["OK", "NO"],
@@ -78,7 +78,7 @@ export function setupIpcMainHandlers() {
       setupLiveManager(liveLaunchProperties);
       getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
-      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
         type: "liveStandBy",
       });
       return true;

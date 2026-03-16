@@ -8,7 +8,7 @@ import {
   Focusable,
 } from "../../../types/liveChatItem";
 import { ParticipantPointRankingData, ParticipantPoint } from "../../../types/participantPoint";
-import { getWindowManager } from "../../window/window";
+import { getWindowManager } from "../../../main/window";
 
 export class LcpDataTransfer {
   readonly #dataSource: DataSource;
