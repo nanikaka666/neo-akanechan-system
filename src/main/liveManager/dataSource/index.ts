@@ -2,6 +2,7 @@ import { ChatDataManager } from "./chats";
 import { CompetitionManager } from "./competition";
 import { FocusManager } from "./focus";
 import { GoalsManager } from "./goals";
+import { LiveLaunchPropertiesDataContainer } from "./liveLaunchProperties";
 import { LiveStatisticsDataContainer } from "./liveStatistics";
 import { PariticipantPointManager } from "./participantPoint";
 import { LiveSettingsManager } from "./settings";
@@ -9,6 +10,7 @@ import { ShowRankingManager } from "./showRanking";
 import { StockManager } from "./stock";
 
 export class DataSource {
+  readonly #liveLaunchPropertiesDataContainer: LiveLaunchPropertiesDataContainer;
   readonly #liveStatisticsDataContainer: LiveStatisticsDataContainer;
   readonly #chatDataManager: ChatDataManager;
   readonly #stockManager: StockManager;
@@ -19,6 +21,7 @@ export class DataSource {
   readonly #showRankingManager: ShowRankingManager;
   readonly #competitionManager: CompetitionManager;
   constructor(
+    liveLaunchPropertiesDataContainer: LiveLaunchPropertiesDataContainer,
     liveStatisticsDataContainer: LiveStatisticsDataContainer,
     chatDataContainer: ChatDataManager,
     stockManager: StockManager,
@@ -29,6 +32,7 @@ export class DataSource {
     showRankingManager: ShowRankingManager,
     competitionManager: CompetitionManager,
   ) {
+    this.#liveLaunchPropertiesDataContainer = liveLaunchPropertiesDataContainer;
     this.#liveStatisticsDataContainer = liveStatisticsDataContainer;
     this.#chatDataManager = chatDataContainer;
     this.#stockManager = stockManager;
@@ -38,6 +42,9 @@ export class DataSource {
     this.#goalsManager = goalsManager;
     this.#showRankingManager = showRankingManager;
     this.#competitionManager = competitionManager;
+  }
+  getLiveLaunchPropertiesDataContainer() {
+    return this.#liveLaunchPropertiesDataContainer;
   }
   getLiveStatisticsDataContainer() {
     return this.#liveStatisticsDataContainer;
