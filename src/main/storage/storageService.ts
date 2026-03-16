@@ -17,7 +17,7 @@ export class StorageService {
    * if no settings, `undefined` will be returned.
    * this function return *Partial* UserSettings because StorageData has possibility changing structure.
    */
-  getUserSettings(): Partial<UserSettings> | undefined {
+  getUserSettings() {
     return this.#dao.get("userSettings");
   }
 
@@ -54,6 +54,20 @@ export class StorageService {
    */
   deleteAuthCredentials() {
     this.#dao.delete("authCredentials");
+  }
+
+  /**
+   * Get Main Window's bounds.
+   */
+  getMainWindowBounds() {
+    return this.#dao.get("mainWindowBounds");
+  }
+
+  /**
+   * Save Main Window's bounds.
+   */
+  registerMainWindowBounds(bounds: Electron.Rectangle) {
+    this.#dao.set("mainWindowBounds", bounds);
   }
 
   /**

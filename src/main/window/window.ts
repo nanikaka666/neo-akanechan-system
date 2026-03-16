@@ -1,5 +1,6 @@
 import { BrowserWindow } from "electron";
 import { isDevMode } from "../environment";
+import { getStorageService } from "../storage";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -13,6 +14,7 @@ declare const OVERLAY_PRELOAD_WEBPACK_ENTRY: string;
 export class WindowManager {
   #mainWindowId?: number;
   #overlayWindowId?: number;
+  #mainWindowMovedTimer?: NodeJS.Timeout;
   constructor() {}
 
   /**
@@ -32,6 +34,27 @@ export class WindowManager {
         devTools: isDevMode(),
       },
     });
+
+    mainWindow.on("resized", () => {
+      getStorageService().registerMainWindowBounds(mainWindow.getBounds());
+    });
+
+    mainWindow.on("moved", () => {
+      // debounce moved event
+      if (this.#mainWindowMovedTimer) {
+        clearTimeout(this.#mainWindowMovedTimer);
+        this.#mainWindowMovedTimer = undefined;
+      }
+      this.#mainWindowMovedTimer = setTimeout(() => {
+        getStorageService().registerMainWindowBounds(mainWindow.getBounds());
+        this.#mainWindowMovedTimer = undefined;
+      }, 500);
+    });
+
+    const maybeBounds = getStorageService().getMainWindowBounds();
+    if (maybeBounds) {
+      mainWindow.setBounds(maybeBounds);
+    }
 
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
