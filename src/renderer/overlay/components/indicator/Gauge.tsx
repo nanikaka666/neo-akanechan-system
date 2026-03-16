@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useIndicatorColor } from "../hooks/useIndicatorColor";
 import { useWindowSize } from "../hooks/useWindowSize";
-
-export type GaugeLevel = 1 | 2 | 3 | 4 | 5;
+import { GoalsLevel } from "../../../../types/goals";
 
 export interface GaugeProps {
-  gaugeLevel: GaugeLevel;
+  gaugeLevel: GoalsLevel;
   value: number;
   range: {
     min: number;

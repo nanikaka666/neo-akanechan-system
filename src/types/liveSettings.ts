@@ -1,5 +1,7 @@
+import { GoalsLevel } from "./goals";
+
 export interface Goal {
-  maxLevel: 1 | 2 | 3 | 4 | 5;
+  maxLevel: GoalsLevel;
   goalValues: number[];
 }
 

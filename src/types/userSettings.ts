@@ -1,3 +1,5 @@
+import { GoalsLevel } from "./goals";
+
 /**
  * Top level interface represents user settings.
  *
@@ -58,7 +60,7 @@ export interface GoalsSettings {
    */
   useLikeCountGoal: boolean;
 
-  likeCountGoalMaxLevel: 1 | 2 | 3 | 4 | 5;
+  likeCountGoalMaxLevel: GoalsLevel;
   likeCountGoalMaxValue: number;
 
   /**
@@ -66,6 +68,6 @@ export interface GoalsSettings {
    */
   useLiveViewCountGoal: boolean;
 
-  liveViewCountGoalMaxLevel: 1 | 2 | 3 | 4 | 5;
+  liveViewCountGoalMaxLevel: GoalsLevel;
   liveViewCountGoalMaxValue: number;
 }

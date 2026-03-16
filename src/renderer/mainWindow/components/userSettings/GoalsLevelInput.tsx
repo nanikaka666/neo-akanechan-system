@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { GoalsLevel } from "../../../../types/goals";
 
 export function GoalsLevelInput({
   initialValue,
   func,
 }: {
-  initialValue: 1 | 2 | 3 | 4 | 5;
-  func: (value: 1 | 2 | 3 | 4 | 5) => void;
+  initialValue: GoalsLevel;
+  func: (value: GoalsLevel) => void;
 }) {
   const [selected, setSelected] = useState(initialValue);
 
@@ -19,7 +20,7 @@ export function GoalsLevelInput({
               value={level}
               checked={selected === level}
               onChange={(e) => {
-                const input = Number.parseInt(e.target.value) as 1 | 2 | 3 | 4 | 5;
+                const input = Number.parseInt(e.target.value) as GoalsLevel;
                 setSelected((_) => input);
                 func(input);
               }}
