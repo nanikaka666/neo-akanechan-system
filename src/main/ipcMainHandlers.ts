@@ -237,11 +237,6 @@ export function setupIpcMainHandlers() {
     return true;
   });
 
-  IpcMainWrapper.handle("manualPlusPoints", (e, item) => {
-    getLiveManager().actionPlusPoints(item);
-    return Promise.resolve(true);
-  });
-
   IpcMainWrapper.handle("requestSyncLiveSettings", () => {
     getLiveManager().syncLiveSettings();
     return Promise.resolve(true);

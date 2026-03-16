@@ -131,11 +131,6 @@ export interface IpcEvent {
   tellRankings: (rankings: PariticipantPointRankings) => void;
 
   /**
-   * Add points manually.
-   */
-  manualPlusPoints: (item: TextMessageChat | SuperChat | SuperSticker) => boolean;
-
-  /**
    * Notify amount of got point. (For Overlay)
    */
   tellAmountOfPoint: (item: PointInfoFromMainProcess) => void;

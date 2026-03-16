@@ -1,12 +1,6 @@
 import { OptionLabel } from "../../types/competition";
 import { PariticipantPointRankings } from "../..//types/participantPoint";
-import {
-  FocusedOnChatItem,
-  NonMarkedExtendedChatItemText,
-  SuperChat,
-  SuperSticker,
-  TextMessageChat,
-} from "../../types/liveChatItem";
+import { FocusedOnChatItem, NonMarkedExtendedChatItemText } from "../../types/liveChatItem";
 import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
 import { LiveChatDataFetcher } from "./dataFetcher/liveChatDataFetcher";
@@ -145,10 +139,6 @@ export class LiveManager {
 
   actionUnsetFocus() {
     this.#processorGuard(() => this.#processor.unsetFocus());
-  }
-
-  actionPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
-    this.#processorGuard(() => this.#processor.manualPlusPoints(item));
   }
 
   actionShowRanking(ranking: PariticipantPointRankings) {

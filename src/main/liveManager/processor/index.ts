@@ -422,14 +422,6 @@ export class Processor {
     this.#overlayDataTransfer.syncFocusView();
   }
 
-  manualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
-    const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByManualPlusPoints(item);
-    if (0 < addedAmountOfPoint) {
-      this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
-    }
-  }
-
   showRanking(ranking: PariticipantPointRankings) {
     this.#dataSource.getShowRankingManager().updateRanking(ranking);
     this.#overlayDataTransfer.syncRanking();
