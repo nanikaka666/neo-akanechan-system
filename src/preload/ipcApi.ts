@@ -40,7 +40,6 @@ export interface IpcApi {
     registerChatsListener: Listen<"tellChats">;
     requestStartAuthFlow: Invoke<"startAuthFlow">;
     registerRankingsListener: Listen<"tellRankings">;
-    requestPlusPoints: Invoke<"manualPlusPoints">;
     registerAllGoalStatus: Listen<"tellAllGoalStatus">;
     requestShowRanking: Invoke<"showRanking">;
     registerIsShownRankingListener: Listen<"tellIsShownRanking">;
@@ -95,7 +94,6 @@ export const IpcApi: IpcApi = {
     registerChatsListener: (callback) => IpcRendererWrapper.on("tellChats", callback),
     requestStartAuthFlow: () => IpcRendererWrapper.invoke("startAuthFlow"),
     registerRankingsListener: (callback) => IpcRendererWrapper.on("tellRankings", callback),
-    requestPlusPoints: (item) => IpcRendererWrapper.invoke("manualPlusPoints", item),
     registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
     requestShowRanking: (ranking) => IpcRendererWrapper.invoke("showRanking", ranking),
     registerIsShownRankingListener: (callback) =>
