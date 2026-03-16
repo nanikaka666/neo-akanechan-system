@@ -56,7 +56,6 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   const videoDataFetcher = new VideoDataFetcher(liveLaunchProperties.live.videoId, 15 * 1000);
   const liveChatDataFetcher = new LiveChatDataFetcher(liveLaunchProperties.live.liveChatId);
   liveManager = new LiveManager(
-    liveLaunchProperties,
     dataSource,
     processor,
     channelDataFetcher,
