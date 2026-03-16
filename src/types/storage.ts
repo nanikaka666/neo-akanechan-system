@@ -7,6 +7,7 @@ import { UserSettings } from "./userSettings";
 export interface StorageData {
   userSettings: Partial<UserSettings>;
   authCredentials: Credentials;
+  mainWindowBounds: Electron.Rectangle;
 }
 
 /**
