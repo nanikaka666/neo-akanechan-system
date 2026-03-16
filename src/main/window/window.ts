@@ -108,6 +108,14 @@ export class WindowManager {
     this.#overlayWindowId = overlayWindow.id;
   }
 
+  closeOverlayWindow() {
+    const maybeOverlayWindow = this.getOverlayWindow();
+    if (maybeOverlayWindow === undefined) {
+      return;
+    }
+    maybeOverlayWindow.close();
+  }
+
   /**
    * Returns whether no window shows.
    */

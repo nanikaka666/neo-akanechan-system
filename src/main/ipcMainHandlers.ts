@@ -181,6 +181,8 @@ export function setupIpcMainHandlers() {
     // clean up emitters
     cleanupLiveManager();
 
+    getWindowManager().closeOverlayWindow();
+
     const channel = await YoutubeApiService.getChannelOfMine();
     if (!channel) {
       WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
