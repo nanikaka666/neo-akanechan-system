@@ -9,7 +9,7 @@ export function LiveStandBy() {
   const liveLaunchProperties = useLiveLaunchProperties();
   const liveSettings = useLiveSettings();
 
-  return liveLaunchProperties ? (
+  return liveLaunchProperties && liveSettings ? (
     <div>
       <div>
         <img src={liveLaunchProperties.live.thumbnailUrl} />

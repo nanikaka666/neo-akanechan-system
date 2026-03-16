@@ -94,6 +94,9 @@ export function OverlayApp() {
             : undefined;
 
   const makeCarouselItems = useCallback(() => {
+    if (liveSettings === undefined) {
+      return [];
+    }
     const likeCount = (
       <LikeCountIndicator
         key={"likeCount"}

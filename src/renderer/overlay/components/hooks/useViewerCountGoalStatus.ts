@@ -10,6 +10,9 @@ export function useViewerCountGoalStatus() {
   });
 
   const viewerCountPromotionFunc = useCallback(() => {
+    if (liveSettings === undefined) {
+      return;
+    }
     // Note: it doesn't work when describe logic with "prev" variable.
     // viewerCountPromotionFunc will be called multipe times at time (why?), so it causes unexpected over promotion.
     // Work arround: describe promoted level with "viewerCountGoalStatus".

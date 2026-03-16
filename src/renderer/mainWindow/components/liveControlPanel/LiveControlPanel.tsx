@@ -15,7 +15,7 @@ export function LiveControlPanel() {
     window.ipcApi.requestStartDataFetch().then(console.log);
   }, []);
 
-  return liveLaunchProperties ? (
+  return liveLaunchProperties && liveSettings ? (
     <>
       <SideBar liveLaunchProperties={liveLaunchProperties} mode={mode} setMode={setMode} />
       <MainContents liveSettings={liveSettings} mode={mode} />
