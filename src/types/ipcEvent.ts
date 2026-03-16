@@ -4,9 +4,6 @@ import {
   ExtendedChatItemText,
   FocusedOnChatItem,
   MembershipAndGiftItem,
-  SuperChat,
-  SuperSticker,
-  TextMessageChat,
 } from "./liveChatItem";
 import { AuthPage, LiveSelectionPage, MainAppPage } from "./mainAppPage";
 import { LiveStatistics } from "./liveStatistics";
