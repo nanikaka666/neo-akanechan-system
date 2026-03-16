@@ -1,21 +1,13 @@
-import { LiveSettings } from "../../../../types/liveSettings";
 import { StartLiveButton } from "./StartLiveButton";
 import { QuitLiveButton } from "../liveControlPanel/QuitLiveButton";
 import { SettingsDetails } from "./SettingsDetails";
 import { UserSettingsButton } from "../liveSelection/UserSettingsButton";
-import { useEffect, useState } from "react";
 import { useLiveLaunchProperties } from "../../../hooks/useLiveLaunchProperties";
+import { useLiveSettings } from "../../../hooks/useLiveSettings";
 
-export function LiveStandBy({ liveSettings: initialLiveSettings }: { liveSettings: LiveSettings }) {
+export function LiveStandBy() {
   const liveLaunchProperties = useLiveLaunchProperties();
-  const [liveSettings, setLiveSettings] = useState<LiveSettings>(initialLiveSettings);
-
-  useEffect(() => {
-    const remover = window.ipcApi.registerLiveSettingsListener((e, latestLiveSettings) => {
-      setLiveSettings((_) => latestLiveSettings);
-    });
-    return () => remover();
-  }, []);
+  const liveSettings = useLiveSettings();
 
   return liveLaunchProperties ? (
     <div>
