@@ -17,7 +17,7 @@ export class StorageService {
    * if no settings, `undefined` will be returned.
    * this function return *Partial* UserSettings because StorageData has possibility changing structure.
    */
-  getUserSettings(): Partial<UserSettings> | undefined {
+  getUserSettings() {
     return this.#dao.get("userSettings");
   }
 
