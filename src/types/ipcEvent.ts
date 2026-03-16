@@ -98,7 +98,7 @@ export interface IpcEvent {
   /**
    * transit MainAppPage status to "inLive".
    */
-  startLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+  startLive: () => boolean;
 
   /**
    * transit MainAppPage status to "liveSelection"

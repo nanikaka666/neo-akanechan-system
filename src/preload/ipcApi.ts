@@ -87,8 +87,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellLiveStatistics", callback),
     requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
     registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
-    requestStartLive: (liveLaunchProperties) =>
-      IpcRendererWrapper.invoke("startLive", liveLaunchProperties),
+    requestStartLive: () => IpcRendererWrapper.invoke("startLive"),
     requestQuitLive: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
     requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),

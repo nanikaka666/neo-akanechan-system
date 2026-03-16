@@ -34,7 +34,7 @@ export function LiveStandBy({ liveSettings: initialLiveSettings }: { liveSetting
         liveSettings={liveSettings}
         currentSubscriberCount={liveLaunchProperties.channel.subscribersCount}
       />
-      <StartLiveButton liveLaunchProperties={liveLaunchProperties} />
+      <StartLiveButton />
       <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
     </div>
   ) : (
