@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, MenuItemConstructorOptions } from "electron";
+import { Menu, MenuItemConstructorOptions } from "electron";
 import { isDevMode, platform } from "./environment";
 import { getStorageService } from "./storage";
 
@@ -55,7 +55,6 @@ function makeDebugMenu(): MenuItemConstructorOptions[] {
       click: () => {
         getStorageService().clearAll();
         console.log("clear storage data.");
-        BrowserWindow.getFocusedWindow()?.reload();
       },
     },
   ];
