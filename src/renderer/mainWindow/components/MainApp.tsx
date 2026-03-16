@@ -20,9 +20,9 @@ export function MainApp() {
 
   return mainAppPage ? (
     mainAppPage.type === "liveControlPanel" ? (
-      <LiveControlPanel {...mainAppPage} />
+      <LiveControlPanel />
     ) : mainAppPage.type === "liveStandBy" ? (
-      <LiveStandBy {...mainAppPage} />
+      <LiveStandBy />
     ) : mainAppPage.type === "liveSelection" ? (
       <LiveSelection {...mainAppPage} />
     ) : (

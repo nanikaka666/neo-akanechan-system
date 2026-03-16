@@ -3,8 +3,8 @@ import { Clock } from "./clock/Clock";
 import { LikeCountIndicator } from "./indicator/LikeCountIndicator";
 import { ViewerCountIndicator } from "./indicator/ViewerCountIndicator";
 import { SubscriberCountIndicator } from "./indicator/SubscriberCountIndicator";
-import { useCallback, useEffect } from "react";
-import { useLiveSettings } from "./hooks/useLiveSettings";
+import { useCallback } from "react";
+import { useLiveSettings } from "../../hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { ChatLogManager } from "./chatLog/ChatLogManager";
@@ -28,11 +28,6 @@ export function OverlayApp() {
 
   const [isSubscriberCountGoalAccomplished, subscriberCountGoalAccomplishFunc] =
     useIsSubscriberCountGoalAccomplished();
-
-  useEffect(() => {
-    // to rewrite default settings by latest LiveSettings
-    window.ipcApi.requestSyncLiveSettings();
-  }, []);
 
   // handle the case which list is empty when promotion
   // it is not fired last popping animation event, because popping item is nothing.
@@ -99,6 +94,9 @@ export function OverlayApp() {
             : undefined;
 
   const makeCarouselItems = useCallback(() => {
+    if (liveSettings === undefined) {
+      return [];
+    }
     const likeCount = (
       <LikeCountIndicator
         key={"likeCount"}
