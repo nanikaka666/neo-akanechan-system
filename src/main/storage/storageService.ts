@@ -57,6 +57,20 @@ export class StorageService {
   }
 
   /**
+   * Get Main Window's bounds.
+   */
+  getMainWindowBounds() {
+    return this.#dao.get("mainWindowBounds");
+  }
+
+  /**
+   * Save Main Window's bounds.
+   */
+  registerMainWindowBounds(bounds: Electron.Rectangle) {
+    this.#dao.set("mainWindowBounds", bounds);
+  }
+
+  /**
    * Get whole object stored in storage.
    */
   getAll() {
