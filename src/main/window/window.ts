@@ -1,4 +1,4 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow, screen } from "electron";
 import { isDevMode } from "../environment";
 import { getStorageService } from "../storage";
 
@@ -125,6 +125,11 @@ export class WindowManager {
       },
     });
 
+    const limitationBounds = this.#getLimitationBoundsOfAllDisplays();
+
+    // overlayWindow.setPosition(0, limitationBounds.y);
+    overlayWindow.setPosition(0, limitationBounds.y - 720 - 25);
+
     overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
 
     // mainWindow.webContents.openDevTools();
@@ -158,5 +163,14 @@ export class WindowManager {
       return false;
     }
     return BrowserWindow.fromId(this.#overlayWindowId) !== null;
+  }
+
+  #getLimitationBoundsOfAllDisplays() {
+    const maximum = { x: 0, y: 0 };
+    screen.getAllDisplays().forEach((display) => {
+      maximum.x = Math.max(maximum.x, display.bounds.x + display.bounds.width);
+      maximum.y = Math.max(maximum.y, display.bounds.y + display.bounds.height);
+    });
+    return maximum;
   }
 }
