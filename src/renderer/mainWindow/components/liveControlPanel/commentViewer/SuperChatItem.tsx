@@ -1,7 +1,6 @@
 import { ExtendedChatItemSuperChat } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 import { FocusForm } from "./FocusForm";
-import { PlusPointsButton } from "./PlusPointsButton";
 
 export function SuperChatItem({ item }: { item: ExtendedChatItemSuperChat }) {
   return (
@@ -12,7 +11,6 @@ export function SuperChatItem({ item }: { item: ExtendedChatItemSuperChat }) {
 
       {item.displayMessage}
       <FocusForm item={item} />
-      <PlusPointsButton item={item} />
     </div>
   );
 }
