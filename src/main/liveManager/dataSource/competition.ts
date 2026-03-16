@@ -7,6 +7,8 @@ import {
   OptionLabel,
 } from "../../../types/competition";
 
+type OptionLabelIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+
 export class CompetitionManager {
   #status: CompetitionStatus;
   #timeout?: NodeJS.Timeout;
@@ -60,7 +62,7 @@ export class CompetitionManager {
     const settingsOptionsMap = new Map<OptionLabel, string>();
     const optionStatistics = new Map<OptionLabel, CompetitionStatisticsUnit>();
     options.forEach((option, idx) => {
-      const label = this.#getOptionLabel(idx as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7);
+      const label = this.#getOptionLabel(idx as OptionLabelIndex);
       settingsOptionsMap.set(label, option);
       optionStatistics.set(label, {
         betCount: 0,
@@ -194,7 +196,7 @@ export class CompetitionManager {
     return true;
   }
 
-  #getOptionLabel(index: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7): OptionLabel {
+  #getOptionLabel(index: OptionLabelIndex): OptionLabel {
     const label = "abcdefgh";
     return label.charAt(index) as OptionLabel;
   }
