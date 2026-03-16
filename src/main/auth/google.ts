@@ -8,7 +8,7 @@ import {
 } from "google-auth-library";
 import { URL } from "node:url";
 import destroyer from "server-destroy";
-import credentialsJson from "./oauthClientCredentials.json";
+import credentialsJson from "./oauthClientCredentialsDev.json";
 import { getStorageService } from "../storage";
 
 let authClient: OAuth2Client | undefined;
