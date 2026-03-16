@@ -40,11 +40,6 @@ export class PariticipantPointManager {
   readonly #continuousChatMetadata: Map<string, ContinuousChatMetadata>;
 
   /**
-   * LiveChatItemId set which used to adding point of stock.
-   */
-  readonly #stocksAdded: Set<string>;
-
-  /**
    * Disqualified channel ids.
    */
   readonly #disqualifiedChannelIds: Set<string>;
@@ -57,7 +52,6 @@ export class PariticipantPointManager {
   constructor() {
     this.#points = new Map();
     this.#continuousChatMetadata = new Map();
-    this.#stocksAdded = new Set();
     this.#disqualifiedChannelIds = new Set();
     this.#authors = new Map();
   }
@@ -98,19 +92,6 @@ export class PariticipantPointManager {
     } else {
       return 0;
     }
-  }
-
-  /**
-   * plus point of stock.
-   *
-   * @returns added point amount. `0` means adding point cancelled.
-   */
-  addByStocked(item: TextMessageChat) {
-    if (this.#stocksAdded.has(item.id.id)) {
-      return 0;
-    }
-    this.#stocksAdded.add(item.id.id);
-    return this.#add(item.author, 100);
   }
 
   /**

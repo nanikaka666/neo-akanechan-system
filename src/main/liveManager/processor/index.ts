@@ -372,13 +372,6 @@ export class Processor {
     }
     this.#dataSource.getStockManager().add(item);
 
-    const addedAmountOfPoint = this.#dataSource.getParticipantManager().addByStocked(item);
-
-    if (0 < addedAmountOfPoint) {
-      this.#lcpDataTransfer.syncRankings();
-      this.#overlayDataTransfer.sendAmountOfPoint(item.author, addedAmountOfPoint);
-    }
-
     this.#dataSource.getLiveStatisticsDataContainer().update({
       stocksCount: this.#dataSource.getStockManager().getStocks().length,
     });
