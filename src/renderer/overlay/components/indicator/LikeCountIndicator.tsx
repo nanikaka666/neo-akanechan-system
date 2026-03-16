@@ -1,9 +1,9 @@
+import { GoalsLevel } from "../../../../types/goals";
 import { Goal } from "../../../../types/liveSettings";
-import { GaugeLevel } from "./Gauge";
 import { Indicator } from "./Indicator";
 
 interface LikeCountIndicatorProps {
-  gaugeLevel: GaugeLevel;
+  gaugeLevel: GoalsLevel;
   goal: Goal;
   currentValue: number;
   maxValueSoFar: number;

@@ -1,3 +1,4 @@
+import { GoalsLevel } from "../../../types/goals";
 import { UserSettingsService } from "../../../main/userSettings";
 import { Goal, LiveSettings } from "../../../types/liveSettings";
 
@@ -21,7 +22,7 @@ export class LiveSettingsManager {
     };
   }
 
-  #goalValuesComplement(maxValue: number, maxLevel: 1 | 2 | 3 | 4 | 5): Goal {
+  #goalValuesComplement(maxValue: number, maxLevel: GoalsLevel): Goal {
     const divideNum = this.#summation(maxLevel);
     let values: number[] = [0];
 
