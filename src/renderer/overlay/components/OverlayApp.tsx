@@ -4,7 +4,7 @@ import { LikeCountIndicator } from "./indicator/LikeCountIndicator";
 import { ViewerCountIndicator } from "./indicator/ViewerCountIndicator";
 import { SubscriberCountIndicator } from "./indicator/SubscriberCountIndicator";
 import { useCallback, useEffect } from "react";
-import { useLiveSettings } from "./hooks/useLiveSettings";
+import { useLiveSettings } from "../../hooks/useLiveSettings";
 import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { ChatLogManager } from "./chatLog/ChatLogManager";

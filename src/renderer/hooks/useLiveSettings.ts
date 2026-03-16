@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LiveSettings } from "../../../../types/liveSettings";
+import { LiveSettings } from "../../types/liveSettings";
 
 const defaultSettings: LiveSettings = {
   likeCountGoal: {
