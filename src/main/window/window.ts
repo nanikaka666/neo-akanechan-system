@@ -51,16 +51,24 @@ export class WindowManager {
     return BrowserWindow.fromId(this.#mainWindowId!)!.webContents;
   }
 
+  getOverlayWindow() {
+    if (!this.#checkOverlayWindowExistence()) {
+      return undefined;
+    }
+    return BrowserWindow.fromId(this.#overlayWindowId!)!;
+  }
+
   /**
    * Returns WebContents of overlay window.
    *
    * if main window closed then returns `undefined`.
    */
   getOverlayWindowWebContents() {
-    if (!this.#checkOverlayWindowExistence()) {
+    const maybeOverlayWindow = this.getOverlayWindow();
+    if (!maybeOverlayWindow) {
       return undefined;
     }
-    return BrowserWindow.fromId(this.#overlayWindowId!)!.webContents;
+    return maybeOverlayWindow.webContents;
   }
 
   createOverlayWindow(title: string) {
