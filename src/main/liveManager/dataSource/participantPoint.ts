@@ -155,10 +155,6 @@ export class PariticipantPointManager {
     return this.#add(item.author, addedPoint);
   }
 
-  addByManualPlusPoints(item: TextMessageChat | SuperChat | SuperSticker) {
-    return this.#add(item.author, 10);
-  }
-
   addByGoalsPromotion(
     accomplishedLevel: GoalsLevel,
     accomplishedValue: number,
