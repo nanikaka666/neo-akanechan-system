@@ -46,7 +46,6 @@ export function setupIpcMainHandlers() {
 
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
-      liveSettings: getLiveManager().getLiveSettings(),
     });
     return Promise.resolve(true);
   });
@@ -81,7 +80,6 @@ export function setupIpcMainHandlers() {
 
       WebContentsWrapper.send(e.sender, "tellMainAppPage", {
         type: "liveStandBy",
-        liveSettings: getLiveManager().getLiveSettings(),
       });
       return true;
     } catch (e: unknown) {
@@ -159,7 +157,6 @@ export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startLive", (e) => {
     WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveControlPanel",
-      liveSettings: getLiveManager().getLiveSettings(),
     } satisfies LiveControlPanelPage);
 
     return Promise.resolve(true);

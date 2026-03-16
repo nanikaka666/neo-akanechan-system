@@ -491,6 +491,7 @@ export class Processor {
   }
 
   syncLiveSettings() {
+    this.#lcpDataTransfer.syncLiveSettings();
     this.#overlayDataTransfer.syncLiveSettings();
   }
 

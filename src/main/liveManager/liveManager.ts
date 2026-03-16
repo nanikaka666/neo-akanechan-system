@@ -175,10 +175,6 @@ export class LiveManager {
     return this.#dataSource.getLiveLaunchPropertiesDataContainer().get();
   }
 
-  getLiveSettings() {
-    return this.#dataSource.getLiveSettingsManager().get();
-  }
-
   close() {
     this.#channelDataFetcher.close();
     this.#videoDataFetcher.close();

@@ -1,6 +1,5 @@
 import { YoutubeLive } from "./youtubeLive";
 import { Channel } from "./youtubeChannel";
-import { LiveSettings } from "./liveSettings";
 
 /**
  * AuthPage
@@ -31,7 +30,6 @@ export interface LiveSelectionPage {
  */
 export interface LiveStandByPage {
   type: "liveStandBy";
-  liveSettings: LiveSettings;
 }
 
 /**
@@ -41,7 +39,6 @@ export interface LiveStandByPage {
  */
 export interface LiveControlPanelPage {
   type: "liveControlPanel";
-  liveSettings: LiveSettings;
 }
 
 /**
