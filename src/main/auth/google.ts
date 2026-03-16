@@ -8,8 +8,8 @@ import {
 } from "google-auth-library";
 import { URL } from "node:url";
 import destroyer from "server-destroy";
-import credentialsJson from "./oauthClientCredentials.json";
 import { getStorageService } from "../storage";
+import { isDevMode } from "../environment";
 
 let authClient: OAuth2Client | undefined;
 
@@ -23,17 +23,24 @@ export function isUserAuthorized() {
 export async function setupAuth() {
   const credentials = getStorageService().getAuthCredentials();
   if (credentials) {
-    authClient = new OAuth2Client(OAUTH_CLIENT_OPTIONS);
+    authClient = new OAuth2Client(await getOauthClientOptions());
     authClient.setCredentials(credentials);
   }
 }
 
 const PORT = 49999;
-const OAUTH_CLIENT_OPTIONS: OAuth2ClientOptions = {
-  client_id: credentialsJson.clientId,
-  client_secret: credentialsJson.clientSecret,
-  redirectUri: `http://127.0.0.1:${PORT}/auth/receive`,
-};
+
+async function getOauthClientOptions(): Promise<OAuth2ClientOptions> {
+  const credentialsJson = isDevMode()
+    ? await import("./oauthClientCredentialsDev.json")
+    : await import("./oauthClientCredentialsProd.json");
+
+  return {
+    client_id: credentialsJson.clientId,
+    client_secret: credentialsJson.clientSecret,
+    redirectUri: `http://127.0.0.1:${PORT}/auth/receive`,
+  };
+}
 
 /**
  * Begin auth flow.
@@ -44,7 +51,7 @@ export async function doAuthFlow(): Promise<boolean> {
     return true;
   }
 
-  const client = new OAuth2Client(OAUTH_CLIENT_OPTIONS);
+  const client = new OAuth2Client(await getOauthClientOptions());
 
   const codeVerifierResult = await client.generateCodeVerifierAsync();
 

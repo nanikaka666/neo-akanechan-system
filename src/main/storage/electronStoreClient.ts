@@ -1,7 +1,14 @@
 import { StorageDao, StorageData } from "../../types/storage";
 import Store from "electron-store";
+import { isDevMode } from "../environment";
 
-const store = new Store<StorageData>();
+function getFileName() {
+  return isDevMode() ? "config.dev" : "config.prod";
+}
+
+const store = new Store<StorageData>({
+  name: getFileName(),
+});
 
 /**
  * Dao Client using electron-store.
