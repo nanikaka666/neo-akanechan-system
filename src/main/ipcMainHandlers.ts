@@ -16,7 +16,7 @@ import {
   isExistLiveManager,
   setupLiveManager,
 } from "./liveManager";
-import { getWindowManager } from "./window/window";
+import { getWindowManager } from "./window";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
