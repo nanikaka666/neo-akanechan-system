@@ -1,9 +1,9 @@
 import { ChatAuthor } from "../../../types/liveChatItem";
-import { getWindowManager } from "../../../main/window";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
 import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "../../../types/overlay";
 import { DataSource } from "../dataSource";
 import { ChatLogData } from "../../../types/chatLog";
+import { getWindowManager } from "../../../main/window";
 
 export class OverlayDataTransfer {
   readonly #dataSource: DataSource;

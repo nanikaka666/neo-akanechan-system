@@ -1,5 +1,5 @@
 import { BrowserWindow } from "electron";
-import { isDevMode } from "./environment";
+import { isDevMode } from "../environment";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -39,16 +39,31 @@ export class WindowManager {
     this.#mainWindowId = mainWindow.id;
   }
 
+  getMainWindow() {
+    if (!this.#checkMainWindowExistence()) {
+      return undefined;
+    }
+    return BrowserWindow.fromId(this.#mainWindowId!)!;
+  }
+
   /**
    * Returns WebContents of main window.
    *
    * if main window closed then returns `undefined`.
    */
   getMainWindowWebContents() {
-    if (!this.#checkMainWindowExistence()) {
+    const maybeMainWindow = this.getMainWindow();
+    if (maybeMainWindow === undefined) {
       return undefined;
     }
-    return BrowserWindow.fromId(this.#mainWindowId!)!.webContents;
+    return maybeMainWindow.webContents;
+  }
+
+  getOverlayWindow() {
+    if (!this.#checkOverlayWindowExistence()) {
+      return undefined;
+    }
+    return BrowserWindow.fromId(this.#overlayWindowId!)!;
   }
 
   /**
@@ -57,10 +72,11 @@ export class WindowManager {
    * if main window closed then returns `undefined`.
    */
   getOverlayWindowWebContents() {
-    if (!this.#checkOverlayWindowExistence()) {
+    const maybeOverlayWindow = this.getOverlayWindow();
+    if (!maybeOverlayWindow) {
       return undefined;
     }
-    return BrowserWindow.fromId(this.#overlayWindowId!)!.webContents;
+    return maybeOverlayWindow.webContents;
   }
 
   createOverlayWindow(title: string) {
@@ -112,17 +128,4 @@ export class WindowManager {
     }
     return BrowserWindow.fromId(this.#overlayWindowId) !== null;
   }
-}
-
-let windowManager: WindowManager | undefined;
-
-export function setupWindowManager() {
-  windowManager = new WindowManager();
-}
-
-export function getWindowManager() {
-  if (windowManager === undefined) {
-    throw new Error("WindowManager is not setup.");
-  }
-  return windowManager;
 }
