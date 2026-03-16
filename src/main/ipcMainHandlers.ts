@@ -1,6 +1,6 @@
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
-import { BrowserWindow, dialog } from "electron";
+import { dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, LiveControlPanelPage, LiveSelectionPage } from "../types/mainAppPage";
 import { doAuthFlow, isUserAuthorized } from "./auth/google";
@@ -162,12 +162,12 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("quitLive", async (e, liveLaunchProperties) => {
-    const window = BrowserWindow.fromWebContents(e.sender);
-    if (window === null) {
+  IpcMainWrapper.handle("quitLive", async (_, liveLaunchProperties) => {
+    const mainWindow = getWindowManager().getMainWindow();
+    if (mainWindow === undefined) {
       return false;
     }
-    const res = await dialog.showMessageBox(window, {
+    const res = await dialog.showMessageBox(mainWindow, {
       message: `本当に終了しますか？`,
       type: "question",
       buttons: ["OK", "NO"],
@@ -183,11 +183,11 @@ export function setupIpcMainHandlers() {
 
     const channel = await YoutubeApiService.getChannelOfMine();
     if (!channel) {
-      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
         type: "auth",
       } satisfies AuthPage);
     } else {
-      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
+      WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
         type: "liveSelection",
         channel: channel,
         lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
@@ -251,12 +251,12 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("abortCompetition", async (e) => {
-    const window = BrowserWindow.fromWebContents(e.sender);
-    if (window === null) {
+  IpcMainWrapper.handle("abortCompetition", async () => {
+    const mainWindow = getWindowManager().getMainWindow();
+    if (mainWindow === undefined) {
       return false;
     }
-    const res = await dialog.showMessageBox(window, {
+    const res = await dialog.showMessageBox(mainWindow, {
       message: `本当にコンペを終了しますか？`,
       type: "question",
       buttons: ["OK", "NO"],
@@ -269,12 +269,12 @@ export function setupIpcMainHandlers() {
     return true;
   });
 
-  IpcMainWrapper.handle("answerDecision", async (e, answer, optionStr) => {
-    const window = BrowserWindow.fromWebContents(e.sender);
-    if (window === null) {
+  IpcMainWrapper.handle("answerDecision", async (_, answer, optionStr) => {
+    const mainWindow = getWindowManager().getMainWindow();
+    if (mainWindow === undefined) {
       return false;
     }
-    const res = await dialog.showMessageBox(window, {
+    const res = await dialog.showMessageBox(mainWindow, {
       message: `コンペの正解を確定します`,
       type: "question",
       buttons: ["OK", "NO"],
@@ -288,12 +288,12 @@ export function setupIpcMainHandlers() {
     return true;
   });
 
-  IpcMainWrapper.handle("manuallyEntryClose", async (e) => {
-    const window = BrowserWindow.fromWebContents(e.sender);
-    if (window === null) {
+  IpcMainWrapper.handle("manuallyEntryClose", async () => {
+    const mainWindow = getWindowManager().getMainWindow();
+    if (mainWindow === undefined) {
       return false;
     }
-    const res = await dialog.showMessageBox(window, {
+    const res = await dialog.showMessageBox(mainWindow, {
       message: `コンペの参加を締め切ります`,
       type: "question",
       buttons: ["OK", "NO"],
