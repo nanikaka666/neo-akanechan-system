@@ -45,7 +45,6 @@ export interface IpcApi {
     registerIsShownRankingListener: Listen<"tellIsShownRanking">;
     requestHideRanking: Invoke<"hideRanking">;
     requestOpenCompetition: Invoke<"openCompetition">;
-    registerCompetitionStatusListener: Listen<"tellCompetitionStatus">;
     requestAbortCompetition: Invoke<"abortCompetition">;
     requestAnswerDecision: Invoke<"answerDecision">;
     requestManuallyEntryClose: Invoke<"manuallyEntryClose">;
@@ -53,7 +52,6 @@ export interface IpcApi {
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
-    requestSyncLiveSettings: Invoke<"requestSyncLiveSettings">;
     registerOverlayEvent: Listen<"tellOverlayEvent">;
     registerChatLogListener: Listen<"tellChatLog">;
     registerFocusItemListener: Listen<"tellFocusViewItem">;
@@ -61,6 +59,8 @@ export interface IpcApi {
 
     // for Both Windows.
     registerLiveSettingsListener: Listen<"tellLiveSettings">;
+    registerCompetitionStatusListener: Listen<"tellCompetitionStatus">;
+    requestSyncLiveSettings: Invoke<"requestSyncLiveSettings">;
   };
 }
 
@@ -109,7 +109,6 @@ export const IpcApi: IpcApi = {
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
-    requestSyncLiveSettings: () => IpcRendererWrapper.invoke("requestSyncLiveSettings"),
     registerOverlayEvent: (callback) => IpcRendererWrapper.on("tellOverlayEvent", callback),
     registerChatLogListener: (callback) => IpcRendererWrapper.on("tellChatLog", callback),
     registerFocusItemListener: (callback) => IpcRendererWrapper.on("tellFocusViewItem", callback),
@@ -119,5 +118,6 @@ export const IpcApi: IpcApi = {
     registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),
     registerCompetitionStatusListener: (callback) =>
       IpcRendererWrapper.on("tellCompetitionStatus", callback),
+    requestSyncLiveSettings: () => IpcRendererWrapper.invoke("requestSyncLiveSettings"),
   },
 };
