@@ -5,7 +5,7 @@ import { platform } from "./environment";
 import { setupIpcMainHandlers } from "./ipcMainHandlers";
 import { setupReactDevtools } from "./reactDevtools";
 import { setupAuth } from "./auth/google";
-import { getWindowManager, setupWindowManager } from "./window";
+import { getWindowManager, setupWindowManager } from "./window/window";
 
 /**
  * Quit when all windows are closed, except on macOS. There, it's common

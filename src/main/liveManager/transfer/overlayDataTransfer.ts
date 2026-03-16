@@ -1,5 +1,5 @@
 import { ChatAuthor } from "../../../types/liveChatItem";
-import { getWindowManager } from "../../../main/window";
+import { getWindowManager } from "../../window/window";
 import { WebContentsWrapper } from "../../../main/webContentsWrapper";
 import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "../../../types/overlay";
 import { DataSource } from "../dataSource";
