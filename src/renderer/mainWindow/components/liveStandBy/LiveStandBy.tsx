@@ -1,18 +1,13 @@
-import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { LiveSettings } from "../../../../types/liveSettings";
 import { StartLiveButton } from "./StartLiveButton";
 import { QuitLiveButton } from "../liveControlPanel/QuitLiveButton";
 import { SettingsDetails } from "./SettingsDetails";
 import { UserSettingsButton } from "../liveSelection/UserSettingsButton";
 import { useEffect, useState } from "react";
+import { useLiveLaunchProperties } from "../../../hooks/useLiveLaunchProperties";
 
-export function LiveStandBy({
-  liveLaunchProperties,
-  liveSettings: initialLiveSettings,
-}: {
-  liveLaunchProperties: LiveLaunchProperties;
-  liveSettings: LiveSettings;
-}) {
+export function LiveStandBy({ liveSettings: initialLiveSettings }: { liveSettings: LiveSettings }) {
+  const liveLaunchProperties = useLiveLaunchProperties();
   const [liveSettings, setLiveSettings] = useState<LiveSettings>(initialLiveSettings);
 
   useEffect(() => {
@@ -22,7 +17,7 @@ export function LiveStandBy({
     return () => remover();
   }, []);
 
-  return (
+  return liveLaunchProperties ? (
     <div>
       <div>
         <img src={liveLaunchProperties.live.thumbnailUrl} />
@@ -39,8 +34,10 @@ export function LiveStandBy({
         liveSettings={liveSettings}
         currentSubscriberCount={liveLaunchProperties.channel.subscribersCount}
       />
-      <StartLiveButton liveLaunchProperties={liveLaunchProperties} />
+      <StartLiveButton />
       <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
     </div>
+  ) : (
+    <div>Now Loading</div>
   );
 }

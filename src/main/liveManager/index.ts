@@ -16,6 +16,7 @@ import { LiveSettingsManager } from "./dataSource/settings";
 import { GoalsManager } from "./dataSource/goals";
 import { ShowRankingManager } from "./dataSource/showRanking";
 import { CompetitionManager } from "./dataSource/competition";
+import { LiveLaunchPropertiesDataContainer } from "./dataSource/liveLaunchProperties";
 
 let liveManager: LiveManager | undefined;
 
@@ -24,6 +25,9 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
     liveManager.close();
     liveManager = undefined;
   }
+  const liveLaunchPropertiesDataContainer = new LiveLaunchPropertiesDataContainer(
+    liveLaunchProperties,
+  );
   const liveStatisticsDataContainer = new LiveStatisticsDataContainer();
   const chatDataManager = new ChatDataManager();
   const stockManager = new StockManager();
@@ -34,6 +38,7 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   const showRankingManager = new ShowRankingManager();
   const competitionManager = new CompetitionManager();
   const dataSource = new DataSource(
+    liveLaunchPropertiesDataContainer,
     liveStatisticsDataContainer,
     chatDataManager,
     stockManager,
@@ -51,7 +56,6 @@ export function setupLiveManager(liveLaunchProperties: LiveLaunchProperties) {
   const videoDataFetcher = new VideoDataFetcher(liveLaunchProperties.live.videoId, 15 * 1000);
   const liveChatDataFetcher = new LiveChatDataFetcher(liveLaunchProperties.live.liveChatId);
   liveManager = new LiveManager(
-    liveLaunchProperties,
     dataSource,
     processor,
     channelDataFetcher,

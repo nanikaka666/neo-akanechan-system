@@ -1,11 +1,6 @@
 import { useState } from "react";
-import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 
-export function StartLiveButton({
-  liveLaunchProperties,
-}: {
-  liveLaunchProperties: LiveLaunchProperties;
-}) {
+export function StartLiveButton() {
   const [disabled, setDisabled] = useState(false);
 
   return (
@@ -13,7 +8,7 @@ export function StartLiveButton({
       onClick={(e) => {
         e.preventDefault();
         setDisabled((_) => true);
-        window.ipcApi.requestStartLive(liveLaunchProperties);
+        window.ipcApi.requestStartLive();
       }}
       disabled={disabled}
     >

@@ -1,5 +1,4 @@
 import { CSSProperties } from "react";
-import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { Mode } from "./LiveControlPanel";
 import { CommentViewer } from "./commentViewer/CommentViewer";
 import { Rankings } from "./rankings/Rankings";
@@ -9,13 +8,12 @@ import { Competition } from "./competition/Competition";
 
 const displayNone: CSSProperties = { display: "none" };
 
-export interface MainContentsProps {
-  liveLaunchProperties: LiveLaunchProperties;
+interface MainContentsProps {
   liveSettings: LiveSettings;
   mode: Mode;
 }
 
-export function MainContents({ liveLaunchProperties, liveSettings, mode }: MainContentsProps) {
+export function MainContents({ liveSettings, mode }: MainContentsProps) {
   return (
     <div style={{ position: "absolute", top: 0, left: "100px", width: `calc(100vw - 100px)` }}>
       <div style={mode !== "commentViewer" ? displayNone : undefined}>

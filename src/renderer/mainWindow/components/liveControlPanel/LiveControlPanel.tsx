@@ -1,31 +1,29 @@
 import { useEffect, useState } from "react";
-import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
 import { LiveSettings } from "../../../../types/liveSettings";
+import { useLiveLaunchProperties } from "../../../hooks/useLiveLaunchProperties";
 
 export type Mode = "commentViewer" | "competition" | "rankings" | "goals";
 
-export interface LiveControlPanelProps {
-  liveLaunchProperties: LiveLaunchProperties;
+interface LiveControlPanelProps {
   liveSettings: LiveSettings;
 }
 
-export function LiveControlPanel({ liveLaunchProperties, liveSettings }: LiveControlPanelProps) {
+export function LiveControlPanel({ liveSettings }: LiveControlPanelProps) {
+  const liveLaunchProperties = useLiveLaunchProperties();
   const [mode, setMode] = useState<Mode>("commentViewer");
 
   useEffect(() => {
     window.ipcApi.requestStartDataFetch().then(console.log);
-  }, [liveLaunchProperties]);
+  }, []);
 
-  return (
+  return liveLaunchProperties ? (
     <>
       <SideBar liveLaunchProperties={liveLaunchProperties} mode={mode} setMode={setMode} />
-      <MainContents
-        liveLaunchProperties={liveLaunchProperties}
-        liveSettings={liveSettings}
-        mode={mode}
-      />
+      <MainContents liveSettings={liveSettings} mode={mode} />
     </>
+  ) : (
+    <div>Now Loading</div>
   );
 }

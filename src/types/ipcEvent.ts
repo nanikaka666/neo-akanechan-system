@@ -98,7 +98,7 @@ export interface IpcEvent {
   /**
    * transit MainAppPage status to "inLive".
    */
-  startLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+  startLive: () => boolean;
 
   /**
    * transit MainAppPage status to "liveSelection"
@@ -208,4 +208,9 @@ export interface IpcEvent {
    * Request to LiveManager to close bet action.
    */
   manuallyEntryClose: () => boolean;
+
+  /**
+   * Request to LiveManager to get LiveLaunchProperties.
+   */
+  getLiveLaunchProperties: () => LiveLaunchProperties;
 }

@@ -49,6 +49,7 @@ export interface IpcApi {
     requestAbortCompetition: Invoke<"abortCompetition">;
     requestAnswerDecision: Invoke<"answerDecision">;
     requestManuallyEntryClose: Invoke<"manuallyEntryClose">;
+    requestLiveLaunchProperties: Invoke<"getLiveLaunchProperties">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
@@ -86,8 +87,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellLiveStatistics", callback),
     requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
     registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
-    requestStartLive: (liveLaunchProperties) =>
-      IpcRendererWrapper.invoke("startLive", liveLaunchProperties),
+    requestStartLive: () => IpcRendererWrapper.invoke("startLive"),
     requestQuitLive: (liveLaunchProperties) =>
       IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
     requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
@@ -105,6 +105,7 @@ export const IpcApi: IpcApi = {
     requestAnswerDecision: (answer, optionStr) =>
       IpcRendererWrapper.invoke("answerDecision", answer, optionStr),
     requestManuallyEntryClose: () => IpcRendererWrapper.invoke("manuallyEntryClose"),
+    requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),

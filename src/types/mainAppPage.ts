@@ -1,6 +1,5 @@
 import { YoutubeLive } from "./youtubeLive";
 import { Channel } from "./youtubeChannel";
-import { LiveLaunchProperties } from "./liveLaunchProperties";
 import { LiveSettings } from "./liveSettings";
 
 /**
@@ -32,7 +31,6 @@ export interface LiveSelectionPage {
  */
 export interface LiveStandByPage {
   type: "liveStandBy";
-  liveLaunchProperties: LiveLaunchProperties;
   liveSettings: LiveSettings;
 }
 
@@ -43,7 +41,6 @@ export interface LiveStandByPage {
  */
 export interface LiveControlPanelPage {
   type: "liveControlPanel";
-  liveLaunchProperties: LiveLaunchProperties;
   liveSettings: LiveSettings;
 }
 

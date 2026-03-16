@@ -1,7 +1,6 @@
 import { OptionLabel } from "../../types/competition";
 import { PariticipantPointRankings } from "../..//types/participantPoint";
 import { FocusedOnChatItem, NonMarkedExtendedChatItemText } from "../../types/liveChatItem";
-import { LiveLaunchProperties } from "../../types/liveLaunchProperties";
 import { ChannelDataFetcher } from "./dataFetcher/channelDataFetcher";
 import { LiveChatDataFetcher } from "./dataFetcher/liveChatDataFetcher";
 import { VideoDataFetcher } from "./dataFetcher/videoDataFetcher";
@@ -9,21 +8,18 @@ import { DataSource } from "./dataSource";
 import { Processor } from "./processor";
 
 export class LiveManager {
-  readonly #liveLaunchProperties: LiveLaunchProperties;
   readonly #dataSource: DataSource;
   readonly #processor: Processor;
   readonly #channelDataFetcher: ChannelDataFetcher;
   readonly #videoDataFetcher: VideoDataFetcher;
   readonly #liveChatDataFetcher: LiveChatDataFetcher;
   constructor(
-    liveLaunchProperties: LiveLaunchProperties,
     dataSource: DataSource,
     processor: Processor,
     channelDataFetcher: ChannelDataFetcher,
     videoDataFetcher: VideoDataFetcher,
     liveChatDataFetcher: LiveChatDataFetcher,
   ) {
-    this.#liveLaunchProperties = liveLaunchProperties;
     this.#dataSource = dataSource;
     this.#processor = processor;
     this.#channelDataFetcher = channelDataFetcher;
@@ -173,6 +169,10 @@ export class LiveManager {
 
   updateLiveSettings() {
     this.#processor.updateLiveSettings();
+  }
+
+  getLiveLaunchProperties() {
+    return this.#dataSource.getLiveLaunchPropertiesDataContainer().get();
   }
 
   getLiveSettings() {
