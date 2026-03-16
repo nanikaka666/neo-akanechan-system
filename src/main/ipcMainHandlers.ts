@@ -20,7 +20,7 @@ import { getWindowManager } from "./window";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
-    if (BrowserWindow.getAllWindows().length === 2) {
+    if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
       return Promise.resolve(false);
     }
@@ -51,7 +51,7 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("startOverlayWithUserConfirmationByVideoId", async (e, inputVideoId) => {
-    if (BrowserWindow.getAllWindows().length === 2) {
+    if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
       return false;
     }
