@@ -1,11 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-
-export type ViewerMode =
-  | "text"
-  | "superchatAndStickers"
-  | "stocks"
-  | "membershipsAndGifts"
-  | "focus";
+import { ViewerMode } from "../../hooks/useCommentViewerMode";
 
 interface ViewerModeSelectOption {
   viewerMode: ViewerMode;

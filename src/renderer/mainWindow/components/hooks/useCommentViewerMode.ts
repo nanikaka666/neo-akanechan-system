@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { ViewerMode } from "../liveControlPanel/commentViewer/ViewerModeSelector";
+
+export type ViewerMode =
+  | "text"
+  | "superchatAndStickers"
+  | "stocks"
+  | "membershipsAndGifts"
+  | "focus";
 
 export function useCommentViewerMode() {
   const [viewerMode, setViewerMode] = useState<ViewerMode>("text");
