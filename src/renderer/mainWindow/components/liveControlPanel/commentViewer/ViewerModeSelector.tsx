@@ -7,7 +7,7 @@ export type ViewerMode =
   | "membershipsAndGifts"
   | "focus";
 
-export interface ViewerModeSelectOption {
+interface ViewerModeSelectOption {
   viewerMode: ViewerMode;
   label: string;
   itemNum: number;
@@ -18,25 +18,43 @@ export interface ChatItemCount {
   superChatAndSticker: number;
   membershipAndGift: number;
   stock: number;
-  focus: number;
+  focus: 0 | 1;
 }
 
 interface ViewerModeSelectorProps {
   currentViewerMode: ViewerMode;
-  options: ViewerModeSelectOption[];
   setViewerMode: Dispatch<SetStateAction<ViewerMode>>;
   itemCounts: ChatItemCount;
 }
 
 export function ViewerModeSelector({
   currentViewerMode,
-  options,
   setViewerMode,
   itemCounts,
 }: ViewerModeSelectorProps) {
+  const selectOptions: ViewerModeSelectOption[] = [
+    { viewerMode: "text", label: "テキストチャット", itemNum: itemCounts.text },
+    {
+      viewerMode: "superchatAndStickers",
+      label: "スパチャ & Sticker",
+      itemNum: itemCounts.superChatAndSticker,
+    },
+    {
+      viewerMode: "stocks",
+      label: "ストック",
+      itemNum: itemCounts.stock,
+    },
+    {
+      viewerMode: "membershipsAndGifts",
+      label: "メンバーシップ & ギフト",
+      itemNum: itemCounts.membershipAndGift,
+    },
+    { viewerMode: "focus", label: "フォーカス中", itemNum: itemCounts.focus },
+  ];
+
   return (
     <div style={{ height: "50px", display: "flex" }}>
-      {options.map((option) => {
+      {selectOptions.map((option) => {
         return (
           <div
             key={option.viewerMode}

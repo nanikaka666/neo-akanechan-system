@@ -1,13 +1,8 @@
-import { CSSProperties, useMemo, useState } from "react";
+import { CSSProperties, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
-import {
-  ChatItemCount,
-  ViewerMode,
-  ViewerModeSelectOption,
-  ViewerModeSelector,
-} from "./ViewerModeSelector";
+import { ChatItemCount, ViewerMode, ViewerModeSelector } from "./ViewerModeSelector";
 import { FocusViewer } from "./FocusViewer";
 import { useChats } from "../../hooks/useChats";
 import { useMembershipsAndGifts } from "../../hooks/useMembershipsAndGifts";
@@ -39,33 +34,10 @@ export function CommentViewer() {
     focus: focus ? 1 : 0,
   };
 
-  const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
-    return [
-      { viewerMode: "text", label: "テキストチャット", disabled: false, itemNum: textChatNum },
-      {
-        viewerMode: "superchatAndStickers",
-        label: "スパチャ & Sticker",
-        itemNum: superChatAndStickers.length,
-      },
-      {
-        viewerMode: "stocks",
-        label: "ストック",
-        itemNum: stocks.length,
-      },
-      {
-        viewerMode: "membershipsAndGifts",
-        label: "メンバーシップ & ギフト",
-        itemNum: membershipsAndGifts.length,
-      },
-      { viewerMode: "focus", label: "フォーカス中", itemNum: focus ? 1 : 0 },
-    ];
-  }, [textChatNum, superChatAndStickers, membershipsAndGifts, stocks, focus]);
-
   return (
     <div>
       <ViewerModeSelector
         currentViewerMode={viewerMode}
-        options={selectOptions}
         setViewerMode={setViewerMode}
         itemCounts={itemCounts}
       />
