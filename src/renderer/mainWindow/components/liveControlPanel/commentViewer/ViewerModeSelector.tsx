@@ -13,15 +13,27 @@ export interface ViewerModeSelectOption {
   itemNum: number;
 }
 
+export interface ChatItemCount {
+  text: number;
+  superChatAndSticker: number;
+  membershipAndGift: number;
+  stock: number;
+  focus: number;
+}
+
+interface ViewerModeSelectorProps {
+  currentViewerMode: ViewerMode;
+  options: ViewerModeSelectOption[];
+  setViewerMode: Dispatch<SetStateAction<ViewerMode>>;
+  itemCounts: ChatItemCount;
+}
+
 export function ViewerModeSelector({
   currentViewerMode,
   options,
   setViewerMode,
-}: {
-  currentViewerMode: ViewerMode;
-  options: ViewerModeSelectOption[];
-  setViewerMode: Dispatch<SetStateAction<ViewerMode>>;
-}) {
+  itemCounts,
+}: ViewerModeSelectorProps) {
   return (
     <div style={{ height: "50px", display: "flex" }}>
       {options.map((option) => {

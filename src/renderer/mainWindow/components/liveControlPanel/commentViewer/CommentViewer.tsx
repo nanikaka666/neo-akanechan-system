@@ -2,7 +2,12 @@ import { CSSProperties, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
-import { ViewerMode, ViewerModeSelectOption, ViewerModeSelector } from "./ViewerModeSelector";
+import {
+  ChatItemCount,
+  ViewerMode,
+  ViewerModeSelectOption,
+  ViewerModeSelector,
+} from "./ViewerModeSelector";
 import { FocusViewer } from "./FocusViewer";
 import { useChats } from "../../hooks/useChats";
 import { useMembershipsAndGifts } from "../../hooks/useMembershipsAndGifts";
@@ -25,6 +30,14 @@ export function CommentViewer() {
 
   const [textChats, textChatNum, superChatAndStickers, stocks, focus] = useChats();
   const membershipsAndGifts = useMembershipsAndGifts();
+
+  const itemCounts: ChatItemCount = {
+    text: textChatNum,
+    superChatAndSticker: superChatAndStickers.length,
+    membershipAndGift: membershipsAndGifts.length,
+    stock: stocks.length,
+    focus: focus ? 1 : 0,
+  };
 
   const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
     return [
@@ -54,6 +67,7 @@ export function CommentViewer() {
         currentViewerMode={viewerMode}
         options={selectOptions}
         setViewerMode={setViewerMode}
+        itemCounts={itemCounts}
       />
       <div style={viewerMode !== "text" ? displayNone : {}}>
         <TextChatViewer textChats={textChats} textChatNum={textChatNum} />
