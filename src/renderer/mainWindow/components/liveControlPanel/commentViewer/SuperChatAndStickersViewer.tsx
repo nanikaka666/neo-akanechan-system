@@ -1,16 +1,18 @@
 import { useState, useRef } from "react";
-import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
+import { VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { ExtendedSuperItem } from "../../../../../types/liveChatItem";
 import { RangeInfo } from "./CommentViewer";
 import { SuperChatItem } from "./SuperChatItem";
 import { SuperStickerItem } from "./SuperStickerItem";
+import { useListRange } from "../../hooks/useListRange";
+import { ListRangeView } from "./ListRangeView";
 
 export function SuperChatAndStickersViewer({
   superChatAndStickers,
 }: {
   superChatAndStickers: ExtendedSuperItem[];
 }) {
-  const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
+  const [range, rangeUpdator] = useListRange();
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
@@ -33,9 +35,7 @@ export function SuperChatAndStickersViewer({
   return (
     <div>
       <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
-        <p>
-          Range: {range.startIndex} - {range.endIndex} / {superChatAndStickers.length}
-        </p>
+        <ListRangeView range={range} chunkSize={superChatAndStickers.length} />
         {rangeInfo && (
           <p>
             {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${superChatAndStickers.length}`}
@@ -67,9 +67,7 @@ export function SuperChatAndStickersViewer({
         followOutput={(isAtBottom) => {
           return isAtBottom ? "smooth" : false;
         }}
-        rangeChanged={(newRange) => {
-          setRange((_) => newRange);
-        }}
+        rangeChanged={rangeUpdator}
         itemContent={(index, item) => {
           return item.type === "superChat" ? (
             <SuperChatItem item={item} key={item.id.id} />

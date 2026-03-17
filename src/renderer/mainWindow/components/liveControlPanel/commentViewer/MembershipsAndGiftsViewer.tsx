@@ -1,18 +1,20 @@
 import { useState, useRef } from "react";
-import { ListRange, VirtuosoHandle, Virtuoso } from "react-virtuoso";
+import { VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { MembershipAndGiftItem } from "../../../../../types/liveChatItem";
 import { RangeInfo } from "./CommentViewer";
 import { NewMembershipItem } from "./NewMembershipItem";
 import { MembershipMilestoneItem } from "./MembershipMilestoneItem";
 import { MembershipGiftItem } from "./MembershipGiftItem";
 import { GiftReceivedItem } from "./GiftReceivedItem";
+import { useListRange } from "../../hooks/useListRange";
+import { ListRangeView } from "./ListRangeView";
 
 export function MembershipsAndGiftsViewer({
   membershipsAndGifts,
 }: {
   membershipsAndGifts: MembershipAndGiftItem[];
 }) {
-  const [range, setRange] = useState<ListRange>({ startIndex: 0, endIndex: 0 });
+  const [range, rangeUpdator] = useListRange();
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
@@ -35,9 +37,7 @@ export function MembershipsAndGiftsViewer({
   return (
     <div>
       <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
-        <p>
-          Range: {range.startIndex} - {range.endIndex} / {membershipsAndGifts.length}
-        </p>
+        <ListRangeView range={range} chunkSize={membershipsAndGifts.length} />
         {rangeInfo && (
           <p>
             {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${membershipsAndGifts.length}`}
@@ -69,9 +69,7 @@ export function MembershipsAndGiftsViewer({
         followOutput={(isAtBottom) => {
           return isAtBottom ? "smooth" : false;
         }}
-        rangeChanged={(newRange) => {
-          setRange((_) => newRange);
-        }}
+        rangeChanged={rangeUpdator}
         itemContent={(index, item) => {
           return item.type === "newMembership" ? (
             <NewMembershipItem item={item} key={item.id.id} />
