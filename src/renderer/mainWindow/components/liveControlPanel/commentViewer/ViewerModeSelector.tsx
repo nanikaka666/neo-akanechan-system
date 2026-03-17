@@ -1,5 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
-import { ViewerMode, ViewerModeSelectOption } from "./CommentViewer";
+
+export type ViewerMode =
+  | "text"
+  | "superchatAndStickers"
+  | "stocks"
+  | "membershipsAndGifts"
+  | "focus";
+
+export interface ViewerModeSelectOption {
+  viewerMode: ViewerMode;
+  label: string;
+  disabled: boolean;
+  itemNum: number;
+}
 
 export function ViewerModeSelector({
   currentViewerMode,

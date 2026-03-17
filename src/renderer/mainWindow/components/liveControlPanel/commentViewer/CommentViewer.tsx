@@ -2,7 +2,7 @@ import { CSSProperties, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
-import { ViewerModeSelector } from "./ViewerModeSelector";
+import { ViewerMode, ViewerModeSelectOption, ViewerModeSelector } from "./ViewerModeSelector";
 import { FocusViewer } from "./FocusViewer";
 import { useChats } from "../../hooks/useChats";
 import { useMembershipsAndGifts } from "../../hooks/useMembershipsAndGifts";
@@ -16,20 +16,6 @@ export interface RangeInfo {
     start: number;
     end: number;
   };
-}
-
-export type ViewerMode =
-  | "text"
-  | "superchatAndStickers"
-  | "stocks"
-  | "membershipsAndGifts"
-  | "focus";
-
-export interface ViewerModeSelectOption {
-  viewerMode: ViewerMode;
-  label: string;
-  disabled: boolean;
-  itemNum: number;
 }
 
 const displayNone: CSSProperties = { display: "none" };
