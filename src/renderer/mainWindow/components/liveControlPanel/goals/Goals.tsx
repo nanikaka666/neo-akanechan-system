@@ -1,6 +1,6 @@
+import { useLiveStatistics } from "../../../../hooks/useLiveStatistics";
 import { LiveSettings } from "../../../../../types/liveSettings";
 import { useAllGoalsStatus } from "../../hooks/useAllGoalsStatus";
-import { useLiveStatistics } from "../../hooks/useLiveStatistics";
 
 export interface GoalsProps {
   liveSettings: LiveSettings;

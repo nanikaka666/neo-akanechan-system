@@ -1,4 +1,4 @@
-import { useLiveStatistics } from "../hooks/useLiveStatistics";
+import { useLiveStatistics } from "../../../hooks/useLiveStatistics";
 
 export function SideBarInfoArea() {
   const liveStatistics = useLiveStatistics();

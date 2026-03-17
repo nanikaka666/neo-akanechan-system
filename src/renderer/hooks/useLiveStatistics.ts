@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LiveStatistics } from "../../../../types/liveStatistics";
+import { LiveStatistics } from "../../types/liveStatistics";
 
 export function useLiveStatistics() {
   const [liveStatistics, setLiveStatistics] = useState<LiveStatistics>({
