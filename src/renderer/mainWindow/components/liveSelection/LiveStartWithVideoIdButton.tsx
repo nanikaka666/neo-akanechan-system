@@ -1,11 +1,12 @@
 import { useState } from "react";
 import ReactModal from "react-modal";
 import { useModal } from "../hooks/useModal";
+import { useButton } from "../hooks/useButton";
 
 export function LiveStartWithVideoIdButton() {
   const [showModal, turnOn, turnOff] = useModal();
   const [inputVideoId, setInputVideoId] = useState("");
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, disable, enable] = useButton();
 
   return (
     <>
@@ -24,9 +25,9 @@ export function LiveStartWithVideoIdButton() {
             <button
               onClick={async (e) => {
                 e.preventDefault();
-                setDisabled((_) => true);
+                disable();
                 await window.ipcApi.requestOpenOverlayWithVideoId(inputVideoId);
-                setDisabled((_) => false);
+                enable();
               }}
               disabled={disabled}
             >

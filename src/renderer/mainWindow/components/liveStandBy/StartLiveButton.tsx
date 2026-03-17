@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useButton } from "../hooks/useButton";
 
 export function StartLiveButton() {
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, disable, enable] = useButton();
 
   return (
     <button
       onClick={(e) => {
         e.preventDefault();
-        setDisabled((_) => true);
-        window.ipcApi.requestStartLive();
+        disable();
+        window.ipcApi.requestStartLive().then(() => enable());
       }}
       disabled={disabled}
     >

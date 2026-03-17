@@ -1,20 +1,20 @@
 import { YoutubeLive } from "../../../../types/youtubeLive";
 import { Channel } from "../../../../types/youtubeChannel";
-import { useState } from "react";
+import { useButton } from "../hooks/useButton";
 
 export function LiveStartButton({ channel, live }: { channel: Channel; live: YoutubeLive }) {
-  const [isConfirming, setIsConfirming] = useState(false);
+  const [disabled, disable, enable] = useButton();
 
   return (
     <button
       onClick={async (e) => {
         e.preventDefault();
-        setIsConfirming((_) => true);
+        disable();
 
         await window.ipcApi.requestOpenOverlay(channel, live);
-        setIsConfirming((_) => false);
+        enable();
       }}
-      disabled={isConfirming}
+      disabled={disabled}
     >
       Live Start
     </button>
