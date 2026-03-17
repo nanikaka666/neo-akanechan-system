@@ -32,22 +32,19 @@ export function CommentViewer() {
       {
         viewerMode: "superchatAndStickers",
         label: "スパチャ & Sticker",
-        disabled: superChatAndStickers.length === 0,
         itemNum: superChatAndStickers.length,
       },
       {
         viewerMode: "stocks",
         label: "ストック",
-        disabled: stocks.length === 0,
         itemNum: stocks.length,
       },
       {
         viewerMode: "membershipsAndGifts",
         label: "メンバーシップ & ギフト",
-        disabled: membershipsAndGifts.length === 0,
         itemNum: membershipsAndGifts.length,
       },
-      { viewerMode: "focus", label: "フォーカス中", disabled: !focus, itemNum: focus ? 1 : 0 },
+      { viewerMode: "focus", label: "フォーカス中", itemNum: focus ? 1 : 0 },
     ];
   }, [textChatNum, superChatAndStickers, membershipsAndGifts, stocks, focus]);
 

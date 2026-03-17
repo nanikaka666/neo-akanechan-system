@@ -10,7 +10,6 @@ export type ViewerMode =
 export interface ViewerModeSelectOption {
   viewerMode: ViewerMode;
   label: string;
-  disabled: boolean;
   itemNum: number;
 }
 
@@ -32,12 +31,12 @@ export function ViewerModeSelector({
             style={
               option.viewerMode === currentViewerMode
                 ? { backgroundColor: "yellow" }
-                : option.disabled
+                : option.itemNum === 0
                   ? { backgroundColor: "gray" }
                   : {}
             }
             onClick={() => {
-              if (option.disabled) {
+              if (option.itemNum === 0) {
                 return;
               }
               setViewerMode((_) => option.viewerMode);
