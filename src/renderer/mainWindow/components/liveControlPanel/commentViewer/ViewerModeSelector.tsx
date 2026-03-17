@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import { ViewerMode } from "../../hooks/useCommentViewerMode";
 
 interface ViewerModeSelectOption {
@@ -17,14 +16,14 @@ export interface ChatItemCount {
 
 interface ViewerModeSelectorProps {
   currentViewerMode: ViewerMode;
-  setViewerMode: Dispatch<SetStateAction<ViewerMode>>;
   itemCounts: ChatItemCount;
+  modeUpdator: (mode: ViewerMode) => void;
 }
 
 export function ViewerModeSelector({
   currentViewerMode,
-  setViewerMode,
   itemCounts,
+  modeUpdator,
 }: ViewerModeSelectorProps) {
   const selectOptions: ViewerModeSelectOption[] = [
     { viewerMode: "text", label: "テキストチャット", itemNum: itemCounts.text },
@@ -63,7 +62,7 @@ export function ViewerModeSelector({
               if (option.itemNum === 0) {
                 return;
               }
-              setViewerMode((_) => option.viewerMode);
+              modeUpdator(option.viewerMode);
             }}
           >
             {`${option.label} (${option.itemNum})`}

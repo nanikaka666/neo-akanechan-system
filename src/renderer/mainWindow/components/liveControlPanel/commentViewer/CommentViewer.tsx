@@ -1,9 +1,9 @@
-import { CSSProperties, useState } from "react";
+import { CSSProperties } from "react";
 import { TextChatViewer } from "./TextChatViewer";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 import { ChatItemCount, ViewerModeSelector } from "./ViewerModeSelector";
-import { ViewerMode } from "../../hooks/useCommentViewerMode";
+import { useCommentViewerMode } from "../../hooks/useCommentViewerMode";
 import { FocusViewer } from "./FocusViewer";
 import { useChats } from "../../hooks/useChats";
 import { useMembershipsAndGifts } from "../../hooks/useMembershipsAndGifts";
@@ -22,7 +22,7 @@ export interface RangeInfo {
 const displayNone: CSSProperties = { display: "none" };
 
 export function CommentViewer() {
-  const [viewerMode, setViewerMode] = useState<ViewerMode>("text");
+  const [viewerMode, modeUpdator] = useCommentViewerMode();
 
   const [textChats, textChatNum, superChatAndStickers, stocks, focus] = useChats();
   const membershipsAndGifts = useMembershipsAndGifts();
@@ -39,8 +39,8 @@ export function CommentViewer() {
     <div>
       <ViewerModeSelector
         currentViewerMode={viewerMode}
-        setViewerMode={setViewerMode}
         itemCounts={itemCounts}
+        modeUpdator={modeUpdator}
       />
       <div style={viewerMode !== "text" ? displayNone : {}}>
         <TextChatViewer textChats={textChats} textChatNum={textChatNum} />
