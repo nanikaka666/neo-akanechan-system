@@ -1,11 +1,11 @@
-import { CSSProperties, useEffect, useMemo, useState } from "react";
+import { CSSProperties, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
-import { MembershipAndGiftItem } from "../../../../../types/liveChatItem";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 import { ViewerModeSelector } from "./ViewerModeSelector";
 import { FocusViewer } from "./FocusViewer";
 import { useChats } from "../../hooks/useChats";
+import { useMembershipsAndGifts } from "../../hooks/useMembershipsAndGifts";
 
 export interface RangeInfo {
   time: {
@@ -37,9 +37,8 @@ const displayNone: CSSProperties = { display: "none" };
 export function CommentViewer() {
   const [viewerMode, setViewerMode] = useState<ViewerMode>("text");
 
-  const [membershipsAndGifts, setMembershipsAndGifts] = useState<MembershipAndGiftItem[]>([]);
-
   const [textChats, textChatNum, superChatAndStickers, stocks, focus] = useChats();
+  const membershipsAndGifts = useMembershipsAndGifts();
 
   const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
     return [
@@ -65,17 +64,6 @@ export function CommentViewer() {
       { viewerMode: "focus", label: "フォーカス中", disabled: !focus, itemNum: focus ? 1 : 0 },
     ];
   }, [textChatNum, superChatAndStickers, membershipsAndGifts, stocks, focus]);
-
-  useEffect(() => {
-    const membershipsRemover = window.ipcApi.registerMembershipsAndGiftsListener(
-      (e, newMembershipsAndGifts) => {
-        setMembershipsAndGifts((_) => newMembershipsAndGifts);
-      },
-    );
-    return () => {
-      membershipsRemover();
-    };
-  }, []);
 
   return (
     <div>
