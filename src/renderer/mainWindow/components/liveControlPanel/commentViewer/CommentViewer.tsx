@@ -1,15 +1,11 @@
 import { CSSProperties, useEffect, useMemo, useState } from "react";
 import { TextChatViewer } from "./TextChatViewer";
-import {
-  ExtendedChatItemText,
-  ExtendedSuperItem,
-  FocusedOnChatItem,
-  MembershipAndGiftItem,
-} from "../../../../../types/liveChatItem";
+import { MembershipAndGiftItem } from "../../../../../types/liveChatItem";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 import { ViewerModeSelector } from "./ViewerModeSelector";
 import { FocusViewer } from "./FocusViewer";
+import { useChats } from "../../hooks/useChats";
 
 export interface RangeInfo {
   time: {
@@ -40,16 +36,10 @@ const displayNone: CSSProperties = { display: "none" };
 
 export function CommentViewer() {
   const [viewerMode, setViewerMode] = useState<ViewerMode>("text");
-  const [textChats, setTextChats] = useState<ExtendedChatItemText[]>([]);
-  const [textChatNum, setTextChatNum] = useState(0);
-
-  const [superChatAndStickers, setSuperChatAndStickers] = useState<ExtendedSuperItem[]>([]);
 
   const [membershipsAndGifts, setMembershipsAndGifts] = useState<MembershipAndGiftItem[]>([]);
 
-  const [stocks, setStocks] = useState<ExtendedChatItemText[]>([]);
-
-  const [focus, setFocus] = useState<FocusedOnChatItem>();
+  const [textChats, textChatNum, superChatAndStickers, stocks, focus] = useChats();
 
   const selectOptions = useMemo<ViewerModeSelectOption[]>(() => {
     return [
@@ -82,16 +72,8 @@ export function CommentViewer() {
         setMembershipsAndGifts((_) => newMembershipsAndGifts);
       },
     );
-    const chatsRemover = window.ipcApi.registerChatsListener((e, chats) => {
-      setTextChats((_) => chats.textChats.items);
-      setTextChatNum((_) => chats.textChats.num);
-      setSuperChatAndStickers((_) => chats.superChatAndStickers);
-      setStocks((_) => chats.stocks);
-      setFocus((_) => chats.focus);
-    });
     return () => {
       membershipsRemover();
-      chatsRemover();
     };
   }, []);
 
