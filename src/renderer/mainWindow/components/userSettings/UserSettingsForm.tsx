@@ -1,4 +1,4 @@
-import { useState, MouseEvent, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { UserSettings } from "../../../../types/userSettings";
 import { LiveChatSettingsForm } from "./LiveChatSettingsForm";
 import { GoalsSettingsForm } from "./GoalsSettingsForm";
@@ -31,12 +31,6 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
       });
   }, [currentUserSettings, originalUserSettings]);
 
-  async function onClick(e: MouseEvent) {
-    e.preventDefault();
-    await window.ipcApi.requestSaveUserSettings(currentUserSettings);
-    turnOff();
-  }
-
   return (
     <div>
       <div>User Settings Form</div>
@@ -48,7 +42,13 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
         goalsSettings={currentUserSettings}
         updateUserSettingsOnEditting={updateUserSettingsOnEditting}
       />
-      <button onClick={onClick} disabled={isSaveDisabled}>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          window.ipcApi.requestSaveUserSettings(currentUserSettings).then(() => turnOff());
+        }}
+        disabled={isSaveDisabled}
+      >
         Save
       </button>
     </div>
