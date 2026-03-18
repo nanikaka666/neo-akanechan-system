@@ -6,11 +6,11 @@ import { SuperStickerItem } from "./SuperStickerItem";
 import { useListRange } from "../../hooks/useListRange";
 import { ListRangeView } from "./ListRangeView";
 
-export function SuperChatAndStickersViewer({
-  superChatAndStickers,
-}: {
+interface SuperChatAndStickersProps {
   superChatAndStickers: ExtendedSuperItem[];
-}) {
+}
+
+export function SuperChatAndStickersViewer({ superChatAndStickers }: SuperChatAndStickersProps) {
   const [range, rangeUpdator] = useListRange();
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [showGoToBottom, setShowGoToBottom] = useState(false);

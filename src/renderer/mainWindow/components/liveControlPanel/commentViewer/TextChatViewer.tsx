@@ -5,7 +5,11 @@ import { TextChatItem } from "./TextChatItem";
 import { useListRange } from "../../hooks/useListRange";
 import { ListRangeView } from "./ListRangeView";
 
-export function TextChatViewer({ textChats }: { textChats: ExtendedChatItemText[] }) {
+interface TextChatViewerProps {
+  textChats: ExtendedChatItemText[];
+}
+
+export function TextChatViewer({ textChats }: TextChatViewerProps) {
   const [range, rangeUpdator] = useListRange();
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [showGoToBottom, setShowGoToBottom] = useState(false);

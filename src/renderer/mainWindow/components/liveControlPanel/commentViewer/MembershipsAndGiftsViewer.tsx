@@ -8,11 +8,11 @@ import { GiftReceivedItem } from "./GiftReceivedItem";
 import { useListRange } from "../../hooks/useListRange";
 import { ListRangeView } from "./ListRangeView";
 
-export function MembershipsAndGiftsViewer({
-  membershipsAndGifts,
-}: {
+interface MembershipsAndGiftsProps {
   membershipsAndGifts: MembershipAndGiftItem[];
-}) {
+}
+
+export function MembershipsAndGiftsViewer({ membershipsAndGifts }: MembershipsAndGiftsProps) {
   const [range, rangeUpdator] = useListRange();
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [showGoToBottom, setShowGoToBottom] = useState(false);
