@@ -213,4 +213,9 @@ export interface IpcEvent {
    * Request to LiveManager to get LiveLaunchProperties.
    */
   getLiveLaunchProperties: () => LiveLaunchProperties;
+
+  /**
+   * Request OAuth revocation.
+   */
+  accountDisconnect: () => boolean;
 }

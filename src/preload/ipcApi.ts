@@ -49,6 +49,7 @@ export interface IpcApi {
     requestAnswerDecision: Invoke<"answerDecision">;
     requestManuallyEntryClose: Invoke<"manuallyEntryClose">;
     requestLiveLaunchProperties: Invoke<"getLiveLaunchProperties">;
+    requestAccountDisconnect: Invoke<"accountDisconnect">;
 
     // for overlay
     registerAmountOfPoint: Listen<"tellAmountOfPoint">;
@@ -106,6 +107,7 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.invoke("answerDecision", answer, optionStr),
     requestManuallyEntryClose: () => IpcRendererWrapper.invoke("manuallyEntryClose"),
     requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
+    requestAccountDisconnect: () => IpcRendererWrapper.invoke("accountDisconnect"),
 
     // For Overlay
     registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
