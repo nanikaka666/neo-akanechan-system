@@ -16,3 +16,18 @@ export async function yesNoDialogOnMainWindow(message: string, detail?: string) 
 
   return res.response === 0;
 }
+
+export async function messageDialogOnMainWindow(message: string, detail?: string) {
+  const mainWindow = getWindowManager().getMainWindow();
+  if (mainWindow === undefined) {
+    return false;
+  }
+
+  await dialog.showMessageBox(mainWindow, {
+    message: message,
+    type: "error",
+    buttons: ["OK"],
+    defaultId: 0,
+    detail: detail,
+  });
+}
