@@ -1,6 +1,5 @@
 import { IpcMainWrapper } from "./ipcMainWrapper";
 import { WebContentsWrapper } from "./webContentsWrapper";
-import { dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, LiveControlPanelPage, LiveSelectionPage } from "../types/mainAppPage";
 import { doAuthFlow, isUserAuthorized, revokeCredentials } from "./auth/google";
@@ -17,7 +16,7 @@ import {
   setupLiveManager,
 } from "./liveManager";
 import { getWindowManager } from "./window";
-import { yesNoDialogOnMainWindow } from "./dialog";
+import { messageDialogOnMainWindow, yesNoDialogOnMainWindow } from "./dialog";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -125,7 +124,7 @@ export function setupIpcMainHandlers() {
     const maybeChannel = await YoutubeApiService.getChannelOfMine();
 
     if (!maybeChannel) {
-      dialog.showErrorBox(
+      await messageDialogOnMainWindow(
         "Please OAuth flow again",
         "Youtube Channel associated with oauth account is not found.",
       );
@@ -196,7 +195,7 @@ export function setupIpcMainHandlers() {
     const maybeChannel = await YoutubeApiService.getChannelOfMine();
 
     if (!maybeChannel) {
-      dialog.showErrorBox(
+      await messageDialogOnMainWindow(
         "Please OAuth flow again",
         "Youtube Channel associated with oauth account is not found.",
       );
