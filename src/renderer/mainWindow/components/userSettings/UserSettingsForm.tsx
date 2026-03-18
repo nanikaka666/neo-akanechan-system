@@ -26,8 +26,6 @@ export function UserSettingsForm({ userSettings }: UserSettingsFormProps) {
   async function onClick(e: MouseEvent) {
     e.preventDefault();
     await window.ipcApi.requestSaveUserSettings(currentUserSettings);
-    // todo: Now saving message should be displayed.
-    console.log("User settings saved.");
   }
 
   return (
