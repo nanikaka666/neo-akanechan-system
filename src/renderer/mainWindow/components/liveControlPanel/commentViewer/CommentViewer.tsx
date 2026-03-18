@@ -32,13 +32,13 @@ export function CommentViewer() {
         modeUpdator={modeUpdator}
       />
       <div style={viewerMode !== "text" ? displayNone : {}}>
-        <TextChatViewer textChats={textChats} textChatNum={textChatNum} />
+        <TextChatViewer textChats={textChats} />
       </div>
       <div style={viewerMode !== "superchatAndStickers" ? displayNone : {}}>
         <SuperChatAndStickersViewer superChatAndStickers={superChatAndStickers} />
       </div>
       <div style={viewerMode !== "stocks" ? displayNone : {}}>
-        <TextChatViewer textChats={stocks} textChatNum={stocks.length} />
+        <TextChatViewer textChats={stocks} />
       </div>
       <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>
         <MembershipsAndGiftsViewer membershipsAndGifts={membershipsAndGifts} />
