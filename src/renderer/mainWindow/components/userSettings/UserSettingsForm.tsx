@@ -14,6 +14,13 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
   }, [userSettings]);
   const [currentUserSettings, setCurrentUserSettings] =
     useState<UserSettings>(originalUserSettings);
+
+  const updateUserSettingsOnEditting = (settings: Partial<UserSettings>) => {
+    setCurrentUserSettings((prev) => {
+      return { ...prev, ...settings };
+    });
+  };
+
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
 
   useEffect(() => {
@@ -35,11 +42,11 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
       <div>User Settings Form</div>
       <LiveChatSettingsForm
         liveChatSettings={currentUserSettings}
-        setCurrentUserSettings={setCurrentUserSettings}
+        updateUserSettingsOnEditting={updateUserSettingsOnEditting}
       />
       <GoalsSettingsForm
         goalsSettings={currentUserSettings}
-        setCurrentUserSettings={setCurrentUserSettings}
+        updateUserSettingsOnEditting={updateUserSettingsOnEditting}
       />
       <button onClick={onClick} disabled={isSaveDisabled}>
         Save
