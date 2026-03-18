@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { UserSettings } from "../../../../types/userSettings";
 import { UserSettingsForm } from "./UserSettingsForm";
 
-export function UserSettingsFormLoader({ turnOff }: { turnOff: () => void }) {
+interface UserSettingsFormLoaderProps {
+  turnOff: () => void;
+}
+
+export function UserSettingsFormLoader({ turnOff }: UserSettingsFormLoaderProps) {
   const [userSettings, setUserSettings] = useState<UserSettings>();
 
   useEffect(() => {

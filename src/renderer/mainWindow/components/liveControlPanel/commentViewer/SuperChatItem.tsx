@@ -2,7 +2,11 @@ import { ExtendedChatItemSuperChat } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 import { FocusForm } from "./FocusForm";
 
-export function SuperChatItem({ item }: { item: ExtendedChatItemSuperChat }) {
+interface SuperChatItemProps {
+  item: ExtendedChatItemSuperChat;
+}
+
+export function SuperChatItem({ item }: SuperChatItemProps) {
   return (
     <div style={{ backgroundColor: `#${item.tier.hex}` }}>
       <Author author={item.author} />

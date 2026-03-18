@@ -7,11 +7,13 @@ import { ListRangeView } from "./ListRangeView";
 import { useJumpToLatestButton } from "../../hooks/useJumpToLatestButton";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 
-interface SuperChatAndStickersProps {
+interface SuperChatAndStickersViewerProps {
   superChatAndStickers: ExtendedSuperItem[];
 }
 
-export function SuperChatAndStickersViewer({ superChatAndStickers }: SuperChatAndStickersProps) {
+export function SuperChatAndStickersViewer({
+  superChatAndStickers,
+}: SuperChatAndStickersViewerProps) {
   const [range, rangeUpdator] = useListRange();
   const [ref, isShownJumpButton, onAtBottomStateChanged] = useJumpToLatestButton();
 

@@ -1,6 +1,10 @@
 import { Channel } from "../../../../types/youtubeChannel";
 
-export function ChannelSummaryView({ channel }: { channel: Channel }) {
+interface ChannelSummaryViewProps {
+  channel: Channel;
+}
+
+export function ChannelSummaryView({ channel }: ChannelSummaryViewProps) {
   return (
     <div>
       {channel.bannerUrl && (

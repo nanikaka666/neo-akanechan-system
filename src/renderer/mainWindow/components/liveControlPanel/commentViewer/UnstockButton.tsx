@@ -1,7 +1,11 @@
 import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
 import { useButton } from "../../hooks/useButton";
 
-export function UnstockButton({ item }: { item: ExtendedChatItemText }) {
+interface UnstockButtonProps {
+  item: ExtendedChatItemText;
+}
+
+export function UnstockButton({ item }: UnstockButtonProps) {
   const [disabled, disable, enable] = useButton();
 
   return (

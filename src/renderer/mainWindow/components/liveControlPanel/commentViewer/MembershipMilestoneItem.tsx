@@ -1,7 +1,11 @@
 import { MembershipMilestone } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 
-export function MembershipMilestoneItem({ item }: { item: MembershipMilestone }) {
+interface MembershipMilestoneItemProps {
+  item: MembershipMilestone;
+}
+
+export function MembershipMilestoneItem({ item }: MembershipMilestoneItemProps) {
   return (
     <div style={{ backgroundColor: "skyblue" }}>
       <Author author={item.author} />

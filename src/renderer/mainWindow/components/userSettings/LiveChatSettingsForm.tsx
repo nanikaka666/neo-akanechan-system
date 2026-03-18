@@ -7,13 +7,15 @@ import {
 
 const displayStyles: LiveChatDisplayStyle[] = ["typical"];
 
+interface LiveChatSettingsFormProps {
+  liveChatSettings: LiveChatSettings;
+  setCurrentUserSettings: Dispatch<SetStateAction<UserSettings>>;
+}
+
 export function LiveChatSettingsForm({
   liveChatSettings,
   setCurrentUserSettings,
-}: {
-  liveChatSettings: LiveChatSettings;
-  setCurrentUserSettings: Dispatch<SetStateAction<UserSettings>>;
-}) {
+}: LiveChatSettingsFormProps) {
   return (
     <div>
       <div>ライブチャット</div>

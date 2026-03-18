@@ -6,15 +6,13 @@ import { QuitLiveButton } from "./QuitLiveButton";
 
 const selectedStyle: CSSProperties = { backgroundColor: "orange" };
 
-export function SideBar({
-  liveLaunchProperties,
-  mode,
-  setMode,
-}: {
+interface SideBarProps {
   liveLaunchProperties: LiveLaunchProperties;
   mode: Mode;
   setMode: Dispatch<SetStateAction<Mode>>;
-}) {
+}
+
+export function SideBar({ liveLaunchProperties, mode, setMode }: SideBarProps) {
   return (
     <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
       <div>

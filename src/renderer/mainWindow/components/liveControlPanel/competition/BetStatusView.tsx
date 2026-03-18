@@ -1,6 +1,6 @@
 import { EntryClosedCompetition, HeldCompetition } from "../../../../../types/competition";
 
-export interface BetStatusViewProps {
+interface BetStatusViewProps {
   status: HeldCompetition | EntryClosedCompetition;
 }
 

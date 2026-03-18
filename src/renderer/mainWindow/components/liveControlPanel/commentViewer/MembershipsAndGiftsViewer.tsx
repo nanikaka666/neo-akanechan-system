@@ -9,11 +9,11 @@ import { ListRangeView } from "./ListRangeView";
 import { useJumpToLatestButton } from "../../hooks/useJumpToLatestButton";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 
-interface MembershipsAndGiftsProps {
+interface MembershipsAndGiftsViewerProps {
   membershipsAndGifts: MembershipAndGiftItem[];
 }
 
-export function MembershipsAndGiftsViewer({ membershipsAndGifts }: MembershipsAndGiftsProps) {
+export function MembershipsAndGiftsViewer({ membershipsAndGifts }: MembershipsAndGiftsViewerProps) {
   const [range, rangeUpdator] = useListRange();
   const [ref, isShownJumpButton, onAtBottomStateChanged] = useJumpToLatestButton();
 

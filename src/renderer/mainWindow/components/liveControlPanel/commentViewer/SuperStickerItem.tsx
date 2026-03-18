@@ -2,7 +2,11 @@ import { ExtendedChatItemSuperSticker } from "../../../../../types/liveChatItem"
 import { Author } from "./Author";
 import { FocusForm } from "./FocusForm";
 
-export function SuperStickerItem({ item }: { item: ExtendedChatItemSuperSticker }) {
+interface SuperStickerItemProps {
+  item: ExtendedChatItemSuperSticker;
+}
+
+export function SuperStickerItem({ item }: SuperStickerItemProps) {
   return (
     <div style={{ backgroundColor: `#${item.tier.hex}` }}>
       <Author author={item.author} />

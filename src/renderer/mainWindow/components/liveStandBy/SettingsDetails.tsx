@@ -1,13 +1,12 @@
 import { LiveSettings } from "../../../../types/liveSettings";
 import { GoalsHavingLevels } from "./GoalsHavingLevels";
 
-export function SettingsDetails({
-  liveSettings,
-  currentSubscriberCount,
-}: {
+interface SettingsDetailsProps {
   liveSettings: LiveSettings;
   currentSubscriberCount: number;
-}) {
+}
+
+export function SettingsDetails({ liveSettings, currentSubscriberCount }: SettingsDetailsProps) {
   return (
     <div>
       <div>配信設定の確認</div>

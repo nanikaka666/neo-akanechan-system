@@ -1,11 +1,11 @@
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
 import { useButton } from "../hooks/useButton";
 
-export function QuitLiveButton({
-  liveLaunchProperties,
-}: {
+interface QuitLiveButtonProps {
   liveLaunchProperties: LiveLaunchProperties;
-}) {
+}
+
+export function QuitLiveButton({ liveLaunchProperties }: QuitLiveButtonProps) {
   const [disabled, disable, enable] = useButton();
   return (
     <button

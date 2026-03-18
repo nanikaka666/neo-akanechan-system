@@ -3,13 +3,15 @@ import { Dispatch, SetStateAction } from "react";
 import { GoalsValueInput } from "./GoalsValueInput";
 import { GoalsLevelInput } from "./GoalsLevelInput";
 
+interface GoalsSettingsFormProps {
+  goalsSettings: GoalsSettings;
+  setCurrentUserSettings: Dispatch<SetStateAction<UserSettings>>;
+}
+
 export function GoalsSettingsForm({
   goalsSettings,
   setCurrentUserSettings,
-}: {
-  goalsSettings: GoalsSettings;
-  setCurrentUserSettings: Dispatch<SetStateAction<UserSettings>>;
-}) {
+}: GoalsSettingsFormProps) {
   return (
     <div>
       <div>ゴール</div>

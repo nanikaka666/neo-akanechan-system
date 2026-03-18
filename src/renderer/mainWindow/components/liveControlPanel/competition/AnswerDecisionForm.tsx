@@ -2,7 +2,7 @@ import { useState } from "react";
 import { OptionLabel } from "../../../../../types/competition";
 import { useButton } from "../../hooks/useButton";
 
-export interface AnswerDecisionFormProps {
+interface AnswerDecisionFormProps {
   options: Map<OptionLabel, string>;
 }
 

@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { GoalsLevel } from "../../../../types/goals";
 
-export function GoalsLevelInput({
-  initialValue,
-  func,
-}: {
+interface GoalsLevelInputProps {
   initialValue: GoalsLevel;
   func: (value: GoalsLevel) => void;
-}) {
+}
+
+export function GoalsLevelInput({ initialValue, func }: GoalsLevelInputProps) {
   const [selected, setSelected] = useState(initialValue);
 
   return (

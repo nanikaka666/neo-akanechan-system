@@ -3,7 +3,11 @@ import { UserSettings } from "../../../../types/userSettings";
 import { LiveChatSettingsForm } from "./LiveChatSettingsForm";
 import { GoalsSettingsForm } from "./GoalsSettingsForm";
 
-export function UserSettingsForm({ userSettings }: { userSettings: UserSettings }) {
+interface UserSettingsFormProps {
+  userSettings: UserSettings;
+}
+
+export function UserSettingsForm({ userSettings }: UserSettingsFormProps) {
   const originalUserSettings = useMemo<UserSettings>(() => {
     return { ...userSettings };
   }, [userSettings]);

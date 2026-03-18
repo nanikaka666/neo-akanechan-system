@@ -1,7 +1,11 @@
 import { FocusedOnChatItem } from "../../../../../types/liveChatItem";
 import { useButton } from "../../hooks/useButton";
 
-export function FocusButton({ item }: { item: FocusedOnChatItem }) {
+interface FocusButtonProps {
+  item: FocusedOnChatItem;
+}
+
+export function FocusButton({ item }: FocusButtonProps) {
   const [disabled, disable, enable] = useButton();
 
   return (

@@ -1,12 +1,11 @@
 import { useState } from "react";
 
-export function GoalsValueInput({
-  initialValue,
-  func,
-}: {
+interface GoalsValueInputProps {
   initialValue: number;
   func: (value: number) => void;
-}) {
+}
+
+export function GoalsValueInput({ initialValue, func }: GoalsValueInputProps) {
   const [input, setInput] = useState(initialValue.toString());
   return (
     <input

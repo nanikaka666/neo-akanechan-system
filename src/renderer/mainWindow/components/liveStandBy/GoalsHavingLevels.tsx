@@ -1,6 +1,10 @@
 import { Goal } from "../../../../types/liveSettings";
 
-export function GoalsHavingLevels({ goal }: { goal: Goal }) {
+interface GoalsHavingLevelsProps {
+  goal: Goal;
+}
+
+export function GoalsHavingLevels({ goal }: GoalsHavingLevelsProps) {
   return (
     <div>
       <div>最終目標値: {goal.goalValues.slice(-1)}</div>
