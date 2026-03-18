@@ -11,7 +11,7 @@ import { useMembershipsAndGifts } from "../../hooks/useMembershipsAndGifts";
 const displayNone: CSSProperties = { display: "none" };
 
 export function CommentViewer() {
-  const [viewerMode, modeUpdator] = useCommentViewerMode();
+  const [currentViewerMode, viewerModeUpdator, allViewerMode] = useCommentViewerMode();
 
   const [textChats, textChatNum, superChatAndStickers, stocks, focus] = useChats();
   const membershipsAndGifts = useMembershipsAndGifts();
@@ -27,25 +27,27 @@ export function CommentViewer() {
   return (
     <div>
       <ViewerModeSelector
-        currentViewerMode={viewerMode}
+        currentViewerMode={currentViewerMode}
         itemCounts={itemCounts}
-        modeUpdator={modeUpdator}
+        viewerModeUpdator={viewerModeUpdator}
       />
-      <div style={viewerMode !== "text" ? displayNone : {}}>
-        <TextChatViewer textChats={textChats} />
-      </div>
-      <div style={viewerMode !== "superchatAndStickers" ? displayNone : {}}>
-        <SuperChatAndStickersViewer superChatAndStickers={superChatAndStickers} />
-      </div>
-      <div style={viewerMode !== "stocks" ? displayNone : {}}>
-        <TextChatViewer textChats={stocks} />
-      </div>
-      <div style={viewerMode !== "membershipsAndGifts" ? displayNone : {}}>
-        <MembershipsAndGiftsViewer membershipsAndGifts={membershipsAndGifts} />
-      </div>
-      <div style={viewerMode !== "focus" ? displayNone : {}}>
-        <FocusViewer focus={focus} />
-      </div>
+      {allViewerMode.map((viewerMode) => {
+        return (
+          <div key={viewerMode} style={viewerMode === currentViewerMode ? {} : displayNone}>
+            {viewerMode === "text" ? (
+              <TextChatViewer textChats={textChats} />
+            ) : viewerMode === "superchatAndStickers" ? (
+              <SuperChatAndStickersViewer superChatAndStickers={superChatAndStickers} />
+            ) : viewerMode === "stocks" ? (
+              <TextChatViewer textChats={stocks} />
+            ) : viewerMode === "membershipsAndGifts" ? (
+              <MembershipsAndGiftsViewer membershipsAndGifts={membershipsAndGifts} />
+            ) : (
+              <FocusViewer focus={focus} />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

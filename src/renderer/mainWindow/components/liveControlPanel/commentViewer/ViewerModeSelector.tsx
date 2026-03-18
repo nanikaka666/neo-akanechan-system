@@ -17,13 +17,13 @@ export interface ChatItemCount {
 interface ViewerModeSelectorProps {
   currentViewerMode: ViewerMode;
   itemCounts: ChatItemCount;
-  modeUpdator: (mode: ViewerMode) => void;
+  viewerModeUpdator: (mode: ViewerMode) => void;
 }
 
 export function ViewerModeSelector({
   currentViewerMode,
   itemCounts,
-  modeUpdator,
+  viewerModeUpdator,
 }: ViewerModeSelectorProps) {
   const selectOptions: ViewerModeSelectOption[] = [
     { viewerMode: "text", label: "テキストチャット", itemNum: itemCounts.text },
@@ -62,7 +62,7 @@ export function ViewerModeSelector({
               if (option.itemNum === 0) {
                 return;
               }
-              modeUpdator(option.viewerMode);
+              viewerModeUpdator(option.viewerMode);
             }}
           >
             {`${option.label} (${option.itemNum})`}

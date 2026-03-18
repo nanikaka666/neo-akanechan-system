@@ -8,11 +8,19 @@ export type ViewerMode =
   | "focus";
 
 export function useCommentViewerMode() {
-  const [viewerMode, setViewerMode] = useState<ViewerMode>("text");
+  const [currentViewerMode, setCurrentViewerMode] = useState<ViewerMode>("text");
 
-  const modeUpdator = (mode: ViewerMode) => {
-    setViewerMode((_) => mode);
+  const viewerModeUpdator = (mode: ViewerMode) => {
+    setCurrentViewerMode((_) => mode);
   };
 
-  return [viewerMode, modeUpdator] as const;
+  const allViewerMode: ViewerMode[] = [
+    "text",
+    "superchatAndStickers",
+    "stocks",
+    "membershipsAndGifts",
+    "focus",
+  ];
+
+  return [currentViewerMode, viewerModeUpdator, allViewerMode] as const;
 }
