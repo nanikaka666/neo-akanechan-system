@@ -3,7 +3,7 @@ import { WebContentsWrapper } from "./webContentsWrapper";
 import { dialog } from "electron";
 import { UserSettingsService } from "./userSettings";
 import { AuthPage, LiveControlPanelPage, LiveSelectionPage } from "../types/mainAppPage";
-import { doAuthFlow, isUserAuthorized } from "./auth/google";
+import { doAuthFlow, isUserAuthorized, revokeCredentials } from "./auth/google";
 import { YoutubeApiService } from "./youtubeApi/service";
 import {
   buildLiveLaunchProperties,
@@ -310,5 +310,42 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("getLiveLaunchProperties", () => {
     return Promise.resolve(getLiveManager().getLiveLaunchProperties());
+  });
+
+  IpcMainWrapper.handle("accountDisconnect", async () => {
+    if (!isUserAuthorized()) {
+      return true;
+    }
+
+    const mainWindow = getWindowManager().getMainWindow();
+    if (mainWindow === undefined) {
+      return false;
+    }
+    const res = await dialog.showMessageBox(mainWindow, {
+      message: `Youtubeアカウントの連携を解除します`,
+      type: "question",
+      buttons: ["OK", "NO"],
+      defaultId: 0,
+    });
+    if (res.response !== 0) {
+      return false;
+    }
+
+    try {
+      await revokeCredentials();
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.log(e.message);
+      } else {
+        console.log(e);
+      }
+    }
+
+    if (!isUserAuthorized()) {
+      WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", { type: "auth" });
+      return true;
+    }
+
+    return false;
   });
 }
