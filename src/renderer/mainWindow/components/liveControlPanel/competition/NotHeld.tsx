@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { OptionLabel } from "../../../../../types/competition";
+import { useButton } from "../../hooks/useButton";
 
 type OptionNum = 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -13,7 +14,7 @@ export function NotHeld() {
 
   const betAcceptMinutesValues = [1, 5, 10, 15, 20, 30, 40, 50, 60, 90, 120, 150, 180];
 
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [disabled, disable, enable] = useButton();
 
   const checkValidity = useCallback(() => {
     if (question === "") {
@@ -106,10 +107,10 @@ export function NotHeld() {
         </label>
       </div>
       <button
-        disabled={!checkValidity() || buttonDisabled}
+        disabled={!checkValidity() || disabled}
         onClick={(e) => {
           e.preventDefault();
-          setButtonDisabled((_) => true);
+          disable();
           window.ipcApi
             .requestOpenCompetition(
               question,
@@ -117,7 +118,7 @@ export function NotHeld() {
               betAcceptMinutes,
             )
             .then((_) => {
-              setButtonDisabled((_) => false);
+              enable();
               setQuestion((_) => "");
               setOptionStrings((_) => ["", "", "", "", "", "", "", ""]);
             });

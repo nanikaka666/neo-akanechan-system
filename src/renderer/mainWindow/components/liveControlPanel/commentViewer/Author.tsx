@@ -1,6 +1,10 @@
 import { ChatAuthor } from "../../../../../types/liveChatItem";
 
-export function Author({ author }: { author: ChatAuthor }) {
+interface AuthorProps {
+  author: ChatAuthor;
+}
+
+export function Author({ author }: AuthorProps) {
   return (
     <div>
       <img src={author.profileImageUrl} style={{ width: "14px" }} />

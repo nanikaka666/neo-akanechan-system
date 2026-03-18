@@ -1,33 +1,68 @@
-import { Dispatch, SetStateAction } from "react";
-import { ViewerMode, ViewerModeSelectOption } from "./CommentViewer";
+import { ViewerMode } from "../../hooks/useCommentViewerMode";
+
+interface ViewerModeSelectOption {
+  viewerMode: ViewerMode;
+  label: string;
+  itemNum: number;
+}
+
+export interface ChatItemCount {
+  text: number;
+  superChatAndSticker: number;
+  membershipAndGift: number;
+  stock: number;
+  focus: 0 | 1;
+}
+
+interface ViewerModeSelectorProps {
+  currentViewerMode: ViewerMode;
+  itemCounts: ChatItemCount;
+  viewerModeUpdator: (mode: ViewerMode) => void;
+}
 
 export function ViewerModeSelector({
   currentViewerMode,
-  options,
-  setViewerMode,
-}: {
-  currentViewerMode: ViewerMode;
-  options: ViewerModeSelectOption[];
-  setViewerMode: Dispatch<SetStateAction<ViewerMode>>;
-}) {
+  itemCounts,
+  viewerModeUpdator,
+}: ViewerModeSelectorProps) {
+  const selectOptions: ViewerModeSelectOption[] = [
+    { viewerMode: "text", label: "テキストチャット", itemNum: itemCounts.text },
+    {
+      viewerMode: "superchatAndStickers",
+      label: "スパチャ & Sticker",
+      itemNum: itemCounts.superChatAndSticker,
+    },
+    {
+      viewerMode: "stocks",
+      label: "ストック",
+      itemNum: itemCounts.stock,
+    },
+    {
+      viewerMode: "membershipsAndGifts",
+      label: "メンバーシップ & ギフト",
+      itemNum: itemCounts.membershipAndGift,
+    },
+    { viewerMode: "focus", label: "フォーカス中", itemNum: itemCounts.focus },
+  ];
+
   return (
     <div style={{ height: "50px", display: "flex" }}>
-      {options.map((option) => {
+      {selectOptions.map((option) => {
         return (
           <div
             key={option.viewerMode}
             style={
               option.viewerMode === currentViewerMode
                 ? { backgroundColor: "yellow" }
-                : option.disabled
+                : option.itemNum === 0
                   ? { backgroundColor: "gray" }
                   : {}
             }
             onClick={() => {
-              if (option.disabled) {
+              if (option.itemNum === 0) {
                 return;
               }
-              setViewerMode((_) => option.viewerMode);
+              viewerModeUpdator(option.viewerMode);
             }}
           >
             {`${option.label} (${option.itemNum})`}

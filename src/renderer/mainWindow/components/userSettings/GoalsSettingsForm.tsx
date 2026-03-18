@@ -1,15 +1,16 @@
 import { GoalsSettings, UserSettings } from "../../../../types/userSettings";
-import { Dispatch, SetStateAction } from "react";
 import { GoalsValueInput } from "./GoalsValueInput";
 import { GoalsLevelInput } from "./GoalsLevelInput";
 
+interface GoalsSettingsFormProps {
+  goalsSettings: GoalsSettings;
+  updateUserSettingsOnEditting: (settings: Partial<UserSettings>) => void;
+}
+
 export function GoalsSettingsForm({
   goalsSettings,
-  setCurrentUserSettings,
-}: {
-  goalsSettings: GoalsSettings;
-  setCurrentUserSettings: Dispatch<SetStateAction<UserSettings>>;
-}) {
+  updateUserSettingsOnEditting,
+}: GoalsSettingsFormProps) {
   return (
     <div>
       <div>ゴール</div>
@@ -19,9 +20,7 @@ export function GoalsSettingsForm({
             type="checkbox"
             checked={goalsSettings.useSubscribersCountGoal}
             onChange={(e) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ useSubscribersCountGoal: e.target.checked } };
-              });
+              updateUserSettingsOnEditting({ useSubscribersCountGoal: e.target.checked });
             }}
           />
           チャンネル登録者数の目標を設定する
@@ -33,9 +32,7 @@ export function GoalsSettingsForm({
           <GoalsValueInput
             initialValue={goalsSettings.subscribersCountGoalValue}
             func={(value) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ subscribersCountGoalValue: value } };
-              });
+              updateUserSettingsOnEditting({ subscribersCountGoalValue: value });
             }}
           />
         </label>
@@ -47,9 +44,7 @@ export function GoalsSettingsForm({
             type="checkbox"
             checked={goalsSettings.useLikeCountGoal}
             onChange={(e) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ useLikeCountGoal: e.target.checked } };
-              });
+              updateUserSettingsOnEditting({ useLikeCountGoal: e.target.checked });
             }}
           />
           高評価数の目標を設定する
@@ -61,9 +56,7 @@ export function GoalsSettingsForm({
           <GoalsLevelInput
             initialValue={goalsSettings.likeCountGoalMaxLevel}
             func={(level) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ likeCountGoalMaxLevel: level } };
-              });
+              updateUserSettingsOnEditting({ likeCountGoalMaxLevel: level });
             }}
           />
         </label>
@@ -74,9 +67,7 @@ export function GoalsSettingsForm({
           <GoalsValueInput
             initialValue={goalsSettings.likeCountGoalMaxValue}
             func={(value) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ likeCountGoalMaxValue: value } };
-              });
+              updateUserSettingsOnEditting({ likeCountGoalMaxValue: value });
             }}
           />
         </label>
@@ -88,9 +79,7 @@ export function GoalsSettingsForm({
             type="checkbox"
             checked={goalsSettings.useLiveViewCountGoal}
             onChange={(e) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ useLiveViewCountGoal: e.target.checked } };
-              });
+              updateUserSettingsOnEditting({ useLiveViewCountGoal: e.target.checked });
             }}
           />
           同時接続数の目標を設定する
@@ -102,9 +91,7 @@ export function GoalsSettingsForm({
           <GoalsLevelInput
             initialValue={goalsSettings.liveViewCountGoalMaxLevel}
             func={(level) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ liveViewCountGoalMaxLevel: level } };
-              });
+              updateUserSettingsOnEditting({ liveViewCountGoalMaxLevel: level });
             }}
           />
         </label>
@@ -115,9 +102,7 @@ export function GoalsSettingsForm({
           <GoalsValueInput
             initialValue={goalsSettings.liveViewCountGoalMaxValue}
             func={(value) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ liveViewCountGoalMaxValue: value } };
-              });
+              updateUserSettingsOnEditting({ liveViewCountGoalMaxValue: value });
             }}
           />
         </label>

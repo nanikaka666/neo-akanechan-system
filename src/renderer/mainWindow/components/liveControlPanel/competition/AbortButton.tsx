@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useButton } from "../../hooks/useButton";
 
 export function AbortButton() {
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, disable, enable] = useButton();
 
   return (
     <button
       onClick={(e) => {
         e.preventDefault();
-        setDisabled((_) => true);
+        disable();
         window.ipcApi.requestAbortCompetition().then(() => {
-          setDisabled((_) => false);
+          enable();
         });
       }}
       disabled={disabled}

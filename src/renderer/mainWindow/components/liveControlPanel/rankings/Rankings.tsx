@@ -1,19 +1,14 @@
-import { useEffect, useState } from "react";
-import { PariticipantPointRankings } from "../../../../../types/participantPoint";
-import { useIsShownRanking } from "../../hooks/useIsShownRanking";
+import { useRankings } from "../../hooks/useRankings";
 
 export function Rankings() {
-  const [rankings, setRankings] = useState<PariticipantPointRankings>();
-  const [showButtonDisabled, setShowButtonDisabled] = useState(false);
-  const isShown = useIsShownRanking();
+  const [
+    rankings,
+    reflectRankingsToOverlayEnabled,
+    isRankingsShownOnOverlay,
+    onClickReflectRankingButton,
+    onClickHideRankingButton,
+  ] = useRankings();
 
-  useEffect(() => {
-    const remover = window.ipcApi.registerRankingsListener((e, rankings) => {
-      setRankings((_) => rankings);
-      setShowButtonDisabled((_) => false);
-    });
-    return () => remover();
-  }, []);
   return rankings ? (
     <div>
       <span style={{ position: "absolute", top: 0, right: 0 }}>
@@ -23,20 +18,18 @@ export function Rankings() {
         <button
           onClick={(e) => {
             e.preventDefault();
-            setShowButtonDisabled((_) => true);
-            window.ipcApi.requestShowRanking(rankings);
+            onClickReflectRankingButton(rankings);
           }}
-          disabled={showButtonDisabled}
+          disabled={!reflectRankingsToOverlayEnabled}
         >
           ランキングを配信画面に映す
         </button>
         <button
           onClick={(e) => {
             e.preventDefault();
-            setShowButtonDisabled((_) => false);
-            window.ipcApi.requestHideRanking();
+            onClickHideRankingButton();
           }}
-          disabled={!isShown}
+          disabled={!isRankingsShownOnOverlay}
         >
           配信画面のランキング表示をやめる
         </button>

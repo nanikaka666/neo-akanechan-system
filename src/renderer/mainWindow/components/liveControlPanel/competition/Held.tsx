@@ -3,7 +3,7 @@ import { AbortButton } from "./AbortButton";
 import { BetStatusView } from "./BetStatusView";
 import { ManuallyEntryCloseButton } from "./ManuallyEntryCloseButton";
 
-export interface HeldProps {
+interface HeldProps {
   status: HeldCompetition;
 }
 

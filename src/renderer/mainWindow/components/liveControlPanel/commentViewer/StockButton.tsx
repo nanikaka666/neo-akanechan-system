@@ -1,16 +1,20 @@
-import { useState } from "react";
 import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
+import { useButton } from "../../hooks/useButton";
 
-export function StockButton({ item }: { item: ExtendedChatItemText }) {
-  const [disabled, setDisabled] = useState(false);
+interface StockButtonProps {
+  item: ExtendedChatItemText;
+}
+
+export function StockButton({ item }: StockButtonProps) {
+  const [disabled, disable, enable] = useButton();
 
   return (
     <button
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        setDisabled((_) => true);
-        window.ipcApi.requestAddStock(item);
+        disable();
+        window.ipcApi.requestAddStock(item).then(() => enable());
       }}
       disabled={disabled}
     >

@@ -1,7 +1,11 @@
 import { GiftReceived } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 
-export function GiftReceivedItem({ item }: { item: GiftReceived }) {
+interface GiftReceivedItemProps {
+  item: GiftReceived;
+}
+
+export function GiftReceivedItem({ item }: GiftReceivedItemProps) {
   return (
     <div style={{ backgroundColor: "purple" }}>
       <Author author={item.author} />

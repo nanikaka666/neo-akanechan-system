@@ -3,7 +3,7 @@ import { AbortButton } from "./AbortButton";
 import { AnswerDecisionForm } from "./AnswerDecisionForm";
 import { BetStatusView } from "./BetStatusView";
 
-export interface EntryClosedProps {
+interface EntryClosedProps {
   status: EntryClosedCompetition;
 }
 

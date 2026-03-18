@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useButton } from "../../hooks/useButton";
 
 export function ManuallyEntryCloseButton() {
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, disable, enable] = useButton();
   return (
     <button
       disabled={disabled}
       onClick={(e) => {
         e.preventDefault();
-        setDisabled((_) => true);
+        disable();
         window.ipcApi.requestManuallyEntryClose().then(() => {
-          setDisabled((_) => false);
+          enable();
         });
       }}
     >

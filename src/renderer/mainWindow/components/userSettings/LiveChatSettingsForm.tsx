@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import {
   LiveChatDisplayStyle,
   LiveChatSettings,
@@ -7,13 +6,15 @@ import {
 
 const displayStyles: LiveChatDisplayStyle[] = ["typical"];
 
+interface LiveChatSettingsFormProps {
+  liveChatSettings: LiveChatSettings;
+  updateUserSettingsOnEditting: (settings: Partial<UserSettings>) => void;
+}
+
 export function LiveChatSettingsForm({
   liveChatSettings,
-  setCurrentUserSettings,
-}: {
-  liveChatSettings: LiveChatSettings;
-  setCurrentUserSettings: Dispatch<SetStateAction<UserSettings>>;
-}) {
+  updateUserSettingsOnEditting,
+}: LiveChatSettingsFormProps) {
   return (
     <div>
       <div>ライブチャット</div>
@@ -23,9 +24,7 @@ export function LiveChatSettingsForm({
             type="checkbox"
             checked={liveChatSettings.useLiveChatDisplay}
             onChange={(e) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ useLiveChatDisplay: e.target.checked } };
-              });
+              updateUserSettingsOnEditting({ useLiveChatDisplay: e.target.checked });
             }}
           ></input>
           ライブチャットの内容をオーバーレイに映す
@@ -42,9 +41,7 @@ export function LiveChatSettingsForm({
               disabled={!liveChatSettings.useLiveChatDisplay}
               checked={style === liveChatSettings.displayStyle}
               onChange={() => {
-                setCurrentUserSettings((prev) => {
-                  return { ...prev, ...{ displayStyle: style } };
-                });
+                updateUserSettingsOnEditting({ displayStyle: style });
               }}
             />
             {style}
@@ -59,9 +56,7 @@ export function LiveChatSettingsForm({
             checked={liveChatSettings.authorIconVisibility}
             disabled={!liveChatSettings.useLiveChatDisplay}
             onChange={(e) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ authorIconVisibility: e.target.checked } };
-              });
+              updateUserSettingsOnEditting({ authorIconVisibility: e.target.checked });
             }}
           />
           ユーザアイコンを表示する
@@ -75,9 +70,7 @@ export function LiveChatSettingsForm({
             checked={liveChatSettings.authorNameVisibility}
             disabled={!liveChatSettings.useLiveChatDisplay}
             onChange={(e) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ authorNameVisibility: e.target.checked } };
-              });
+              updateUserSettingsOnEditting({ authorNameVisibility: e.target.checked });
             }}
           />
           ユーザ名を表示する
@@ -91,9 +84,7 @@ export function LiveChatSettingsForm({
             checked={liveChatSettings.membershipBadgeVisibility}
             disabled={!liveChatSettings.useLiveChatDisplay}
             onChange={(e) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ membershipBadgeVisibility: e.target.checked } };
-              });
+              updateUserSettingsOnEditting({ membershipBadgeVisibility: e.target.checked });
             }}
           />
           メンバーシップバッジを表示する
@@ -107,9 +98,7 @@ export function LiveChatSettingsForm({
             checked={liveChatSettings.decorateFirstChat}
             disabled={!liveChatSettings.useLiveChatDisplay}
             onChange={(e) => {
-              setCurrentUserSettings((prev) => {
-                return { ...prev, ...{ decorateFirstChat: e.target.checked } };
-              });
+              updateUserSettingsOnEditting({ decorateFirstChat: e.target.checked });
             }}
           />
           最初の書き込みを目立たせる

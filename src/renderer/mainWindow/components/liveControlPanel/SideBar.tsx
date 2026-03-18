@@ -1,49 +1,46 @@
-import { CSSProperties, Dispatch, SetStateAction } from "react";
+import { CSSProperties } from "react";
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
-import { Mode } from "./LiveControlPanel";
 import { SideBarInfoArea } from "./SideBarInfoArea";
 import { QuitLiveButton } from "./QuitLiveButton";
+import { MainContentsName } from "../hooks/useMainContentsTab";
 
 const selectedStyle: CSSProperties = { backgroundColor: "orange" };
 
+interface SideBarProps {
+  liveLaunchProperties: LiveLaunchProperties;
+  currentMainContents: MainContentsName;
+  switchMainContents: (to: MainContentsName) => void;
+  allContentsNames: MainContentsName[];
+}
+
 export function SideBar({
   liveLaunchProperties,
-  mode,
-  setMode,
-}: {
-  liveLaunchProperties: LiveLaunchProperties;
-  mode: Mode;
-  setMode: Dispatch<SetStateAction<Mode>>;
-}) {
+  currentMainContents,
+  switchMainContents,
+  allContentsNames,
+}: SideBarProps) {
   return (
     <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
       <div>
         <img src={liveLaunchProperties.live.thumbnailUrl} style={{ width: "100px" }}></img>
       </div>
-      <div
-        onClick={() => setMode((_) => "commentViewer")}
-        style={mode === "commentViewer" ? selectedStyle : undefined}
-      >
-        Comment Viewer
-      </div>
-      <div
-        onClick={() => setMode((_) => "competition")}
-        style={mode === "competition" ? selectedStyle : undefined}
-      >
-        Competition
-      </div>
-      <div
-        onClick={() => setMode((_) => "rankings")}
-        style={mode === "rankings" ? selectedStyle : undefined}
-      >
-        Participant Point Rankings
-      </div>
-      <div
-        onClick={() => setMode((_) => "goals")}
-        style={mode === "goals" ? selectedStyle : undefined}
-      >
-        Goals
-      </div>
+      {allContentsNames.map((contentsName) => {
+        return (
+          <div
+            key={contentsName}
+            onClick={() => switchMainContents(contentsName)}
+            style={currentMainContents === contentsName ? selectedStyle : {}}
+          >
+            {contentsName === "commentViewer"
+              ? "コメントビューワー"
+              : contentsName === "competition"
+                ? "コンペティション"
+                : contentsName === "rankings"
+                  ? "ランキング"
+                  : "目標"}
+          </div>
+        );
+      })}
       <SideBarInfoArea />
       <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
     </div>

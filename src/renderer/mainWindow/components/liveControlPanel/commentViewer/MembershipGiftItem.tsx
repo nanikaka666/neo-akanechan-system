@@ -1,7 +1,11 @@
 import { MembershipGift } from "../../../../../types/liveChatItem";
 import { Author } from "./Author";
 
-export function MembershipGiftItem({ item }: { item: MembershipGift }) {
+interface MembershipGiftItemProps {
+  item: MembershipGift;
+}
+
+export function MembershipGiftItem({ item }: MembershipGiftItemProps) {
   return (
     <div style={{ backgroundColor: "pink" }}>
       <Author author={item.author} />

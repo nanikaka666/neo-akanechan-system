@@ -3,7 +3,11 @@ import { SuperChatItem } from "./SuperChatItem";
 import { SuperStickerItem } from "./SuperStickerItem";
 import { TextChatItem } from "./TextChatItem";
 
-export function FocusItem({ item }: { item: FocusedOnChatItem }) {
+interface FocusItemProps {
+  item: FocusedOnChatItem;
+}
+
+export function FocusItem({ item }: FocusItemProps) {
   return (
     <div style={{ height: `calc(100vh - 50px)` }}>
       {item.type === "text" ? (

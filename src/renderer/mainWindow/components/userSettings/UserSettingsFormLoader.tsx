@@ -1,23 +1,15 @@
-import { useEffect, useState } from "react";
-import { UserSettings } from "../../../../types/userSettings";
 import { UserSettingsForm } from "./UserSettingsForm";
+import { useUserSettings } from "../hooks/useUserSettings";
 
-export function UserSettingsFormLoader({ turnOff }: { turnOff: () => void }) {
-  const [userSettings, setUserSettings] = useState<UserSettings>();
+interface UserSettingsFormLoaderProps {
+  turnOff: () => void;
+}
 
-  useEffect(() => {
-    window.ipcApi.requestUserSettings().then((res) => {
-      setUserSettings((_) => res);
-    });
-    const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, settings) => {
-      setUserSettings((_) => settings);
-      turnOff();
-    });
-    return () => remover();
-  }, [turnOff]);
+export function UserSettingsFormLoader({ turnOff }: UserSettingsFormLoaderProps) {
+  const userSettings = useUserSettings();
 
   return userSettings ? (
-    <UserSettingsForm userSettings={userSettings} />
+    <UserSettingsForm userSettings={userSettings} turnOff={turnOff} />
   ) : (
     <div>Now Loading...</div>
   );

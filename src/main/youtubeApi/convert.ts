@@ -31,18 +31,6 @@ import {
 } from "../liveManager/dataFetcher/liveChatDataFetcher";
 import { ChannelId, LiveChatItemId } from "../../types/youtubeDomainModel";
 
-function to2Digit(value: string) {
-  return value.length === 1 ? "0" + value : value;
-}
-
-function convertFormattedDate(date: Date) {
-  const hour = date.getHours() + "";
-  const minute = date.getMinutes() + "";
-  const second = date.getSeconds() + "";
-
-  return `${to2Digit(hour)}:${to2Digit(minute)}:${to2Digit(second)}`;
-}
-
 function convertCommonPart(item: LiveChatItemCommonPart): ChatCommonPart {
   return {
     id: new LiveChatItemId(item.id),
@@ -56,7 +44,6 @@ function convertCommonPart(item: LiveChatItemCommonPart): ChatCommonPart {
     },
     publishedAt: item.snippet.publishedAt,
     displayMessage: item.snippet.displayMessage,
-    formattedTimeString: convertFormattedDate(item.snippet.publishedAt),
   };
 }
 

@@ -1,8 +1,12 @@
-import { useState } from "react";
 import { FocusedOnChatItem } from "../../../../../types/liveChatItem";
+import { useButton } from "../../hooks/useButton";
 
-export function FocusButton({ item }: { item: FocusedOnChatItem }) {
-  const [disabled, setDisabled] = useState(false);
+interface FocusButtonProps {
+  item: FocusedOnChatItem;
+}
+
+export function FocusButton({ item }: FocusButtonProps) {
+  const [disabled, disable, enable] = useButton();
 
   return (
     <button
@@ -10,8 +14,8 @@ export function FocusButton({ item }: { item: FocusedOnChatItem }) {
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        setDisabled((_) => true);
-        window.ipcApi.requestUpdateFocus(item);
+        disable();
+        window.ipcApi.requestUpdateFocus(item).then(() => enable());
       }}
     >
       フォーカスする

@@ -5,7 +5,6 @@ import { ViewerCountIndicator } from "./indicator/ViewerCountIndicator";
 import { SubscriberCountIndicator } from "./indicator/SubscriberCountIndicator";
 import { useCallback } from "react";
 import { useLiveSettings } from "../../hooks/useLiveSettings";
-import { useLiveStatistics } from "./hooks/useLiveStatistics";
 import { useOverlayEvent } from "./hooks/useOverlayEvent";
 import { ChatLogManager } from "./chatLog/ChatLogManager";
 import { Ranking } from "./ranking/Ranking";
@@ -17,6 +16,7 @@ import { FocusView } from "./focus/FocusView";
 import { useLikeCountGoalStatus } from "./hooks/useLikeCountGoalStatus";
 import { useViewerCountGoalStatus } from "./hooks/useViewerCountGoalStatus";
 import { useIsSubscriberCountGoalAccomplished } from "./hooks/useIsSubscriberCountGoalAccomplished";
+import { useLiveStatistics } from "../../hooks/useLiveStatistics";
 
 export function OverlayApp() {
   const liveSettings = useLiveSettings();

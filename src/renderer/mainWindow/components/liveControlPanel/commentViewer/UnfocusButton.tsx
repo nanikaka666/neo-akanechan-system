@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useButton } from "../../hooks/useButton";
 
 export function UnfocusButton() {
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, disable, enable] = useButton();
 
   return (
     <button
@@ -9,8 +9,8 @@ export function UnfocusButton() {
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        setDisabled((_) => true);
-        window.ipcApi.requestUpdateFocus(undefined);
+        disable();
+        window.ipcApi.requestUpdateFocus(undefined).then(() => enable());
       }}
     >
       フォーカスを外す

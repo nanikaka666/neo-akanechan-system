@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { OptionLabel } from "../../../../../types/competition";
+import { useButton } from "../../hooks/useButton";
 
-export interface AnswerDecisionFormProps {
+interface AnswerDecisionFormProps {
   options: Map<OptionLabel, string>;
 }
 
 export function AnswerDecisionForm({ options }: AnswerDecisionFormProps) {
   const [answer, setAnswer] = useState<OptionLabel>("a");
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, disable, enable] = useButton();
 
   return (
     <div>
@@ -29,9 +30,9 @@ export function AnswerDecisionForm({ options }: AnswerDecisionFormProps) {
         disabled={disabled}
         onClick={(e) => {
           e.preventDefault();
-          setDisabled((_) => true);
+          disable();
           window.ipcApi.requestAnswerDecision(answer, options.get(answer)!).then(() => {
-            setDisabled((_) => false);
+            enable();
           });
         }}
       >
