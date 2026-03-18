@@ -127,7 +127,7 @@ export function setupIpcMainHandlers() {
     if (!maybeChannel) {
       dialog.showErrorBox(
         "Please OAuth flow again",
-        "Youtube Channel associated with oauth accound is not found.",
+        "Youtube Channel associated with oauth account is not found.",
       );
       return Promise.resolve({ type: "auth" } satisfies AuthPage);
     }
@@ -198,7 +198,7 @@ export function setupIpcMainHandlers() {
     if (!maybeChannel) {
       dialog.showErrorBox(
         "Please OAuth flow again",
-        "Youtube Channel associated with oauth accound is not found.",
+        "Youtube Channel associated with oauth account is not found.",
       );
       return false;
     }
