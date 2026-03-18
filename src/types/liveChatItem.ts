@@ -23,10 +23,6 @@ export interface ChatCommonPart {
   author: ChatAuthor;
   publishedAt: Date;
   displayMessage: string;
-  /**
-   * HH:mm:ss style time format
-   */
-  formattedTimeString: string;
 }
 
 export interface FirstMarkable {
