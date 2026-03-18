@@ -4,6 +4,7 @@ import { Channel } from "../../../../types/youtubeChannel";
 import { UserSettingsButton } from "./UserSettingsButton";
 import { LiveStartButton } from "./LiveStartButton";
 import { LiveStartWithVideoIdButton } from "./LiveStartWithVideoIdButton";
+import { AccountDisconnectButton } from "./AccountDisconnectButton";
 
 interface LiveSelectionProps {
   channel: Channel;
@@ -28,6 +29,7 @@ export function LiveSelection({ channel, lives }: LiveSelectionProps) {
         );
       })}
       <LiveStartWithVideoIdButton />
+      <AccountDisconnectButton />
     </div>
   );
 }
