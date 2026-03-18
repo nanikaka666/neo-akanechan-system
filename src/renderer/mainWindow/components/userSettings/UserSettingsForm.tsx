@@ -12,11 +12,11 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
   const originalUserSettings = useMemo<UserSettings>(() => {
     return { ...userSettings };
   }, [userSettings]);
-  const [currentUserSettings, setCurrentUserSettings] =
+  const [userSettingsOnEditting, setUserSettingsOnEditting] =
     useState<UserSettings>(originalUserSettings);
 
   const updateUserSettingsOnEditting = (settings: Partial<UserSettings>) => {
-    setCurrentUserSettings((prev) => {
+    setUserSettingsOnEditting((prev) => {
       return { ...prev, ...settings };
     });
   };
@@ -25,27 +25,27 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
 
   useEffect(() => {
     window.ipcApi
-      .requestCheckHavingDifferenceAmongUserSettings(originalUserSettings, currentUserSettings)
+      .requestCheckHavingDifferenceAmongUserSettings(originalUserSettings, userSettingsOnEditting)
       .then((res) => {
         setIsSaveDisabled((_) => !res);
       });
-  }, [currentUserSettings, originalUserSettings]);
+  }, [userSettingsOnEditting, originalUserSettings]);
 
   return (
     <div>
       <div>User Settings Form</div>
       <LiveChatSettingsForm
-        liveChatSettings={currentUserSettings}
+        liveChatSettings={userSettingsOnEditting}
         updateUserSettingsOnEditting={updateUserSettingsOnEditting}
       />
       <GoalsSettingsForm
-        goalsSettings={currentUserSettings}
+        goalsSettings={userSettingsOnEditting}
         updateUserSettingsOnEditting={updateUserSettingsOnEditting}
       />
       <button
         onClick={(e) => {
           e.preventDefault();
-          window.ipcApi.requestSaveUserSettings(currentUserSettings).then(() => turnOff());
+          window.ipcApi.requestSaveUserSettings(userSettingsOnEditting).then(() => turnOff());
         }}
         disabled={isSaveDisabled}
       >
