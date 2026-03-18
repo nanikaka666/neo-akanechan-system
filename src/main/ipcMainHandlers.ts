@@ -17,26 +17,18 @@ import {
   setupLiveManager,
 } from "./liveManager";
 import { getWindowManager } from "./window";
+import { yesNoDialogOnMainWindow } from "./dialog";
 
 export function setupIpcMainHandlers() {
-  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (_, channel, live) => {
+  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
-      return Promise.resolve(false);
+      return false;
     }
-    const mainWindow = getWindowManager().getMainWindow();
-    if (mainWindow === undefined) {
-      return Promise.resolve(false);
-    }
-    const res = await dialog.showMessageBox(mainWindow, {
-      message: `ライブ配信を開始しますか？`,
-      type: "question",
-      buttons: ["OK", "NO"],
-      defaultId: 0,
-      detail: `${live.title}`,
-    });
-    if (res.response !== 0) {
-      return Promise.resolve(false);
+
+    const res = await yesNoDialogOnMainWindow(`ライブ配信を開始しますか？`, live.title);
+    if (!res) {
+      return false;
     }
 
     const liveLaunchProperties = buildLiveLaunchProperties(channel, live);
@@ -44,19 +36,15 @@ export function setupIpcMainHandlers() {
     setupLiveManager(liveLaunchProperties);
     getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
-    WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
+    WebContentsWrapper.send(e.sender, "tellMainAppPage", {
       type: "liveStandBy",
     });
-    return Promise.resolve(true);
+    return true;
   });
 
-  IpcMainWrapper.handle("startOverlayWithUserConfirmationByVideoId", async (_, inputVideoId) => {
+  IpcMainWrapper.handle("startOverlayWithUserConfirmationByVideoId", async (e, inputVideoId) => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
-      return false;
-    }
-    const mainWindow = getWindowManager().getMainWindow();
-    if (mainWindow === undefined) {
       return false;
     }
 
@@ -64,21 +52,18 @@ export function setupIpcMainHandlers() {
       const liveLaunchProperties = await buildLiveLaunchPropertiesForDebug(
         new VideoId(inputVideoId),
       );
-      const res = await dialog.showMessageBox(mainWindow, {
-        message: `ライブ配信を開始しますか？`,
-        type: "question",
-        buttons: ["OK", "NO"],
-        defaultId: 0,
-        detail: `${liveLaunchProperties.live.title}`,
-      });
-      if (res.response !== 0) {
+      const res = await yesNoDialogOnMainWindow(
+        `ライブ配信を開始しますか？`,
+        liveLaunchProperties.live.title,
+      );
+      if (!res) {
         return false;
       }
 
       setupLiveManager(liveLaunchProperties);
       getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
 
-      WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
         type: "liveStandBy",
       });
       return true;
@@ -162,19 +147,12 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("quitLive", async (_, liveLaunchProperties) => {
-    const mainWindow = getWindowManager().getMainWindow();
-    if (mainWindow === undefined) {
-      return false;
-    }
-    const res = await dialog.showMessageBox(mainWindow, {
-      message: `本当に終了しますか？`,
-      type: "question",
-      buttons: ["OK", "NO"],
-      defaultId: 0,
-      detail: `${liveLaunchProperties.live.title}`,
-    });
-    if (res.response !== 0) {
+  IpcMainWrapper.handle("quitLive", async (e, liveLaunchProperties) => {
+    const res = await yesNoDialogOnMainWindow(
+      `本当に終了しますか？`,
+      liveLaunchProperties.live.title,
+    );
+    if (!res) {
       return false;
     }
 
@@ -185,11 +163,11 @@ export function setupIpcMainHandlers() {
 
     const channel = await YoutubeApiService.getChannelOfMine();
     if (!channel) {
-      WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
         type: "auth",
       } satisfies AuthPage);
     } else {
-      WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", {
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", {
         type: "liveSelection",
         channel: channel,
         lives: await YoutubeApiService.getNotFinishedLivesOfMine(),
@@ -254,17 +232,8 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("abortCompetition", async () => {
-    const mainWindow = getWindowManager().getMainWindow();
-    if (mainWindow === undefined) {
-      return false;
-    }
-    const res = await dialog.showMessageBox(mainWindow, {
-      message: `本当にコンペを終了しますか？`,
-      type: "question",
-      buttons: ["OK", "NO"],
-      defaultId: 0,
-    });
-    if (res.response !== 0) {
+    const res = await yesNoDialogOnMainWindow(`本当にコンペを終了しますか？`);
+    if (!res) {
       return false;
     }
     getLiveManager().actionAbortCompetition();
@@ -272,18 +241,11 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("answerDecision", async (_, answer, optionStr) => {
-    const mainWindow = getWindowManager().getMainWindow();
-    if (mainWindow === undefined) {
-      return false;
-    }
-    const res = await dialog.showMessageBox(mainWindow, {
-      message: `コンペの正解を確定します`,
-      type: "question",
-      buttons: ["OK", "NO"],
-      defaultId: 0,
-      detail: `${answer}: ${optionStr}`,
-    });
-    if (res.response !== 0) {
+    const res = await yesNoDialogOnMainWindow(
+      `コンペの正解を確定します`,
+      `${answer}: ${optionStr}`,
+    );
+    if (!res) {
       return false;
     }
     getLiveManager().actionAnswerDecision(answer);
@@ -291,17 +253,8 @@ export function setupIpcMainHandlers() {
   });
 
   IpcMainWrapper.handle("manuallyEntryClose", async () => {
-    const mainWindow = getWindowManager().getMainWindow();
-    if (mainWindow === undefined) {
-      return false;
-    }
-    const res = await dialog.showMessageBox(mainWindow, {
-      message: `コンペの参加を締め切ります`,
-      type: "question",
-      buttons: ["OK", "NO"],
-      defaultId: 0,
-    });
-    if (res.response !== 0) {
+    const res = await yesNoDialogOnMainWindow(`コンペの参加を締め切ります`);
+    if (!res) {
       return false;
     }
     getLiveManager().actionManuallyEntryClose();
@@ -312,22 +265,13 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(getLiveManager().getLiveLaunchProperties());
   });
 
-  IpcMainWrapper.handle("accountDisconnect", async () => {
+  IpcMainWrapper.handle("accountDisconnect", async (e) => {
     if (!isUserAuthorized()) {
       return true;
     }
 
-    const mainWindow = getWindowManager().getMainWindow();
-    if (mainWindow === undefined) {
-      return false;
-    }
-    const res = await dialog.showMessageBox(mainWindow, {
-      message: `Youtubeアカウントの連携を解除します`,
-      type: "question",
-      buttons: ["OK", "NO"],
-      defaultId: 0,
-    });
-    if (res.response !== 0) {
+    const res = await yesNoDialogOnMainWindow(`Youtubeアカウントの連携を解除します`);
+    if (!res) {
       return false;
     }
 
@@ -342,7 +286,7 @@ export function setupIpcMainHandlers() {
     }
 
     if (!isUserAuthorized()) {
-      WebContentsWrapper.send(mainWindow.webContents, "tellMainAppPage", { type: "auth" });
+      WebContentsWrapper.send(e.sender, "tellMainAppPage", { type: "auth" });
       return true;
     }
 
