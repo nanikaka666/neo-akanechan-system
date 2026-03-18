@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
-import { RangeInfo } from "./CommentViewer";
 import { TextChatItem } from "./TextChatItem";
 import { useListRange } from "../../hooks/useListRange";
 import { ListRangeView } from "./ListRangeView";
@@ -17,31 +16,10 @@ export function TextChatViewer({
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
-  const rangeInfo: RangeInfo | undefined =
-    textChats.length !== 0 &&
-    range.startIndex < textChats.length &&
-    range.endIndex < textChats.length
-      ? {
-          time: {
-            start: textChats[range.startIndex].formattedTimeString,
-            end: textChats[range.endIndex].formattedTimeString,
-          },
-          indexOfWhole: {
-            start: textChats[range.startIndex].indexOfWhole,
-            end: textChats[range.endIndex].indexOfWhole,
-          },
-        }
-      : undefined;
-
   return (
     <div>
       <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
         <ListRangeView range={range} chunkSize={textChats.length} />
-        {rangeInfo && (
-          <p>
-            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${textChatNum}`}
-          </p>
-        )}
         {showGoToBottom && (
           <button
             onClick={(e) => {

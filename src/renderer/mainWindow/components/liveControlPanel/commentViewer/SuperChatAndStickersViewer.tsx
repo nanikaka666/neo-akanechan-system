@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { ExtendedSuperItem } from "../../../../../types/liveChatItem";
-import { RangeInfo } from "./CommentViewer";
 import { SuperChatItem } from "./SuperChatItem";
 import { SuperStickerItem } from "./SuperStickerItem";
 import { useListRange } from "../../hooks/useListRange";
@@ -16,31 +15,10 @@ export function SuperChatAndStickersViewer({
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
-  const rangeInfo: RangeInfo | undefined =
-    superChatAndStickers.length !== 0 &&
-    range.startIndex < superChatAndStickers.length &&
-    range.endIndex < superChatAndStickers.length
-      ? {
-          time: {
-            start: superChatAndStickers[range.startIndex].formattedTimeString,
-            end: superChatAndStickers[range.endIndex].formattedTimeString,
-          },
-          indexOfWhole: {
-            start: range.startIndex + 1,
-            end: range.endIndex + 1,
-          },
-        }
-      : undefined;
-
   return (
     <div>
       <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
         <ListRangeView range={range} chunkSize={superChatAndStickers.length} />
-        {rangeInfo && (
-          <p>
-            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${superChatAndStickers.length}`}
-          </p>
-        )}
         {showGoToBottom && (
           <button
             onClick={(e) => {

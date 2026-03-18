@@ -8,17 +8,6 @@ import { FocusViewer } from "./FocusViewer";
 import { useChats } from "../../hooks/useChats";
 import { useMembershipsAndGifts } from "../../hooks/useMembershipsAndGifts";
 
-export interface RangeInfo {
-  time: {
-    start: string;
-    end: string;
-  };
-  indexOfWhole: {
-    start: number;
-    end: number;
-  };
-}
-
 const displayNone: CSSProperties = { display: "none" };
 
 export function CommentViewer() {

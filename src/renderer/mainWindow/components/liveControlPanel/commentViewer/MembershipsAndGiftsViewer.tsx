@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { VirtuosoHandle, Virtuoso } from "react-virtuoso";
 import { MembershipAndGiftItem } from "../../../../../types/liveChatItem";
-import { RangeInfo } from "./CommentViewer";
 import { NewMembershipItem } from "./NewMembershipItem";
 import { MembershipMilestoneItem } from "./MembershipMilestoneItem";
 import { MembershipGiftItem } from "./MembershipGiftItem";
@@ -18,31 +17,10 @@ export function MembershipsAndGiftsViewer({
   const ref = useRef<VirtuosoHandle>(null); // for control scroll position
   const [showGoToBottom, setShowGoToBottom] = useState(false);
 
-  const rangeInfo: RangeInfo | undefined =
-    membershipsAndGifts.length !== 0 &&
-    range.startIndex < membershipsAndGifts.length &&
-    range.endIndex < membershipsAndGifts.length
-      ? {
-          time: {
-            start: membershipsAndGifts[range.startIndex].formattedTimeString,
-            end: membershipsAndGifts[range.endIndex].formattedTimeString,
-          },
-          indexOfWhole: {
-            start: range.startIndex + 1,
-            end: range.endIndex + 1,
-          },
-        }
-      : undefined;
-
   return (
     <div>
       <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
         <ListRangeView range={range} chunkSize={membershipsAndGifts.length} />
-        {rangeInfo && (
-          <p>
-            {`${rangeInfo.time.start} (${rangeInfo.indexOfWhole.start}) - ${rangeInfo.time.end} (${rangeInfo.indexOfWhole.end}) / ${membershipsAndGifts.length}`}
-          </p>
-        )}
         {showGoToBottom && (
           <button
             onClick={(e) => {
