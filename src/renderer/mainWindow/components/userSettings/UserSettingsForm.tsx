@@ -5,9 +5,10 @@ import { GoalsSettingsForm } from "./GoalsSettingsForm";
 
 interface UserSettingsFormProps {
   userSettings: UserSettings;
+  turnOff: () => void;
 }
 
-export function UserSettingsForm({ userSettings }: UserSettingsFormProps) {
+export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProps) {
   const originalUserSettings = useMemo<UserSettings>(() => {
     return { ...userSettings };
   }, [userSettings]);
@@ -26,6 +27,7 @@ export function UserSettingsForm({ userSettings }: UserSettingsFormProps) {
   async function onClick(e: MouseEvent) {
     e.preventDefault();
     await window.ipcApi.requestSaveUserSettings(currentUserSettings);
+    turnOff();
   }
 
   return (

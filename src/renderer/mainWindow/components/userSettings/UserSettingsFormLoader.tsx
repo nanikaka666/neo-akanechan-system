@@ -15,13 +15,12 @@ export function UserSettingsFormLoader({ turnOff }: UserSettingsFormLoaderProps)
     });
     const remover = window.ipcApi.registerUpdatedUserSettingsListener((e, settings) => {
       setUserSettings((_) => settings);
-      turnOff();
     });
     return () => remover();
-  }, [turnOff]);
+  }, []);
 
   return userSettings ? (
-    <UserSettingsForm userSettings={userSettings} />
+    <UserSettingsForm userSettings={userSettings} turnOff={turnOff} />
   ) : (
     <div>Now Loading...</div>
   );
