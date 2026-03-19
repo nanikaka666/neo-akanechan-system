@@ -15,6 +15,7 @@ import {
   YoutubeApiClient,
 } from "./client";
 import { ChannelId, VideoId } from "../../types/youtubeDomainModel";
+import { messageDialogOnMainWindow } from "../dialog";
 
 export const YoutubeApiService = {
   getChannelOfMine: async () => {
@@ -23,8 +24,12 @@ export const YoutubeApiService = {
 
     if (!res) {
       // if channel not found, this youtube account doesn't have channel.
-      // So revoke it.
+      // So revoke it, and notify it to users.
       await revokeCredentials();
+      await messageDialogOnMainWindow(
+        "Please OAuth flow again",
+        "Youtube Channel associated with oauth account is not found.",
+      );
       return undefined;
     }
 
