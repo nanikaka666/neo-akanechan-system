@@ -2,7 +2,7 @@ import { app } from "electron";
 import { checkElectronSquirrelStartup } from "./checkElectronSquirrelStartup";
 import { setupApplicationMenu } from "./menu";
 import { platform } from "./environment";
-import { setupIpcMainHandlers } from "./ipc/handler/ipcMainHandlers";
+import { setupIpcMainHandlers } from "./ipc/handler";
 import { setupReactDevtools } from "./reactDevtools";
 import { setupAuth } from "./auth/google";
 import { getWindowManager, setupWindowManager } from "./window";
