@@ -8,7 +8,7 @@ export function StartLiveButton() {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.mainWindow.requestStartLive().then(() => enable());
+        window.ipcApi.mainWindow.mainAppPage.requestStartLive().then(() => enable());
       }}
       disabled={disabled}
     >

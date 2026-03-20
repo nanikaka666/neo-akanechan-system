@@ -131,15 +131,17 @@ interface GoalIpcEvent {
   tellAllGoalStatus: (status: AllGoalsStatus) => void;
 }
 
-export type IpcEventForMainWindow = IpcEventForMainWindowTemp &
-  AuthIpcEvent &
-  UserSettingsIpcEvent &
-  RankingIpcEvent &
-  CompetitionIpcEvent &
-  CommentViewerIpcEvent &
-  GoalIpcEvent;
+interface MainAppPageIpcEvent {
+  /**
+   * Return MainAppPage for initial status.
+   */
+  getInitialMainAppPage: () => AuthPage | LiveSelectionPage;
 
-interface IpcEventForMainWindowTemp {
+  /**
+   * Notify latest MainAppPage to renderer.
+   */
+  tellMainAppPage: (page: MainAppPage) => void;
+
   /**
    * Confirm to user that overlay feature should starts.
    */
@@ -153,21 +155,6 @@ interface IpcEventForMainWindowTemp {
   startOverlayWithUserConfirmationByVideoId: (inputVideoId: string) => boolean;
 
   /**
-   * Start DataFetcheres.
-   */
-  startDataFetch: () => boolean;
-
-  /**
-   * Return MainAppPage for initial status.
-   */
-  getInitialMainAppPage: () => AuthPage | LiveSelectionPage;
-
-  /**
-   * Notify latest MainAppPage to renderer.
-   */
-  tellMainAppPage: (page: MainAppPage) => void;
-
-  /**
    * transit MainAppPage status to "inLive".
    */
   startLive: () => boolean;
@@ -176,6 +163,22 @@ interface IpcEventForMainWindowTemp {
    * transit MainAppPage status to "liveSelection"
    */
   quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+}
+
+export type IpcEventForMainWindow = IpcEventForMainWindowTemp &
+  AuthIpcEvent &
+  UserSettingsIpcEvent &
+  RankingIpcEvent &
+  CompetitionIpcEvent &
+  CommentViewerIpcEvent &
+  GoalIpcEvent &
+  MainAppPageIpcEvent;
+
+interface IpcEventForMainWindowTemp {
+  /**
+   * Start DataFetcheres.
+   */
+  startDataFetch: () => boolean;
 
   /**
    * Request to LiveManager to get LiveLaunchProperties.

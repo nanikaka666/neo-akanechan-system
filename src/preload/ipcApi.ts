@@ -53,13 +53,15 @@ export interface IpcApi {
       goal: {
         registerAllGoalStatus: Listen<"tellAllGoalStatus">;
       };
-      requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
-      requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
+      mainAppPage: {
+        requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
+        registerMainAppPage: Listen<"tellMainAppPage">;
+        requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
+        requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
+        requestStartLive: Invoke<"startLive">;
+        requestQuitLive: Invoke<"quitLive">;
+      };
       requestStartDataFetch: Invoke<"startDataFetch">;
-      requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
-      registerMainAppPage: Listen<"tellMainAppPage">;
-      requestStartLive: Invoke<"startLive">;
-      requestQuitLive: Invoke<"quitLive">;
       requestLiveLaunchProperties: Invoke<"getLiveLaunchProperties">;
     };
 
@@ -122,16 +124,18 @@ export const IpcApi: IpcApi = {
       goal: {
         registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
       },
-      requestOpenOverlay: (channel, live) =>
-        IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
-      requestOpenOverlayWithVideoId: (inputVideoId) =>
-        IpcRendererWrapper.invoke("startOverlayWithUserConfirmationByVideoId", inputVideoId),
+      mainAppPage: {
+        requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
+        registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
+        requestOpenOverlay: (channel, live) =>
+          IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
+        requestOpenOverlayWithVideoId: (inputVideoId) =>
+          IpcRendererWrapper.invoke("startOverlayWithUserConfirmationByVideoId", inputVideoId),
+        requestStartLive: () => IpcRendererWrapper.invoke("startLive"),
+        requestQuitLive: (liveLaunchProperties) =>
+          IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
+      },
       requestStartDataFetch: () => IpcRendererWrapper.invoke("startDataFetch"),
-      requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
-      registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
-      requestStartLive: () => IpcRendererWrapper.invoke("startLive"),
-      requestQuitLive: (liveLaunchProperties) =>
-        IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
       requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
     },
 

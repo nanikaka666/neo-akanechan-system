@@ -14,7 +14,7 @@ export function QuitLiveButton({ liveLaunchProperties }: QuitLiveButtonProps) {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.mainWindow.requestQuitLive(liveLaunchProperties).then((res) => {
+        window.ipcApi.mainWindow.mainAppPage.requestQuitLive(liveLaunchProperties).then((res) => {
           if (!res) {
             enable();
           }
