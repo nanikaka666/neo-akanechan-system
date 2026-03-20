@@ -20,7 +20,6 @@ type Listen<K extends keyof IpcEvent> = (
  */
 export interface IpcApi {
   ipcApi: {
-    // for LCP
     mainWindow: {
       requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
       requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
@@ -52,7 +51,6 @@ export interface IpcApi {
       requestAccountDisconnect: Invoke<"accountDisconnect">;
     };
 
-    // for overlay
     overlay: {
       registerAmountOfPoint: Listen<"tellAmountOfPoint">;
       registerOverlayEvent: Listen<"tellOverlayEvent">;
@@ -61,7 +59,6 @@ export interface IpcApi {
       registerRankingViewListener: Listen<"tellRankingView">;
     };
 
-    // for Both Windows.
     common: {
       registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
       registerLiveSettingsListener: Listen<"tellLiveSettings">;
@@ -73,7 +70,6 @@ export interface IpcApi {
 
 export const IpcApi: IpcApi = {
   ipcApi: {
-    // for LCP
     mainWindow: {
       requestOpenOverlay: (channel, live) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
@@ -115,7 +111,6 @@ export const IpcApi: IpcApi = {
       requestAccountDisconnect: () => IpcRendererWrapper.invoke("accountDisconnect"),
     },
 
-    // For Overlay
     overlay: {
       registerAmountOfPoint: (callback) => IpcRendererWrapper.on("tellAmountOfPoint", callback),
       registerOverlayEvent: (callback) => IpcRendererWrapper.on("tellOverlayEvent", callback),
@@ -124,7 +119,6 @@ export const IpcApi: IpcApi = {
       registerRankingViewListener: (callback) => IpcRendererWrapper.on("tellRankingView", callback),
     },
 
-    // For both
     common: {
       registerLiveStatisticsListener: (callback) =>
         IpcRendererWrapper.on("tellLiveStatistics", callback),
