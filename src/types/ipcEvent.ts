@@ -23,7 +23,9 @@ import { CompetitionStatus, OptionLabel } from "./competition";
  *
  * key represents channel name.
  */
-export interface IpcEvent {
+export type IpcEvent = IpcEventForMainWindow & IpcEventForOverlay & CommonIpcEvent;
+
+interface IpcEventForMainWindow {
   /**
    * Confirm to user that overlay feature should starts.
    */
@@ -81,11 +83,6 @@ export interface IpcEvent {
   removeStock: (stock: ExtendedChatItemText) => boolean;
 
   /**
-   * Notify LiveStatistics to renderer. (LCP & Overlay)
-   */
-  tellLiveStatistics: (statistics: LiveStatistics) => void;
-
-  /**
    * Return MainAppPage for initial status.
    */
   getInitialMainAppPage: () => AuthPage | LiveSelectionPage;
@@ -128,46 +125,9 @@ export interface IpcEvent {
   tellRankings: (rankings: PariticipantPointRankings) => void;
 
   /**
-   * Notify amount of got point. (For Overlay)
-   */
-  tellAmountOfPoint: (item: PointInfoFromMainProcess) => void;
-
-  /**
-   * Notify LiveSettings. (For both Windows)
-   */
-  tellLiveSettings: (liveSettings: LiveSettings) => void;
-
-  /**
-   * Request to LiveManager that sync LiveSettings. (For Both Windows)
-   *
-   * mainly used when want to fetch initial LiveSettings.
-   */
-  requestSyncLiveSettings: () => boolean;
-
-  /**
-   * Notify OverlayEvent (NoEvent is not included). (For Overlay)
-   */
-  tellOverlayEvent: (event: Exclude<OverlayEvent, NoEvent>) => void;
-
-  /**
    * Notify AllGoalStatus.
    */
   tellAllGoalStatus: (status: AllGoalsStatus) => void;
-
-  /**
-   * Notify ChatLog. (For Overlay)
-   */
-  tellChatLog: (chatLog: ChatLog) => void;
-
-  /**
-   * Notify FocusViewItem. (For Overlay)
-   */
-  tellFocusViewItem: (item: FocusViewItem | undefined) => void;
-
-  /**
-   * Notify to show rankings. (For Overlay)
-   */
-  tellRankingView: (ranking: PariticipantPointRankings | undefined) => void;
 
   /**
    * Request to LiveManager to show ranking dialogs on overlay.
@@ -188,11 +148,6 @@ export interface IpcEvent {
    * Request to LiveManager to open a new competition.
    */
   openCompetition: (question: string, options: string[], acceptTimeMinutes: number) => boolean;
-
-  /**
-   * Notify latest CompetitionStatus. (For Both)
-   */
-  tellCompetitionStatus: (status: CompetitionStatus) => void;
 
   /**
    * Request to LiveManager to abort the competition.
@@ -218,4 +173,55 @@ export interface IpcEvent {
    * Request OAuth revocation.
    */
   accountDisconnect: () => boolean;
+}
+
+interface CommonIpcEvent {
+  /**
+   * Notify LiveStatistics to renderer.
+   */
+  tellLiveStatistics: (statistics: LiveStatistics) => void;
+
+  /**
+   * Notify LiveSettings.
+   */
+  tellLiveSettings: (liveSettings: LiveSettings) => void;
+
+  /**
+   * Request to LiveManager that sync LiveSettings.
+   *
+   * mainly used when want to fetch initial LiveSettings.
+   */
+  requestSyncLiveSettings: () => boolean;
+
+  /**
+   * Notify latest CompetitionStatus.
+   */
+  tellCompetitionStatus: (status: CompetitionStatus) => void;
+}
+
+interface IpcEventForOverlay {
+  /**
+   * Notify amount of got point.
+   */
+  tellAmountOfPoint: (item: PointInfoFromMainProcess) => void;
+
+  /**
+   * Notify OverlayEvent (NoEvent is not included).
+   */
+  tellOverlayEvent: (event: Exclude<OverlayEvent, NoEvent>) => void;
+
+  /**
+   * Notify ChatLog.
+   */
+  tellChatLog: (chatLog: ChatLog) => void;
+
+  /**
+   * Notify FocusViewItem.
+   */
+  tellFocusViewItem: (item: FocusViewItem | undefined) => void;
+
+  /**
+   * Notify to show rankings.
+   */
+  tellRankingView: (ranking: PariticipantPointRankings | undefined) => void;
 }
