@@ -8,7 +8,7 @@ export function AbortButton() {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.mainWindow.requestAbortCompetition().then(() => {
+        window.ipcApi.mainWindow.competition.requestAbortCompetition().then(() => {
           enable();
         });
       }}

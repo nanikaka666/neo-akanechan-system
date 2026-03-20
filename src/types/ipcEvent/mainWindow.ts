@@ -73,10 +73,33 @@ interface RankingIpcEvent {
   hideRanking: () => boolean;
 }
 
+interface CompetitionIpcEvent {
+  /**
+   * Request to LiveManager to open a new competition.
+   */
+  openCompetition: (question: string, options: string[], acceptTimeMinutes: number) => boolean;
+
+  /**
+   * Request to LiveManager to abort the competition.
+   */
+  abortCompetition: () => boolean;
+
+  /**
+   * Request to LiveManager to decide the answer of competition.
+   */
+  answerDecision: (answer: OptionLabel, optionStr: string) => boolean;
+
+  /**
+   * Request to LiveManager to close bet action.
+   */
+  manuallyEntryClose: () => boolean;
+}
+
 export type IpcEventForMainWindow = IpcEventForMainWindowTemp &
   AuthIpcEvent &
   UserSettingsIpcEvent &
-  RankingIpcEvent;
+  RankingIpcEvent &
+  CompetitionIpcEvent;
 
 interface IpcEventForMainWindowTemp {
   /**
@@ -147,27 +170,6 @@ interface IpcEventForMainWindowTemp {
    * Notify AllGoalStatus.
    */
   tellAllGoalStatus: (status: AllGoalsStatus) => void;
-
-  /**
-   * Request to LiveManager to open a new competition.
-   */
-  openCompetition: (question: string, options: string[], acceptTimeMinutes: number) => boolean;
-
-  /**
-   * Request to LiveManager to abort the competition.
-   */
-  abortCompetition: () => boolean;
-
-  /**
-   * Request to LiveManager to decide the answer of competition.
-   */
-  answerDecision: (answer: OptionLabel, optionStr: string) => boolean;
-
-  /**
-   * Request to LiveManager to close bet action.
-   */
-  manuallyEntryClose: () => boolean;
-
   /**
    * Request to LiveManager to get LiveLaunchProperties.
    */

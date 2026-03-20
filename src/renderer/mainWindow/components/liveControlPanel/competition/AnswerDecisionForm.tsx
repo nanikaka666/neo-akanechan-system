@@ -31,9 +31,11 @@ export function AnswerDecisionForm({ options }: AnswerDecisionFormProps) {
         onClick={(e) => {
           e.preventDefault();
           disable();
-          window.ipcApi.mainWindow.requestAnswerDecision(answer, options.get(answer)!).then(() => {
-            enable();
-          });
+          window.ipcApi.mainWindow.competition
+            .requestAnswerDecision(answer, options.get(answer)!)
+            .then(() => {
+              enable();
+            });
         }}
       >
         正解を確定する

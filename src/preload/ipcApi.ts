@@ -37,6 +37,12 @@ export interface IpcApi {
         registerIsShownRankingListener: Listen<"tellIsShownRanking">;
         requestHideRanking: Invoke<"hideRanking">;
       };
+      competition: {
+        requestOpenCompetition: Invoke<"openCompetition">;
+        requestAbortCompetition: Invoke<"abortCompetition">;
+        requestAnswerDecision: Invoke<"answerDecision">;
+        requestManuallyEntryClose: Invoke<"manuallyEntryClose">;
+      };
       requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
       requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
       requestStartDataFetch: Invoke<"startDataFetch">;
@@ -50,10 +56,6 @@ export interface IpcApi {
       requestUpdateFocus: Invoke<"updateFocus">;
       registerChatsListener: Listen<"tellChats">;
       registerAllGoalStatus: Listen<"tellAllGoalStatus">;
-      requestOpenCompetition: Invoke<"openCompetition">;
-      requestAbortCompetition: Invoke<"abortCompetition">;
-      requestAnswerDecision: Invoke<"answerDecision">;
-      requestManuallyEntryClose: Invoke<"manuallyEntryClose">;
       requestLiveLaunchProperties: Invoke<"getLiveLaunchProperties">;
     };
 
@@ -97,6 +99,14 @@ export const IpcApi: IpcApi = {
           IpcRendererWrapper.on("tellIsShownRanking", callback),
         requestHideRanking: () => IpcRendererWrapper.invoke("hideRanking"),
       },
+      competition: {
+        requestOpenCompetition: (question, options, acceptTimeMinutes) =>
+          IpcRendererWrapper.invoke("openCompetition", question, options, acceptTimeMinutes),
+        requestAbortCompetition: () => IpcRendererWrapper.invoke("abortCompetition"),
+        requestAnswerDecision: (answer, optionStr) =>
+          IpcRendererWrapper.invoke("answerDecision", answer, optionStr),
+        requestManuallyEntryClose: () => IpcRendererWrapper.invoke("manuallyEntryClose"),
+      },
       requestOpenOverlay: (channel, live) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
       requestOpenOverlayWithVideoId: (inputVideoId) =>
@@ -114,12 +124,6 @@ export const IpcApi: IpcApi = {
       requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
       registerChatsListener: (callback) => IpcRendererWrapper.on("tellChats", callback),
       registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
-      requestOpenCompetition: (question, options, acceptTimeMinutes) =>
-        IpcRendererWrapper.invoke("openCompetition", question, options, acceptTimeMinutes),
-      requestAbortCompetition: () => IpcRendererWrapper.invoke("abortCompetition"),
-      requestAnswerDecision: (answer, optionStr) =>
-        IpcRendererWrapper.invoke("answerDecision", answer, optionStr),
-      requestManuallyEntryClose: () => IpcRendererWrapper.invoke("manuallyEntryClose"),
       requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
     },
 
