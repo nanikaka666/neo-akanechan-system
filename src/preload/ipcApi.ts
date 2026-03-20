@@ -43,18 +43,20 @@ export interface IpcApi {
         requestAnswerDecision: Invoke<"answerDecision">;
         requestManuallyEntryClose: Invoke<"manuallyEntryClose">;
       };
+      commentViewer: {
+        registerChatsListener: Listen<"tellChats">;
+        registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
+        requestAddStock: Invoke<"addStock">;
+        requestRemoveStock: Invoke<"removeStock">;
+        requestUpdateFocus: Invoke<"updateFocus">;
+      };
       requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
       requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
       requestStartDataFetch: Invoke<"startDataFetch">;
-      registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
-      requestAddStock: Invoke<"addStock">;
-      requestRemoveStock: Invoke<"removeStock">;
       requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
       registerMainAppPage: Listen<"tellMainAppPage">;
       requestStartLive: Invoke<"startLive">;
       requestQuitLive: Invoke<"quitLive">;
-      requestUpdateFocus: Invoke<"updateFocus">;
-      registerChatsListener: Listen<"tellChats">;
       registerAllGoalStatus: Listen<"tellAllGoalStatus">;
       requestLiveLaunchProperties: Invoke<"getLiveLaunchProperties">;
     };
@@ -107,22 +109,24 @@ export const IpcApi: IpcApi = {
           IpcRendererWrapper.invoke("answerDecision", answer, optionStr),
         requestManuallyEntryClose: () => IpcRendererWrapper.invoke("manuallyEntryClose"),
       },
+      commentViewer: {
+        registerChatsListener: (callback) => IpcRendererWrapper.on("tellChats", callback),
+        registerMembershipsAndGiftsListener: (callback) =>
+          IpcRendererWrapper.on("tellMembershipsAndGifts", callback),
+        requestAddStock: (stock) => IpcRendererWrapper.invoke("addStock", stock),
+        requestRemoveStock: (stock) => IpcRendererWrapper.invoke("removeStock", stock),
+        requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
+      },
       requestOpenOverlay: (channel, live) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
       requestOpenOverlayWithVideoId: (inputVideoId) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmationByVideoId", inputVideoId),
       requestStartDataFetch: () => IpcRendererWrapper.invoke("startDataFetch"),
-      registerMembershipsAndGiftsListener: (callback) =>
-        IpcRendererWrapper.on("tellMembershipsAndGifts", callback),
-      requestAddStock: (stock) => IpcRendererWrapper.invoke("addStock", stock),
-      requestRemoveStock: (stock) => IpcRendererWrapper.invoke("removeStock", stock),
       requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
       registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
       requestStartLive: () => IpcRendererWrapper.invoke("startLive"),
       requestQuitLive: (liveLaunchProperties) =>
         IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
-      requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
-      registerChatsListener: (callback) => IpcRendererWrapper.on("tellChats", callback),
       registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
       requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
     },

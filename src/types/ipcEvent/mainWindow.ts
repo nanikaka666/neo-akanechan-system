@@ -95,11 +95,41 @@ interface CompetitionIpcEvent {
   manuallyEntryClose: () => boolean;
 }
 
+interface CommentViewerIpcEvent {
+  /**
+   * Notify latest chat data.
+   */
+  tellChats: (chats: Chats) => void;
+
+  /**
+   * Notify all memberships and gifts item to renderer.
+   */
+  tellMembershipsAndGifts: (membershipsAndGifts: MembershipAndGiftItem[]) => void;
+
+  /**
+   * Add chat item to stock list.
+   */
+  addStock: (stock: ExtendedChatItemText) => boolean;
+
+  /**
+   * Remove the stock from list.
+   */
+  removeStock: (stock: ExtendedChatItemText) => boolean;
+
+  /**
+   * Update focus item.
+   *
+   * `undefined` means focused item will be unfocused.
+   */
+  updateFocus: (focus?: FocusedOnChatItem) => boolean;
+}
+
 export type IpcEventForMainWindow = IpcEventForMainWindowTemp &
   AuthIpcEvent &
   UserSettingsIpcEvent &
   RankingIpcEvent &
-  CompetitionIpcEvent;
+  CompetitionIpcEvent &
+  CommentViewerIpcEvent;
 
 interface IpcEventForMainWindowTemp {
   /**
@@ -120,21 +150,6 @@ interface IpcEventForMainWindowTemp {
   startDataFetch: () => boolean;
 
   /**
-   * Notify all memberships and gifts item to renderer.
-   */
-  tellMembershipsAndGifts: (membershipsAndGifts: MembershipAndGiftItem[]) => void;
-
-  /**
-   * Add chat item to stock list.
-   */
-  addStock: (stock: ExtendedChatItemText) => boolean;
-
-  /**
-   * Remove the stock from list.
-   */
-  removeStock: (stock: ExtendedChatItemText) => boolean;
-
-  /**
    * Return MainAppPage for initial status.
    */
   getInitialMainAppPage: () => AuthPage | LiveSelectionPage;
@@ -153,18 +168,6 @@ interface IpcEventForMainWindowTemp {
    * transit MainAppPage status to "liveSelection"
    */
   quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
-
-  /**
-   * Update focus item.
-   *
-   * `undefined` means focused item will be unfocused.
-   */
-  updateFocus: (focus?: FocusedOnChatItem) => boolean;
-
-  /**
-   * Notify latest chat data.
-   */
-  tellChats: (chats: Chats) => void;
 
   /**
    * Notify AllGoalStatus.
