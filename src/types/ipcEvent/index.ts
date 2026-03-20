@@ -1,22 +1,22 @@
-import { UserSettings } from "./userSettings";
+import { UserSettings } from "../userSettings";
 import {
   Chats,
   ExtendedChatItemText,
   FocusedOnChatItem,
   MembershipAndGiftItem,
-} from "./liveChatItem";
-import { AuthPage, LiveSelectionPage, MainAppPage } from "./mainAppPage";
-import { LiveStatistics } from "./liveStatistics";
-import { LiveLaunchProperties } from "./liveLaunchProperties";
-import { Channel } from "./youtubeChannel";
-import { YoutubeLive } from "./youtubeLive";
-import { PariticipantPointRankings } from "./participantPoint";
-import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "./overlay";
-import { LiveSettings } from "./liveSettings";
-import { AllGoalsStatus } from "./goals";
-import { ChatLog } from "./chatLog";
-import { FocusViewItem } from "./focusView";
-import { CompetitionStatus, OptionLabel } from "./competition";
+} from "../liveChatItem";
+import { AuthPage, LiveSelectionPage, MainAppPage } from "../mainAppPage";
+import { LiveStatistics } from "../liveStatistics";
+import { LiveLaunchProperties } from "../liveLaunchProperties";
+import { Channel } from "../youtubeChannel";
+import { YoutubeLive } from "../youtubeLive";
+import { PariticipantPointRankings } from "../participantPoint";
+import { NoEvent, OverlayEvent, PointInfoFromMainProcess } from "../overlay";
+import { LiveSettings } from "../liveSettings";
+import { AllGoalsStatus } from "../goals";
+import { ChatLog } from "../chatLog";
+import { FocusViewItem } from "../focusView";
+import { CompetitionStatus, OptionLabel } from "../competition";
 
 /**
  * Ipc channel interfaces.
