@@ -1,4 +1,4 @@
-import { useCompetitionStatus } from "../hooks/useCompetitionStatus";
+import { useCompetitionStatus } from "../../../hooks/useCompetitionStatus";
 import { EntryClosedView } from "./EntryClosedView";
 import { HeldView } from "./HeldView";
 import { HowToJoin } from "./HowToJoin";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CompetitionStatus } from "../../../../types/competition";
+import { CompetitionStatus } from "../../types/competition";
 
 export function useCompetitionStatus() {
   const [status, setStatus] = useState<CompetitionStatus>({ type: "notHeld" });
