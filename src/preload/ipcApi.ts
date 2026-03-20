@@ -50,6 +50,9 @@ export interface IpcApi {
         requestRemoveStock: Invoke<"removeStock">;
         requestUpdateFocus: Invoke<"updateFocus">;
       };
+      goal: {
+        registerAllGoalStatus: Listen<"tellAllGoalStatus">;
+      };
       requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
       requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
       requestStartDataFetch: Invoke<"startDataFetch">;
@@ -57,7 +60,6 @@ export interface IpcApi {
       registerMainAppPage: Listen<"tellMainAppPage">;
       requestStartLive: Invoke<"startLive">;
       requestQuitLive: Invoke<"quitLive">;
-      registerAllGoalStatus: Listen<"tellAllGoalStatus">;
       requestLiveLaunchProperties: Invoke<"getLiveLaunchProperties">;
     };
 
@@ -117,6 +119,9 @@ export const IpcApi: IpcApi = {
         requestRemoveStock: (stock) => IpcRendererWrapper.invoke("removeStock", stock),
         requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
       },
+      goal: {
+        registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
+      },
       requestOpenOverlay: (channel, live) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
       requestOpenOverlayWithVideoId: (inputVideoId) =>
@@ -127,7 +132,6 @@ export const IpcApi: IpcApi = {
       requestStartLive: () => IpcRendererWrapper.invoke("startLive"),
       requestQuitLive: (liveLaunchProperties) =>
         IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
-      registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
       requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
     },
 

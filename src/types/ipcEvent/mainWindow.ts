@@ -124,12 +124,20 @@ interface CommentViewerIpcEvent {
   updateFocus: (focus?: FocusedOnChatItem) => boolean;
 }
 
+interface GoalIpcEvent {
+  /**
+   * Notify AllGoalStatus.
+   */
+  tellAllGoalStatus: (status: AllGoalsStatus) => void;
+}
+
 export type IpcEventForMainWindow = IpcEventForMainWindowTemp &
   AuthIpcEvent &
   UserSettingsIpcEvent &
   RankingIpcEvent &
   CompetitionIpcEvent &
-  CommentViewerIpcEvent;
+  CommentViewerIpcEvent &
+  GoalIpcEvent;
 
 interface IpcEventForMainWindowTemp {
   /**
@@ -169,10 +177,6 @@ interface IpcEventForMainWindowTemp {
    */
   quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
 
-  /**
-   * Notify AllGoalStatus.
-   */
-  tellAllGoalStatus: (status: AllGoalsStatus) => void;
   /**
    * Request to LiveManager to get LiveLaunchProperties.
    */
