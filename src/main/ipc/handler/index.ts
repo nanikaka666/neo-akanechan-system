@@ -1,7 +1,6 @@
 import { IpcMainWrapper } from "../ipcMainWrapper";
 import { WebContentsWrapper } from "../../webContentsWrapper";
 import { UserSettingsService } from "../../userSettings";
-import { doAuthFlow, isUserAuthorized, revokeCredentials } from "../../auth/google";
 import {
   buildLiveLaunchProperties,
   buildLiveLaunchPropertiesForDebug,
@@ -17,8 +16,10 @@ import { getWindowManager } from "../../window";
 import { yesNoDialogOnMainWindow } from "../../dialog";
 import { getInitialMainAppPage, MainAppPageSwitcher } from "../../mainAppPage";
 import { setupIpcMainHandlersForCommon } from "./common";
+import { setupIpcMainHandlersForMainWindow } from "./mainWindow";
 
 export function setupIpcMainHandlers() {
+  setupIpcMainHandlersForMainWindow();
   setupIpcMainHandlersForCommon();
 
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
@@ -152,18 +153,6 @@ export function setupIpcMainHandlers() {
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("startAuthFlow", async () => {
-    const authFlowResult = await doAuthFlow();
-
-    if (!authFlowResult) {
-      return false;
-    }
-
-    MainAppPageSwitcher.liveSelection();
-
-    return true;
-  });
-
   IpcMainWrapper.handle("showRanking", (_, ranking) => {
     getLiveManager().actionShowRanking(ranking);
     return Promise.resolve(true);
@@ -211,33 +200,5 @@ export function setupIpcMainHandlers() {
 
   IpcMainWrapper.handle("getLiveLaunchProperties", () => {
     return Promise.resolve(getLiveManager().getLiveLaunchProperties());
-  });
-
-  IpcMainWrapper.handle("accountDisconnect", async () => {
-    if (!isUserAuthorized()) {
-      return true;
-    }
-
-    const res = await yesNoDialogOnMainWindow(`Youtubeアカウントの連携を解除します`);
-    if (!res) {
-      return false;
-    }
-
-    try {
-      await revokeCredentials();
-    } catch (e: unknown) {
-      if (e instanceof Error) {
-        console.log(e.message);
-      } else {
-        console.log(e);
-      }
-    }
-
-    if (!isUserAuthorized()) {
-      MainAppPageSwitcher.auth();
-      return true;
-    }
-
-    return false;
   });
 }
