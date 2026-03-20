@@ -1,5 +1,5 @@
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
-import { useButton } from "../hooks/useButton";
+import { useButton } from "../../hooks/useButton";
 
 interface QuitLiveButtonProps {
   liveLaunchProperties: LiveLaunchProperties;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AllGoalsStatus } from "../../../../types/goals";
+import { AllGoalsStatus } from "../../../types/goals";
 
 export function useAllGoalsStatus() {
   const [allGoalStatus, setAllGoalStatus] = useState<AllGoalsStatus>({

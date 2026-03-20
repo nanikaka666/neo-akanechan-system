@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MainAppPage } from "../../../../types/mainAppPage";
+import { MainAppPage } from "../../../types/mainAppPage";
 
 export function useMainAppPage() {
   const [mainAppPage, setMainAppPage] = useState<MainAppPage>();

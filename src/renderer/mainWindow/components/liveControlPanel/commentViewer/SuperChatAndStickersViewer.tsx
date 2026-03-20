@@ -2,9 +2,9 @@ import { Virtuoso } from "react-virtuoso";
 import { ExtendedSuperItem } from "../../../../../types/liveChatItem";
 import { SuperChatItem } from "./SuperChatItem";
 import { SuperStickerItem } from "./SuperStickerItem";
-import { useListRange } from "../../hooks/useListRange";
+import { useListRange } from "../../../hooks/useListRange";
 import { ListRangeView } from "./ListRangeView";
-import { useJumpToLatestButton } from "../../hooks/useJumpToLatestButton";
+import { useJumpToLatestButton } from "../../../hooks/useJumpToLatestButton";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 
 interface SuperChatAndStickersViewerProps {

@@ -1,9 +1,9 @@
 import { Virtuoso } from "react-virtuoso";
 import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
 import { TextChatItem } from "./TextChatItem";
-import { useListRange } from "../../hooks/useListRange";
+import { useListRange } from "../../../hooks/useListRange";
 import { ListRangeView } from "./ListRangeView";
-import { useJumpToLatestButton } from "../../hooks/useJumpToLatestButton";
+import { useJumpToLatestButton } from "../../../hooks/useJumpToLatestButton";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 
 interface TextChatViewerProps {

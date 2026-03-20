@@ -4,9 +4,9 @@ import { NewMembershipItem } from "./NewMembershipItem";
 import { MembershipMilestoneItem } from "./MembershipMilestoneItem";
 import { MembershipGiftItem } from "./MembershipGiftItem";
 import { GiftReceivedItem } from "./GiftReceivedItem";
-import { useListRange } from "../../hooks/useListRange";
+import { useListRange } from "../../../hooks/useListRange";
 import { ListRangeView } from "./ListRangeView";
-import { useJumpToLatestButton } from "../../hooks/useJumpToLatestButton";
+import { useJumpToLatestButton } from "../../../hooks/useJumpToLatestButton";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 
 interface MembershipsAndGiftsViewerProps {

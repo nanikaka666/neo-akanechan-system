@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactModal from "react-modal";
-import { useModal } from "../hooks/useModal";
-import { useButton } from "../hooks/useButton";
+import { useModal } from "../../hooks/useModal";
+import { useButton } from "../../hooks/useButton";
 
 export function LiveStartWithVideoIdButton() {
   const [showModal, turnOn, turnOff] = useModal();

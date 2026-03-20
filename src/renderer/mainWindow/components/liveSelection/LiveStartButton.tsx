@@ -1,6 +1,6 @@
 import { YoutubeLive } from "../../../../types/youtubeLive";
 import { Channel } from "../../../../types/youtubeChannel";
-import { useButton } from "../hooks/useButton";
+import { useButton } from "../../hooks/useButton";
 
 interface LiveStartButtonProps {
   channel: Channel;

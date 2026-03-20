@@ -4,7 +4,7 @@ import { Rankings } from "./rankings/Rankings";
 import { Goals } from "./goals/Goals";
 import { LiveSettings } from "../../../../types/liveSettings";
 import { Competition } from "./competition/Competition";
-import { MainContentsName } from "../hooks/useMainContentsTab";
+import { MainContentsName } from "../../hooks/useMainContentsTab";
 
 const displayNone: CSSProperties = { display: "none" };
 

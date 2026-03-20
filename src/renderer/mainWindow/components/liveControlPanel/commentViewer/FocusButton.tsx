@@ -1,5 +1,5 @@
 import { FocusedOnChatItem } from "../../../../../types/liveChatItem";
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 interface FocusButtonProps {
   item: FocusedOnChatItem;

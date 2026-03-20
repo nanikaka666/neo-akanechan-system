@@ -3,10 +3,10 @@ import { TextChatViewer } from "./TextChatViewer";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
 import { ChatItemCount, ViewerModeSelector } from "./ViewerModeSelector";
-import { useCommentViewerMode } from "../../hooks/useCommentViewerMode";
+import { useCommentViewerMode } from "../../../hooks/useCommentViewerMode";
 import { FocusViewer } from "./FocusViewer";
-import { useChats } from "../../hooks/useChats";
-import { useMembershipsAndGifts } from "../../hooks/useMembershipsAndGifts";
+import { useChats } from "../../../hooks/useChats";
+import { useMembershipsAndGifts } from "../../../hooks/useMembershipsAndGifts";
 
 const displayNone: CSSProperties = { display: "none" };
 

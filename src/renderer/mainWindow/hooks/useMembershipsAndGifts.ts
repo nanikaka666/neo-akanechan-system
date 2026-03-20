@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MembershipAndGiftItem } from "../../../../types/liveChatItem";
+import { MembershipAndGiftItem } from "../../../types/liveChatItem";
 
 export function useMembershipsAndGifts() {
   const [membershipsAndGifts, setMembershipsAndGifts] = useState<MembershipAndGiftItem[]>([]);

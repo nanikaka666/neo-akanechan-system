@@ -1,4 +1,4 @@
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 export function ManuallyEntryCloseButton() {
   const [disabled, disable, enable] = useButton();

@@ -2,7 +2,7 @@ import { StartLiveButton } from "./StartLiveButton";
 import { QuitLiveButton } from "../liveControlPanel/QuitLiveButton";
 import { SettingsDetails } from "./SettingsDetails";
 import { UserSettingsButton } from "../liveSelection/UserSettingsButton";
-import { useLiveLaunchProperties } from "../hooks/useLiveLaunchProperties";
+import { useLiveLaunchProperties } from "../../hooks/useLiveLaunchProperties";
 import { useLiveSettings } from "../../../hooks/useLiveSettings";
 
 export function LiveStandBy() {

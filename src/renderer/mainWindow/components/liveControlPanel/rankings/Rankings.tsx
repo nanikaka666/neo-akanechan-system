@@ -1,4 +1,4 @@
-import { useRankings } from "../../hooks/useRankings";
+import { useRankings } from "../../../hooks/useRankings";
 
 export function Rankings() {
   const [

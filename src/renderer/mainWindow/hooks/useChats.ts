@@ -3,7 +3,7 @@ import {
   ExtendedChatItemText,
   ExtendedSuperItem,
   FocusedOnChatItem,
-} from "../../../../types/liveChatItem";
+} from "../../../types/liveChatItem";
 
 export function useChats() {
   const [textChats, setTextChats] = useState<ExtendedChatItemText[]>([]);

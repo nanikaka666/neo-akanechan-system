@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PariticipantPointRankings } from "../../../../types/participantPoint";
+import { PariticipantPointRankings } from "../../../types/participantPoint";
 import { useIsShownRanking } from "./useIsShownRanking";
 
 export function useRankings() {
