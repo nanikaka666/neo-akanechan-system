@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
-import { useLiveLaunchProperties } from "../../../hooks/useLiveLaunchProperties";
+import { useLiveLaunchProperties } from "../hooks/useLiveLaunchProperties";
 import { useLiveSettings } from "../../../hooks/useLiveSettings";
 import { useMainContentsTab } from "../hooks/useMainContentsTab";
 
