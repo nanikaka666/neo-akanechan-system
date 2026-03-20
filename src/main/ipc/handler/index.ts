@@ -16,8 +16,11 @@ import {
 import { getWindowManager } from "../../window";
 import { yesNoDialogOnMainWindow } from "../../dialog";
 import { getInitialMainAppPage, MainAppPageSwitcher } from "../../mainAppPage";
+import { setupIpcMainHandlersForCommon } from "./common";
 
 export function setupIpcMainHandlers() {
+  setupIpcMainHandlersForCommon();
+
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
@@ -159,11 +162,6 @@ export function setupIpcMainHandlers() {
     MainAppPageSwitcher.liveSelection();
 
     return true;
-  });
-
-  IpcMainWrapper.handle("requestSyncLiveSettings", () => {
-    getLiveManager().syncLiveSettings();
-    return Promise.resolve(true);
   });
 
   IpcMainWrapper.handle("showRanking", (_, ranking) => {
