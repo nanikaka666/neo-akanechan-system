@@ -21,6 +21,10 @@ type Listen<K extends keyof IpcEvent> = (
 export interface IpcApi {
   ipcApi: {
     mainWindow: {
+      auth: {
+        requestStartAuthFlow: Invoke<"startAuthFlow">;
+        requestAccountDisconnect: Invoke<"accountDisconnect">;
+      };
       requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
       requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
       requestUserSettings: Invoke<"getUserSettings">;
@@ -37,7 +41,6 @@ export interface IpcApi {
       requestQuitLive: Invoke<"quitLive">;
       requestUpdateFocus: Invoke<"updateFocus">;
       registerChatsListener: Listen<"tellChats">;
-      requestStartAuthFlow: Invoke<"startAuthFlow">;
       registerRankingsListener: Listen<"tellRankings">;
       registerAllGoalStatus: Listen<"tellAllGoalStatus">;
       requestShowRanking: Invoke<"showRanking">;
@@ -48,7 +51,6 @@ export interface IpcApi {
       requestAnswerDecision: Invoke<"answerDecision">;
       requestManuallyEntryClose: Invoke<"manuallyEntryClose">;
       requestLiveLaunchProperties: Invoke<"getLiveLaunchProperties">;
-      requestAccountDisconnect: Invoke<"accountDisconnect">;
     };
 
     overlay: {
@@ -71,6 +73,10 @@ export interface IpcApi {
 export const IpcApi: IpcApi = {
   ipcApi: {
     mainWindow: {
+      auth: {
+        requestStartAuthFlow: () => IpcRendererWrapper.invoke("startAuthFlow"),
+        requestAccountDisconnect: () => IpcRendererWrapper.invoke("accountDisconnect"),
+      },
       requestOpenOverlay: (channel, live) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
       requestOpenOverlayWithVideoId: (inputVideoId) =>
@@ -94,7 +100,6 @@ export const IpcApi: IpcApi = {
         IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
       requestUpdateFocus: (focus) => IpcRendererWrapper.invoke("updateFocus", focus),
       registerChatsListener: (callback) => IpcRendererWrapper.on("tellChats", callback),
-      requestStartAuthFlow: () => IpcRendererWrapper.invoke("startAuthFlow"),
       registerRankingsListener: (callback) => IpcRendererWrapper.on("tellRankings", callback),
       registerAllGoalStatus: (callback) => IpcRendererWrapper.on("tellAllGoalStatus", callback),
       requestShowRanking: (ranking) => IpcRendererWrapper.invoke("showRanking", ranking),
@@ -108,7 +113,6 @@ export const IpcApi: IpcApi = {
         IpcRendererWrapper.invoke("answerDecision", answer, optionStr),
       requestManuallyEntryClose: () => IpcRendererWrapper.invoke("manuallyEntryClose"),
       requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
-      requestAccountDisconnect: () => IpcRendererWrapper.invoke("accountDisconnect"),
     },
 
     overlay: {

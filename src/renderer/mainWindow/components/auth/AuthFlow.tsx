@@ -10,7 +10,7 @@ export function AuthFlow() {
         onClick={(e) => {
           e.preventDefault();
           disable();
-          window.ipcApi.mainWindow.requestStartAuthFlow().then(() => enable());
+          window.ipcApi.mainWindow.auth.requestStartAuthFlow().then(() => enable());
         }}
         disabled={disabled}
       >

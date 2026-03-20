@@ -7,7 +7,7 @@ export function AccountDisconnectButton() {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.mainWindow.requestAccountDisconnect().then(() => enable());
+        window.ipcApi.mainWindow.auth.requestAccountDisconnect().then(() => enable());
       }}
       disabled={disabled}
     >

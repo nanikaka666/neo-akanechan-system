@@ -13,7 +13,21 @@ import { UserSettings } from "../userSettings";
 import { Channel } from "../youtubeChannel";
 import { YoutubeLive } from "../youtubeLive";
 
-export interface IpcEventForMainWindow {
+interface AuthIpcEvent {
+  /**
+   * Start auth flow.
+   */
+  startAuthFlow: () => boolean;
+
+  /**
+   * Request OAuth revocation.
+   */
+  accountDisconnect: () => boolean;
+}
+
+export type IpcEventForMainWindow = IpcEventForMainWindowTemp & AuthIpcEvent;
+
+interface IpcEventForMainWindowTemp {
   /**
    * Confirm to user that overlay feature should starts.
    */
@@ -103,11 +117,6 @@ export interface IpcEventForMainWindow {
   tellChats: (chats: Chats) => void;
 
   /**
-   * Start auth flow.
-   */
-  startAuthFlow: () => boolean;
-
-  /**
    * Notify point rankings.
    */
   tellRankings: (rankings: PariticipantPointRankings) => void;
@@ -156,9 +165,4 @@ export interface IpcEventForMainWindow {
    * Request to LiveManager to get LiveLaunchProperties.
    */
   getLiveLaunchProperties: () => LiveLaunchProperties;
-
-  /**
-   * Request OAuth revocation.
-   */
-  accountDisconnect: () => boolean;
 }
