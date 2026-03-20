@@ -10,7 +10,7 @@ import { VideoId } from "../../../../types/youtubeDomainModel";
 import { IpcMainWrapper } from "../../ipcMainWrapper";
 
 export function setupIpcMainHandlersForMainAppPage() {
-  IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
+  IpcMainWrapper.handle("transitToLiveStandBy", async (e, channel, live) => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
       return false;
@@ -30,7 +30,7 @@ export function setupIpcMainHandlersForMainAppPage() {
     return true;
   });
 
-  IpcMainWrapper.handle("startOverlayWithUserConfirmationByVideoId", async (e, inputVideoId) => {
+  IpcMainWrapper.handle("transitToLiveStandByByVideoId", async (e, inputVideoId) => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       // already overlay window opened.
       return false;

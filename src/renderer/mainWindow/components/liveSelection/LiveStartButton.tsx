@@ -16,7 +16,7 @@ export function LiveStartButton({ channel, live }: LiveStartButtonProps) {
         e.preventDefault();
         disable();
 
-        await window.ipcApi.mainWindow.mainAppPage.requestOpenOverlay(channel, live);
+        await window.ipcApi.mainWindow.mainAppPage.requestTransitToLiveStandBy(channel, live);
         enable();
       }}
       disabled={disabled}

@@ -56,8 +56,8 @@ export interface IpcApi {
       mainAppPage: {
         requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
         registerMainAppPage: Listen<"tellMainAppPage">;
-        requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
-        requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
+        requestTransitToLiveStandBy: Invoke<"transitToLiveStandBy">;
+        requestTransitToLiveStandByByVideoId: Invoke<"transitToLiveStandByByVideoId">;
         requestStartLive: Invoke<"startLive">;
         requestQuitLive: Invoke<"quitLive">;
       };
@@ -127,10 +127,10 @@ export const IpcApi: IpcApi = {
       mainAppPage: {
         requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
         registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
-        requestOpenOverlay: (channel, live) =>
-          IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
-        requestOpenOverlayWithVideoId: (inputVideoId) =>
-          IpcRendererWrapper.invoke("startOverlayWithUserConfirmationByVideoId", inputVideoId),
+        requestTransitToLiveStandBy: (channel, live) =>
+          IpcRendererWrapper.invoke("transitToLiveStandBy", channel, live),
+        requestTransitToLiveStandByByVideoId: (inputVideoId) =>
+          IpcRendererWrapper.invoke("transitToLiveStandByByVideoId", inputVideoId),
         requestStartLive: () => IpcRendererWrapper.invoke("startLive"),
         requestQuitLive: (liveLaunchProperties) =>
           IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),

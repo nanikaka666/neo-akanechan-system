@@ -152,16 +152,14 @@ interface MainAppPageIpcEvent {
   tellMainAppPage: (page: MainAppPage) => void;
 
   /**
-   * Confirm to user that overlay feature should starts.
+   * transit MainAppPage status to "liveStandBy"
    */
-  startOverlayWithUserConfirmation: (channel: Channel, live: YoutubeLive) => boolean;
+  transitToLiveStandBy: (channel: Channel, live: YoutubeLive) => boolean;
 
   /**
-   * Confirm to user that overlay feature should starts with video id.
-   *
-   * this ipc used for debug.
+   * transit MainAppPage status to "liveStandBy" with video id. (For debug)
    */
-  startOverlayWithUserConfirmationByVideoId: (inputVideoId: string) => boolean;
+  transitToLiveStandByByVideoId: (inputVideoId: string) => boolean;
 
   /**
    * transit MainAppPage status to "inLive".
