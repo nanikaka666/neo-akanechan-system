@@ -31,7 +31,6 @@ export interface IpcApi {
     registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
     requestAddStock: Invoke<"addStock">;
     requestRemoveStock: Invoke<"removeStock">;
-    registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
     requestInitialMainAppPage: Invoke<"getInitialMainAppPage">;
     registerMainAppPage: Listen<"tellMainAppPage">;
     requestStartLive: Invoke<"startLive">;
@@ -59,6 +58,7 @@ export interface IpcApi {
     registerRankingViewListener: Listen<"tellRankingView">;
 
     // for Both Windows.
+    registerLiveStatisticsListener: Listen<"tellLiveStatistics">;
     registerLiveSettingsListener: Listen<"tellLiveSettings">;
     registerCompetitionStatusListener: Listen<"tellCompetitionStatus">;
     requestSyncLiveSettings: Invoke<"requestSyncLiveSettings">;
@@ -84,8 +84,6 @@ export const IpcApi: IpcApi = {
       IpcRendererWrapper.on("tellMembershipsAndGifts", callback),
     requestAddStock: (stock) => IpcRendererWrapper.invoke("addStock", stock),
     requestRemoveStock: (stock) => IpcRendererWrapper.invoke("removeStock", stock),
-    registerLiveStatisticsListener: (callback) =>
-      IpcRendererWrapper.on("tellLiveStatistics", callback),
     requestInitialMainAppPage: () => IpcRendererWrapper.invoke("getInitialMainAppPage"),
     registerMainAppPage: (callback) => IpcRendererWrapper.on("tellMainAppPage", callback),
     requestStartLive: () => IpcRendererWrapper.invoke("startLive"),
@@ -117,6 +115,8 @@ export const IpcApi: IpcApi = {
     registerRankingViewListener: (callback) => IpcRendererWrapper.on("tellRankingView", callback),
 
     // For both
+    registerLiveStatisticsListener: (callback) =>
+      IpcRendererWrapper.on("tellLiveStatistics", callback),
     registerLiveSettingsListener: (callback) => IpcRendererWrapper.on("tellLiveSettings", callback),
     registerCompetitionStatusListener: (callback) =>
       IpcRendererWrapper.on("tellCompetitionStatus", callback),
