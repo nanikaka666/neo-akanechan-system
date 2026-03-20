@@ -105,16 +105,6 @@ export function setupIpcMainHandlers() {
     return true;
   });
 
-  IpcMainWrapper.handle("addStock", (e, item) => {
-    getLiveManager().actionAddStock(item);
-    return Promise.resolve(true);
-  });
-
-  IpcMainWrapper.handle("removeStock", (e, item) => {
-    getLiveManager().actionRemoveStock(item);
-    return Promise.resolve(true);
-  });
-
   IpcMainWrapper.handle("getInitialMainAppPage", async () => {
     return await getInitialMainAppPage();
   });
@@ -142,15 +132,6 @@ export function setupIpcMainHandlers() {
     MainAppPageSwitcher.liveSelection();
 
     return true;
-  });
-
-  IpcMainWrapper.handle("updateFocus", (e, focus) => {
-    if (focus) {
-      getLiveManager().actionSetFocus(focus);
-    } else {
-      getLiveManager().actionUnsetFocus();
-    }
-    return Promise.resolve(true);
   });
 
   IpcMainWrapper.handle("showRanking", (_, ranking) => {
