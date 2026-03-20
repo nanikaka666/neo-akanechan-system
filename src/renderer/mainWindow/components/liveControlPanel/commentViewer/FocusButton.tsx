@@ -15,7 +15,7 @@ export function FocusButton({ item }: FocusButtonProps) {
         e.preventDefault();
         e.stopPropagation();
         disable();
-        window.ipcApi.lcp.requestUpdateFocus(item).then(() => enable());
+        window.ipcApi.mainWindow.requestUpdateFocus(item).then(() => enable());
       }}
     >
       フォーカスする

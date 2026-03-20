@@ -21,7 +21,7 @@ type Listen<K extends keyof IpcEvent> = (
 export interface IpcApi {
   ipcApi: {
     // for LCP
-    lcp: {
+    mainWindow: {
       requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
       requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
       requestUserSettings: Invoke<"getUserSettings">;
@@ -74,7 +74,7 @@ export interface IpcApi {
 export const IpcApi: IpcApi = {
   ipcApi: {
     // for LCP
-    lcp: {
+    mainWindow: {
       requestOpenOverlay: (channel, live) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
       requestOpenOverlayWithVideoId: (inputVideoId) =>

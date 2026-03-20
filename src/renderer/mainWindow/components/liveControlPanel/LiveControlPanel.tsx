@@ -11,7 +11,7 @@ export function LiveControlPanel() {
   const [currentMainContents, switchMainContents, allContentsNames] = useMainContentsTab();
 
   useEffect(() => {
-    window.ipcApi.lcp.requestStartDataFetch().then(console.log);
+    window.ipcApi.mainWindow.requestStartDataFetch().then(console.log);
   }, []);
 
   return liveLaunchProperties && liveSettings ? (

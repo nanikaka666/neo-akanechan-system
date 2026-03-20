@@ -5,10 +5,10 @@ export function useUserSettings() {
   const [userSettings, setUserSettings] = useState<UserSettings>();
 
   useEffect(() => {
-    window.ipcApi.lcp.requestUserSettings().then((res) => {
+    window.ipcApi.mainWindow.requestUserSettings().then((res) => {
       setUserSettings((_) => res);
     });
-    const remover = window.ipcApi.lcp.registerUpdatedUserSettingsListener((e, settings) => {
+    const remover = window.ipcApi.mainWindow.registerUpdatedUserSettingsListener((e, settings) => {
       setUserSettings((_) => settings);
     });
     return () => remover();

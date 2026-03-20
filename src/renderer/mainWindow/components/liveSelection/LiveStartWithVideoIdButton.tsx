@@ -26,7 +26,7 @@ export function LiveStartWithVideoIdButton() {
               onClick={async (e) => {
                 e.preventDefault();
                 disable();
-                await window.ipcApi.lcp.requestOpenOverlayWithVideoId(inputVideoId);
+                await window.ipcApi.mainWindow.requestOpenOverlayWithVideoId(inputVideoId);
                 enable();
               }}
               disabled={disabled}

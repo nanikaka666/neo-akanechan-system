@@ -16,7 +16,7 @@ export function useChats() {
   const [focus, setFocus] = useState<FocusedOnChatItem>();
 
   useEffect(() => {
-    const remover = window.ipcApi.lcp.registerChatsListener((e, chats) => {
+    const remover = window.ipcApi.mainWindow.registerChatsListener((e, chats) => {
       setTextChats((_) => chats.textChats.items);
       setTextChatNum((_) => chats.textChats.num);
       setSuperChatAndStickers((_) => chats.superChatAndStickers);

@@ -14,7 +14,7 @@ export function UnstockButton({ item }: UnstockButtonProps) {
         e.preventDefault();
         e.stopPropagation();
         disable();
-        window.ipcApi.lcp.requestRemoveStock(item).then(() => enable());
+        window.ipcApi.mainWindow.requestRemoveStock(item).then(() => enable());
       }}
       disabled={disabled}
     >

@@ -31,7 +31,7 @@ export function AnswerDecisionForm({ options }: AnswerDecisionFormProps) {
         onClick={(e) => {
           e.preventDefault();
           disable();
-          window.ipcApi.lcp.requestAnswerDecision(answer, options.get(answer)!).then(() => {
+          window.ipcApi.mainWindow.requestAnswerDecision(answer, options.get(answer)!).then(() => {
             enable();
           });
         }}

@@ -111,7 +111,7 @@ export function NotHeld() {
         onClick={(e) => {
           e.preventDefault();
           disable();
-          window.ipcApi.lcp
+          window.ipcApi.mainWindow
             .requestOpenCompetition(
               question,
               optionStrings.slice(0, selectedOptionNum),

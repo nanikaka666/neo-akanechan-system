@@ -24,7 +24,7 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
 
   useEffect(() => {
-    window.ipcApi.lcp
+    window.ipcApi.mainWindow
       .requestCheckHavingDifferenceAmongUserSettings(originalUserSettings, userSettingsOnEditting)
       .then((res) => {
         setIsSaveDisabled((_) => !res);
@@ -45,7 +45,9 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
       <button
         onClick={(e) => {
           e.preventDefault();
-          window.ipcApi.lcp.requestSaveUserSettings(userSettingsOnEditting).then(() => turnOff());
+          window.ipcApi.mainWindow
+            .requestSaveUserSettings(userSettingsOnEditting)
+            .then(() => turnOff());
         }}
         disabled={isSaveDisabled}
       >

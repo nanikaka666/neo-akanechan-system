@@ -8,7 +8,7 @@ export function useRankings() {
   const isRankingsShownOnOverlay = useIsShownRanking();
 
   useEffect(() => {
-    const remover = window.ipcApi.lcp.registerRankingsListener((e, rankings) => {
+    const remover = window.ipcApi.mainWindow.registerRankingsListener((e, rankings) => {
       setRankings((_) => rankings);
       setReflectRankingsToOverlayEnabled((_) => true);
     });
@@ -17,12 +17,12 @@ export function useRankings() {
 
   const onClickReflectRankingButton = (rankings: PariticipantPointRankings) => {
     setReflectRankingsToOverlayEnabled((_) => false);
-    window.ipcApi.lcp.requestShowRanking(rankings);
+    window.ipcApi.mainWindow.requestShowRanking(rankings);
   };
 
   const onClickHideRankingButton = () => {
     setReflectRankingsToOverlayEnabled((_) => true);
-    window.ipcApi.lcp.requestHideRanking();
+    window.ipcApi.mainWindow.requestHideRanking();
   };
 
   return [

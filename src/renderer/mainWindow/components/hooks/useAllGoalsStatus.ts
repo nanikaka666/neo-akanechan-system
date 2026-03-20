@@ -9,7 +9,7 @@ export function useAllGoalsStatus() {
   });
 
   useEffect(() => {
-    const remover = window.ipcApi.lcp.registerAllGoalStatus((_, status) => {
+    const remover = window.ipcApi.mainWindow.registerAllGoalStatus((_, status) => {
       setAllGoalStatus((_) => status);
     });
     return () => remover();
