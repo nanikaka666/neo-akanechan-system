@@ -51,7 +51,32 @@ interface UserSettingsIpcEvent {
   tellUpdatedUserSettings: (settings: UserSettings) => void;
 }
 
-export type IpcEventForMainWindow = IpcEventForMainWindowTemp & AuthIpcEvent & UserSettingsIpcEvent;
+interface RankingIpcEvent {
+  /**
+   * Notify point rankings.
+   */
+  tellRankings: (rankings: PariticipantPointRankings) => void;
+
+  /**
+   * Request to LiveManager to show ranking dialogs on overlay.
+   */
+  showRanking: (ranking: PariticipantPointRankings) => boolean;
+
+  /**
+   * Notify flag whether a ranking is shown or not.
+   */
+  tellIsShownRanking: (isShown: boolean) => void;
+
+  /**
+   * Request to LiveManager to hide ranking dialogs on overlay.
+   */
+  hideRanking: () => boolean;
+}
+
+export type IpcEventForMainWindow = IpcEventForMainWindowTemp &
+  AuthIpcEvent &
+  UserSettingsIpcEvent &
+  RankingIpcEvent;
 
 interface IpcEventForMainWindowTemp {
   /**
@@ -119,29 +144,9 @@ interface IpcEventForMainWindowTemp {
   tellChats: (chats: Chats) => void;
 
   /**
-   * Notify point rankings.
-   */
-  tellRankings: (rankings: PariticipantPointRankings) => void;
-
-  /**
    * Notify AllGoalStatus.
    */
   tellAllGoalStatus: (status: AllGoalsStatus) => void;
-
-  /**
-   * Request to LiveManager to show ranking dialogs on overlay.
-   */
-  showRanking: (ranking: PariticipantPointRankings) => boolean;
-
-  /**
-   * Notify flag whether a ranking is shown or not.
-   */
-  tellIsShownRanking: (isShown: boolean) => void;
-
-  /**
-   * Request to LiveManager to hide ranking dialogs on overlay.
-   */
-  hideRanking: () => boolean;
 
   /**
    * Request to LiveManager to open a new competition.
