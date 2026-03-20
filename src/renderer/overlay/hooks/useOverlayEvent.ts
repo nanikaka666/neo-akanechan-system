@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NoEvent, OverlayEvent } from "../../../../types/overlay";
+import { NoEvent, OverlayEvent } from "../../../types/overlay";
 
 const noEvent: OverlayEvent = { type: "noEvent" };
 
