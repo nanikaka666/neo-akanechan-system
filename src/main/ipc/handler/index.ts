@@ -134,16 +134,6 @@ export function setupIpcMainHandlers() {
     return true;
   });
 
-  IpcMainWrapper.handle("showRanking", (_, ranking) => {
-    getLiveManager().actionShowRanking(ranking);
-    return Promise.resolve(true);
-  });
-
-  IpcMainWrapper.handle("hideRanking", () => {
-    getLiveManager().actionHideRanking();
-    return Promise.resolve(true);
-  });
-
   IpcMainWrapper.handle("getLiveLaunchProperties", () => {
     return Promise.resolve(getLiveManager().getLiveLaunchProperties());
   });
