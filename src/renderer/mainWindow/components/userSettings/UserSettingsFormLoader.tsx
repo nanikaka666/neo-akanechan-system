@@ -1,5 +1,5 @@
 import { UserSettingsForm } from "./UserSettingsForm";
-import { useUserSettings } from "../hooks/useUserSettings";
+import { useUserSettings } from "../../hooks/useUserSettings";
 
 interface UserSettingsFormLoaderProps {
   turnOff: () => void;

@@ -1,5 +1,5 @@
 import { FocusedOnChatItem } from "../../../../../types/liveChatItem";
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 interface FocusButtonProps {
   item: FocusedOnChatItem;
@@ -15,7 +15,7 @@ export function FocusButton({ item }: FocusButtonProps) {
         e.preventDefault();
         e.stopPropagation();
         disable();
-        window.ipcApi.requestUpdateFocus(item).then(() => enable());
+        window.ipcApi.mainWindow.commentViewer.requestUpdateFocus(item).then(() => enable());
       }}
     >
       フォーカスする

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AllGoalsStatus } from "../../../../types/goals";
+import { AllGoalsStatus } from "../../../types/goals";
 
 export function useAllGoalsStatus() {
   const [allGoalStatus, setAllGoalStatus] = useState<AllGoalsStatus>({
@@ -9,7 +9,7 @@ export function useAllGoalsStatus() {
   });
 
   useEffect(() => {
-    const remover = window.ipcApi.registerAllGoalStatus((_, status) => {
+    const remover = window.ipcApi.mainWindow.goal.registerAllGoalStatus((_, status) => {
       setAllGoalStatus((_) => status);
     });
     return () => remover();

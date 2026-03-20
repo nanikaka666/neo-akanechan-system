@@ -1,4 +1,4 @@
-import { useButton } from "../hooks/useButton";
+import { useButton } from "../../hooks/useButton";
 
 export function AuthFlow() {
   const [disabled, disable, enable] = useButton();
@@ -10,7 +10,7 @@ export function AuthFlow() {
         onClick={(e) => {
           e.preventDefault();
           disable();
-          window.ipcApi.requestStartAuthFlow().then(() => enable());
+          window.ipcApi.mainWindow.auth.requestStartAuthFlow().then(() => enable());
         }}
         disabled={disabled}
       >

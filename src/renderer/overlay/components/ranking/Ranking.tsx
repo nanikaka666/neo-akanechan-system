@@ -7,7 +7,7 @@ export function Ranking() {
   const [ranking, setRanking] = useState<PariticipantPointRankings | undefined>();
 
   useEffect(() => {
-    const remover = window.ipcApi.registerRankingViewListener((_, maybeRanking) => {
+    const remover = window.ipcApi.overlay.registerRankingViewListener((_, maybeRanking) => {
       setRanking((_) => maybeRanking);
     });
     return () => remover();

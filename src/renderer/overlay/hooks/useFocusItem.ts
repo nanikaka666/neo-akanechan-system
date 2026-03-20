@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { FocusViewItem } from "../../../../types/focusView";
+import { FocusViewItem } from "../../../types/focusView";
 
 export function useFocusItem() {
   const [focusItem, setFocusItem] = useState<FocusViewItem | undefined>();
 
   useEffect(() => {
-    const remover = window.ipcApi.registerFocusItemListener((_, item) => {
+    const remover = window.ipcApi.overlay.registerFocusItemListener((_, item) => {
       setFocusItem((_) => item);
     });
     return () => remover();

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import { GoalsLevel, GoalsStatus } from "../../../../types/goals";
-import { useLiveSettings } from "../../../hooks/useLiveSettings";
+import { useLiveSettings } from "../../hooks/useLiveSettings";
+import { GoalsStatus, GoalsLevel } from "../../../types/goals";
 
 export function useViewerCountGoalStatus() {
   const liveSettings = useLiveSettings();

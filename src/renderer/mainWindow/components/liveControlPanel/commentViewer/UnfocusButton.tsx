@@ -1,4 +1,4 @@
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 export function UnfocusButton() {
   const [disabled, disable, enable] = useButton();
@@ -10,7 +10,7 @@ export function UnfocusButton() {
         e.preventDefault();
         e.stopPropagation();
         disable();
-        window.ipcApi.requestUpdateFocus(undefined).then(() => enable());
+        window.ipcApi.mainWindow.commentViewer.requestUpdateFocus(undefined).then(() => enable());
       }}
     >
       フォーカスを外す

@@ -3,7 +3,7 @@ import {
   ExtendedChatItemText,
   ExtendedSuperItem,
   FocusedOnChatItem,
-} from "../../../../types/liveChatItem";
+} from "../../../types/liveChatItem";
 
 export function useChats() {
   const [textChats, setTextChats] = useState<ExtendedChatItemText[]>([]);
@@ -16,7 +16,7 @@ export function useChats() {
   const [focus, setFocus] = useState<FocusedOnChatItem>();
 
   useEffect(() => {
-    const remover = window.ipcApi.registerChatsListener((e, chats) => {
+    const remover = window.ipcApi.mainWindow.commentViewer.registerChatsListener((e, chats) => {
       setTextChats((_) => chats.textChats.items);
       setTextChatNum((_) => chats.textChats.num);
       setSuperChatAndStickers((_) => chats.superChatAndStickers);

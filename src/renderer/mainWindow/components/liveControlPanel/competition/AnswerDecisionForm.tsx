@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { OptionLabel } from "../../../../../types/competition";
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 interface AnswerDecisionFormProps {
   options: Map<OptionLabel, string>;
@@ -31,9 +31,11 @@ export function AnswerDecisionForm({ options }: AnswerDecisionFormProps) {
         onClick={(e) => {
           e.preventDefault();
           disable();
-          window.ipcApi.requestAnswerDecision(answer, options.get(answer)!).then(() => {
-            enable();
-          });
+          window.ipcApi.mainWindow.competition
+            .requestAnswerDecision(answer, options.get(answer)!)
+            .then(() => {
+              enable();
+            });
         }}
       >
         正解を確定する

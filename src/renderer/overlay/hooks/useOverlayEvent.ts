@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NoEvent, OverlayEvent } from "../../../../types/overlay";
+import { NoEvent, OverlayEvent } from "../../../types/overlay";
 
 const noEvent: OverlayEvent = { type: "noEvent" };
 
@@ -23,7 +23,7 @@ export function useOverlayEvent() {
   }, [overlayEvent, eventQueue]);
 
   useEffect(() => {
-    const remover = window.ipcApi.registerOverlayEvent((e, overlayEvent) => {
+    const remover = window.ipcApi.overlay.registerOverlayEvent((e, overlayEvent) => {
       setEventQueue((prev) => [...prev, overlayEvent]);
     });
     return () => remover();

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PariticipantPointRankings } from "../../../../types/participantPoint";
+import { PariticipantPointRankings } from "../../../types/participantPoint";
 import { useIsShownRanking } from "./useIsShownRanking";
 
 export function useRankings() {
@@ -8,7 +8,7 @@ export function useRankings() {
   const isRankingsShownOnOverlay = useIsShownRanking();
 
   useEffect(() => {
-    const remover = window.ipcApi.registerRankingsListener((e, rankings) => {
+    const remover = window.ipcApi.mainWindow.ranking.registerRankingsListener((e, rankings) => {
       setRankings((_) => rankings);
       setReflectRankingsToOverlayEnabled((_) => true);
     });
@@ -17,12 +17,12 @@ export function useRankings() {
 
   const onClickReflectRankingButton = (rankings: PariticipantPointRankings) => {
     setReflectRankingsToOverlayEnabled((_) => false);
-    window.ipcApi.requestShowRanking(rankings);
+    window.ipcApi.mainWindow.ranking.requestShowRanking(rankings);
   };
 
   const onClickHideRankingButton = () => {
     setReflectRankingsToOverlayEnabled((_) => true);
-    window.ipcApi.requestHideRanking();
+    window.ipcApi.mainWindow.ranking.requestHideRanking();
   };
 
   return [

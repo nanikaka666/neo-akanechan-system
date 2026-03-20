@@ -1,4 +1,4 @@
-import { ViewerMode } from "../../hooks/useCommentViewerMode";
+import { ViewerMode } from "../../../hooks/useCommentViewerMode";
 
 interface ViewerModeSelectOption {
   viewerMode: ViewerMode;

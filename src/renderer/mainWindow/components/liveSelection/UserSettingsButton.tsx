@@ -1,6 +1,6 @@
 import ReactModal from "react-modal";
 import { UserSettingsFormLoader } from "../userSettings/UserSettingsFormLoader";
-import { useModal } from "../hooks/useModal";
+import { useModal } from "../../hooks/useModal";
 
 export function UserSettingsButton() {
   const [showModal, turnOn, turnOff] = useModal();

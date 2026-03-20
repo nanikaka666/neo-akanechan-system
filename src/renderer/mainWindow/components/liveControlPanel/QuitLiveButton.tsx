@@ -1,5 +1,5 @@
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
-import { useButton } from "../hooks/useButton";
+import { useButton } from "../../hooks/useButton";
 
 interface QuitLiveButtonProps {
   liveLaunchProperties: LiveLaunchProperties;
@@ -14,7 +14,7 @@ export function QuitLiveButton({ liveLaunchProperties }: QuitLiveButtonProps) {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.requestQuitLive(liveLaunchProperties).then((res) => {
+        window.ipcApi.mainWindow.mainAppPage.requestQuitLive(liveLaunchProperties).then((res) => {
           if (!res) {
             enable();
           }

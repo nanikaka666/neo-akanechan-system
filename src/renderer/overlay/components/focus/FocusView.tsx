@@ -1,7 +1,7 @@
 import { SuperChatItem } from "../chatLog/SuperChatItem";
 import { SuperStickerItem } from "../chatLog/SuperStickerItem";
 import { TextItem } from "../chatLog/TextItem";
-import { useFocusItem } from "../hooks/useFocusItem";
+import { useFocusItem } from "../../hooks/useFocusItem";
 
 export function FocusView() {
   const focusItem = useFocusItem();

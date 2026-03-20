@@ -1,4 +1,4 @@
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 export function ManuallyEntryCloseButton() {
   const [disabled, disable, enable] = useButton();
@@ -8,7 +8,7 @@ export function ManuallyEntryCloseButton() {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.requestManuallyEntryClose().then(() => {
+        window.ipcApi.mainWindow.competition.requestManuallyEntryClose().then(() => {
           enable();
         });
       }}

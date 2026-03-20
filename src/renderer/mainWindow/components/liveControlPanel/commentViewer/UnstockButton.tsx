@@ -1,5 +1,5 @@
 import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 interface UnstockButtonProps {
   item: ExtendedChatItemText;
@@ -14,7 +14,7 @@ export function UnstockButton({ item }: UnstockButtonProps) {
         e.preventDefault();
         e.stopPropagation();
         disable();
-        window.ipcApi.requestRemoveStock(item).then(() => enable());
+        window.ipcApi.mainWindow.commentViewer.requestRemoveStock(item).then(() => enable());
       }}
       disabled={disabled}
     >

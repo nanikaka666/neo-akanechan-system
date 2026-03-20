@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
-import { useIndicatorColor } from "../hooks/useIndicatorColor";
-import { useWindowSize } from "../hooks/useWindowSize";
 import { GoalsLevel } from "../../../../types/goals";
+import { useIndicatorColor } from "../../hooks/useIndicatorColor";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 export interface GaugeProps {
   gaugeLevel: GoalsLevel;

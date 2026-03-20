@@ -21,7 +21,7 @@ export function useLiveStatistics() {
   });
 
   useEffect(() => {
-    const remover = window.ipcApi.registerLiveStatisticsListener((e, newLiveStatistics) => {
+    const remover = window.ipcApi.common.registerLiveStatisticsListener((e, newLiveStatistics) => {
       setLiveStatistics((_) => newLiveStatistics);
     });
     return () => remover();

@@ -1,6 +1,6 @@
 import { YoutubeLive } from "../../../../types/youtubeLive";
 import { Channel } from "../../../../types/youtubeChannel";
-import { useButton } from "../hooks/useButton";
+import { useButton } from "../../hooks/useButton";
 
 interface LiveStartButtonProps {
   channel: Channel;
@@ -16,7 +16,7 @@ export function LiveStartButton({ channel, live }: LiveStartButtonProps) {
         e.preventDefault();
         disable();
 
-        await window.ipcApi.requestOpenOverlay(channel, live);
+        await window.ipcApi.mainWindow.mainAppPage.requestTransitToLiveStandBy(channel, live);
         enable();
       }}
       disabled={disabled}

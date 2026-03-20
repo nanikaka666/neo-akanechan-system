@@ -1,4 +1,4 @@
-import { useButton } from "../hooks/useButton";
+import { useButton } from "../../hooks/useButton";
 
 export function AccountDisconnectButton() {
   const [disabled, disable, enable] = useButton();
@@ -7,7 +7,7 @@ export function AccountDisconnectButton() {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.requestAccountDisconnect().then(() => enable());
+        window.ipcApi.mainWindow.auth.requestAccountDisconnect().then(() => enable());
       }}
       disabled={disabled}
     >

@@ -1,4 +1,4 @@
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 export function AbortButton() {
   const [disabled, disable, enable] = useButton();
@@ -8,7 +8,7 @@ export function AbortButton() {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.requestAbortCompetition().then(() => {
+        window.ipcApi.mainWindow.competition.requestAbortCompetition().then(() => {
           enable();
         });
       }}

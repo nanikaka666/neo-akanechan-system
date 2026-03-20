@@ -1,5 +1,5 @@
 import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 interface StockButtonProps {
   item: ExtendedChatItemText;
@@ -14,7 +14,7 @@ export function StockButton({ item }: StockButtonProps) {
         e.preventDefault();
         e.stopPropagation();
         disable();
-        window.ipcApi.requestAddStock(item).then(() => enable());
+        window.ipcApi.mainWindow.commentViewer.requestAddStock(item).then(() => enable());
       }}
       disabled={disabled}
     >

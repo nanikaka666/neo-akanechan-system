@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { MainAppPage } from "../../../../types/mainAppPage";
+import { MainAppPage } from "../../../types/mainAppPage";
 
 export function useMainAppPage() {
   const [mainAppPage, setMainAppPage] = useState<MainAppPage>();
 
   useEffect(() => {
-    window.ipcApi.requestInitialMainAppPage().then((page) => {
+    window.ipcApi.mainWindow.mainAppPage.requestInitialMainAppPage().then((page) => {
       setMainAppPage((_) => page);
     });
-    const remover = window.ipcApi.registerMainAppPage((e, page) => {
+    const remover = window.ipcApi.mainWindow.mainAppPage.registerMainAppPage((e, page) => {
       setMainAppPage((_) => page);
     });
     return () => remover();

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
-import { useLiveLaunchProperties } from "../../../hooks/useLiveLaunchProperties";
+import { useLiveLaunchProperties } from "../../hooks/useLiveLaunchProperties";
 import { useLiveSettings } from "../../../hooks/useLiveSettings";
-import { useMainContentsTab } from "../hooks/useMainContentsTab";
+import { useMainContentsTab } from "../../hooks/useMainContentsTab";
 
 export function LiveControlPanel() {
   const liveLaunchProperties = useLiveLaunchProperties();
@@ -11,7 +11,7 @@ export function LiveControlPanel() {
   const [currentMainContents, switchMainContents, allContentsNames] = useMainContentsTab();
 
   useEffect(() => {
-    window.ipcApi.requestStartDataFetch().then(console.log);
+    window.ipcApi.mainWindow.requestStartDataFetch().then(console.log);
   }, []);
 
   return liveLaunchProperties && liveSettings ? (

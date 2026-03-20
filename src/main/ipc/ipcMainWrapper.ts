@@ -1,5 +1,5 @@
 import { ipcMain, IpcMainInvokeEvent } from "electron";
-import { IpcEvent } from "../types/ipcEvent";
+import { IpcEvent } from "../../types/ipcEvent";
 
 /**
  * Wrapper object of ipcMain.

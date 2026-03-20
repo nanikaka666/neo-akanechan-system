@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { OptionLabel } from "../../../../../types/competition";
-import { useButton } from "../../hooks/useButton";
+import { useButton } from "../../../hooks/useButton";
 
 type OptionNum = 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -111,7 +111,7 @@ export function NotHeld() {
         onClick={(e) => {
           e.preventDefault();
           disable();
-          window.ipcApi
+          window.ipcApi.mainWindow.competition
             .requestOpenCompetition(
               question,
               optionStrings.slice(0, selectedOptionNum),
