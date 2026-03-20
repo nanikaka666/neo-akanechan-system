@@ -25,12 +25,14 @@ export interface IpcApi {
         requestStartAuthFlow: Invoke<"startAuthFlow">;
         requestAccountDisconnect: Invoke<"accountDisconnect">;
       };
+      userSettings: {
+        requestUserSettings: Invoke<"getUserSettings">;
+        requestSaveUserSettings: Invoke<"saveUserSettings">;
+        requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
+        registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
+      };
       requestOpenOverlay: Invoke<"startOverlayWithUserConfirmation">;
       requestOpenOverlayWithVideoId: Invoke<"startOverlayWithUserConfirmationByVideoId">;
-      requestUserSettings: Invoke<"getUserSettings">;
-      requestSaveUserSettings: Invoke<"saveUserSettings">;
-      requestCheckHavingDifferenceAmongUserSettings: Invoke<"hasDifferenceAmongUserSettings">;
-      registerUpdatedUserSettingsListener: Listen<"tellUpdatedUserSettings">;
       requestStartDataFetch: Invoke<"startDataFetch">;
       registerMembershipsAndGiftsListener: Listen<"tellMembershipsAndGifts">;
       requestAddStock: Invoke<"addStock">;
@@ -77,17 +79,19 @@ export const IpcApi: IpcApi = {
         requestStartAuthFlow: () => IpcRendererWrapper.invoke("startAuthFlow"),
         requestAccountDisconnect: () => IpcRendererWrapper.invoke("accountDisconnect"),
       },
+      userSettings: {
+        requestUserSettings: () => IpcRendererWrapper.invoke("getUserSettings"),
+        requestSaveUserSettings: (userSettings) =>
+          IpcRendererWrapper.invoke("saveUserSettings", userSettings),
+        requestCheckHavingDifferenceAmongUserSettings: (settingsA, settingsB) =>
+          IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),
+        registerUpdatedUserSettingsListener: (callback) =>
+          IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
+      },
       requestOpenOverlay: (channel, live) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmation", channel, live),
       requestOpenOverlayWithVideoId: (inputVideoId) =>
         IpcRendererWrapper.invoke("startOverlayWithUserConfirmationByVideoId", inputVideoId),
-      requestUserSettings: () => IpcRendererWrapper.invoke("getUserSettings"),
-      requestSaveUserSettings: (userSettings) =>
-        IpcRendererWrapper.invoke("saveUserSettings", userSettings),
-      requestCheckHavingDifferenceAmongUserSettings: (settingsA, settingsB) =>
-        IpcRendererWrapper.invoke("hasDifferenceAmongUserSettings", settingsA, settingsB),
-      registerUpdatedUserSettingsListener: (callback) =>
-        IpcRendererWrapper.on("tellUpdatedUserSettings", callback),
       requestStartDataFetch: () => IpcRendererWrapper.invoke("startDataFetch"),
       registerMembershipsAndGiftsListener: (callback) =>
         IpcRendererWrapper.on("tellMembershipsAndGifts", callback),

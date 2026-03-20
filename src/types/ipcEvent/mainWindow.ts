@@ -25,26 +25,7 @@ interface AuthIpcEvent {
   accountDisconnect: () => boolean;
 }
 
-export type IpcEventForMainWindow = IpcEventForMainWindowTemp & AuthIpcEvent;
-
-interface IpcEventForMainWindowTemp {
-  /**
-   * Confirm to user that overlay feature should starts.
-   */
-  startOverlayWithUserConfirmation: (channel: Channel, live: YoutubeLive) => boolean;
-
-  /**
-   * Confirm to user that overlay feature should starts with video id.
-   *
-   * this ipc used for debug.
-   */
-  startOverlayWithUserConfirmationByVideoId: (inputVideoId: string) => boolean;
-
-  /**
-   * Start DataFetcheres.
-   */
-  startDataFetch: () => boolean;
-
+interface UserSettingsIpcEvent {
   /**
    * Get UserSettings.
    *
@@ -68,6 +49,27 @@ interface IpcEventForMainWindowTemp {
    * Notify updated UserSettings to renderer.
    */
   tellUpdatedUserSettings: (settings: UserSettings) => void;
+}
+
+export type IpcEventForMainWindow = IpcEventForMainWindowTemp & AuthIpcEvent & UserSettingsIpcEvent;
+
+interface IpcEventForMainWindowTemp {
+  /**
+   * Confirm to user that overlay feature should starts.
+   */
+  startOverlayWithUserConfirmation: (channel: Channel, live: YoutubeLive) => boolean;
+
+  /**
+   * Confirm to user that overlay feature should starts with video id.
+   *
+   * this ipc used for debug.
+   */
+  startOverlayWithUserConfirmationByVideoId: (inputVideoId: string) => boolean;
+
+  /**
+   * Start DataFetcheres.
+   */
+  startDataFetch: () => boolean;
 
   /**
    * Notify all memberships and gifts item to renderer.
