@@ -8,7 +8,7 @@ export function ManuallyEntryCloseButton() {
       onClick={(e) => {
         e.preventDefault();
         disable();
-        window.ipcApi.requestManuallyEntryClose().then(() => {
+        window.ipcApi.lcp.requestManuallyEntryClose().then(() => {
           enable();
         });
       }}

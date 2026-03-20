@@ -45,7 +45,7 @@ export function PoppingManager() {
   }, [buffer]);
 
   useEffect(() => {
-    const remover = window.ipcApi.registerAmountOfPoint((e, item) => {
+    const remover = window.ipcApi.overlay.registerAmountOfPoint((e, item) => {
       setBuffer((prev) => [...prev, item]);
     });
     return () => remover();

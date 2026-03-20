@@ -5,10 +5,10 @@ export function useMainAppPage() {
   const [mainAppPage, setMainAppPage] = useState<MainAppPage>();
 
   useEffect(() => {
-    window.ipcApi.requestInitialMainAppPage().then((page) => {
+    window.ipcApi.lcp.requestInitialMainAppPage().then((page) => {
       setMainAppPage((_) => page);
     });
-    const remover = window.ipcApi.registerMainAppPage((e, page) => {
+    const remover = window.ipcApi.lcp.registerMainAppPage((e, page) => {
       setMainAppPage((_) => page);
     });
     return () => remover();

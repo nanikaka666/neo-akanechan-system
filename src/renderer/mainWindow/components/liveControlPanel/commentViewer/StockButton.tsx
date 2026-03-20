@@ -14,7 +14,7 @@ export function StockButton({ item }: StockButtonProps) {
         e.preventDefault();
         e.stopPropagation();
         disable();
-        window.ipcApi.requestAddStock(item).then(() => enable());
+        window.ipcApi.lcp.requestAddStock(item).then(() => enable());
       }}
       disabled={disabled}
     >

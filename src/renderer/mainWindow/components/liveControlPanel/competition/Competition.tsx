@@ -8,7 +8,7 @@ export function Competition() {
   const [status, setStatus] = useState<CompetitionStatus>({ type: "notHeld" });
 
   useEffect(() => {
-    const remover = window.ipcApi.registerCompetitionStatusListener((_, newStatus) => {
+    const remover = window.ipcApi.common.registerCompetitionStatusListener((_, newStatus) => {
       setStatus((_) => newStatus);
     });
     return () => remover();

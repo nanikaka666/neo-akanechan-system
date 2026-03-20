@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export function useIsShownRanking() {
   const [isShown, setIsShown] = useState(false);
   useEffect(() => {
-    const remover = window.ipcApi.registerIsShownRankingListener((_, nextIsShown) => {
+    const remover = window.ipcApi.lcp.registerIsShownRankingListener((_, nextIsShown) => {
       setIsShown((_) => nextIsShown);
     });
     return () => remover();

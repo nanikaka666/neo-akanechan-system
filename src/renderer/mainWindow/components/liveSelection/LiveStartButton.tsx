@@ -16,7 +16,7 @@ export function LiveStartButton({ channel, live }: LiveStartButtonProps) {
         e.preventDefault();
         disable();
 
-        await window.ipcApi.requestOpenOverlay(channel, live);
+        await window.ipcApi.lcp.requestOpenOverlay(channel, live);
         enable();
       }}
       disabled={disabled}

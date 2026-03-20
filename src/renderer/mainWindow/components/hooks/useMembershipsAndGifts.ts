@@ -5,7 +5,7 @@ export function useMembershipsAndGifts() {
   const [membershipsAndGifts, setMembershipsAndGifts] = useState<MembershipAndGiftItem[]>([]);
 
   useEffect(() => {
-    const remover = window.ipcApi.registerMembershipsAndGiftsListener(
+    const remover = window.ipcApi.lcp.registerMembershipsAndGiftsListener(
       (e, newMembershipsAndGifts) => {
         setMembershipsAndGifts((_) => newMembershipsAndGifts);
       },

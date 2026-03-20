@@ -10,7 +10,7 @@ export function UnfocusButton() {
         e.preventDefault();
         e.stopPropagation();
         disable();
-        window.ipcApi.requestUpdateFocus(undefined).then(() => enable());
+        window.ipcApi.lcp.requestUpdateFocus(undefined).then(() => enable());
       }}
     >
       フォーカスを外す

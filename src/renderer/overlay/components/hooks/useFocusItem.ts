@@ -5,7 +5,7 @@ export function useFocusItem() {
   const [focusItem, setFocusItem] = useState<FocusViewItem | undefined>();
 
   useEffect(() => {
-    const remover = window.ipcApi.registerFocusItemListener((_, item) => {
+    const remover = window.ipcApi.overlay.registerFocusItemListener((_, item) => {
       setFocusItem((_) => item);
     });
     return () => remover();

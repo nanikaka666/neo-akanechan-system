@@ -6,7 +6,7 @@ export function ChatLogManager() {
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
 
   useEffect(() => {
-    const remover = window.ipcApi.registerChatLogListener((_, chatLog) => {
+    const remover = window.ipcApi.overlay.registerChatLogListener((_, chatLog) => {
       setChatLogs((prev) => [...prev, chatLog].slice(-20));
     });
     return () => remover();
