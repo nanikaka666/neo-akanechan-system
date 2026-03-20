@@ -1,21 +1,21 @@
-import { IpcMainWrapper } from "./ipcMainWrapper";
-import { WebContentsWrapper } from "./webContentsWrapper";
-import { UserSettingsService } from "./userSettings";
-import { doAuthFlow, isUserAuthorized, revokeCredentials } from "./auth/google";
+import { IpcMainWrapper } from "../ipcMainWrapper";
+import { WebContentsWrapper } from "../../webContentsWrapper";
+import { UserSettingsService } from "../../userSettings";
+import { doAuthFlow, isUserAuthorized, revokeCredentials } from "../../auth/google";
 import {
   buildLiveLaunchProperties,
   buildLiveLaunchPropertiesForDebug,
-} from "./liveLaunchProperties";
-import { VideoId } from "../types/youtubeDomainModel";
+} from "../../liveLaunchProperties";
+import { VideoId } from "../../../types/youtubeDomainModel";
 import {
   cleanupLiveManager,
   getLiveManager,
   isExistLiveManager,
   setupLiveManager,
-} from "./liveManager";
-import { getWindowManager } from "./window";
-import { yesNoDialogOnMainWindow } from "./dialog";
-import { getInitialMainAppPage, MainAppPageSwitcher } from "./mainAppPage";
+} from "../../liveManager";
+import { getWindowManager } from "../../window";
+import { yesNoDialogOnMainWindow } from "../../dialog";
+import { getInitialMainAppPage, MainAppPageSwitcher } from "../../mainAppPage";
 
 export function setupIpcMainHandlers() {
   IpcMainWrapper.handle("startOverlayWithUserConfirmation", async (e, channel, live) => {
