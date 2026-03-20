@@ -13,6 +13,15 @@ import { UserSettings } from "../userSettings";
 import { Channel } from "../youtubeChannel";
 import { YoutubeLive } from "../youtubeLive";
 
+export type IpcEventForMainWindow = IpcEventOthers &
+  AuthIpcEvent &
+  UserSettingsIpcEvent &
+  RankingIpcEvent &
+  CompetitionIpcEvent &
+  CommentViewerIpcEvent &
+  GoalIpcEvent &
+  MainAppPageIpcEvent;
+
 interface AuthIpcEvent {
   /**
    * Start auth flow.
@@ -165,16 +174,7 @@ interface MainAppPageIpcEvent {
   quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
 }
 
-export type IpcEventForMainWindow = IpcEventForMainWindowTemp &
-  AuthIpcEvent &
-  UserSettingsIpcEvent &
-  RankingIpcEvent &
-  CompetitionIpcEvent &
-  CommentViewerIpcEvent &
-  GoalIpcEvent &
-  MainAppPageIpcEvent;
-
-interface IpcEventForMainWindowTemp {
+interface IpcEventOthers {
   /**
    * Start DataFetcheres.
    */
