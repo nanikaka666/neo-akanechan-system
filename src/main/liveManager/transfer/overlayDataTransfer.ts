@@ -12,73 +12,97 @@ export class OverlayDataTransfer {
   }
 
   sendAmountOfPoint(author: ChatAuthor, amountOfPoint: number) {
-    WebContentsWrapper.send(this.#getWebContents(), "tellAmountOfPoint", {
+    const webContents = getWindowManager().getOverlayWindowWebContents();
+    if (webContents === undefined) {
+      return;
+    }
+    WebContentsWrapper.send(webContents, "tellAmountOfPoint", {
       img: author.profileImageUrl,
       point: amountOfPoint,
     } satisfies PointInfoFromMainProcess);
   }
 
   syncLiveSettings() {
+    const webContents = getWindowManager().getOverlayWindowWebContents();
+    if (webContents === undefined) {
+      return;
+    }
     WebContentsWrapper.send(
-      this.#getWebContents(),
+      webContents,
       "tellLiveSettings",
       this.#dataSource.getLiveSettingsManager().get(),
     );
   }
 
   syncLiveStatistics() {
+    const webContents = getWindowManager().getOverlayWindowWebContents();
+    if (webContents === undefined) {
+      return;
+    }
     WebContentsWrapper.send(
-      this.#getWebContents(),
+      webContents,
       "tellLiveStatistics",
       this.#dataSource.getLiveStatisticsDataContainer().get(),
     );
   }
 
   sendOverlayEvent(event: Exclude<OverlayEvent, NoEvent>) {
-    WebContentsWrapper.send(this.#getWebContents(), "tellOverlayEvent", event);
+    const webContents = getWindowManager().getOverlayWindowWebContents();
+    if (webContents === undefined) {
+      return;
+    }
+    WebContentsWrapper.send(webContents, "tellOverlayEvent", event);
   }
 
   sendChatLog(data: ChatLogData) {
+    const webContents = getWindowManager().getOverlayWindowWebContents();
+    if (webContents === undefined) {
+      return;
+    }
     const bet = this.#dataSource
       .getCompetitionManager()
       .getBets()
       .filter((bet) => bet.author.channelId.id === data.author.channelId.id);
-    WebContentsWrapper.send(this.#getWebContents(), "tellChatLog", {
+    WebContentsWrapper.send(webContents, "tellChatLog", {
       data,
       votedTo: bet.length === 1 ? bet[0].betTo : undefined,
     });
   }
 
   syncFocusView() {
+    const webContents = getWindowManager().getOverlayWindowWebContents();
+    if (webContents === undefined) {
+      return;
+    }
     const focusStatus = this.#dataSource.getFocusManager().getFocusStatus();
     WebContentsWrapper.send(
-      this.#getWebContents(),
+      webContents,
       "tellFocusViewItem",
       focusStatus.type === "unfocused" ? undefined : focusStatus.item,
     );
   }
 
   syncRanking() {
+    const webContents = getWindowManager().getOverlayWindowWebContents();
+    if (webContents === undefined) {
+      return;
+    }
     WebContentsWrapper.send(
-      this.#getWebContents(),
+      webContents,
       "tellRankingView",
       this.#dataSource.getShowRankingManager().get(),
     );
   }
 
   syncCompetitionStatus() {
+    const webContents = getWindowManager().getOverlayWindowWebContents();
+    if (webContents === undefined) {
+      return;
+    }
     WebContentsWrapper.send(
-      this.#getWebContents(),
+      webContents,
       "tellCompetitionStatus",
       this.#dataSource.getCompetitionManager().get(),
     );
-  }
-
-  #getWebContents() {
-    const res = getWindowManager().getOverlayWindowWebContents();
-    if (res === undefined) {
-      throw new Error("Data transfer failed by missing overlay window.");
-    }
-    return res;
   }
 }
