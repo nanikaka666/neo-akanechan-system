@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useButton } from "../../hooks/useButton";
 
 export function OpenOverlayWindowForm() {
   const [isChecked, setIsChecked] = useState(false);
   const [disabled, disable, enable] = useButton();
+
+  useEffect(() => {
+    const remover =
+      window.ipcApi.mainWindow.createOverlayWindow.registerOverlayWindowClosedListener(() => {
+        enable();
+      });
+    return () => remover();
+  }, [enable]);
 
   return (
     <div>
