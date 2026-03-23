@@ -20,7 +20,8 @@ export type IpcEventForMainWindow = IpcEventOthers &
   CompetitionIpcEvent &
   CommentViewerIpcEvent &
   GoalIpcEvent &
-  MainAppPageIpcEvent;
+  MainAppPageIpcEvent &
+  CreateOverlayWindowIpcEvent;
 
 interface AuthIpcEvent {
   /**
@@ -170,6 +171,23 @@ interface MainAppPageIpcEvent {
    * transit MainAppPage status to "liveSelection"
    */
   quitLive: (liveLaunchProperties: LiveLaunchProperties) => boolean;
+}
+
+interface CreateOverlayWindowIpcEvent {
+  /**
+   * Create Overlay Window.
+   */
+  createOverlayWindow: () => boolean;
+
+  /**
+   * Create Overlay Window for preview.
+   */
+  createOverlayWindowForPreview: () => boolean;
+
+  /**
+   * Notify it when overlay window is closed.
+   */
+  tellOverlayWindowClosed: () => void;
 }
 
 interface IpcEventOthers {

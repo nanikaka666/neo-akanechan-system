@@ -1,6 +1,8 @@
-import { BrowserWindow, screen } from "electron";
+import { BrowserWindow, BrowserWindowConstructorOptions, screen } from "electron";
 import { isDevMode } from "../environment";
 import { getStorageService } from "../storage";
+import { getWindowManager } from ".";
+import { WebContentsWrapper } from "../webContentsWrapper";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -111,28 +113,52 @@ export class WindowManager {
     if (!this.#checkMainWindowExistence()) {
       return;
     }
-    const overlayWindow = new BrowserWindow({
-      title: title,
-      useContentSize: true,
-      height: 720,
-      width: 1280,
-      // transparent: true,
-      // titleBarStyle: "hidden",
-      webPreferences: {
-        preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
-        devTools: isDevMode(),
-        backgroundThrottling: false,
-      },
-    });
+
+    const overlayWindow = new BrowserWindow(this.#getOverlayWindowOptions(title));
 
     const limitationBounds = this.#getLimitationBoundsOfAllDisplays();
+    overlayWindow.setPosition(0, limitationBounds.y);
 
-    // overlayWindow.setPosition(0, limitationBounds.y);
-    overlayWindow.setPosition(0, limitationBounds.y - 720 - 25);
+    overlayWindow.on("closed", () => {
+      const mainWindowWebContents = getWindowManager().getMainWindowWebContents();
+      if (mainWindowWebContents === undefined) {
+        return;
+      }
+      WebContentsWrapper.send(mainWindowWebContents, "tellOverlayWindowClosed");
+    });
 
     overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
 
-    // mainWindow.webContents.openDevTools();
+    this.#overlayWindowId = overlayWindow.id;
+  }
+
+  createOverlayWindowInPreview(title: string) {
+    // if overlay window exists, then do nothing.
+    if (this.#checkOverlayWindowExistence()) {
+      return;
+    }
+    // if main window does not exist, then do nothing.
+    if (!this.#checkMainWindowExistence()) {
+      return;
+    }
+
+    const overlayWindow = new BrowserWindow(this.#getOverlayWindowOptionsForPreview(title));
+
+    const limitationBounds = this.#getLimitationBoundsOfAllDisplays();
+
+    overlayWindow.setPosition(0, limitationBounds.y - 720 - 30);
+    overlayWindow.setBackgroundColor("green");
+
+    overlayWindow.on("closed", () => {
+      const mainWindowWebContents = getWindowManager().getMainWindowWebContents();
+      if (mainWindowWebContents === undefined) {
+        return;
+      }
+      WebContentsWrapper.send(mainWindowWebContents, "tellOverlayWindowClosed");
+    });
+
+    overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
+
     this.#overlayWindowId = overlayWindow.id;
   }
 
@@ -172,5 +198,29 @@ export class WindowManager {
       maximum.y = Math.max(maximum.y, display.bounds.y + display.bounds.height);
     });
     return maximum;
+  }
+
+  #getOverlayWindowOptions(title: string): BrowserWindowConstructorOptions {
+    return {
+      ...this.#getOverlayWindowOptionsForPreview(title),
+      ...{
+        transparent: true,
+        titleBarStyle: "hidden",
+      },
+    };
+  }
+
+  #getOverlayWindowOptionsForPreview(title: string): BrowserWindowConstructorOptions {
+    return {
+      title: title,
+      useContentSize: true,
+      height: 720,
+      width: 1280,
+      webPreferences: {
+        preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
+        devTools: isDevMode(),
+        backgroundThrottling: false,
+      },
+    };
   }
 }
