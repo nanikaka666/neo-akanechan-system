@@ -58,6 +58,11 @@ export class WindowManager {
       mainWindow.setBounds(maybeBounds);
     }
 
+    mainWindow.on("closed", () => {
+      // if main window closed, then overlay window will be closed at same time.
+      getWindowManager().closeOverlayWindow();
+    });
+
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
     // mainWindow.webContents.openDevTools();
