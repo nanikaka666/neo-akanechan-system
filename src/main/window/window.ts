@@ -102,7 +102,7 @@ export class WindowManager {
     return maybeOverlayWindow.webContents;
   }
 
-  createOverlayWindow(title: string, isPreview: boolean) {
+  createOverlayWindow(title: string) {
     // if overlay window exists, then do nothing.
     if (this.#checkOverlayWindowExistence()) {
       return;
@@ -112,20 +112,32 @@ export class WindowManager {
       return;
     }
 
-    const options = isPreview
-      ? this.#getOverlayWindowOptionsForPreview(title)
-      : this.#getOverlayWindowOptions(title);
+    const overlayWindow = new BrowserWindow(this.#getOverlayWindowOptions(title));
 
-    const overlayWindow = new BrowserWindow(options);
+    const limitationBounds = this.#getLimitationBoundsOfAllDisplays();
+    overlayWindow.setPosition(0, limitationBounds.y);
+
+    overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
+
+    this.#overlayWindowId = overlayWindow.id;
+  }
+
+  createOverlayWindowInPreview(title: string) {
+    // if overlay window exists, then do nothing.
+    if (this.#checkOverlayWindowExistence()) {
+      return;
+    }
+    // if main window does not exist, then do nothing.
+    if (!this.#checkMainWindowExistence()) {
+      return;
+    }
+
+    const overlayWindow = new BrowserWindow(this.#getOverlayWindowOptionsForPreview(title));
 
     const limitationBounds = this.#getLimitationBoundsOfAllDisplays();
 
-    if (isPreview) {
-      overlayWindow.setPosition(0, limitationBounds.y - 720 - 30);
-      overlayWindow.setBackgroundColor("green");
-    } else {
-      overlayWindow.setPosition(0, limitationBounds.y);
-    }
+    overlayWindow.setPosition(0, limitationBounds.y - 720 - 30);
+    overlayWindow.setBackgroundColor("green");
 
     overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
 

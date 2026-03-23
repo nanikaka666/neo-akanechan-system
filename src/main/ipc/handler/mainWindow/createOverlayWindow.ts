@@ -7,7 +7,7 @@ export function setupIpcMainHandlersForCreateOverlayWindow() {
       return Promise.resolve(true);
     }
 
-    getWindowManager().createOverlayWindow(overlayWindowTitle, false);
+    getWindowManager().createOverlayWindow(overlayWindowTitle);
     return Promise.resolve(true);
   });
 
@@ -16,7 +16,7 @@ export function setupIpcMainHandlersForCreateOverlayWindow() {
       return Promise.resolve(true);
     }
 
-    getWindowManager().createOverlayWindow(overlayWindowTitle, true);
+    getWindowManager().createOverlayWindowInPreview(overlayWindowTitle);
     return Promise.resolve(true);
   });
 }
