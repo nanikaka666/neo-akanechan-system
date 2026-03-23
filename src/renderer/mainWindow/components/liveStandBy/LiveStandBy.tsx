@@ -4,6 +4,7 @@ import { SettingsDetails } from "./SettingsDetails";
 import { UserSettingsButton } from "../liveSelection/UserSettingsButton";
 import { useLiveLaunchProperties } from "../../hooks/useLiveLaunchProperties";
 import { useLiveSettings } from "../../../hooks/useLiveSettings";
+import { OpenOverlayWindowForm } from "./OpenOverlayWindowForm";
 
 export function LiveStandBy() {
   const liveLaunchProperties = useLiveLaunchProperties();
@@ -26,6 +27,7 @@ export function LiveStandBy() {
         liveSettings={liveSettings}
         currentSubscriberCount={liveLaunchProperties.channel.subscribersCount}
       />
+      <OpenOverlayWindowForm />
       <StartLiveButton />
       <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
     </div>
