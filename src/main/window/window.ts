@@ -1,6 +1,8 @@
 import { BrowserWindow, BrowserWindowConstructorOptions, screen } from "electron";
 import { isDevMode } from "../environment";
 import { getStorageService } from "../storage";
+import { getWindowManager } from ".";
+import { WebContentsWrapper } from "../webContentsWrapper";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -117,6 +119,14 @@ export class WindowManager {
     const limitationBounds = this.#getLimitationBoundsOfAllDisplays();
     overlayWindow.setPosition(0, limitationBounds.y);
 
+    overlayWindow.on("closed", () => {
+      const mainWindowWebContents = getWindowManager().getMainWindowWebContents();
+      if (mainWindowWebContents === undefined) {
+        return;
+      }
+      WebContentsWrapper.send(mainWindowWebContents, "tellOverlayWindowClosed");
+    });
+
     overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
 
     this.#overlayWindowId = overlayWindow.id;
@@ -138,6 +148,14 @@ export class WindowManager {
 
     overlayWindow.setPosition(0, limitationBounds.y - 720 - 30);
     overlayWindow.setBackgroundColor("green");
+
+    overlayWindow.on("closed", () => {
+      const mainWindowWebContents = getWindowManager().getMainWindowWebContents();
+      if (mainWindowWebContents === undefined) {
+        return;
+      }
+      WebContentsWrapper.send(mainWindowWebContents, "tellOverlayWindowClosed");
+    });
 
     overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
 
