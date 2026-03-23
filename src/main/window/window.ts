@@ -122,6 +122,7 @@ export class WindowManager {
 
     if (isPreview) {
       overlayWindow.setPosition(0, limitationBounds.y - 720 - 30);
+      overlayWindow.setBackgroundColor("green");
     } else {
       overlayWindow.setPosition(0, limitationBounds.y);
     }
