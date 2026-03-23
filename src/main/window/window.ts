@@ -3,6 +3,8 @@ import { isDevMode } from "../environment";
 import { getStorageService } from "../storage";
 import { getWindowManager } from ".";
 import { WebContentsWrapper } from "../webContentsWrapper";
+import { yesNoDialogOnMainWindow } from "../dialog";
+import { getLiveManager, isExistLiveManager } from "../liveManager";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -57,6 +59,21 @@ export class WindowManager {
     if (maybeBounds) {
       mainWindow.setBounds(maybeBounds);
     }
+
+    mainWindow.on("close", async (e) => {
+      e.preventDefault();
+
+      // show confirm dialog when LiveManager is alive. other wise the window is closed without confirmation.
+      if (!isExistLiveManager()) {
+        mainWindow.destroy();
+      } else {
+        const res = await yesNoDialogOnMainWindow("本当にアプリを終了しますか？");
+        if (res) {
+          getLiveManager().close();
+          mainWindow.destroy();
+        }
+      }
+    });
 
     mainWindow.on("closed", () => {
       // if main window closed, then overlay window will be closed at same time.
