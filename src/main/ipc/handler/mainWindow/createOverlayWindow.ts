@@ -1,22 +1,27 @@
+import { getLiveManager } from "../../../liveManager";
 import { getWindowManager } from "../../../window";
 import { IpcMainWrapper } from "../../ipcMainWrapper";
 
 export function setupIpcMainHandlersForCreateOverlayWindow() {
-  IpcMainWrapper.handle("createOverlayWindow", (e, overlayWindowTitle) => {
+  IpcMainWrapper.handle("createOverlayWindow", () => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       return Promise.resolve(true);
     }
 
-    getWindowManager().createOverlayWindow(overlayWindowTitle);
+    getWindowManager().createOverlayWindow(
+      getLiveManager().getLiveLaunchProperties().overlayWindowTitle,
+    );
     return Promise.resolve(true);
   });
 
-  IpcMainWrapper.handle("createOverlayWindowForPreview", (e, overlayWindowTitle) => {
+  IpcMainWrapper.handle("createOverlayWindowForPreview", () => {
     if (getWindowManager().getOverlayWindow() !== undefined) {
       return Promise.resolve(true);
     }
 
-    getWindowManager().createOverlayWindowInPreview(overlayWindowTitle);
+    getWindowManager().createOverlayWindowInPreview(
+      getLiveManager().getLiveLaunchProperties().overlayWindowTitle,
+    );
     return Promise.resolve(true);
   });
 }

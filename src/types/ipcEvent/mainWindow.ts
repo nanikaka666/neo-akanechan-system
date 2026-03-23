@@ -177,12 +177,12 @@ interface CreateOverlayWindowIpcEvent {
   /**
    * Create Overlay Window.
    */
-  createOverlayWindow: (overlayWindowTitle: string) => boolean;
+  createOverlayWindow: () => boolean;
 
   /**
    * Create Overlay Window for preview.
    */
-  createOverlayWindowForPreview: (overlayWindowTitle: string) => boolean;
+  createOverlayWindowForPreview: () => boolean;
 }
 
 interface IpcEventOthers {

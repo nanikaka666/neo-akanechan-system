@@ -140,10 +140,9 @@ export const IpcApi: IpcApi = {
           IpcRendererWrapper.invoke("quitLive", liveLaunchProperties),
       },
       createOverlayWindow: {
-        requestCreateOverlayWindow: (overlayWindowTitle) =>
-          IpcRendererWrapper.invoke("createOverlayWindow", overlayWindowTitle),
-        requestCreateOverlayWindowForPreview: (overlayWindowTitle) =>
-          IpcRendererWrapper.invoke("createOverlayWindowForPreview", overlayWindowTitle),
+        requestCreateOverlayWindow: () => IpcRendererWrapper.invoke("createOverlayWindow"),
+        requestCreateOverlayWindowForPreview: () =>
+          IpcRendererWrapper.invoke("createOverlayWindowForPreview"),
       },
       requestStartDataFetch: () => IpcRendererWrapper.invoke("startDataFetch"),
       requestLiveLaunchProperties: () => IpcRendererWrapper.invoke("getLiveLaunchProperties"),
