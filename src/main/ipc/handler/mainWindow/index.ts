@@ -4,6 +4,7 @@ import { setupIpcMainHandlersForCommentViewer } from "./commentViewer";
 import { setupIpcMainHandlersForCompetition } from "./competition";
 import { setupIpcMainHandlersForRanking } from "./ranking";
 import { setupIpcMainHandlersForUserSettings } from "./userSettings";
+import { setupIpcMainHandlersForCreateOverlayWindow } from "./createOverlayWindow";
 
 export function setupIpcMainHandlersForMainWindow() {
   setupIpcMainHandlersForAuth();
@@ -12,4 +13,5 @@ export function setupIpcMainHandlersForMainWindow() {
   setupIpcMainHandlersForRanking();
   setupIpcMainHandlersForUserSettings();
   setupIpcMainHandlersForMainAppPage();
+  setupIpcMainHandlersForCreateOverlayWindow();
 }
