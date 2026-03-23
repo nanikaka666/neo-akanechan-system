@@ -1,4 +1,4 @@
-import { BrowserWindow, screen } from "electron";
+import { BrowserWindow, BrowserWindowConstructorOptions, screen } from "electron";
 import { isDevMode } from "../environment";
 import { getStorageService } from "../storage";
 
@@ -102,7 +102,7 @@ export class WindowManager {
     return maybeOverlayWindow.webContents;
   }
 
-  createOverlayWindow(title: string) {
+  createOverlayWindow(title: string, isPreview: boolean) {
     // if overlay window exists, then do nothing.
     if (this.#checkOverlayWindowExistence()) {
       return;
@@ -111,28 +111,23 @@ export class WindowManager {
     if (!this.#checkMainWindowExistence()) {
       return;
     }
-    const overlayWindow = new BrowserWindow({
-      title: title,
-      useContentSize: true,
-      height: 720,
-      width: 1280,
-      // transparent: true,
-      // titleBarStyle: "hidden",
-      webPreferences: {
-        preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
-        devTools: isDevMode(),
-        backgroundThrottling: false,
-      },
-    });
+
+    const options = isPreview
+      ? this.#getOverlayWindowOptionsForPreview(title)
+      : this.#getOverlayWindowOptions(title);
+
+    const overlayWindow = new BrowserWindow(options);
 
     const limitationBounds = this.#getLimitationBoundsOfAllDisplays();
 
-    // overlayWindow.setPosition(0, limitationBounds.y);
-    overlayWindow.setPosition(0, limitationBounds.y - 720 - 25);
+    if (isPreview) {
+      overlayWindow.setPosition(0, limitationBounds.y - 720 - 30);
+    } else {
+      overlayWindow.setPosition(0, limitationBounds.y);
+    }
 
     overlayWindow.loadURL(OVERLAY_WEBPACK_ENTRY);
 
-    // mainWindow.webContents.openDevTools();
     this.#overlayWindowId = overlayWindow.id;
   }
 
@@ -172,5 +167,29 @@ export class WindowManager {
       maximum.y = Math.max(maximum.y, display.bounds.y + display.bounds.height);
     });
     return maximum;
+  }
+
+  #getOverlayWindowOptions(title: string): BrowserWindowConstructorOptions {
+    return {
+      ...this.#getOverlayWindowOptionsForPreview(title),
+      ...{
+        transparent: true,
+        titleBarStyle: "hidden",
+      },
+    };
+  }
+
+  #getOverlayWindowOptionsForPreview(title: string): BrowserWindowConstructorOptions {
+    return {
+      title: title,
+      useContentSize: true,
+      height: 720,
+      width: 1280,
+      webPreferences: {
+        preload: OVERLAY_PRELOAD_WEBPACK_ENTRY,
+        devTools: isDevMode(),
+        backgroundThrottling: false,
+      },
+    };
   }
 }

@@ -24,7 +24,7 @@ export function setupIpcMainHandlersForMainAppPage() {
     const liveLaunchProperties = buildLiveLaunchProperties(channel, live);
 
     setupLiveManager(liveLaunchProperties);
-    getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
+    getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle, false);
 
     MainAppPageSwitcher.liveStandBy();
     return true;
@@ -49,7 +49,7 @@ export function setupIpcMainHandlersForMainAppPage() {
       }
 
       setupLiveManager(liveLaunchProperties);
-      getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle);
+      getWindowManager().createOverlayWindow(liveLaunchProperties.overlayWindowTitle, false);
 
       MainAppPageSwitcher.liveStandBy();
       return true;
