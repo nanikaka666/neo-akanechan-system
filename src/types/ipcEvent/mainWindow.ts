@@ -183,6 +183,11 @@ interface CreateOverlayWindowIpcEvent {
    * Create Overlay Window for preview.
    */
   createOverlayWindowForPreview: () => boolean;
+
+  /**
+   * Notify it when overlay window is closed.
+   */
+  tellOverlayWindowClosed: () => void;
 }
 
 interface IpcEventOthers {
