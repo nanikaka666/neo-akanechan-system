@@ -38,18 +38,6 @@
         position: absolute;
         left: 0;
         bottom: 0;
-
-        display: block;
-        border: none;
-        cursor: pointer;
-        background-color: red;
-        color: yellow;
-        font-size: 0.8vh;
-        padding: 1vh 2vw;
-
-        &:hover {
-          background-color: #ff6d62;
-        }
       }
     }
     .lives {

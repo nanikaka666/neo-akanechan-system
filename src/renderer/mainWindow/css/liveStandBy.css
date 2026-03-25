@@ -1,0 +1,19 @@
+.live-standby {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2vh;
+
+  .header {
+    img {
+      display: inline-block;
+      width: 480px;
+      height: 360px;
+    }
+  }
+
+  .quit-button-container {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+}
