@@ -4,6 +4,7 @@ export function AccountDisconnectButton() {
   const [disabled, disable, enable] = useButton();
   return (
     <button
+      className="account-disconnect"
       onClick={(e) => {
         e.preventDefault();
         disable();

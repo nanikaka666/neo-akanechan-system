@@ -1,0 +1,92 @@
+.live-selection-container {
+  .banner img {
+    width: 100%;
+  }
+
+  .live-selection {
+    display: flex;
+    flex-direction: row;
+
+    .channel {
+      flex: 1;
+
+      .owner {
+        display: flex;
+        flex-direction: row;
+        column-gap: 1vw;
+        align-items: center;
+        .icon {
+          border-radius: 50%;
+          width: 5vh;
+          height: 5vh;
+        }
+        .name-and-count {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          .name {
+            font-size: 1.5vh;
+          }
+          .count {
+            font-size: 1.2vh;
+            color: #cfcfcf;
+          }
+        }
+      }
+
+      .account-disconnect {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        display: block;
+        border: none;
+        cursor: pointer;
+        background-color: red;
+        color: yellow;
+        font-size: 0.8vh;
+        padding: 1vh 2vw;
+
+        &:hover {
+          background-color: #ff6d62;
+        }
+      }
+    }
+    .lives {
+      flex: 2;
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          display: flex;
+          flex-direction: row;
+          column-gap: 2vw;
+          align-items: center;
+          cursor: pointer;
+          padding: 1vh;
+          img {
+            display: block;
+            width: 180px;
+            height: 135px;
+          }
+          .scheduled-start-time {
+            font-size: 1vh;
+            color: gray;
+          }
+          .in-live-mark {
+            display: inline-block;
+            font-size: 1vh;
+            padding: 0.5vh 1vw;
+            background-color: #ff3838;
+          }
+        }
+        li:hover {
+          background-color: #3c3c3c;
+        }
+      }
+    }
+  }
+}

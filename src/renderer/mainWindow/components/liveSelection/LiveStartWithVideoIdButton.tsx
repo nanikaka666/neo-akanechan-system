@@ -10,11 +10,13 @@ export function LiveStartWithVideoIdButton() {
 
   return (
     <>
-      <button onClick={turnOn}>VideoIdを指定してアプリを起動</button>
-      <ReactModal isOpen={showModal} onRequestClose={turnOff}>
+      <button className="live-start-with-video-id" onClick={turnOn}>
+        VideoIdを直接指定する
+      </button>
+      <ReactModal isOpen={showModal} onRequestClose={turnOff} className="video-id-input-modal">
         <div>
           <label>
-            Video Idを入力
+            <span>Video Id</span>
             <input
               type="text"
               onChange={(e) => {
@@ -22,20 +24,20 @@ export function LiveStartWithVideoIdButton() {
               }}
               value={inputVideoId}
             />
-            <button
-              onClick={async (e) => {
-                e.preventDefault();
-                disable();
-                await window.ipcApi.mainWindow.mainAppPage.requestTransitToLiveStandByByVideoId(
-                  inputVideoId,
-                );
-                enable();
-              }}
-              disabled={disabled}
-            >
-              Start Live
-            </button>
           </label>
+          <button
+            onClick={async (e) => {
+              e.preventDefault();
+              disable();
+              await window.ipcApi.mainWindow.mainAppPage.requestTransitToLiveStandByByVideoId(
+                inputVideoId,
+              );
+              enable();
+            }}
+            disabled={disabled || inputVideoId.length === 0}
+          >
+            OK
+          </button>
         </div>
       </ReactModal>
     </>

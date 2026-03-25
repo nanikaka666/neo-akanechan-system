@@ -1,8 +1,6 @@
-import { ChannelSummaryView } from "./ChannelSummaryView";
 import { YoutubeLive } from "../../../../types/youtubeLive";
 import { Channel } from "../../../../types/youtubeChannel";
 import { UserSettingsButton } from "./UserSettingsButton";
-import { LiveStartButton } from "./LiveStartButton";
 import { LiveStartWithVideoIdButton } from "./LiveStartWithVideoIdButton";
 import { AccountDisconnectButton } from "./AccountDisconnectButton";
 
@@ -13,23 +11,60 @@ interface LiveSelectionProps {
 
 export function LiveSelection({ channel, lives }: LiveSelectionProps) {
   return (
-    <div>
-      <ChannelSummaryView channel={channel} />
-      <UserSettingsButton />
-      {lives.map((live) => {
-        return (
-          <div key={live.videoId.id}>
-            <img src={live.thumbnailUrl} alt="next live thumbnail" style={{ width: "360px" }} />
-            <p>{live.title}</p>
-            <p>{live.isPublic ? "public" : "private"}</p>
-            <p>
-              <LiveStartButton channel={channel} live={live} />
-            </p>
+    <div className="live-selection-container">
+      {channel.bannerUrl && (
+        <div className="banner">
+          <img src={channel.bannerUrl} />
+        </div>
+      )}
+      <div className="live-selection">
+        <div className="channel">
+          <div className="owner">
+            <img className="icon" src={channel.ownerIconUrl} />
+            <div className="name-and-count">
+              <div className="name">{channel.title}</div>
+              <div className="count">チャンネル登録者数 {channel.subscribersCount}</div>
+            </div>
           </div>
-        );
-      })}
-      <LiveStartWithVideoIdButton />
-      <AccountDisconnectButton />
+          <UserSettingsButton />
+          <AccountDisconnectButton />
+        </div>
+        <div className="lives">
+          <ul>
+            {lives.map((live) => {
+              return (
+                <li
+                  key={live.videoId.id}
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    await window.ipcApi.mainWindow.mainAppPage.requestTransitToLiveStandBy(
+                      channel,
+                      live,
+                    );
+                  }}
+                >
+                  <img src={live.thumbnailUrl} />
+                  {live.type === "inReady" ? (
+                    <div>
+                      <div>{live.title}</div>
+                      <div className="scheduled-start-time">
+                        [{live.isPublic ? "公開" : "非公開"}] 配信開始予定{" "}
+                        {live.scheduledStartTime.toLocaleString()}
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div>{live.title}</div>
+                      <div className="in-live-mark">ライブ中</div>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+          <LiveStartWithVideoIdButton />
+        </div>
+      </div>
     </div>
   );
 }

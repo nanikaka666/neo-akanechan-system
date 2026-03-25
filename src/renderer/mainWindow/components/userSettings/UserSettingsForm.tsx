@@ -51,7 +51,7 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
         }}
         disabled={isSaveDisabled}
       >
-        Save
+        設定を保存する
       </button>
     </div>
   );
