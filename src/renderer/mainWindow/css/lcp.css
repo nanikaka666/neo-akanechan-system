@@ -48,10 +48,23 @@
 
     .statistics {
       justify-self: flex-end;
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0 3vw;
+        li {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          &:hover {
+            background-color: gray;
+          }
+        }
+      }
     }
   }
   .right {
-    flex: 1;
+    flex: 2;
     height: 100vh;
   }
 }
