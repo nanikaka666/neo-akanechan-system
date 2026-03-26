@@ -3,7 +3,7 @@ import { MainContents } from "./MainContents";
 import { useLiveLaunchProperties } from "../../hooks/useLiveLaunchProperties";
 import { useLiveSettings } from "../../../hooks/useLiveSettings";
 import { CommentViewer } from "./commentViewer/CommentViewer";
-import { SideBarInfoArea } from "./SideBarInfoArea";
+import { StatisticsArea } from "./StatisticsArea";
 
 export function LiveControlPanel() {
   const liveLaunchProperties = useLiveLaunchProperties();
@@ -20,7 +20,7 @@ export function LiveControlPanel() {
           <img src={liveLaunchProperties.live.thumbnailUrl}></img>
           <div>{liveLaunchProperties.live.title}</div>
         </div>
-        <SideBarInfoArea />
+        <StatisticsArea />
         <MainContents liveSettings={liveSettings} />
       </div>
       <div className="right">

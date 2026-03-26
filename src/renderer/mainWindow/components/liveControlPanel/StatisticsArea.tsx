@@ -1,6 +1,6 @@
 import { useLiveStatistics } from "../../../hooks/useLiveStatistics";
 
-export function SideBarInfoArea() {
+export function StatisticsArea() {
   const liveStatistics = useLiveStatistics();
 
   return (
