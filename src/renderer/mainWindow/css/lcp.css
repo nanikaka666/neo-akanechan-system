@@ -1,0 +1,57 @@
+.lcp-container {
+  display: flex;
+  flex-direction: row;
+
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    row-gap: 1vh;
+
+    .header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      img {
+        display: block;
+        width: 20vw;
+      }
+    }
+
+    .contents-selector {
+      display: flex;
+      flex-direction: row;
+      column-gap: 2vw;
+
+      div {
+        cursor: pointer;
+        background-color: #353535;
+        padding: 0.5vh 1vw;
+      }
+
+      div:hover {
+        background-color: #585858;
+      }
+
+      .selected {
+        background-color: orange;
+      }
+      .selected:hover {
+        background-color: orange;
+      }
+    }
+
+    .contents-area {
+      overflow: scroll;
+    }
+
+    .statistics {
+      justify-self: flex-end;
+    }
+  }
+  .right {
+    flex: 1;
+    height: 100vh;
+  }
+}

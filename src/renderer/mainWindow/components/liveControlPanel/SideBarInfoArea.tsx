@@ -4,7 +4,7 @@ export function SideBarInfoArea() {
   const liveStatistics = useLiveStatistics();
 
   return (
-    <div>
+    <div className="statistics">
       <div>
         高評価数(最大): {`${liveStatistics.currentLikeCount} (${liveStatistics.maxLikeCount})`}
       </div>

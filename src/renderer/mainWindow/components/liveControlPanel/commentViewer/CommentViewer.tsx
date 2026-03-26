@@ -25,7 +25,7 @@ export function CommentViewer() {
   };
 
   return (
-    <div>
+    <div className="comment-viewer">
       <ViewerModeSelector
         currentViewerMode={currentViewerMode}
         itemCounts={itemCounts}
