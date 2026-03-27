@@ -19,32 +19,34 @@
       }
     }
 
-    .contents-selector {
-      display: flex;
-      flex-direction: row;
-      column-gap: 1vw;
+    .main-contents {
+      overflow: scroll;
+      .contents-selector {
+        display: flex;
+        flex-direction: row;
+        column-gap: 1vw;
 
-      div {
-        cursor: pointer;
-        background-color: #353535;
-        padding: 0.5vh 1vw;
-      }
+        div {
+          cursor: pointer;
+          background-color: #353535;
+          padding: 0.5vh 1vw;
+        }
 
-      div:hover {
-        background-color: #585858;
-      }
+        div:hover {
+          background-color: #585858;
+        }
 
-      .selected {
-        background-color: orange;
-
-        &:hover {
+        .selected {
           background-color: orange;
+
+          &:hover {
+            background-color: orange;
+          }
         }
       }
-    }
-
-    .contents-area {
-      overflow: scroll;
+      .invisible-contents {
+        display: none;
+      }
     }
 
     .statistics {
