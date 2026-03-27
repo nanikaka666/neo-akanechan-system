@@ -1,0 +1,24 @@
+.rankings {
+  .list {
+    padding: 0 2vw;
+    .item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      &:hover {
+        background-color: #303030;
+      }
+
+      .author {
+        display: flex;
+        flex-direction: row;
+        column-gap: 1vw;
+        img {
+          border-radius: 50%;
+          width: 24px;
+        }
+      }
+    }
+  }
+}
