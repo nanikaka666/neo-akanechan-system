@@ -7,9 +7,11 @@ interface GiftReceivedItemProps {
 
 export function GiftReceivedItem({ item }: GiftReceivedItemProps) {
   return (
-    <div style={{ backgroundColor: "purple" }}>
-      <Author author={item.author} />
-      <div>{item.displayMessage}</div>
+    <div className="item gift-received">
+      <div className="contents">
+        <Author author={item.author} />
+        <div>{item.displayMessage}</div>
+      </div>
     </div>
   );
 }

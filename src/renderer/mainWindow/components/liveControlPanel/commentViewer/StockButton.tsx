@@ -10,6 +10,7 @@ export function StockButton({ item }: StockButtonProps) {
 
   return (
     <button
+      className="stock"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();

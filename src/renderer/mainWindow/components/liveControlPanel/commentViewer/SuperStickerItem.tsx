@@ -7,15 +7,18 @@ interface SuperStickerItemProps {
 }
 
 export function SuperStickerItem({ item }: SuperStickerItemProps) {
+  const tier = `tier-${item.tier.level}`;
+
   return (
-    <div style={{ backgroundColor: `#${item.tier.hex}` }}>
-      <Author author={item.author} />
-
-      <span style={{ fontWeight: "bold", fontSize: "24px" }}>{item.amount}</span>
-
-      {item.displayMessage}
-
-      <FocusForm item={item} />
+    <div className={`item super-sticker ${tier}`}>
+      <div className="contents">
+        <Author author={item.author} />
+        <span className="amount">{item.amount}</span>
+        <span>{item.sticker.altText}</span>
+      </div>
+      <div className="buttons">
+        <FocusForm item={item} />
+      </div>
     </div>
   );
 }

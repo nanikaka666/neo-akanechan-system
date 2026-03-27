@@ -22,7 +22,7 @@
     .contents-selector {
       display: flex;
       flex-direction: row;
-      column-gap: 2vw;
+      column-gap: 1vw;
 
       div {
         cursor: pointer;
@@ -36,9 +36,10 @@
 
       .selected {
         background-color: orange;
-      }
-      .selected:hover {
-        background-color: orange;
+
+        &:hover {
+          background-color: orange;
+        }
       }
     }
 
@@ -63,6 +64,7 @@
       }
     }
   }
+
   .right {
     flex: 2;
     height: 100vh;

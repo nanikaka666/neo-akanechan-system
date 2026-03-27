@@ -1,0 +1,185 @@
+.comment-viewer {
+  .mode-selector {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    column-gap: 1vw;
+
+    li {
+      background-color: #353535;
+      font-size: 13px;
+      padding: 0.5vh 1vw;
+
+      &.selected {
+        background-color: orange;
+
+        &:hover {
+          background-color: orange;
+        }
+      }
+
+      &.disabled {
+        cursor: default;
+        color: #656565;
+        background-color: #242424;
+
+        &:hover {
+          cursor: default;
+          background-color: #242424;
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: #585858;
+      }
+    }
+  }
+
+  .invisible-viewer {
+    display: none;
+  }
+
+  .jump-button-container {
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+
+    button {
+      border: none;
+      margin: 0;
+      padding: 0.2vh 0;
+      width: 100%;
+      background-color: #353535;
+      color: white;
+      &:hover {
+        cursor: pointer;
+        background-color: #585858;
+      }
+    }
+  }
+
+  .virtuoso {
+    .item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin: 0;
+      border: 0.1vh black solid;
+      padding: 0.1vh 0;
+      &:hover {
+        background-color: #303030;
+        .buttons {
+          opacity: 1;
+        }
+      }
+      .buttons {
+        display: flex;
+        flex-direction: row;
+        column-gap: 1vw;
+        opacity: 0;
+      }
+
+      .contents {
+        display: flex;
+        flex-direction: row;
+        column-gap: 1vw;
+      }
+
+      &.first {
+        background-color: #043c03;
+        &:hover {
+          background-color: #286b30;
+        }
+      }
+
+      &.super-chat,
+      &.super-sticker {
+        &.tier-1 {
+          background-color: #1e88e5;
+        }
+        &.tier-2 {
+          background-color: #00e5ff;
+        }
+        &.tier-3 {
+          background-color: #1de9b6;
+        }
+        &.tier-4 {
+          background-color: #ffca28;
+        }
+        &.tier-5 {
+          background-color: #f57c00;
+        }
+        &.tier-6 {
+          background-color: #e91e63;
+        }
+        &.tier-7 {
+          background-color: #e62117;
+        }
+      }
+
+      &.new-membership {
+        background-color: green;
+      }
+      &.milestone {
+        background-color: skyblue;
+      }
+      &.gift {
+        background-color: pink;
+      }
+      &.gift-received {
+        background-color: purple;
+      }
+
+      .stock,
+      .focus {
+        border: none;
+        margin: 0;
+        padding: 0.1vh 1vw;
+        background-color: #494949;
+        color: white;
+
+        &:hover {
+          cursor: pointer;
+          background-color: #b8b8b8;
+        }
+      }
+
+      .unstock,
+      .unfocus {
+        border: none;
+        margin: 0;
+        padding: 0.1vh 1vw;
+        background-color: #7c7c7c;
+        color: white;
+        &:hover {
+          cursor: pointer;
+          background-color: #b8b8b8;
+        }
+      }
+    }
+    .author {
+      display: inline-flex;
+      flex-direction: row;
+      column-gap: 1vw;
+      align-items: center;
+      color: #d3d3d3;
+      img {
+        border-radius: 50%;
+        width: 20px;
+      }
+      span {
+        white-space: nowrap;
+        &.membership {
+          color: green;
+        }
+      }
+    }
+    .amount {
+      font-weight: bold;
+      font-size: 24px;
+    }
+  }
+}

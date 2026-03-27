@@ -9,7 +9,7 @@ interface FocusItemProps {
 
 export function FocusItem({ item }: FocusItemProps) {
   return (
-    <div style={{ height: `calc(100vh - 50px)` }}>
+    <div>
       {item.type === "text" ? (
         <TextChatItem item={item} />
       ) : item.type === "superChat" ? (

@@ -7,10 +7,12 @@ interface NewMembershipItemProps {
 
 export function NewMembershipItem({ item }: NewMembershipItemProps) {
   return (
-    <div style={{ backgroundColor: "green" }}>
-      <Author author={item.author} />
-      <div>{item.displayMessage}</div>
-      <div>{item.memberLevelName}</div>
+    <div className="item new-membership">
+      <div className="contents">
+        <Author author={item.author} />
+        <div>{item.memberLevelName}</div>
+        <div>新規メンバーシップ登録</div>
+      </div>
     </div>
   );
 }

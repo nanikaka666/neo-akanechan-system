@@ -7,14 +7,17 @@ interface SuperChatItemProps {
 }
 
 export function SuperChatItem({ item }: SuperChatItemProps) {
+  const tier = `tier-${item.tier.level}`;
   return (
-    <div style={{ backgroundColor: `#${item.tier.hex}` }}>
-      <Author author={item.author} />
-
-      <span style={{ fontWeight: "bold", fontSize: "24px" }}>{item.amount}</span>
-
-      {item.displayMessage}
-      <FocusForm item={item} />
+    <div className={`item super-chat ${tier}`}>
+      <div className="contents">
+        <Author author={item.author} />
+        <span className="amount">{item.amount}</span>
+        <span>{item.userComment}</span>
+      </div>
+      <div className="buttons">
+        <FocusForm item={item} />
+      </div>
     </div>
   );
 }

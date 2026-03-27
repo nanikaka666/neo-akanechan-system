@@ -7,7 +7,7 @@ interface FocusViewerProps {
 
 export function FocusViewer({ focus }: FocusViewerProps) {
   return (
-    <div style={{ height: `calc(100vh - 50px)` }}>
+    <div className="virtuoso">
       {focus ? <FocusItem item={focus} /> : <div>フォーカス中のアイテムはありません</div>}
     </div>
   );

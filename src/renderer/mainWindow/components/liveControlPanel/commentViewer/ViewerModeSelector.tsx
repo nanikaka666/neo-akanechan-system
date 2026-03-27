@@ -26,10 +26,10 @@ export function ViewerModeSelector({
   viewerModeUpdator,
 }: ViewerModeSelectorProps) {
   const selectOptions: ViewerModeSelectOption[] = [
-    { viewerMode: "text", label: "テキストチャット", itemNum: itemCounts.text },
+    { viewerMode: "text", label: "テキスト", itemNum: itemCounts.text },
     {
       viewerMode: "superchatAndStickers",
-      label: "スパチャ & Sticker",
+      label: "スパチャ",
       itemNum: itemCounts.superChatAndSticker,
     },
     {
@@ -39,26 +39,25 @@ export function ViewerModeSelector({
     },
     {
       viewerMode: "membershipsAndGifts",
-      label: "メンバーシップ & ギフト",
+      label: "メンバー & ギフト",
       itemNum: itemCounts.membershipAndGift,
     },
     { viewerMode: "focus", label: "フォーカス中", itemNum: itemCounts.focus },
   ];
 
   return (
-    <div style={{ height: "50px", display: "flex" }}>
+    <ul className="mode-selector">
       {selectOptions.map((option) => {
         return (
-          <div
+          <li
             key={option.viewerMode}
-            style={
-              option.viewerMode === currentViewerMode
-                ? { backgroundColor: "yellow" }
-                : option.itemNum === 0
-                  ? { backgroundColor: "gray" }
-                  : {}
-            }
-            onClick={() => {
+            value={option.viewerMode}
+            className={[
+              option.itemNum === 0 ? "disabled" : "",
+              currentViewerMode === option.viewerMode ? "selected" : "",
+            ].join(" ")}
+            onClick={(e) => {
+              e.preventDefault();
               if (option.itemNum === 0) {
                 return;
               }
@@ -66,9 +65,9 @@ export function ViewerModeSelector({
             }}
           >
             {`${option.label} (${option.itemNum})`}
-          </div>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }
