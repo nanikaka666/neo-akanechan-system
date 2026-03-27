@@ -11,22 +11,19 @@ export function Goals({ liveSettings }: GoalsProps) {
   const allGoalsStatus = useAllGoalsStatus();
 
   return (
-    <div>
-      <div>目標と達成度</div>
-
-      <div>
-        <div>高評価数</div>
-        <div>
-          レベル:{" "}
-          {allGoalsStatus.likeCountStatus.type === "accomplished"
-            ? "達成！"
-            : `${allGoalsStatus.likeCountStatus.currentLevel} / ${liveSettings.likeCountGoal.maxLevel}`}
-        </div>
+    <div className="goals">
+      <div
+        className={[
+          "goal",
+          allGoalsStatus.likeCountStatus.type === "accomplished" ? "accomplished" : "",
+        ].join(" ")}
+      >
+        <h2>高評価数</h2>
         <div>
           {liveStatistics.currentLikeCount} / {liveStatistics.maxLikeCount}
         </div>
         <div>
-          <div>小目標</div>
+          <h3>小目標</h3>
           <ul>
             {liveSettings.likeCountGoal.goalValues.map((value, level) => {
               return level === 0 ? null : (
@@ -42,19 +39,18 @@ export function Goals({ liveSettings }: GoalsProps) {
         </div>
       </div>
 
-      <div>
-        <div>同接数</div>
-        <div>
-          レベル:{" "}
-          {allGoalsStatus.viewerCountStatus.type === "accomplished"
-            ? "達成！"
-            : `${allGoalsStatus.viewerCountStatus.currentLevel} / ${liveSettings.viewerCountGoal.maxLevel}`}
-        </div>
+      <div
+        className={[
+          "goal",
+          allGoalsStatus.viewerCountStatus.type === "accomplished" ? "accomplished" : "",
+        ].join(" ")}
+      >
+        <h2>同接数</h2>
         <div>
           {liveStatistics.currentLiveViewCount} / {liveStatistics.maxLiveViewCount}
         </div>
         <div>
-          <div>小目標</div>
+          <h3>小目標</h3>
           <ul>
             {liveSettings.viewerCountGoal.goalValues.map((value, level) => {
               return level === 0 ? null : (
@@ -69,8 +65,14 @@ export function Goals({ liveSettings }: GoalsProps) {
           </ul>
         </div>
       </div>
-      <div>
-        <div>チャンネル登録者数</div>
+
+      <div
+        className={[
+          "goal",
+          allGoalsStatus.isSubscriberCountGoalAccomplished ? "accomplished" : "",
+        ].join(" ")}
+      >
+        <h2>チャンネル登録者数</h2>
         <div>
           {liveStatistics.currentSubscriberCount} / {liveSettings.subscriberCountGoal}{" "}
           {allGoalsStatus.isSubscriberCountGoalAccomplished && "✅"}
