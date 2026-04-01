@@ -2,7 +2,7 @@
   "name": "neo-akanechan-system",
   "productName": "neo-akanechan-system",
   "version": "0.1.0",
-  "description": "My Electron application description",
+  "description": "The streaming support tool",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
