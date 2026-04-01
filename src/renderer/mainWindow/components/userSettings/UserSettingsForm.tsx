@@ -43,6 +43,7 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
         updateUserSettingsOnEditting={updateUserSettingsOnEditting}
       />
       <button
+        className="action-button"
         onClick={(e) => {
           e.preventDefault();
           window.ipcApi.mainWindow.userSettings
@@ -51,7 +52,7 @@ export function UserSettingsForm({ userSettings, turnOff }: UserSettingsFormProp
         }}
         disabled={isSaveDisabled}
       >
-        Save
+        設定を保存する
       </button>
     </div>
   );

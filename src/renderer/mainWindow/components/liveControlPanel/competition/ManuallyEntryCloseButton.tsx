@@ -4,6 +4,7 @@ export function ManuallyEntryCloseButton() {
   const [disabled, disable, enable] = useButton();
   return (
     <button
+      className="action-button"
       disabled={disabled}
       onClick={(e) => {
         e.preventDefault();

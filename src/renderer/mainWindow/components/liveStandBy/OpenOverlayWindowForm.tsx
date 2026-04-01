@@ -21,9 +21,11 @@ export function OpenOverlayWindowForm() {
           type="checkbox"
           checked={isChecked}
           onChange={() => setIsChecked((prev) => !prev)}
+          disabled={disabled}
         ></input>
       </label>
       <button
+        className="action-button"
         disabled={disabled}
         onClick={(e) => {
           e.preventDefault();
@@ -35,7 +37,7 @@ export function OpenOverlayWindowForm() {
           }
         }}
       >
-        オーバーレイを開く
+        オーバーレイを開く {isChecked && "(プレビュー)"}
       </button>
     </div>
   );

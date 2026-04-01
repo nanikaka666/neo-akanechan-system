@@ -1,33 +1,36 @@
 import { useEffect } from "react";
-import { SideBar } from "./SideBar";
 import { MainContents } from "./MainContents";
 import { useLiveLaunchProperties } from "../../hooks/useLiveLaunchProperties";
 import { useLiveSettings } from "../../../hooks/useLiveSettings";
-import { useMainContentsTab } from "../../hooks/useMainContentsTab";
+import { CommentViewer } from "./commentViewer/CommentViewer";
+import { StatisticsArea } from "./StatisticsArea";
+import { QuitLiveButton } from "./QuitLiveButton";
 
 export function LiveControlPanel() {
   const liveLaunchProperties = useLiveLaunchProperties();
   const liveSettings = useLiveSettings();
-  const [currentMainContents, switchMainContents, allContentsNames] = useMainContentsTab();
 
   useEffect(() => {
     window.ipcApi.mainWindow.requestStartDataFetch().then(console.log);
   }, []);
 
   return liveLaunchProperties && liveSettings ? (
-    <>
-      <SideBar
-        liveLaunchProperties={liveLaunchProperties}
-        currentMainContents={currentMainContents}
-        switchMainContents={switchMainContents}
-        allContentsNames={allContentsNames}
-      />
-      <MainContents
-        liveSettings={liveSettings}
-        currentMainContents={currentMainContents}
-        allContentsNames={allContentsNames}
-      />
-    </>
+    <div className="lcp-container">
+      <div className="left">
+        <div className="header">
+          <img src={liveLaunchProperties.live.thumbnailUrl}></img>
+          <div>{liveLaunchProperties.live.title}</div>
+        </div>
+        <StatisticsArea />
+        <MainContents liveSettings={liveSettings} />
+      </div>
+      <div className="right">
+        <CommentViewer />
+      </div>
+      <div className="quit-button">
+        <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
+      </div>
+    </div>
   ) : (
     <div>Now Loading</div>
   );

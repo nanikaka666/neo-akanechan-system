@@ -7,12 +7,12 @@ interface MembershipMilestoneItemProps {
 
 export function MembershipMilestoneItem({ item }: MembershipMilestoneItemProps) {
   return (
-    <div style={{ backgroundColor: "skyblue" }}>
-      <Author author={item.author} />
-      <div>{item.displayMessage}</div>
-      <div>{item.userComment}</div>
-      <div>
-        {item.memberLevelName} : {item.memberMonth}
+    <div className="item milestone">
+      <div className="contents">
+        <Author author={item.author} />
+        <div>{item.memberLevelName}</div>
+        <div>{item.memberMonth}ヶ月</div>
+        <div>{item.userComment}</div>
       </div>
     </div>
   );

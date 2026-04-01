@@ -9,12 +9,20 @@ interface HeldProps {
 
 export function Held({ status }: HeldProps) {
   return (
-    <div key={status.settings.competitionId}>
-      <div>問題: {status.settings.question}</div>
-      <div>受付締切: {status.settings.scheduledClosedAt.toLocaleString()}</div>
+    <div className="held" key={status.settings.competitionId}>
+      <div>
+        <h2>問題</h2>
+        <div>{status.settings.question}</div>
+      </div>
+      <div>
+        <h2>受付締切</h2>
+        <div>{status.settings.scheduledClosedAt.toLocaleString()}</div>
+      </div>
       <BetStatusView status={status} />
-      <AbortButton />
-      <ManuallyEntryCloseButton />
+      <div className="buttons">
+        <AbortButton />
+        <ManuallyEntryCloseButton />
+      </div>
     </div>
   );
 }

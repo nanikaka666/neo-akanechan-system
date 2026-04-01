@@ -1,4 +1,3 @@
-import { CSSProperties } from "react";
 import { TextChatViewer } from "./TextChatViewer";
 import { SuperChatAndStickersViewer } from "./SuperChatAndStickersViewer";
 import { MembershipsAndGiftsViewer } from "./MembershipsAndGiftsViewer";
@@ -7,8 +6,6 @@ import { useCommentViewerMode } from "../../../hooks/useCommentViewerMode";
 import { FocusViewer } from "./FocusViewer";
 import { useChats } from "../../../hooks/useChats";
 import { useMembershipsAndGifts } from "../../../hooks/useMembershipsAndGifts";
-
-const displayNone: CSSProperties = { display: "none" };
 
 export function CommentViewer() {
   const [currentViewerMode, viewerModeUpdator, allViewerMode] = useCommentViewerMode();
@@ -25,7 +22,7 @@ export function CommentViewer() {
   };
 
   return (
-    <div>
+    <div className="comment-viewer">
       <ViewerModeSelector
         currentViewerMode={currentViewerMode}
         itemCounts={itemCounts}
@@ -33,7 +30,10 @@ export function CommentViewer() {
       />
       {allViewerMode.map((viewerMode) => {
         return (
-          <div key={viewerMode} style={viewerMode === currentViewerMode ? {} : displayNone}>
+          <div
+            key={viewerMode}
+            className={viewerMode !== currentViewerMode ? "invisible-viewer" : ""}
+          >
             {viewerMode === "text" ? (
               <TextChatViewer textChats={textChats} />
             ) : viewerMode === "superchatAndStickers" ? (

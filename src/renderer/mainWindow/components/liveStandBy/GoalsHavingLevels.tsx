@@ -13,7 +13,8 @@ export function GoalsHavingLevels({ goal }: GoalsHavingLevelsProps) {
         {goal.goalValues.map((goalValue, idx) => {
           return idx === 0 ? null : (
             <li key={idx}>
-              Level {idx}: {goalValue}
+              <div>Level {idx}</div>
+              <div>{goalValue}</div>
             </li>
           );
         })}

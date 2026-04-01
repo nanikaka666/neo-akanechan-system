@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
-import { SideBarInfoArea } from "./SideBarInfoArea";
+import { StatisticsArea } from "./StatisticsArea";
 import { QuitLiveButton } from "./QuitLiveButton";
 import { MainContentsName } from "../../hooks/useMainContentsTab";
 
@@ -20,9 +20,9 @@ export function SideBar({
   allContentsNames,
 }: SideBarProps) {
   return (
-    <div style={{ width: "100px", height: "100%", position: "absolute", top: 0, left: 0 }}>
+    <div>
       <div>
-        <img src={liveLaunchProperties.live.thumbnailUrl} style={{ width: "100px" }}></img>
+        <img src={liveLaunchProperties.live.thumbnailUrl}></img>
       </div>
       {allContentsNames.map((contentsName) => {
         return (
@@ -31,18 +31,15 @@ export function SideBar({
             onClick={() => switchMainContents(contentsName)}
             style={currentMainContents === contentsName ? selectedStyle : {}}
           >
-            {contentsName === "commentViewer"
-              ? "コメントビューワー"
-              : contentsName === "competition"
-                ? "コンペティション"
-                : contentsName === "rankings"
-                  ? "ランキング"
-                  : "目標"}
+            {contentsName === "competition"
+              ? "コンペティション"
+              : contentsName === "rankings"
+                ? "ランキング"
+                : "目標"}
           </div>
         );
       })}
-      <SideBarInfoArea />
-      <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
+      {/* <QuitLiveButton liveLaunchProperties={liveLaunchProperties} /> */}
     </div>
   );
 }

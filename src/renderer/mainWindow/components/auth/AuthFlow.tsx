@@ -4,8 +4,11 @@ export function AuthFlow() {
   const [disabled, disable, enable] = useButton();
 
   return (
-    <div>
-      Auth Flow
+    <div className="auth-flow-container ">
+      <h1>Youtubeアカウントと連携</h1>
+      <div className="description">
+        Youtubeチャンネルを開設しているGoogleアカウントで連携してください。
+      </div>
       <button
         onClick={(e) => {
           e.preventDefault();
@@ -14,7 +17,7 @@ export function AuthFlow() {
         }}
         disabled={disabled}
       >
-        Start Auth
+        連携する
       </button>
     </div>
   );

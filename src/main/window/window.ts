@@ -60,20 +60,20 @@ export class WindowManager {
       mainWindow.setBounds(maybeBounds);
     }
 
-    mainWindow.on("close", async (e) => {
-      e.preventDefault();
+    // mainWindow.on("close", async (e) => {
+    //   e.preventDefault();
 
-      // show confirm dialog when LiveManager is alive. other wise the window is closed without confirmation.
-      if (!isExistLiveManager()) {
-        mainWindow.destroy();
-      } else {
-        const res = await yesNoDialogOnMainWindow("本当にアプリを終了しますか？");
-        if (res) {
-          getLiveManager().close();
-          mainWindow.destroy();
-        }
-      }
-    });
+    //   // show confirm dialog when LiveManager is alive. other wise the window is closed without confirmation.
+    //   if (!isExistLiveManager()) {
+    //     mainWindow.destroy();
+    //   } else {
+    //     const res = await yesNoDialogOnMainWindow("本当にアプリを終了しますか？");
+    //     if (res) {
+    //       getLiveManager().close();
+    //       mainWindow.destroy();
+    //     }
+    //   }
+    // });
 
     mainWindow.on("closed", () => {
       // if main window closed, then overlay window will be closed at same time.

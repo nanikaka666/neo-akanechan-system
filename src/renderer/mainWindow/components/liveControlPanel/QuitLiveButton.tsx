@@ -9,7 +9,7 @@ export function QuitLiveButton({ liveLaunchProperties }: QuitLiveButtonProps) {
   const [disabled, disable, enable] = useButton();
   return (
     <button
-      style={{ backgroundColor: "red" }}
+      className="danger-action-button"
       disabled={disabled}
       onClick={(e) => {
         e.preventDefault();

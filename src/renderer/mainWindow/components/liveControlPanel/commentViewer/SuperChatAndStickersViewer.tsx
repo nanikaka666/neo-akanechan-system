@@ -3,7 +3,6 @@ import { ExtendedSuperItem } from "../../../../../types/liveChatItem";
 import { SuperChatItem } from "./SuperChatItem";
 import { SuperStickerItem } from "./SuperStickerItem";
 import { useListRange } from "../../../hooks/useListRange";
-import { ListRangeView } from "./ListRangeView";
 import { useJumpToLatestButton } from "../../../hooks/useJumpToLatestButton";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 
@@ -14,23 +13,18 @@ interface SuperChatAndStickersViewerProps {
 export function SuperChatAndStickersViewer({
   superChatAndStickers,
 }: SuperChatAndStickersViewerProps) {
-  const [range, rangeUpdator] = useListRange();
+  const [_, rangeUpdator] = useListRange();
   const [ref, isShownJumpButton, onAtBottomStateChanged] = useJumpToLatestButton();
 
   return (
     <div>
-      <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
-        <ListRangeView range={range} chunkSize={superChatAndStickers.length} />
-        {isShownJumpButton && (
-          <JumpToLatestButton ref={ref} lastIndex={superChatAndStickers.length - 1} />
-        )}
-      </div>
       <Virtuoso
+        className="virtuoso"
+        style={{ height: "95vh" }}
         ref={ref}
         data={superChatAndStickers}
-        atBottomThreshold={200}
+        atBottomThreshold={50}
         atBottomStateChange={onAtBottomStateChanged}
-        style={{ height: `calc(100vh - 50px)` }}
         followOutput={(isAtBottom) => {
           return isAtBottom ? "smooth" : false;
         }}
@@ -43,6 +37,9 @@ export function SuperChatAndStickersViewer({
           );
         }}
       />
+      {isShownJumpButton && (
+        <JumpToLatestButton ref={ref} lastIndex={superChatAndStickers.length - 1} />
+      )}
     </div>
   );
 }

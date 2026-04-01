@@ -5,7 +5,6 @@ import { MembershipMilestoneItem } from "./MembershipMilestoneItem";
 import { MembershipGiftItem } from "./MembershipGiftItem";
 import { GiftReceivedItem } from "./GiftReceivedItem";
 import { useListRange } from "../../../hooks/useListRange";
-import { ListRangeView } from "./ListRangeView";
 import { useJumpToLatestButton } from "../../../hooks/useJumpToLatestButton";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 
@@ -14,23 +13,18 @@ interface MembershipsAndGiftsViewerProps {
 }
 
 export function MembershipsAndGiftsViewer({ membershipsAndGifts }: MembershipsAndGiftsViewerProps) {
-  const [range, rangeUpdator] = useListRange();
+  const [_, rangeUpdator] = useListRange();
   const [ref, isShownJumpButton, onAtBottomStateChanged] = useJumpToLatestButton();
 
   return (
     <div>
-      <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
-        <ListRangeView range={range} chunkSize={membershipsAndGifts.length} />
-        {isShownJumpButton && (
-          <JumpToLatestButton ref={ref} lastIndex={membershipsAndGifts.length - 1} />
-        )}
-      </div>
       <Virtuoso
+        className="virtuoso"
+        style={{ height: "95vh" }}
         ref={ref}
         data={membershipsAndGifts}
-        atBottomThreshold={200}
+        atBottomThreshold={50}
         atBottomStateChange={onAtBottomStateChanged}
-        style={{ height: `calc(100vh - 50px)` }}
         followOutput={(isAtBottom) => {
           return isAtBottom ? "smooth" : false;
         }}
@@ -47,6 +41,9 @@ export function MembershipsAndGiftsViewer({ membershipsAndGifts }: MembershipsAn
           );
         }}
       />
+      {isShownJumpButton && (
+        <JumpToLatestButton ref={ref} lastIndex={membershipsAndGifts.length - 1} />
+      )}
     </div>
   );
 }

@@ -10,6 +10,7 @@ export function UnstockButton({ item }: UnstockButtonProps) {
 
   return (
     <button
+      className="unstock"
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();

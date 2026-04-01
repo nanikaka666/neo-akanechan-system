@@ -7,10 +7,13 @@ interface MembershipGiftItemProps {
 
 export function MembershipGiftItem({ item }: MembershipGiftItemProps) {
   return (
-    <div style={{ backgroundColor: "pink" }}>
-      <Author author={item.author} />
-      <div>{item.displayMessage}</div>
-      <div>Gift Num: {item.giftCount}</div>
+    <div className="item gift">
+      <div className="contents">
+        <Author author={item.author} />
+        <div>
+          {item.giftMemberLevelName}を{item.giftCount}個贈りました
+        </div>
+      </div>
     </div>
   );
 }

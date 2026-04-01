@@ -1,0 +1,34 @@
+.live-standby {
+  h1 {
+    margin: 0;
+  }
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 2vh;
+
+  .header {
+    img {
+      display: inline-block;
+      width: 360px;
+      height: 240px;
+    }
+  }
+
+  .quit-button-container {
+    margin-top: 3vh;
+  }
+
+  .setting-details {
+    ul {
+      list-style: none;
+      padding: 0;
+      width: 20vw;
+      li {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  }
+}

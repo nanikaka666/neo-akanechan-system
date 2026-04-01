@@ -5,6 +5,7 @@ export function UnfocusButton() {
 
   return (
     <button
+      className="unfocus"
       disabled={disabled}
       onClick={(e) => {
         e.preventDefault();

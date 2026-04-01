@@ -11,16 +11,10 @@ export function LiveStandBy() {
   const liveSettings = useLiveSettings();
 
   return liveLaunchProperties && liveSettings ? (
-    <div>
-      <div>
+    <div className="live-standby">
+      <div className="header">
         <img src={liveLaunchProperties.live.thumbnailUrl} />
-        {liveLaunchProperties.live.title}
-      </div>
-      <div>
-        <div>配信スタンバイ中</div>
-        <div>
-          「{liveLaunchProperties.overlayWindowTitle}」のウィンドウをOBS上でキャプチャしてください
-        </div>
+        <h1>{liveLaunchProperties.live.title}</h1>
       </div>
       <UserSettingsButton />
       <SettingsDetails
@@ -28,8 +22,12 @@ export function LiveStandBy() {
         currentSubscriberCount={liveLaunchProperties.channel.subscribersCount}
       />
       <OpenOverlayWindowForm />
-      <StartLiveButton />
-      <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
+      <div>
+        <StartLiveButton />
+      </div>
+      <div className="quit-button-container">
+        <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
+      </div>
     </div>
   ) : (
     <div>Now Loading</div>

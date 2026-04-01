@@ -10,12 +10,11 @@ export function Rankings() {
   ] = useRankings();
 
   return rankings ? (
-    <div>
-      <span style={{ position: "absolute", top: 0, right: 0 }}>
-        更新日時: {rankings.updatedAt.toLocaleString()}
-      </span>
+    <div className="rankings">
+      <div>更新日時: {rankings.updatedAt.toLocaleString()}</div>
       <div>
         <button
+          className="action-button"
           onClick={(e) => {
             e.preventDefault();
             onClickReflectRankingButton(rankings);
@@ -25,6 +24,7 @@ export function Rankings() {
           ランキングを配信画面に映す
         </button>
         <button
+          className="action-button"
           onClick={(e) => {
             e.preventDefault();
             onClickHideRankingButton();
@@ -34,21 +34,20 @@ export function Rankings() {
           配信画面のランキング表示をやめる
         </button>
       </div>
-      {rankings.items.map((item, idx) => {
-        return (
-          <div key={idx}>
-            <span>#{item.rank}: </span>
-            <span>
-              <img
-                src={item.participantPoint.author.profileImageUrl}
-                style={{ width: "32px", height: "32px" }}
-              />
-              {item.participantPoint.author.name}
-            </span>
-            <span> | {item.participantPoint.point} pts.</span>
-          </div>
-        );
-      })}
+      <div className="list">
+        {rankings.items.map((item, idx) => {
+          return (
+            <div key={idx} className="item">
+              <div>#{item.rank}</div>
+              <div className="author">
+                <img src={item.participantPoint.author.profileImageUrl} />
+                <div>{item.participantPoint.author.name}</div>
+              </div>
+              <div>{item.participantPoint.point}</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   ) : (
     <div>ランキングデータがありません</div>

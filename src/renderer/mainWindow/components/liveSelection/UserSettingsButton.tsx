@@ -7,8 +7,10 @@ export function UserSettingsButton() {
 
   return (
     <div>
-      <button onClick={turnOn}>ライブの設定</button>
-      <ReactModal isOpen={showModal} onRequestClose={turnOff}>
+      <button onClick={turnOn} className="action-button">
+        設定
+      </button>
+      <ReactModal isOpen={showModal} onRequestClose={turnOff} className="react-modal">
         <UserSettingsFormLoader turnOff={turnOff} />
       </ReactModal>
     </div>

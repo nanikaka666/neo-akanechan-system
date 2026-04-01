@@ -10,6 +10,7 @@ export function FocusButton({ item }: FocusButtonProps) {
 
   return (
     <button
+      className="focus"
       disabled={disabled}
       onClick={(e) => {
         e.preventDefault();

@@ -9,11 +9,15 @@ interface TextChatItemProps {
 
 export function TextChatItem({ item }: TextChatItemProps) {
   return (
-    <div style={item.isFirst ? { backgroundColor: "yellowgreen" } : {}}>
-      <Author author={item.author} />
-      <div>{item.displayMessage}</div>
-      <StockForm item={item} />
-      <FocusForm item={item} />
+    <div className={`item ${item.isFirst && "first"}`}>
+      <div className="contents">
+        <Author author={item.author} />
+        <span>{item.displayMessage}</span>
+      </div>
+      <div className="buttons">
+        <StockForm item={item} />
+        <FocusForm item={item} />
+      </div>
     </div>
   );
 }

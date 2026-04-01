@@ -5,6 +5,7 @@ export function StartLiveButton() {
 
   return (
     <button
+      className="action-button"
       onClick={(e) => {
         e.preventDefault();
         disable();

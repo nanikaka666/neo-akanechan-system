@@ -2,7 +2,6 @@ import { Virtuoso } from "react-virtuoso";
 import { ExtendedChatItemText } from "../../../../../types/liveChatItem";
 import { TextChatItem } from "./TextChatItem";
 import { useListRange } from "../../../hooks/useListRange";
-import { ListRangeView } from "./ListRangeView";
 import { useJumpToLatestButton } from "../../../hooks/useJumpToLatestButton";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 
@@ -11,22 +10,19 @@ interface TextChatViewerProps {
 }
 
 export function TextChatViewer({ textChats }: TextChatViewerProps) {
-  const [range, rangeUpdator] = useListRange();
+  const [_, rangeUpdator] = useListRange();
 
   const [ref, isShownJumpButton, onAtBottomStateChanged] = useJumpToLatestButton();
 
   return (
     <div>
-      <div style={{ position: "absolute", top: 0, right: 0, zIndex: 2 }}>
-        <ListRangeView range={range} chunkSize={textChats.length} />
-        {isShownJumpButton && <JumpToLatestButton ref={ref} lastIndex={textChats.length - 1} />}
-      </div>
       <Virtuoso
+        className="virtuoso"
         ref={ref}
         data={textChats}
-        atBottomThreshold={200}
+        atBottomThreshold={50}
         atBottomStateChange={onAtBottomStateChanged}
-        style={{ height: `calc(100vh - 50px)` }}
+        style={{ height: "95vh" }}
         followOutput={(isAtBottom) => {
           return isAtBottom ? "smooth" : false;
         }}
@@ -35,6 +31,7 @@ export function TextChatViewer({ textChats }: TextChatViewerProps) {
           return <TextChatItem item={textChat} key={textChat.id.id} />;
         }}
       />
+      {isShownJumpButton && <JumpToLatestButton ref={ref} lastIndex={textChats.length - 1} />}
     </div>
   );
 }
