@@ -4,6 +4,7 @@ import { useLiveLaunchProperties } from "../../hooks/useLiveLaunchProperties";
 import { useLiveSettings } from "../../../hooks/useLiveSettings";
 import { CommentViewer } from "./commentViewer/CommentViewer";
 import { StatisticsArea } from "./StatisticsArea";
+import { QuitLiveButton } from "./QuitLiveButton";
 
 export function LiveControlPanel() {
   const liveLaunchProperties = useLiveLaunchProperties();
@@ -25,6 +26,9 @@ export function LiveControlPanel() {
       </div>
       <div className="right">
         <CommentViewer />
+      </div>
+      <div className="quit-button">
+        <QuitLiveButton liveLaunchProperties={liveLaunchProperties} />
       </div>
     </div>
   ) : (

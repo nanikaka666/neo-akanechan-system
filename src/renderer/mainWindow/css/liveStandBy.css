@@ -10,15 +10,13 @@
   .header {
     img {
       display: inline-block;
-      width: 480px;
-      height: 360px;
+      width: 360px;
+      height: 240px;
     }
   }
 
   .quit-button-container {
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    margin-top: 3vh;
   }
 
   .setting-details {
