@@ -28,10 +28,13 @@ export function Goals({ liveSettings }: GoalsProps) {
             {liveSettings.likeCountGoal.goalValues.map((value, level) => {
               return level === 0 ? null : (
                 <li key={level}>
-                  レベル: {level}: {value}{" "}
-                  {(allGoalsStatus.likeCountStatus.type === "accomplished" ||
-                    level < allGoalsStatus.likeCountStatus.currentLevel) &&
-                    "✅"}
+                  <div>レベル: {level}</div>
+                  <div>
+                    {value}{" "}
+                    {(allGoalsStatus.likeCountStatus.type === "accomplished" ||
+                      level < allGoalsStatus.likeCountStatus.currentLevel) &&
+                      "✅"}
+                  </div>
                 </li>
               );
             })}
@@ -55,10 +58,13 @@ export function Goals({ liveSettings }: GoalsProps) {
             {liveSettings.viewerCountGoal.goalValues.map((value, level) => {
               return level === 0 ? null : (
                 <li key={level}>
-                  レベル: {level}: {value}{" "}
-                  {(allGoalsStatus.viewerCountStatus.type === "accomplished" ||
-                    level < allGoalsStatus.viewerCountStatus.currentLevel) &&
-                    "✅"}
+                  <div>レベル: {level}</div>
+                  <div>
+                    {value}{" "}
+                    {(allGoalsStatus.viewerCountStatus.type === "accomplished" ||
+                      level < allGoalsStatus.viewerCountStatus.currentLevel) &&
+                      "✅"}
+                  </div>
                 </li>
               );
             })}

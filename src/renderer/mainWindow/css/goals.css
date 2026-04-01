@@ -11,6 +11,12 @@
       list-style: none;
       margin: 0;
       padding: 0;
+      width: 30vw;
+      li {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
     }
   }
 }
