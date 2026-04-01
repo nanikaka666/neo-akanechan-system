@@ -9,12 +9,17 @@ interface EntryClosedProps {
 
 export function EntryClosed({ status }: EntryClosedProps) {
   return (
-    <div key={status.settings.competitionId}>
-      <div>問題: {status.settings.question}</div>
+    <div className="entry-closed" key={status.settings.competitionId}>
+      <div>
+        <h2>問題</h2>
+        <div>{status.settings.question}</div>
+      </div>
       <div>受付締切済み</div>
       <BetStatusView status={status} />
-      <AnswerDecisionForm options={status.settings.options} />
-      <AbortButton />
+      <div className="buttons">
+        <AnswerDecisionForm options={status.settings.options} />
+        <AbortButton />
+      </div>
     </div>
   );
 }

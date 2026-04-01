@@ -28,10 +28,11 @@ export function NotHeld() {
   }, [question, selectedOptionNum, optionStrings]);
 
   return (
-    <div>
+    <div className="not-held">
       <label>
-        問題
+        <h2>問題</h2>
         <input
+          className="question"
           maxLength={50}
           type="text"
           value={question}
@@ -42,7 +43,7 @@ export function NotHeld() {
         />
       </label>
       <label>
-        選択肢の数
+        <h2>選択肢の数</h2>
         <select
           value={selectedOptionNum}
           onChange={(e) => {
@@ -88,7 +89,7 @@ export function NotHeld() {
       </div>
       <div>
         <label>
-          Bet受付時間
+          <h2>Bet受付時間</h2>
           <select
             value={betAcceptMinutes}
             onChange={(e) => {
@@ -107,6 +108,7 @@ export function NotHeld() {
         </label>
       </div>
       <button
+        className="action-button"
         disabled={!checkValidity() || disabled}
         onClick={(e) => {
           e.preventDefault();

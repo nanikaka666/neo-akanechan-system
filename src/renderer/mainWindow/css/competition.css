@@ -1,0 +1,39 @@
+.not-held {
+  .question {
+    width: 30vw;
+  }
+
+  ul {
+    list-style: none;
+    input {
+      width: 20vw;
+    }
+  }
+}
+
+.held {
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    column-gap: 2vw;
+  }
+}
+
+.entry-closed {
+  .answer-decision {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1vh;
+  }
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    row-gap: 3vh;
+  }
+}
+
+.bet-status {
+  ul {
+    list-style: none;
+  }
+}

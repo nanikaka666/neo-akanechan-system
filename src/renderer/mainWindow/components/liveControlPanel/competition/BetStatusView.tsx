@@ -6,10 +6,16 @@ interface BetStatusViewProps {
 
 export function BetStatusView({ status }: BetStatusViewProps) {
   return (
-    <div>
-      <div>Bet Status</div>
-      <div>参加人数: {status.statistics.all.betCount}</div>
-      <div>Bet合計: {status.statistics.all.totalStakes}</div>
+    <div className="bet-status">
+      <h2>Bet Status</h2>
+      <div>
+        <h3>参加人数</h3>
+        <div>{status.statistics.all.betCount}</div>
+      </div>
+      <div>
+        <h3>Bet合計</h3>
+        <div>{status.statistics.all.totalStakes}</div>
+      </div>
       <ul>
         {Array.from(status.statistics.options.keys()).map((label) => {
           const statistics = status.statistics.options.get(label)!;

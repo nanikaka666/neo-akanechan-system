@@ -11,7 +11,7 @@ export function AnswerDecisionForm({ options }: AnswerDecisionFormProps) {
   const [disabled, disable, enable] = useButton();
 
   return (
-    <div>
+    <div className="answer-decision">
       <select
         onChange={(e) => {
           e.preventDefault();
@@ -27,6 +27,7 @@ export function AnswerDecisionForm({ options }: AnswerDecisionFormProps) {
         })}
       </select>
       <button
+        className="action-button"
         disabled={disabled}
         onClick={(e) => {
           e.preventDefault();
