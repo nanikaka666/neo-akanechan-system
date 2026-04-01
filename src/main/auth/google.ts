@@ -6,6 +6,7 @@ import {
   GenerateAuthUrlOpts,
   CodeChallengeMethod,
 } from "google-auth-library";
+import { GaxiosError } from "gaxios";
 import { URL } from "node:url";
 import destroyer from "server-destroy";
 import { getStorageService } from "../storage";
@@ -126,11 +127,11 @@ export async function revokeCredentials() {
   if (!authClient) {
     return;
   }
+  getStorageService().deleteAuthCredentials();
   const res = await authClient.revokeCredentials();
   if (res.status !== 200) {
     throw new Error(`Revoke credentials failed. ${await res.json()}`);
   }
-  getStorageService().deleteAuthCredentials();
   authClient = undefined;
   return;
 }
@@ -144,9 +145,19 @@ export async function getAccessToken() {
   if (!authClient) {
     throw new Error("Auth Client not initialized.");
   }
-  const res = (await authClient.getAccessToken()).token;
-  if (!res) {
-    throw new Error("Access Token not available.");
+  try {
+    const res = (await authClient.getAccessToken()).token;
+    if (!res) {
+      throw new Error("Access Token not available.");
+    }
+    return res;
+  } catch (e: unknown) {
+    // Note: A oauth client which be in test mode has reflesh tokens with expire term.
+    // if used expired reflesh token then it looks like return GaxiosError with 400 status code.
+    // to handle such cases, call revoke function and restart auth flow.
+    if (e instanceof GaxiosError && e.status === 400) {
+      await revokeCredentials();
+    }
+    throw e;
   }
-  return res;
 }
