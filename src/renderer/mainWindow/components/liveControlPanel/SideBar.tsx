@@ -1,7 +1,5 @@
 import { CSSProperties } from "react";
 import { LiveLaunchProperties } from "../../../../types/liveLaunchProperties";
-import { StatisticsArea } from "./StatisticsArea";
-import { QuitLiveButton } from "./QuitLiveButton";
 import { MainContentsName } from "../../hooks/useMainContentsTab";
 
 const selectedStyle: CSSProperties = { backgroundColor: "orange" };
