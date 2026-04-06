@@ -121,7 +121,7 @@
       }
 
       &.new-membership {
-        background-color: green;
+        background-color: rgb(108, 223, 108);
       }
       &.milestone {
         background-color: skyblue;
