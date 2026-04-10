@@ -11,7 +11,8 @@
     "publish": "electron-forge publish",
     "lint": "eslint .",
     "format-check": "prettier . --check",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": {
