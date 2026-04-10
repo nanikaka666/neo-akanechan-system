@@ -56,7 +56,8 @@
     "ts-loader": "^9.5.4",
     "ts-protoc-gen": "^0.15.0",
     "typed-emitter": "^2.1.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "vitest": "^4.1.4"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.3",
