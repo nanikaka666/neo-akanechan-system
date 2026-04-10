@@ -1,6 +1,7 @@
 {
   "include": ["src/**/*", "test/**/*"],
   "compilerOptions": {
+    "ignoreDeprecations": "6.0", // quite warnings temporary...
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */
