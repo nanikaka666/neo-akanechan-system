@@ -1,6 +1,6 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import { fixupConfigRules } from "@eslint/compat";
-import globals from "globals";
+import globals, { node } from "globals";
 import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -47,6 +47,11 @@ export default defineConfig([
     settings: {
       react: {
         version: "detect", // for avoid warning.
+      },
+      "import/resolver": {
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx", ".d.ts"],
+        },
       },
     },
 
