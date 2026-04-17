@@ -20,6 +20,9 @@
     "name": "nanikaka",
     "email": "nanikaka666@gmail.com"
   },
+  "overrides": {
+    "tar": "^7.5.13"
+  },
   "license": "MIT",
   "devDependencies": {
     "@electron-forge/cli": "^7.10.2",
