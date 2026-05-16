@@ -11,12 +11,17 @@
     "publish": "electron-forge publish",
     "lint": "eslint .",
     "format-check": "prettier . --check",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "test": "vitest run -c vitest.config.ts",
+    "test-coverage": "vitest run -c vitest.config.ts --coverage"
   },
   "keywords": [],
   "author": {
     "name": "nanikaka",
     "email": "nanikaka666@gmail.com"
+  },
+  "overrides": {
+    "tar": "^7.5.13"
   },
   "license": "MIT",
   "devDependencies": {
@@ -39,9 +44,10 @@
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
+    "@vitest/coverage-v8": "^4.1.4",
     "baseline-browser-mapping": "^2.10.13",
     "css-loader": "^6.11.0",
-    "electron": "38.2.1",
+    "electron": "39.8.6",
     "electron-devtools-installer": "^4.0.0",
     "eslint": "^9.32.0",
     "eslint-plugin-import": "^2.32.0",
@@ -56,7 +62,8 @@
     "ts-loader": "^9.5.4",
     "ts-protoc-gen": "^0.15.0",
     "typed-emitter": "^2.1.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "vitest": "^4.1.4"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.3",
